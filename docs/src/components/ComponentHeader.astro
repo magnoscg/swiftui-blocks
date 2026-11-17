@@ -24,6 +24,7 @@ const prompt = [
   shaderRawURL
     ? `It draws with a Metal shader: also download ${shaderRawURL} into ${name}.metal, in the same target.`
     : undefined,
+  `Check that each file starts with // SPDX-License-Identifier: MIT and that ${name}.swift ends with the three lines of its #Preview; if not, delete it and tell me.`,
   `It needs iOS ${minIOS} or later, so compare that with my deployment target first.`,
   `Its ${name}Demo view and its #Preview show how it is used. Use it where I ask, then remove the demo and the preview.`,
 ]
