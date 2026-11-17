@@ -32,6 +32,9 @@ on `main`.
 - Every row of the API reference of a component page now says what the
   property or parameter does, with its range, units and edge cases, and Quick
   Help in Xcode shows the same text.
+- On a wide window the docs sit in one centered block: the bar, the sidebar,
+  the page and its outline line up, and the page is wider. The lines between
+  them and under the title are gone, and headings are a size smaller.
 
 ### Fixed
 
