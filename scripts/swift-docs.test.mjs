@@ -166,6 +166,33 @@ describe('the API of a component', () => {
     ]);
   });
 
+  it('does not lend the comment of a property declared with an attribute to the one below it', () => {
+    const docs = componentDocs(
+      file(
+        [
+          'struct GlowButton: View {',
+          '    /// Whether it glows.',
+          '    @Binding var isOn: Bool',
+          '    var tint: Color = .red',
+          '    /// The view inside.',
+          '    @ViewBuilder',
+          '    var label: Text',
+          '}',
+        ].join('\n'),
+      ),
+      'GlowButton',
+    );
+
+    assert.deepEqual(
+      docs.api[0].rows.map((row) => [row.name, row.description]),
+      [
+        ['isOn', 'Whether it glows.'],
+        ['tint', ''],
+        ['label', 'The view inside.'],
+      ],
+    );
+  });
+
   it('takes a type from an initializer and leaves one it cannot tell empty', () => {
     const docs = componentDocs(
       file('struct GlowButton: View {\n    var size = CGSize(width: 1, height: 2)\n    var rules = GlowButtonRule.defaults\n}\n'),
