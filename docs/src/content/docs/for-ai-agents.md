@@ -33,8 +33,8 @@ the metadata of the components.
 4. If its shader column says `metal`, download `<Name>.metal` from the same
    folder too, into the same target. The component draws nothing without it.
 5. Check that each file starts with `// SPDX-License-Identifier: MIT` and
-   that the Swift file ends with its `#Preview`. If not, delete it and tell
-   the user.
+   that the Swift file ends with the `#Preview` block that shows its demo, in
+   its last three lines. If not, delete it and tell the user.
 
 An agent without a shell can read the page of the category instead, a few
 kilobytes with the summary of each component:

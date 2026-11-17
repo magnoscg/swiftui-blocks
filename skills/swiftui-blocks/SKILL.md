@@ -38,8 +38,9 @@ component is one Swift file, and two when it draws with a Metal shader.
    When the shader column says `metal`, download `<Name>.metal`
    from the same folder too, into the same target. The component draws
    nothing without it. Check that each downloaded file starts with
-   `// SPDX-License-Identifier: MIT` and that the Swift file ends with its
-   `#Preview`; if not, delete it and tell the user.
+   `// SPDX-License-Identifier: MIT` and that the Swift file ends with the
+   `#Preview` block that shows its demo, in its last three lines; if not,
+   delete it and tell the user.
 5. Read the `///` comment of its main type and its `<Name>Demo` view, then
    use it where the user asked. Once it works, offer to remove the demo and
    its `#Preview` from the file.
