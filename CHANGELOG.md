@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.14.0 - 2026-11-17
+
 ### Added
 
 - The skill installs with one command, `npx skills add
