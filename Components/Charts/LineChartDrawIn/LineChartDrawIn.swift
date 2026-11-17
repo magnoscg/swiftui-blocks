@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// It draws again whenever the values change. With Reduce Motion on, the finished chart appears.
 struct LineChartDrawIn: View {
+    /// The points of the line, evenly spaced from left to right and scaled from the lowest to the highest.
     let values: [Double]
+    /// The color of the line, of the dot at its tip and of the fill under it.
     var tint: Color = .indigo
+    /// The seconds the line takes to draw in.
     var duration: Double = 1.6
 
     @State private var progress = 0.0

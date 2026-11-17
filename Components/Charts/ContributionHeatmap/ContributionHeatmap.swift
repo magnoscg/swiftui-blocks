@@ -8,12 +8,19 @@ import SwiftUI
 /// It opens scrolled to the newest week. VoiceOver reads the whole grid as one summary,
 /// and with Reduce Motion on the cells appear without animating.
 struct ContributionHeatmap: View {
+    /// The count of each day. Dates are matched by day, and two dates on the same day keep the higher count.
     let activity: [Date: Int]
+    /// The last day of the grid, in its trailing column.
     var endDate: Date = .now
+    /// How many weeks the grid shows, from 1 to 530. Each one is a column.
     var weeks: Int = 26
+    /// The calendar for the days, the first weekday of each column and the time zone.
     var calendar: Calendar = .current
+    /// The color of the cells. Busier days take it more opaque, in four steps up to the busiest.
     var tint: Color = .green
+    /// The side of each square cell, in points.
     var cellSize: CGFloat = 18
+    /// The gap between cells, in points.
     var spacing: CGFloat = 4
 
     @State private var isRevealed = false

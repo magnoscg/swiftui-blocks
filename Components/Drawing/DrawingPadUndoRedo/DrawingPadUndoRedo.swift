@@ -46,8 +46,12 @@ struct DrawingPadUndoRedoHistory: Equatable {
 ///
 /// A stroke the system interrupts is kept up to the point where it stopped.
 struct DrawingPadUndoRedo: View {
+    /// The strokes on the pad and the ones undone. The pad adds a stroke when a finger lifts, and the
+    /// buttons undo, redo and clear it.
     @Binding var history: DrawingPadUndoRedoHistory
+    /// The ink of every stroke.
     var color: Color = .primary
+    /// The width of every stroke, in points. Half a point at the least.
     var lineWidth: CGFloat = 6
 
     @State private var currentPoints: [CGPoint] = []

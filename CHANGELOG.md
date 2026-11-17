@@ -7,6 +7,12 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- Every row of the API reference of a component page now says what the
+  property or parameter does, with its range, units and edge cases, and Quick
+  Help in Xcode shows the same text.
+
 ## 0.14.0 - 2026-11-17
 
 ### Added

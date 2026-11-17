@@ -75,9 +75,13 @@ struct CropRectangleOverlay: View {
         let delta: CGSize
     }
 
+    /// The image to crop. It fits the space it is given, keeping `aspectRatio`.
     let image: Image
+    /// The image's width divided by its height.
     let aspectRatio: CGFloat
+    /// The crop frame as a fraction of the image, from 0 to 1 on each axis. The component writes it when a drag ends or a VoiceOver action runs; a value outside the image is fitted inside it.
     @Binding var crop: CGRect
+    /// The smallest width and height the frame can be resized to, as a fraction of the image.
     var minimumSide: CGFloat = 0.15
 
     @GestureState private var drag: ActiveDrag?

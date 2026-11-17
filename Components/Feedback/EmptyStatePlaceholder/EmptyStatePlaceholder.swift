@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the symbol stays still.
 struct EmptyStatePlaceholder: View {
+    /// The SF Symbol above the title. It breathes unless Reduce Motion is on.
     var systemImage: String
+    /// The headline, like "No messages".
     var title: LocalizedStringResource
+    /// The line below the title that explains why it is empty or what to do.
     var message: LocalizedStringResource
+    /// The text of the prominent button. The button shows only when this and `action` are both set.
     var actionTitle: LocalizedStringResource?
+    /// Runs when the button is tapped. The button shows only when this and `actionTitle` are both set.
     var action: (() -> Void)?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

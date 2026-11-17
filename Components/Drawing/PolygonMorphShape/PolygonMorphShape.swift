@@ -85,6 +85,10 @@ nonisolated struct PolygonMorphShapeRadii: VectorArithmetic {
 nonisolated struct PolygonMorphShape: Shape {
     var radii: PolygonMorphShapeRadii
 
+    /// Creates the outline of a form, centered and as large as the shorter side allows.
+    ///
+    /// - Parameters:
+    ///   - form: The form to draw. Changing it inside an animation morphs from the form before.
     init(form: PolygonMorphShapeForm) {
         radii = form.radii
     }

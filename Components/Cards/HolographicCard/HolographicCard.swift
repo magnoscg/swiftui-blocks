@@ -37,9 +37,11 @@ nonisolated enum HolographicCardMath {
 struct HolographicCard<Content: View>: View {
     /// The degrees the card leans at the end of a drag.
     var maxAngle: Double = 16
+    /// The radius of the card's corners, in points.
     var cornerRadius: CGFloat = 28
     /// How much foil the card has, from 0 for none to 1.
     var intensity: Double = 1
+    /// The face of the card. Its size is the card's size, and the foil is drawn over it.
     @ViewBuilder var content: () -> Content
 
     @GestureState private var tilt = CGSize.zero

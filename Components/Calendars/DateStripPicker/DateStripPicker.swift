@@ -20,6 +20,16 @@ struct DateStripPicker: View {
 
     private let spacing = 10.0
 
+    /// Creates a strip of days around a date.
+    ///
+    /// - Parameters:
+    ///   - selection: The day picked. The strip writes the day centered after a scroll or a tap,
+    ///     at the start of the day, and scrolls to a day set from outside.
+    ///   - center: The day the strip is built around.
+    ///   - daysBefore: How many days the strip reaches before `center`, from 0 to 3,650.
+    ///   - daysAfter: How many days the strip reaches after `center`, from 0 to 3,650.
+    ///   - calendar: The calendar for the days, their names and the time zone.
+    ///   - tint: The fill of the selected day and the dot under today.
     init(
         selection: Binding<Date>,
         center: Date = .now,

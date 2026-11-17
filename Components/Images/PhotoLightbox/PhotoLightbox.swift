@@ -29,9 +29,13 @@ enum PhotoLightboxMath {
 /// and the swipe down stop while the current photo is zoomed, so a drag pans it instead.
 /// Changing `photos` returns every page to fit.
 struct PhotoLightbox: View {
+    /// The photos to page through, each fitted to the screen.
     let photos: [Image]
+    /// The index of the photo on screen. The component writes it on a swipe, and pulls it back into range when `photos` shrinks.
     @Binding var selection: Int
+    /// The largest zoom of a pinch, as a multiple of the fitted size. A double tap zooms to 2.5, or to this if it is smaller.
     var maxZoom: CGFloat = 4
+    /// Runs when the close button is tapped, the photo is swiped down far enough, or VoiceOver's escape gesture is made. Remove the viewer there.
     var onClose: () -> Void
 
     @State private var zooms: [Int: CGFloat] = [:]

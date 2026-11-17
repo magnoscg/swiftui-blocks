@@ -5358,10 +5358,13 @@ enum CalendarMonthGridMath {
 ///
 /// With Reduce Motion on, the arrows change the month without sliding.
 struct CalendarMonthGrid: View {
+    /// The day picked, or nil before any tap. The grid writes the tapped day.
     @Binding var selection: Date?
+    /// A day in the month the grid opens on. Paging counts months from it.
     var anchor: Date = .now
     /// How many months can be reached in each direction.
     var monthRange = 24
+    /// The color of the selected day's circle, of today's number and of the arrows.
     var tint: Color = .indigo
 
     var body: some View {
@@ -5545,6 +5548,16 @@ struct CalendarRangeSelector: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.locale) private var locale
 
+    /// Creates a range calendar.
+    ///
+    /// - Parameters:
+    ///   - start: The first day of the range, or nil before any tap. The calendar writes it,
+    ///     at the start of the day.
+    ///   - end: The last day of the range, or nil while only the start is picked. The
+    ///     calendar writes it, at the start of the day.
+    ///   - month: A day in the month shown first. The arrows move from it.
+    ///   - calendar: The calendar for the weeks, the first weekday and the time zone.
+    ///   - tint: The color of the endpoint circles and, faded, of the band between them.
     init(
         start: Binding<Date?>,
         end: Binding<Date?>,
@@ -5802,6 +5815,16 @@ struct DateStripPicker: View {
 
     private let spacing = 10.0
 
+    /// Creates a strip of days around a date.
+    ///
+    /// - Parameters:
+    ///   - selection: The day picked. The strip writes the day centered after a scroll or a tap,
+    ///     at the start of the day, and scrolls to a day set from outside.
+    ///   - center: The day the strip is built around.
+    ///   - daysBefore: How many days the strip reaches before `center`, from 0 to 3,650.
+    ///   - daysAfter: How many days the strip reaches after `center`, from 0 to 3,650.
+    ///   - calendar: The calendar for the days, their names and the time zone.
+    ///   - tint: The fill of the selected day and the dot under today.
     init(
         selection: Binding<Date>,
         center: Date = .now,
@@ -6008,9 +6031,13 @@ nonisolated enum DayScheduleTimelineMath {
 ///
 /// A tap on an event sets `selection`. The column starts scrolled to its first event.
 struct DayScheduleTimeline: View {
+    /// The events drawn over the column. Overlapping ones share its width.
     let events: [DayScheduleTimelineEvent]
+    /// The id of the highlighted event, or nil. A tap writes it, and a second tap clears it.
     @Binding var selection: DayScheduleTimelineEvent.ID?
+    /// The hours of the day the column spans, from 0 to 24. The last one is where the column ends.
     var hours: ClosedRange<Int> = 7...21
+    /// Whether a red line marks the time it is now, when it falls inside `hours`.
     var showsCurrentTime = true
 
     @ScaledMetric(relativeTo: .body) private var hourHeight = 88.0
@@ -6225,8 +6252,11 @@ enum AvatarStackMath {
 
 /// Overlapping avatars of initials, with a +N badge for everyone who does not fit.
 struct AvatarStack: View {
+    /// The people in the stack, in order. Each avatar shows the initials of the first and last word.
     let names: [String]
+    /// How many avatars show before the rest fold into the +N badge.
     var maxVisible = 4
+    /// The width of each avatar, in points. It grows with Dynamic Type.
     var diameter: CGFloat = 48
 
     @ScaledMetric(relativeTo: .body) private var textScale = 1.0
@@ -6340,10 +6370,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the details fade in place.
 struct ExpandableInfoCard<Details: View>: View {
+    /// The headline of the card, always visible.
     let title: LocalizedStringResource
+    /// A line under the title, or nil for none. VoiceOver reads it as the hint.
     var subtitle: LocalizedStringResource?
+    /// The SF Symbol in the rounded square at the leading edge.
     var systemImage = "info.circle.fill"
+    /// The fill of the icon's square. The symbol takes white or black from it.
     var tint: Color = .blue
+    /// The content revealed under the header when the card is expanded.
     @ViewBuilder var details: () -> Details
 
     @State private var isExpanded = false
@@ -6499,9 +6534,11 @@ nonisolated enum HolographicCardMath {
 struct HolographicCard<Content: View>: View {
     /// The degrees the card leans at the end of a drag.
     var maxAngle: Double = 16
+    /// The radius of the card's corners, in points.
     var cornerRadius: CGFloat = 28
     /// How much foil the card has, from 0 for none to 1.
     var intensity: Double = 1
+    /// The face of the card. Its size is the card's size, and the foil is drawn over it.
     @ViewBuilder var content: () -> Content
 
     @GestureState private var tilt = CGSize.zero
@@ -6724,10 +6761,15 @@ enum SwipeableCardStackLogic {
 ///
 /// With Reduce Motion on, a swiped card fades out instead of flying away.
 struct SwipeableCardStack<Item, Card: View>: View {
+    /// The cards of the deck, from the top down.
     let items: [Item]
+    /// Whether the deck starts over after the last card. Otherwise it ends empty.
     var loops = false
+    /// The fraction of the deck's width, from 0 to 1, a release must be heading for to swipe the card away.
     var threshold: CGFloat = 0.35
+    /// Called with the item and its direction on screen when a card is swiped away.
     var onSwipe: (Item, SwipeableCardStackDirection) -> Void = { _, _ in }
+    /// The view of each card. Up to three show, stacked behind the top one.
     @ViewBuilder var card: (Item) -> Card
 
     @State private var top = 0
@@ -6911,9 +6953,13 @@ import SwiftUI
 /// `restingPoint` is where the card leans while nobody touches it. `nil` keeps it flat.
 /// With Reduce Motion on, the card stays flat and only the highlight moves.
 struct TiltCard<Content: View>: View {
+    /// The degrees the card leans when the finger is at an edge.
     var maxAngle: Double = 14
+    /// The radius of the card's corners, in points.
     var cornerRadius: CGFloat = 28
+    /// Where the card leans and the highlight sits while nobody touches it, or nil to keep it flat.
     var restingPoint: UnitPoint?
+    /// The face of the card. Its size is the card's size.
     @ViewBuilder var content: () -> Content
 
     @GestureState private var touchPoint: UnitPoint?
@@ -7070,15 +7116,19 @@ nonisolated enum WalletCardStackMath {
 /// Give it the height it can use: the stack tightens to fit, and the pile sits at the bottom edge.
 /// With Reduce Motion on, the cards change places without sliding.
 struct WalletCardStack<Item: Identifiable, Card: View, Detail: View>: View {
+    /// The cards, from the top of the stack down.
     let items: [Item]
     /// The card that is open, or `nil` when all of them are in the stack.
     @Binding var selection: Item.ID?
+    /// The height of each card, in points, in the stack and when it opens.
     var cardHeight: CGFloat = 200
     /// How much of a card shows above the next one in the stack. It grows with Dynamic Type.
     var peek: CGFloat = 64
     /// How much room the other cards keep at the bottom while one is open.
     var pileHeight: CGFloat = 76
+    /// The face of each card, drawn `cardHeight` tall.
     @ViewBuilder var card: (Item) -> Card
+    /// What shows under the open card, in the room left above the pile.
     @ViewBuilder var detail: (Item) -> Detail
 
     private let spacing: CGFloat = 16
@@ -7259,8 +7309,12 @@ struct AnimatedBarChartEntry: Hashable {
 ///
 /// With Reduce Motion on, the bars are drawn at their final height.
 struct AnimatedBarChart: View {
+    /// The bars, from the leading edge. Each is as tall as its share of the highest value, and zero
+    /// or negative values draw no bar.
     let entries: [AnimatedBarChartEntry]
+    /// The color of the bars, drawn as a gradient.
     var tint: Color = .indigo
+    /// The seconds each bar waits after the one before it starts to grow.
     var stagger: Double = 0.09
 
     @State private var isRevealed = false
@@ -7410,7 +7464,11 @@ struct AnimatedDonutChartSegment: Identifiable, Hashable {
 /// Tap a segment or its legend row to select it. With Reduce Motion on, the whole donut
 /// appears at once.
 struct AnimatedDonutChart: View {
+    /// The slices, clockwise from the top. Each id is also its name in the legend and the center.
+    /// Negative values count as zero.
     let segments: [AnimatedDonutChartSegment]
+    /// The id of the lifted segment, or nil to show the total. A tap on a segment or its legend row
+    /// writes it, and a second tap clears it.
     @Binding var selection: String?
 
     @State private var revealedCount = 0
@@ -7668,9 +7726,14 @@ nonisolated enum CandlestickChartMath {
 /// of a day at a time. With Differentiate Without Color on, the days
 /// that fell are drawn lighter, so the two kinds do not depend on the color alone.
 struct CandlestickChart: View {
+    /// The days to draw, one candle each.
     let candles: [CandlestickChartCandle]
+    /// The candle of the day being read, or nil. The chart writes the day nearest the finger, and
+    /// clears it when the drag ends.
     @Binding var selection: CandlestickChartCandle?
+    /// The color of a day that closed at or above its open.
     var risingColor = Color.green
+    /// The color of a day that closed below its open.
     var fallingColor = Color.red
 
     @State private var selectedDate: Date?
@@ -7852,12 +7915,19 @@ import SwiftUI
 /// It opens scrolled to the newest week. VoiceOver reads the whole grid as one summary,
 /// and with Reduce Motion on the cells appear without animating.
 struct ContributionHeatmap: View {
+    /// The count of each day. Dates are matched by day, and two dates on the same day keep the higher count.
     let activity: [Date: Int]
+    /// The last day of the grid, in its trailing column.
     var endDate: Date = .now
+    /// How many weeks the grid shows, from 1 to 530. Each one is a column.
     var weeks: Int = 26
+    /// The calendar for the days, the first weekday of each column and the time zone.
     var calendar: Calendar = .current
+    /// The color of the cells. Busier days take it more opaque, in four steps up to the busiest.
     var tint: Color = .green
+    /// The side of each square cell, in points.
     var cellSize: CGFloat = 18
+    /// The gap between cells, in points.
     var spacing: CGFloat = 4
 
     @State private var isRevealed = false
@@ -8081,10 +8151,15 @@ nonisolated enum GaugeChartMath {
 /// VoiceOver reads the value and the name of its zone, so the reading does not depend on the
 /// color. With Reduce Motion on, the needle goes to its place without swinging.
 struct GaugeChart: View {
+    /// The reading the needle points at. Values outside `range` stop at its ends.
     var value: Double
+    /// The values at the start and the end of the dial.
     var range: ClosedRange<Double> = 0...100
+    /// The colored stretches of the dial, in any order. VoiceOver reads the name of the one `value` falls in.
     let zones: [GaugeChartZone]
+    /// What VoiceOver calls the gauge.
     var label = "Gauge"
+    /// Turns `value` into the text VoiceOver reads. Whole numbers by default.
     var valueText: (Double) -> String = { $0.formatted(.number.precision(.fractionLength(0))) }
 
     private let lineWidth: CGFloat = 26
@@ -8218,8 +8293,11 @@ struct InteractiveLineChartPoint: Identifiable, Hashable {
 ///
 /// The tooltip only exists during the touch, and nothing animates on its own.
 struct InteractiveLineChart: View {
+    /// The values to plot, by date. A touch reads the point nearest the finger.
     let points: [InteractiveLineChartPoint]
+    /// The color of the line, of the fill under it and of the touched point.
     var tint: Color = .indigo
+    /// Turns a value into the text of the tooltip and of VoiceOver.
     var format: (Double) -> String = { $0.formatted() }
 
     @State private var touchedDate: Date?
@@ -8386,8 +8464,11 @@ import SwiftUI
 ///
 /// It draws again whenever the values change. With Reduce Motion on, the finished chart appears.
 struct LineChartDrawIn: View {
+    /// The points of the line, evenly spaced from left to right and scaled from the lowest to the highest.
     let values: [Double]
+    /// The color of the line, of the dot at its tip and of the fill under it.
     var tint: Color = .indigo
+    /// The seconds the line takes to draw in.
     var duration: Double = 1.6
 
     @State private var progress = 0.0
@@ -8622,8 +8703,11 @@ nonisolated enum RadarChartMath {
 /// The shapes grow from the center when they appear. VoiceOver reads each axis with the value
 /// of every series. With Reduce Motion on, the shapes are there from the start.
 struct RadarChart: View {
+    /// The names of the axes, clockwise from the top. The chart needs three or more to draw.
     let axes: [String]
+    /// The shapes to compare, each with one value per axis.
     let series: [RadarChartSeries]
+    /// The value at the outer ring. Higher values stop there, and values below zero at the center.
     var maximum = 100.0
     /// How many rings the grid has, the outer one included.
     var rings = 4
@@ -8841,9 +8925,11 @@ nonisolated enum ScrollableBarChartMath {
 ///
 /// It starts on the latest days. Swift Charts gives VoiceOver every bar and an audio graph.
 struct ScrollableBarChart: View {
+    /// The value of each day, one bar each. The chart scrolls through all of them.
     let entries: [ScrollableBarChartEntry]
     /// The entries of the days in sight, kept up to date as the chart scrolls.
     @Binding var visible: [ScrollableBarChartEntry]
+    /// How many days fit in sight at once.
     var visibleDays = 7
 
     @State private var position = Date.now
@@ -8967,10 +9053,15 @@ import SwiftUI
 /// VoiceOver reads the title, the value and the change as one element. With Reduce Motion
 /// on, new values appear without animating the line.
 struct SparklineStatTile: View {
+    /// The name of the figure, above the value.
     let title: LocalizedStringResource
+    /// The figure, already formatted, like `"$12.4k"`.
     let value: String
+    /// The history drawn as the line, oldest first. The change shows from its first value to its last.
     let trend: [Double]
+    /// The SF Symbol next to the title.
     var systemImage: String = "chart.line.uptrend.xyaxis"
+    /// The color of the trend line and the fill under it.
     var tint: Color = .indigo
     /// Set it to false for a figure that is good news when it falls, like churn. A fall is then green.
     var higherIsBetter = true
@@ -9169,8 +9260,11 @@ enum Surface3DChartPreset: String, CaseIterable, Identifiable {
 /// With Reduce Motion on, the presets jump to their angle.
 @available(iOS 26, *)
 struct Surface3DChart: View {
+    /// The span of both horizontal axes, x and z. An empty range falls back to `-1...1`.
     var domain: ClosedRange<Double> = -3...3
+    /// The colors of the surface, from its lowest point to its highest.
     var gradient = Gradient(colors: [.indigo, .purple, .pink, .orange])
+    /// The height of the surface for an x and a z. A result that is not finite is drawn at zero.
     let function: @Sendable (Double, Double) -> Double
 
     @State private var pose = Surface3DChartPreset.angled.pose
@@ -9288,6 +9382,12 @@ struct ChatAutoScrollList<Item: Identifiable, Row: View>: View where Item.ID: Se
     @State private var isUserScrolling = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a list that opens on its newest message.
+    ///
+    /// - Parameters:
+    ///   - items: The messages, oldest first. A new last item scrolls into view while the list follows.
+    ///   - spacing: The gap between rows, in points.
+    ///   - row: The view of each message.
     init(items: [Item], spacing: CGFloat = 8, @ViewBuilder row: @escaping (Item) -> Row) {
         self.items = items
         self.spacing = spacing
@@ -9479,6 +9579,15 @@ nonisolated struct ChatBubbleShape: Shape {
 
     private let tailWidth: CGFloat = 7
 
+    /// Creates the outline of one message.
+    ///
+    /// - Parameters:
+    ///   - side: The bottom corner that carries the tail: `trailing` for messages sent, `leading`
+    ///     for messages received.
+    ///   - position: Where the message sits in its run. Only `single` and `last` get a tail, and the
+    ///     corners that face a neighbor tighten.
+    ///   - radius: The radius of the round corners, in points.
+    ///   - tightRadius: The radius of the corners next to a grouped message, in points.
     init(
         side: ChatBubbleShapeSide = .trailing,
         position: ChatBubbleShapePosition = .single,
@@ -9683,6 +9792,15 @@ struct KeyboardTrackingInputBar<Content: View>: View {
     @ScaledMetric(relativeTo: .body) private var sendSize = 34.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a composer below some content.
+    ///
+    /// - Parameters:
+    ///   - text: The draft in the field. The bar writes what is typed, and empties it on send.
+    ///   - placeholder: The prompt in the empty field, also its VoiceOver label.
+    ///   - tint: The fill of the send button. Its arrow takes white or black from it.
+    ///   - onSend: Called with the draft, trimmed of spaces and new lines, when the send button is
+    ///     tapped. The button is disabled while that is empty.
+    ///   - content: The view above the bar, usually the conversation. It leaves room for the bar.
     init(
         text: Binding<String>,
         placeholder: LocalizedStringResource = "Message",
@@ -9821,7 +9939,9 @@ struct NestedCommentThreadComment: Identifiable, Hashable {
 /// Put it in a `ScrollView`. Indentation stops growing past a few levels, sooner with
 /// accessibility text sizes, so deep threads keep room for their text.
 struct NestedCommentThread: View {
+    /// The top-level comments, each with its replies nested inside.
     let comments: [NestedCommentThreadComment]
+    /// The color of the avatars and of the buttons that show or hide replies.
     var tint: Color = .indigo
 
     @State private var collapsed: Set<String> = []
@@ -10067,12 +10187,16 @@ nonisolated enum TapbackReactionBubbleLogic {
 /// VoiceOver offers each reaction as an action of the message. With Reduce Motion on, nothing
 /// scales: the bar and the badge fade.
 struct TapbackReactionBubble<Content: View>: View {
+    /// The reaction shown as the badge, or nil for none. Choosing one writes it, and choosing it again clears it.
     @Binding var reaction: String?
+    /// Whether the bar of reactions is open. A long press sets it, and choosing a reaction clears it.
     @Binding var isPicking: Bool
+    /// The reactions in the bar, in order. Each one must be unique.
     var reactions = ["❤️", "👍", "👎", "😂", "‼️", "❓"]
     /// The side of the screen the message sits on. The bar grows from that side and the badge
     /// goes to the other corner, toward the middle of the screen.
     var side = HorizontalAlignment.leading
+    /// The message itself, which lifts while the bar is open.
     @ViewBuilder var content: () -> Content
 
     private let gap: CGFloat = 8
@@ -10279,11 +10403,17 @@ nonisolated enum TypingIndicatorBubbleTiming {
 /// Set `isTyping` to false and the bubble shrinks away into its corner. With Reduce Motion
 /// on, the dots only brighten in turn and the bubble fades. VoiceOver reads `label`.
 struct TypingIndicatorBubble: View {
+    /// Whether the bubble shows. Setting it to false shrinks it away into its bottom leading corner.
     var isTyping = true
+    /// What VoiceOver reads for the bubble.
     var label: LocalizedStringResource = "Typing"
+    /// The fill of the bubble.
     var bubbleColor = Color(.secondarySystemFill)
+    /// The fill of the dots.
     var dotColor = Color.secondary
+    /// How many dots bounce, one at least.
     var dotCount = 3
+    /// The seconds of one round of bounces. It stretches when the last dot would not have time to bounce.
     var period = 1.3
 
     @ScaledMetric(relativeTo: .body) private var dotSize = 9.0
@@ -10425,12 +10555,19 @@ import SwiftUI
 /// count goes up when the copy lands. With Reduce Motion on, or with no `cartFrame`, the
 /// count goes up at once and nothing flies.
 struct AddToCartFlyButton: View {
+    /// The product picture, shown large and as the copy that flies. A symbol takes the tint.
     let image: Image
+    /// The number of items in the cart. The button adds one when a copy lands, or at once when nothing flies.
     @Binding var count: Int
+    /// The frame of the cart icon in the `.global` space, where copies land. Nil adds without flying.
     var cartFrame: CGRect?
+    /// The text of the add button.
     var title: LocalizedStringResource = "Add to Cart"
+    /// What VoiceOver reads for the product picture.
     var imageLabel: LocalizedStringResource = "Product"
+    /// The color of the button, of the panel behind the picture and of a symbol image.
     var tint: Color = .indigo
+    /// Runs each time an item is added, right after `count` changes.
     var onAdd: () -> Void = {}
 
     @State private var flights: [AddToCartFlyButtonLaunch] = []
@@ -10665,9 +10802,13 @@ enum AddToCartStepperMath {
 /// The capsule is one background around content that changes, so it resizes by itself
 /// and nothing has to match geometry. VoiceOver can also adjust the count directly.
 struct AddToCartStepper: View {
+    /// How many are in the cart. At zero the add button shows. The stepper writes it, kept from 0 to `maximum`.
     @Binding var quantity: Int
+    /// The highest quantity, from 0 to 1,000,000. The plus button stops there, and at 0 nothing can be added.
     var maximum: Int = 99
+    /// The text of the add button. VoiceOver reads it followed by "to cart".
     var title: LocalizedStringResource = "Add"
+    /// The fill of the capsule. Its symbols and text take white or black from it.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .headline) private var buttonSize = 44.0
@@ -10842,10 +10983,16 @@ enum BillingPeriodTogglePricing {
 ///
 /// With Reduce Motion on, everything changes at once.
 struct BillingPeriodToggle: View {
+    /// The billing period chosen. The segments write it.
     @Binding var period: BillingPeriodToggleOption
+    /// The price of one month on the monthly plan.
     var monthlyPrice: Double = 12
+    /// The price of a whole year on the yearly plan. It shows divided by 12, and the badge compares
+    /// it with 12 monthly payments.
     var yearlyPrice: Double = 99
+    /// The ISO 4217 code the prices are formatted in, like `"EUR"`.
     var currencyCode: String = "USD"
+    /// The fill of the selected segment.
     var tint: Color = .indigo
 
     @Namespace private var namespace
@@ -11022,8 +11169,11 @@ struct PricingTierCardsTier: Identifiable, Hashable {
 /// It opens centered on the recommended plan. Place it in a vertical `ScrollView`
 /// so tall cards stay reachable at the largest text sizes.
 struct PricingTierCards: View {
+    /// The plans, from the leading edge. The recommended one is filled with `tint` and drawn larger.
     let tiers: [PricingTierCardsTier]
+    /// The name of the chosen plan, or nil. A card's button writes it.
     @Binding var selection: PricingTierCardsTier.ID?
+    /// The fill of the recommended card and of the other cards' buttons.
     var tint: Color = .indigo
 
     @State private var centeredID: PricingTierCardsTier.ID?
@@ -11211,14 +11361,23 @@ struct TrialTimelinePaywallPlan: Identifiable, Equatable {
 /// with StoreKit or whatever you use. The reminder step is a promise, so schedule that
 /// notification, or set `reminderLead` to 0 to leave the step out.
 struct TrialTimelinePaywall: View {
+    /// The heading at the top.
     var title: LocalizedStringResource = "How your free trial works"
+    /// The plans to choose from, as cards under the timeline.
     let plans: [TrialTimelinePaywallPlan]
+    /// The id of the chosen plan, whose trial the timeline shows. A tap on a card writes it, and an
+    /// id that matches no plan falls back to the first.
     @Binding var selection: TrialTimelinePaywallPlan.ID
     /// How many days before the trial ends the reminder is sent.
     var reminderLead = 2
+    /// The day the trial would start, from which the dates of the timeline are counted.
     var startDate = Date.now
+    /// Whether a purchase is in progress. The main button shows a spinner and stops answering, and
+    /// Restore Purchases is disabled.
     var isPurchasing = false
+    /// Called with the chosen plan when the main button is tapped. Start the purchase here.
     var onContinue: (TrialTimelinePaywallPlan) -> Void
+    /// Runs when Restore Purchases is tapped.
     var onRestore: () -> Void
 
     private let margin: CGFloat = 24
@@ -14235,10 +14394,16 @@ enum DrawingPadSpeedBrushMath {
 ///
 /// A stroke the system interrupts is kept up to the point where it stopped.
 struct DrawingPadSpeedBrush: View {
+    /// The finished strokes, each a list of points with their widths. The pad appends one when a
+    /// finger lifts, and setting it to empty clears the pad.
     @Binding var strokes: [[DrawingPadSpeedBrushPoint]]
+    /// The ink of every stroke.
     var color: Color = .primary
+    /// The width of the stroke at `fullSpeed` and faster, in points. Half a point at the least.
     var thinWidth: CGFloat = 2
+    /// The width of the stroke when the finger is still, in points.
     var thickWidth: CGFloat = 16
+    /// The finger speed, in points per second, at which the stroke reaches `thinWidth`.
     var fullSpeed: CGFloat = 1400
 
     @State private var currentStroke: [DrawingPadSpeedBrushPoint] = []
@@ -14418,8 +14583,12 @@ struct DrawingPadUndoRedoHistory: Equatable {
 ///
 /// A stroke the system interrupts is kept up to the point where it stopped.
 struct DrawingPadUndoRedo: View {
+    /// The strokes on the pad and the ones undone. The pad adds a stroke when a finger lifts, and the
+    /// buttons undo, redo and clear it.
     @Binding var history: DrawingPadUndoRedoHistory
+    /// The ink of every stroke.
     var color: Color = .primary
+    /// The width of every stroke, in points. Half a point at the least.
     var lineWidth: CGFloat = 6
 
     @State private var currentPoints: [CGPoint] = []
@@ -14558,11 +14727,17 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the shape appears at once.
 struct PathTrimDrawOn<Outline: Shape>: View {
+    /// The outline to draw, in the order its path runs.
     let shape: Outline
+    /// Whether the stroke is drawn. Turning it true draws the shape on, and false erases it back.
     let isDrawn: Bool
+    /// What VoiceOver reads for the drawing.
     var label: LocalizedStringResource = "Logo"
+    /// The gradient of the stroke, from the top leading corner to the bottom trailing one.
     var colors: [Color] = [.pink, .orange]
+    /// The width of the stroke and of the guide under it, in points.
     var lineWidth: CGFloat = 8
+    /// The seconds the stroke takes to draw on or off.
     var duration: Double = 1.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -14752,6 +14927,10 @@ nonisolated struct PolygonMorphShapeRadii: VectorArithmetic {
 nonisolated struct PolygonMorphShape: Shape {
     var radii: PolygonMorphShapeRadii
 
+    /// Creates the outline of a form, centered and as large as the shorter side allows.
+    ///
+    /// - Parameters:
+    ///   - form: The form to draw. Changing it inside an animation morphs from the form before.
     init(form: PolygonMorphShapeForm) {
         radii = form.radii
     }
@@ -18484,9 +18663,13 @@ import SwiftUI
 ///
 /// It hides at zero. With Reduce Motion on, the number changes without moving.
 struct AnimatedBadgeCount: View {
+    /// The number to show. At zero or below, the badge hides.
     var count: Int
+    /// The highest number the badge shows. Past it, the badge reads the limit and a plus, like `99+`.
     var maximum = 99
+    /// The fill of the capsule. Its number takes white or black from it.
     var tint: Color = .red
+    /// The word VoiceOver reads after the number, like "3 new".
     var unit = "new"
 
     @ScaledMetric(relativeTo: .caption) private var height = 22.0
@@ -18602,10 +18785,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the badge fades in and the checkmark does not draw.
 struct AnimatedCheckmarkBadge: View {
+    /// Whether the badge shows. Turning it on springs the circle in, draws the checkmark and plays a success haptic.
     var isComplete: Bool
+    /// The fill of the circle. The checkmark is always white.
     var tint: Color = .green
+    /// The side of the badge in points, before it scales with Dynamic Type.
     var size: CGFloat = 96
+    /// What VoiceOver reads while the badge shows.
     var completeLabel = "Complete"
+    /// What VoiceOver reads while the badge is hidden.
     var pendingLabel = "Pending"
 
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0
@@ -18713,9 +18901,13 @@ import SwiftUI
 /// status bar while it is expanded, because it takes that space. With Reduce Motion on,
 /// it changes size without bouncing and its content only fades.
 struct DynamicIslandPill<Content: View>: View {
+    /// Whether the capsule is grown to show its content. Collapsed, it is an empty pill hidden from VoiceOver.
     var isExpanded: Bool
+    /// The size of the collapsed pill in points. Match it to the island of the device.
     var pillSize = CGSize(width: 126, height: 37)
+    /// The corner radius of the expanded capsule in points.
     var expandedCornerRadius: CGFloat = 36
+    /// The status shown while expanded, drawn in white over black, below the height of the pill.
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -18863,10 +19055,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the symbol stays still.
 struct EmptyStatePlaceholder: View {
+    /// The SF Symbol above the title. It breathes unless Reduce Motion is on.
     var systemImage: String
+    /// The headline, like "No messages".
     var title: LocalizedStringResource
+    /// The line below the title that explains why it is empty or what to do.
     var message: LocalizedStringResource
+    /// The text of the prominent button. The button shows only when this and `action` are both set.
     var actionTitle: LocalizedStringResource?
+    /// Runs when the button is tapped. The button shows only when this and `actionTitle` are both set.
     var action: (() -> Void)?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -19015,12 +19212,19 @@ nonisolated private struct NotificationStackLayout: Layout {
 /// Give the cards a similar height: a card taller than the first shows over it while the pile
 /// is closed. With Reduce Motion on, the pile opens and closes without moving.
 struct NotificationStack<Item: Identifiable, Card: View>: View {
+    /// The notifications, newest first. The first one sits on top of the closed pile, and two more show their edge under it.
     let items: [Item]
+    /// Whether the pile is open into a column. The component sets it to `true` on a tap on the pile and to `false` from its Show less button.
     @Binding var isExpanded: Bool
+    /// The heading shown over the open column, next to the Show less button.
     var title: LocalizedStringResource = "Notifications"
+    /// The gap in points between the cards of the open column, and under its heading.
     var spacing: CGFloat = 10
+    /// How far in points each card behind the first shows below the one before it while the pile is closed.
     var peek: CGFloat = 10
+    /// Called with the item when its card is swiped towards the leading edge, or cleared with VoiceOver, while the pile is open. Remove it from `items` there. Without it, the cards cannot be swiped.
     var onDismiss: ((Item) -> Void)?
+    /// Builds the card of an item. Give the cards a similar height.
     @ViewBuilder var card: (Item) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -19248,8 +19452,11 @@ enum RatingStarsValue {
 ///
 /// VoiceOver treats the row as one adjustable value. With Reduce Motion on, the stars only change color.
 struct RatingStars: View {
+    /// The number of filled stars, from 0 to `maximum`. The component writes it on a tap, and a tap on the chosen star sets it to 0.
     @Binding var rating: Int
+    /// How many stars the row draws.
     var maximum: Int = 5
+    /// The fill of the chosen stars, drawn as a gradient. The rest are drawn in the quaternary style.
     var color: Color = .orange
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -19407,6 +19614,10 @@ struct ShakeErrorModifier<Trigger: Equatable & Sendable>: ViewModifier {
 
 extension View {
     /// Shakes the view each time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - trigger: A value that starts a shake and an error haptic each time it changes, like a count of failed attempts.
+    ///   - distance: How far in points the view swings to each side on the first beat. The later beats swing less.
     func shakeError(trigger: some Equatable & Sendable, distance: CGFloat = 10) -> some View {
         modifier(ShakeErrorModifier(trigger: trigger, distance: distance))
     }
@@ -19489,8 +19700,11 @@ import SwiftUI
 
 /// The capsule shown by the `.toast(isPresented:)` modifier.
 struct ToastBanner: View {
+    /// The text of the banner, which VoiceOver also announces.
     let message: LocalizedStringResource
+    /// The SF Symbol before the message.
     var systemImage: String = "checkmark.circle.fill"
+    /// The color of the symbol, drawn as a gradient. The message keeps the primary style.
     var tint: Color = .green
 
     var body: some View {
@@ -19548,6 +19762,13 @@ extension View {
     /// Slides a banner in from the top, announces it to VoiceOver and dismisses it after `duration` seconds.
     ///
     /// With Reduce Motion on, the banner fades instead of sliding.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the banner shows. Set it to `true` to show it; the modifier sets it back to `false` when the banner times out.
+    ///   - message: The text of the banner, also announced to VoiceOver. A new message while it shows restarts the timer.
+    ///   - systemImage: The SF Symbol before the message.
+    ///   - tint: The color of the symbol, drawn as a gradient.
+    ///   - duration: How many seconds the banner stays before it dismisses itself.
     func toast(
         isPresented: Binding<Bool>,
         message: LocalizedStringResource,
@@ -19895,6 +20116,10 @@ import SwiftUI
 
 extension View {
     /// Marks this view as the place a tooltip points to.
+    ///
+    /// - Parameters:
+    ///   - id: The name ``TooltipPopoverHost`` looks for in its `activeID` to show this tooltip. Keep it unique on the screen.
+    ///   - text: What the tooltip says.
     func tooltipPopoverAnchor(id: String, text: LocalizedStringResource) -> some View {
         anchorPreference(key: TooltipPopoverAnchorKey.self, value: .bounds) { bounds in
             [id: TooltipPopoverAnchor(text: text, bounds: bounds)]
@@ -20171,10 +20396,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the line stays still and the bar simply fades away on time.
 struct UndoSnackbar: View {
+    /// The line on the bar, announced to VoiceOver with "Undo available".
     let message: LocalizedStringResource
+    /// How many seconds the bar lasts before `onExpire` runs. Doubled while VoiceOver is on.
     var duration: Double = 5
+    /// The color of the Undo button and of the line that shrinks.
     var tint: Color = .yellow
+    /// Runs when the Undo button is tapped.
     let onUndo: () -> Void
+    /// Runs when `duration` runs out without an undo. Remove the bar there.
     let onExpire: () -> Void
 
     @State private var remaining = 1.0
@@ -20256,6 +20486,12 @@ private struct UndoSnackbarModifier: ViewModifier {
 
 extension View {
     /// Shows an `UndoSnackbar` at the bottom for `duration` seconds.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the bar shows. Set it to `true` to show it; the modifier sets it back to `false` on an undo or when the time runs out.
+    ///   - message: The line on the bar, announced to VoiceOver.
+    ///   - duration: How many seconds the bar lasts. Doubled while VoiceOver is on.
+    ///   - onUndo: Runs when the Undo button is tapped, after the bar starts to hide.
     func undoSnackbar(
         isPresented: Binding<Bool>,
         message: LocalizedStringResource,
@@ -23001,10 +23237,15 @@ import SwiftUI
 ///
 /// `position` runs from 0, all after, to 1, all before. VoiceOver adjusts it by swiping up or down.
 struct BeforeAfterSlider: View {
+    /// The image shown on the leading side of the handle. Both images fill the frame and are cropped to it.
     let before: Image
+    /// The image shown on the trailing side of the handle.
     let after: Image
+    /// Where the handle sits, from 0 at the leading edge to 1 at the trailing edge. The component writes it while dragging, and VoiceOver moves it in steps of 0.1.
     @Binding var position: Double
+    /// The tag in the top leading corner, also read by VoiceOver. It fades as the handle nears the leading edge.
     var beforeTitle = "Before"
+    /// The tag in the top trailing corner, also read by VoiceOver. It fades as the handle nears the trailing edge.
     var afterTitle = "After"
 
     @ScaledMetric(relativeTo: .body) private var knobSize = 44.0
@@ -23153,10 +23394,15 @@ private struct BlurUpImageFocus: Transition {
 /// It fills the space it is given. With Reduce Motion on, the full image fades in without the
 /// focus pull. Use `BlurUpImageRemote` to load the full image from a URL.
 struct BlurUpImage: View {
+    /// A small or low-quality version of the image, shown blurred until `image` arrives.
     let preview: Image
+    /// The full image, or `nil` while it loads. Setting it brings it into focus over the preview.
     let image: Image?
+    /// What VoiceOver reads for the image.
     let label: LocalizedStringResource
+    /// How blurred the preview is, in points. The full image starts from the same blur.
     var blurRadius: CGFloat = 24
+    /// Whether to show a spinner over the preview while `image` is `nil`. Set it to `false` when loading fails.
     var isLoading = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -23353,10 +23599,15 @@ nonisolated private struct CircularAvatarCropperDim: Shape {
 /// is the photo's width divided by its height. VoiceOver zooms by swiping up or down, and pans
 /// with custom actions.
 struct CircularAvatarCropper: View {
+    /// The photo to crop. It always covers the window.
     let image: Image
+    /// The photo's width divided by its height, used to size it and to compute the crop.
     let aspectRatio: CGFloat
+    /// The zoom and position of the photo. The component writes it when a pan or pinch ends, always kept in range.
     @Binding var crop: CircularAvatarCropperTransform
+    /// The largest zoom, as a multiple of the size that just fills the window. Values below 1 act as 1.
     var maxZoom: CGFloat = 4
+    /// The space in points between the circular window and the shorter side of the view.
     var windowInset: CGFloat = 24
 
     @GestureState private var translation = CGSize.zero
@@ -23613,9 +23864,13 @@ struct CropRectangleOverlay: View {
         let delta: CGSize
     }
 
+    /// The image to crop. It fits the space it is given, keeping `aspectRatio`.
     let image: Image
+    /// The image's width divided by its height.
     let aspectRatio: CGFloat
+    /// The crop frame as a fraction of the image, from 0 to 1 on each axis. The component writes it when a drag ends or a VoiceOver action runs; a value outside the image is fitted inside it.
     @Binding var crop: CGRect
+    /// The smallest width and height the frame can be resized to, as a fraction of the image.
     var minimumSide: CGFloat = 0.15
 
     @GestureState private var drag: ActiveDrag?
@@ -23830,8 +24085,11 @@ enum DoubleTapZoomImageMath {
 /// While zoomed, a drag pans the image. At rest it leaves drags to the scroll view around it.
 /// With Reduce Motion on, the zoom changes without animating.
 struct DoubleTapZoomImage: View {
+    /// The image, filling the space it is given and cropped to it.
     let image: Image
+    /// What VoiceOver reads for the image.
     let label: LocalizedStringResource
+    /// How much a double tap magnifies the image. Values below 1 act as 1.
     var zoom: CGFloat = 2.5
     /// Zooms in on this point without a touch, for demos. `nil` returns to fit.
     var programmaticZoom: UnitPoint? = nil
@@ -23988,11 +24246,17 @@ import SwiftUI
 /// It fills the space it is given and never shows an edge, because it only scales up around a
 /// point inside the image. With Reduce Motion on, the picture stays still.
 struct KenBurnsImage: View {
+    /// The picture, filling the space it is given and cropped to it.
     let image: Image
+    /// What VoiceOver reads for the picture.
     let label: LocalizedStringResource
+    /// How many seconds one pass takes, from `from` to `to`. It then eases back and repeats.
     var duration: Double = 12
+    /// How far the picture scales up at the end of a pass. Values below 1 act as 1.
     var zoom: CGFloat = 1.3
+    /// The point of the picture it zooms around at the start of a pass.
     var from: UnitPoint = .topLeading
+    /// The point of the picture it zooms around at the end of a pass.
     var to: UnitPoint = .bottomTrailing
 
     @State private var isAtEnd = false
@@ -24114,8 +24378,11 @@ extension View {
 ///
 /// The whole view scrolls, so every slider stays reachable at the largest text sizes.
 struct PhotoAdjustmentSliders: View {
+    /// The photo the adjustments are previewed on.
     let image: Image
+    /// The brightness, contrast, saturation and hue. The sliders write them as they move, and Reset sets them back to their defaults. Apply them elsewhere with `adjusted(by:)`.
     @Binding var values: PhotoAdjustmentSlidersValues
+    /// The tallest the photo is drawn, in points. It fits inside that height, keeping its proportions.
     var maxImageHeight: CGFloat = 340
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -24284,8 +24551,11 @@ extension View {
 /// The row scrolls sideways and its tiles grow with Dynamic Type. With Reduce Motion on, a new
 /// look appears without a crossfade.
 struct PhotoFilterPresets: View {
+    /// The photo shown large with the chosen look, and small in every tile.
     let image: Image
+    /// The chosen look. The component writes it when a tile is tapped. Apply it elsewhere with `filtered(by:)`.
     @Binding var selection: PhotoFilterPreset
+    /// The looks offered in the row, in order. Each tile shows the photo with its look and its name.
     var presets = PhotoFilterPreset.all
 
     @ScaledMetric(relativeTo: .caption) private var tileSize = 72.0
@@ -24428,9 +24698,13 @@ enum PhotoLightboxMath {
 /// and the swipe down stop while the current photo is zoomed, so a drag pans it instead.
 /// Changing `photos` returns every page to fit.
 struct PhotoLightbox: View {
+    /// The photos to page through, each fitted to the screen.
     let photos: [Image]
+    /// The index of the photo on screen. The component writes it on a swipe, and pulls it back into range when `photos` shrinks.
     @Binding var selection: Int
+    /// The largest zoom of a pinch, as a multiple of the fitted size. A double tap zooms to 2.5, or to this if it is smaller.
     var maxZoom: CGFloat = 4
+    /// Runs when the close button is tapped, the photo is swiped down far enough, or VoiceOver's escape gesture is made. Remove the viewer there.
     var onClose: () -> Void
 
     @State private var zooms: [Int: CGFloat] = [:]
@@ -24684,9 +24958,13 @@ struct PhotoMultiSelectGridPhoto: Identifiable {
 /// In that mode a tap toggles a photo. Out of it, a tap calls `onOpen`. Photos that disappear
 /// also leave the selection. With Reduce Motion on, photos change state without animating.
 struct PhotoMultiSelectGrid: View {
+    /// The photos, laid out in square cells at least 110 points wide.
     let photos: [PhotoMultiSelectGridPhoto]
+    /// The ids of the chosen photos. The component writes it as photos are toggled, and drops ids that leave `photos`.
     @Binding var selection: Set<String>
+    /// Whether the grid is in multi-select mode. The component turns it on with a long press; turn it off yourself, and clear `selection` if you want.
     @Binding var isSelecting: Bool
+    /// Called with the photo tapped while the grid is not selecting.
     var onOpen: (PhotoMultiSelectGridPhoto) -> Void = { _ in }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -24915,7 +25193,9 @@ struct ScatteredPhotoBoard: View {
         let translation: CGSize
     }
 
+    /// The photos, scattered on a jittered grid that keeps each one in the same place for the same index.
     let photos: [ScatteredPhotoBoardPhoto]
+    /// The width of each card in points. Its height is 1.2 times the width.
     var cardWidth: CGFloat = 150
 
     @State private var offsets: [String: CGSize] = [:]
@@ -27181,6 +27461,7 @@ import SwiftUI
 struct ModelAvailabilityGate<Content: View>: View {
     /// Leave it `nil` to read the real model. Pass a value to force a state.
     var availability: SystemLanguageModel.Availability? = nil
+    /// The feature that uses the model, shown only while it is available.
     @ViewBuilder var content: () -> Content
 
     @State private var liveAvailability = SystemLanguageModel.default.availability
@@ -27355,8 +27636,11 @@ struct OnDeviceStreamingAnswer: View {
 
     private struct ModelUnavailable: Error {}
 
+    /// The question sent to the model, trimmed of surrounding spaces. Changing it starts a new answer; an empty one shows `placeholder`.
     let prompt: String
+    /// What the model is told before every prompt, like the tone and length of the answer.
     var instructions = "Answer in two short, friendly sentences."
+    /// The text shown, in the secondary style, while `prompt` is empty.
     var placeholder = "Ask something to see the answer here."
     /// Replaces the model with your own text stream, for previews and for tests.
     /// Each element is the whole text so far.
@@ -27364,6 +27648,7 @@ struct OnDeviceStreamingAnswer: View {
     /// Plays instead of an error when the model is unavailable or fails.
     /// Each element is the whole text so far.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
+    /// The text shown when the model is unavailable or fails and there is no `fallbackStream`.
     var failureMessage = "The on-device model couldn't answer right now. Please try again later."
 
     @State private var text = ""
@@ -27584,12 +27869,15 @@ struct StructuredOutputFormDraft: Equatable, Sendable {
 /// A form whose fields the on-device model fills in from a free-form note, as a typed value.
 @available(iOS 27, *)
 struct StructuredOutputForm: View {
+    /// The free-form note the model reads, like "Lunch at Joe's, 18.50". The component writes it as the person types.
     @Binding var note: String
+    /// The values of the form. The component empties it when filling starts, writes each field as it arrives, restores it if filling fails, and writes the person's edits.
     @Binding var draft: StructuredOutputFormDraft
     /// Replaces the model with your own stream, for previews and for tests.
     var sampleStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
     /// Plays instead of an error when the model is unavailable or fails.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
+    /// The text shown under the form when the model is unavailable or fails and there is no `fallbackStream`.
     var failureMessage = "The on-device model couldn't fill in the form right now. Please try again later."
 
     @State private var fillTask: Task<Void, Never>?
@@ -30971,9 +31259,14 @@ nonisolated enum MapAnnotationCalloutLogic {
 /// VoiceOver reads each pin by its title and label. With Reduce Motion on, the callout fades in
 /// and the camera does not fly.
 struct MapAnnotationCallout<Callout: View>: View {
+    /// The pins. The map opens on a region that fits them all.
     let items: [MapAnnotationCalloutItem]
+    /// The id of the pin whose callout is open, or nil. The map writes it on a tap, and clears it
+    /// on a tap elsewhere.
     @Binding var selection: MapAnnotationCalloutItem.ID?
+    /// The width of the callout's content, in points, inside its 12-point padding.
     var calloutWidth: CGFloat = 220
+    /// What the callout above the selected pin shows.
     @ViewBuilder var callout: (MapAnnotationCalloutItem) -> Callout
 
     private let shadow = Color.black.opacity(0.2)
@@ -31176,8 +31469,11 @@ nonisolated enum MapClusterAnnotationsLogic {
 /// A tap on a place sets `selection` and shows its name. With Reduce Motion on, the camera
 /// does not fly.
 struct MapClusterAnnotations: View {
+    /// The places on the map. The map opens on a region that fits them all.
     let places: [MapClusterAnnotationsPlace]
+    /// The id of the place whose name shows, or nil. A tap on a place writes it, and a second tap clears it.
     @Binding var selection: MapClusterAnnotationsPlace.ID?
+    /// The fill of the bubbles and of the selected place. Their content takes white or black from it.
     var tint: Color = .indigo
 
     @State private var position = MapCameraPosition.automatic
@@ -31408,12 +31704,17 @@ nonisolated enum MapRouteTrackerMath {
 /// Set `progress` from 0 to 1 as the trip advances. The route is yours: take it from
 /// `MKDirections` or from your own data.
 struct MapRouteTracker: View {
+    /// The points of the route, from the start to the destination, which gets a flag.
     let route: [MapRouteTrackerPoint]
     /// How much of the route is done, from 0 to 1.
     var progress: Double
+    /// The SF Symbol on the moving marker.
     var symbol = "bicycle"
+    /// The color of the route, of the marker's symbol and ring and of the destination flag.
     var color = Color.blue
+    /// The name of the moving marker, which VoiceOver reads with the share of the route done.
     var markerTitle = "Courier"
+    /// The name of the destination flag.
     var destinationTitle = "Destination"
     /// Whether the camera travels with the marker. Otherwise it shows the whole route.
     var followsMarker = true
@@ -31600,7 +31901,9 @@ nonisolated enum MapSearchSheetLogic {
 /// Typing filters the list and the markers. Choosing a place, in the list or on the map, flies
 /// the camera to it. The places are yours: fill them from `MKLocalSearch` or from your own data.
 struct MapSearchSheet: View {
+    /// Every place, on the map and in the list. Typing keeps those whose name or kind has every word.
     let places: [MapSearchSheetPlace]
+    /// The placeholder of the search field.
     var prompt: LocalizedStringResource = "Search places"
     /// How far above a chosen place the camera stops, in meters.
     var closeUpDistance = 1500.0
@@ -31791,15 +32094,21 @@ import SwiftUI
 ///
 /// Pass any view as the artwork, usually `Image("cover").resizable().scaledToFill()`.
 struct AudioPlayerCard<Artwork: View>: View {
+    /// The episode or track name, in the headline style.
     let title: String
+    /// The line under the title, like the show or the artist.
     let subtitle: String
+    /// The length of the audio in seconds. At zero, the slider and the skip buttons are disabled.
     let duration: TimeInterval
+    /// The playback position in seconds. The component writes it while scrubbing and on each skip, kept between 0 and `duration`.
     @Binding var currentTime: TimeInterval
+    /// Whether the audio plays. The component toggles it from the play button.
     @Binding var isPlaying: Bool
     /// Seconds per skip. Matching SF Symbols exist for 5, 10, 15, 30, 45, 60, 75 and 90.
     var skipInterval = 15
     /// Called with `true` when a scrub starts and `false` when it ends.
     var onScrubbingChanged: (Bool) -> Void = { _ in }
+    /// The cover, drawn in a rounded square that grows with Dynamic Type.
     @ViewBuilder var artwork: () -> Artwork
 
     @ScaledMetric(relativeTo: .title) private var artworkSize = 84.0
@@ -31992,11 +32301,15 @@ struct DoubleTapSeekOverlayTally: Equatable {
 /// left inside `video` would do both. VoiceOver users get the same skips as named actions.
 /// With Reduce Motion on, the ripple is left out.
 struct DoubleTapSeekOverlay<Video: View, Controls: View>: View {
+    /// The seconds each double tap skips. Repeated double taps on one side add up in the label. At zero or below, nothing seeks.
     var interval = 10.0
+    /// Called with the seconds to move on each skip, negative when going back.
     let onSeek: (Double) -> Void
     /// Skips without a touch, for demos. Each new value is one skip.
     var programmaticSeek: DoubleTapSeekOverlayRequest? = nil
+    /// The player. A double tap on its left half skips back and on its right half skips forward, also in right-to-left layouts.
     @ViewBuilder var video: () -> Video
+    /// Buttons drawn above the video and the seek gesture, so a double tap on one does not seek.
     @ViewBuilder var controls: () -> Controls
 
     @State private var tally = DoubleTapSeekOverlayTally()
@@ -32089,6 +32402,13 @@ struct DoubleTapSeekOverlay<Video: View, Controls: View>: View {
 }
 
 extension DoubleTapSeekOverlay where Controls == EmptyView {
+    /// Creates the overlay without controls of its own.
+    ///
+    /// - Parameters:
+    ///   - interval: The seconds each double tap skips. At zero or below, nothing seeks.
+    ///   - onSeek: Called with the seconds to move on each skip, negative when going back.
+    ///   - programmaticSeek: Skips without a touch, for demos. Each new value is one skip.
+    ///   - video: The player. A double tap on its left half skips back and on its right half skips forward.
     init(interval: Double = 10.0, onSeek: @escaping (Double) -> Void, programmaticSeek: DoubleTapSeekOverlayRequest? = nil, @ViewBuilder video: @escaping () -> Video) {
         self.init(interval: interval, onSeek: onSeek, programmaticSeek: programmaticSeek, video: video, controls: { EmptyView() })
     }
@@ -32209,14 +32529,21 @@ import SwiftUI
 struct ExpandingMiniPlayer<Content: View, Artwork: View>: View {
     private enum MorphID: Hashable { case background, artwork }
 
+    /// The track name, on the mini bar and the full player.
     let title: String
+    /// The line under the title, like the artist.
     let subtitle: String
+    /// Whether the track plays. The component toggles it from its play buttons.
     @Binding var isPlaying: Bool
     /// From 0 to 1.
     var progress = 0.0
+    /// Runs when the previous button of the full player is tapped.
     var onPrevious: () -> Void = {}
+    /// Runs when the next button of the full player is tapped.
     var onNext: () -> Void = {}
+    /// The screen under the player. It gets bottom padding so the mini bar does not cover it.
     @ViewBuilder var content: () -> Content
+    /// The cover, which morphs from a small square on the mini bar to a large one in the full player.
     @ViewBuilder var artwork: () -> Artwork
 
     @State private var isExpanded = false
@@ -32477,8 +32804,11 @@ enum ShutterCaptureButtonMode: String, CaseIterable, Identifiable, Sendable {
 /// In photo mode a tap calls `onCapture` and flashes a ring. In video mode a tap
 /// toggles `isRecording`. With Reduce Motion on, the shape changes without moving.
 struct ShutterCaptureButton: View {
+    /// Whether the shutter takes photos or records video. The component writes it from the Photo and Video toggle, which is disabled while recording.
     @Binding var mode: ShutterCaptureButtonMode
+    /// Whether a video is recording. The component toggles it on a tap in video mode, and the inner circle turns into a square while it is on.
     @Binding var isRecording: Bool
+    /// Runs on a tap in photo mode.
     var onCapture: () -> Void = {}
 
     @State private var captureCount = 0
@@ -32677,10 +33007,13 @@ struct SpinningVinylArtSpin: Equatable {
 /// Pass any view as the art, usually `Image("cover").resizable().scaledToFill()`.
 /// With Reduce Motion on, the disc stays still.
 struct SpinningVinylArt<Artwork: View>: View {
+    /// Whether the disc spins. It speeds up and eases to a stop over 0.9 seconds.
     let isPlaying: Bool
     /// Revolutions per minute. A 33 rpm record is slow enough to read the label.
     var rpm = 33.0
+    /// What VoiceOver reads for the disc.
     var accessibilityName = "Album art"
+    /// The cover, clipped to a circle in the middle 60% of the disc.
     @ViewBuilder var artwork: () -> Artwork
 
     @State private var spin = SpinningVinylArtSpin()
@@ -32818,11 +33151,17 @@ struct VideoPlayerChrome<Video: View>: View {
         let activity: Int
     }
 
+    /// The name shown at the top of the controls, on up to two lines.
     let title: String
+    /// The length of the video in seconds. At zero, the slider is disabled.
     let duration: TimeInterval
+    /// The playback position in seconds. The component writes it while scrubbing and on each 10-second skip, kept between 0 and `duration`.
     @Binding var currentTime: TimeInterval
+    /// Whether the video plays. The component toggles it from the play button. The controls only hide while it is `true`.
     @Binding var isPlaying: Bool
+    /// How many seconds the controls stay after the last touch while the video plays. They stay while scrubbing.
     var hideDelay: TimeInterval = 3
+    /// The video view the controls sit over, like `VideoPlayer(player: player)`.
     @ViewBuilder var video: () -> Video
 
     @State private var isVisible = true
@@ -33006,10 +33345,15 @@ import SwiftUI
 /// `VideoPlayer(player: player)`. Start and stop your player from `isPlaying`.
 /// With Reduce Motion on, the video fades in instead of opening from the button.
 struct VideoPosterToPlayer<Poster: View, Player: View>: View {
+    /// Whether the player shows instead of the poster. The component sets it to `true` from the play button and to `false` from the close button.
     @Binding var isPlaying: Bool
+    /// The width of the frame divided by its height. A value that is not positive falls back to 16:9.
     var aspectRatio: CGFloat = 16.0 / 9.0
+    /// The corner radius of the frame in points, which clips the poster and the player.
     var cornerRadius: CGFloat = 22
+    /// The still shown with the play button over it, hidden from VoiceOver.
     @ViewBuilder var poster: () -> Poster
+    /// The video, shown while `isPlaying` is `true`. It opens from the center as a growing circle.
     @ViewBuilder var player: () -> Player
 
     @ScaledMetric(relativeTo: .title) private var buttonSize = 72.0
@@ -33182,11 +33526,17 @@ enum WaveformScrubberMath {
 ///
 /// `samples` are loudness values from 0 to 1. With Reduce Motion on, the bars don't grow during a drag.
 struct WaveformScrubber: View {
+    /// The loudness of the audio over time, each from 0 to 1. They are averaged into as many bars as fit the width.
     let samples: [Double]
+    /// The playback position, from 0 to 1. The component writes it while dragging, and VoiceOver moves it in steps of 0.05.
     @Binding var progress: Double
+    /// The color of the bars already played. The rest are drawn in a faint secondary color.
     var tint: Color = .accentColor
+    /// The width of each bar in points, also the height of the shortest one.
     var barWidth: CGFloat = 3
+    /// The gap between bars in points.
     var spacing: CGFloat = 2
+    /// Called with `true` when a drag starts and `false` when it ends.
     var onScrubbingChanged: (Bool) -> Void = { _ in }
 
     @GestureState private var isDragging = false
@@ -34424,8 +34774,11 @@ nonisolated struct AnimatableRingArc: Shape {
 /// With Reduce Motion on, the ring jumps to the new value.
 @available(iOS 26, *)
 struct AnimatableRing: View {
+    /// How full the ring is, from 0 to 1. Values outside stop at the ends, and the center shows it as a percent.
     let progress: Double
+    /// What VoiceOver calls the ring before reading the percent.
     var title: LocalizedStringKey = "Progress"
+    /// The colors of the angular gradient around the arc. Repeat the first color last for a seamless join.
     var colors: [Color] = [.mint, .cyan, .blue, .mint]
 
     @ScaledMetric(relativeTo: .largeTitle) private var lineWidth = 26.0
@@ -34506,9 +34859,13 @@ import SwiftUI
 /// A card that publishes its corners, so `ConcentricCardSurface` views inside stay concentric.
 @available(iOS 26, *)
 struct ConcentricCard<Background: ShapeStyle, Content: View>: View {
+    /// The radius of the card's corners, in points. Surfaces inside take theirs from it.
     var cornerRadius: CGFloat = 36
+    /// The space between the card's edge and its content, in points.
     var padding: CGFloat = 12
+    /// The fill of the card.
     let background: Background
+    /// What the card holds. Put `ConcentricCardSurface` views here to match its corners.
     @ViewBuilder let content: () -> Content
 
     var body: some View {
@@ -34609,9 +34966,13 @@ struct ProminentTabBarItem<Value: Hashable>: Identifiable {
 /// A tab view whose main action gets the system's prominent tab treatment.
 @available(iOS 27, *)
 struct ProminentTabBar<Value: Hashable, Content: View>: View {
+    /// The ordinary tabs, in order.
     let tabs: [ProminentTabBarItem<Value>]
+    /// The main action, drawn last with the system's prominent tab role.
     let prominent: ProminentTabBarItem<Value>
+    /// The value of the tab on screen. The tab bar writes it when a tab is chosen.
     @Binding var selection: Value
+    /// The screen of each tab, for its value.
     @ViewBuilder let content: (Value) -> Content
 
     var body: some View {
@@ -34700,8 +35061,11 @@ import SwiftUI
 /// The header sits in a safe area bar, which is what lets the scroll edge effect reach it.
 @available(iOS 26, *)
 struct ScrollEdgeHeader<Header: View, Content: View>: View {
+    /// The system's edge effect where the content meets the header, like `.soft` or `.hard`.
     var style: ScrollEdgeEffectStyle = .soft
+    /// The view pinned at the top, over the scrolling content.
     @ViewBuilder let header: () -> Header
+    /// What scrolls under the header.
     @ViewBuilder let content: () -> Content
 
     var body: some View {
@@ -34783,8 +35147,11 @@ import SwiftUI
 /// appearance. With Reduce Motion on, the symbol fades.
 @available(iOS 26, *)
 struct SymbolDrawOn: View {
+    /// The SF Symbol to draw.
     let systemName: String
+    /// Whether the symbol shows. Turning it true draws it on, and false draws it off.
     var isDrawn: Bool
+    /// What VoiceOver reads for the symbol, or nil to hide it from VoiceOver.
     var label: LocalizedStringKey?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -34873,9 +35240,13 @@ struct ToolbarOverflowDemoAction: Identifiable {
 /// The title is large, under the bar, where the actions cannot push it out.
 @available(iOS 27, *)
 struct ToolbarOverflowDemo<Content: View>: View {
+    /// The large navigation title.
     let title: LocalizedStringResource
+    /// The actions in the bar. When space runs out, those with the lowest `priority` move to the menu first.
     let barActions: [ToolbarOverflowDemoAction]
+    /// The actions that always live in the overflow menu.
     let overflowActions: [ToolbarOverflowDemoAction]
+    /// The screen under the navigation bar.
     @ViewBuilder let content: () -> Content
 
     var body: some View {
@@ -40090,10 +40461,15 @@ nonisolated enum ProfileHeaderStretchyMath {
 /// The cover and the avatar follow the scroll itself, so there is nothing to slow down for
 /// Reduce Motion. Put it at the top of a screen: the cover runs under the status bar.
 struct ProfileHeaderStretchy<Cover: View, Avatar: View, Content: View>: View {
+    /// The name that shows in the bar once the cover has closed.
     let name: String
+    /// The height of the cover at rest, in points, measured from the top of the screen.
     var coverHeight: CGFloat = 190
+    /// The background of the header, usually an image. It is clipped to the cover's height as it changes.
     @ViewBuilder var cover: () -> Cover
+    /// The picture in the circle on the cover's leading edge, half under it.
     @ViewBuilder var avatar: () -> Avatar
+    /// The page that scrolls under the header.
     @ViewBuilder var content: () -> Content
 
     @State private var offset: CGFloat = 0
@@ -40265,9 +40641,13 @@ struct StoriesViewerStory: Identifiable {
 /// Tap the left or right half to move, and hold to pause. Stories do not advance by themselves
 /// with Reduce Motion or VoiceOver on: the tap areas still work.
 struct StoriesViewer: View {
+    /// The stories, in the order they play, with a segment each in the progress bar.
     let stories: [StoriesViewerStory]
+    /// The seconds each story shows before the next, a tenth of a second at the least.
     var duration: TimeInterval = 4
+    /// Runs when the close button is tapped. Nil hides the button.
     var onClose: (() -> Void)?
+    /// Runs when the last story ends, by itself or with a tap forward.
     var onFinish: () -> Void = {}
 
     @State private var playback = StoriesViewerPlayback()
@@ -40589,11 +40969,17 @@ import SwiftUI
 /// `placeholder` shows while the image loads or when there is no URL. With Reduce Motion on,
 /// the ring stays still.
 struct StoryRingAvatar<Placeholder: View>: View {
+    /// The person's name, which VoiceOver reads.
     let name: String
+    /// The address of the photo, loaded with `AsyncImage`. Nil shows the placeholder.
     var url: URL?
+    /// Whether the colored ring shows and spins. Otherwise only a faint ring remains.
     var hasUnseenStories: Bool = true
+    /// The width of the whole avatar, ring included, in points.
     var size: CGFloat = 72
+    /// The angular gradient of the ring. Repeat the first color last for a seamless join.
     var colors: [Color] = [.yellow, .orange, .pink, .purple, .yellow]
+    /// What shows while the photo loads, when it fails, or with no `url`.
     @ViewBuilder var placeholder: () -> Placeholder
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

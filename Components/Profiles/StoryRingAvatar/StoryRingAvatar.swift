@@ -8,11 +8,17 @@ import SwiftUI
 /// `placeholder` shows while the image loads or when there is no URL. With Reduce Motion on,
 /// the ring stays still.
 struct StoryRingAvatar<Placeholder: View>: View {
+    /// The person's name, which VoiceOver reads.
     let name: String
+    /// The address of the photo, loaded with `AsyncImage`. Nil shows the placeholder.
     var url: URL?
+    /// Whether the colored ring shows and spins. Otherwise only a faint ring remains.
     var hasUnseenStories: Bool = true
+    /// The width of the whole avatar, ring included, in points.
     var size: CGFloat = 72
+    /// The angular gradient of the ring. Repeat the first color last for a seamless join.
     var colors: [Color] = [.yellow, .orange, .pink, .purple, .yellow]
+    /// What shows while the photo loads, when it fails, or with no `url`.
     @ViewBuilder var placeholder: () -> Placeholder
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

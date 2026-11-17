@@ -12,8 +12,12 @@ struct AnimatedBarChartEntry: Hashable {
 ///
 /// With Reduce Motion on, the bars are drawn at their final height.
 struct AnimatedBarChart: View {
+    /// The bars, from the leading edge. Each is as tall as its share of the highest value, and zero
+    /// or negative values draw no bar.
     let entries: [AnimatedBarChartEntry]
+    /// The color of the bars, drawn as a gradient.
     var tint: Color = .indigo
+    /// The seconds each bar waits after the one before it starts to grow.
     var stagger: Double = 0.09
 
     @State private var isRevealed = false

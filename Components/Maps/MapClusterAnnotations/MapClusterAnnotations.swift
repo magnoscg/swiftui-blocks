@@ -80,8 +80,11 @@ nonisolated enum MapClusterAnnotationsLogic {
 /// A tap on a place sets `selection` and shows its name. With Reduce Motion on, the camera
 /// does not fly.
 struct MapClusterAnnotations: View {
+    /// The places on the map. The map opens on a region that fits them all.
     let places: [MapClusterAnnotationsPlace]
+    /// The id of the place whose name shows, or nil. A tap on a place writes it, and a second tap clears it.
     @Binding var selection: MapClusterAnnotationsPlace.ID?
+    /// The fill of the bubbles and of the selected place. Their content takes white or black from it.
     var tint: Color = .indigo
 
     @State private var position = MapCameraPosition.automatic

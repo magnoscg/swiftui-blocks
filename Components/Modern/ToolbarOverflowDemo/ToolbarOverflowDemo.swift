@@ -19,9 +19,13 @@ struct ToolbarOverflowDemoAction: Identifiable {
 /// The title is large, under the bar, where the actions cannot push it out.
 @available(iOS 27, *)
 struct ToolbarOverflowDemo<Content: View>: View {
+    /// The large navigation title.
     let title: LocalizedStringResource
+    /// The actions in the bar. When space runs out, those with the lowest `priority` move to the menu first.
     let barActions: [ToolbarOverflowDemoAction]
+    /// The actions that always live in the overflow menu.
     let overflowActions: [ToolbarOverflowDemoAction]
+    /// The screen under the navigation bar.
     @ViewBuilder let content: () -> Content
 
     var body: some View {

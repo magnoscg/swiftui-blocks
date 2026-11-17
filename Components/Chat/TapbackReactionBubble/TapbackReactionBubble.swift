@@ -23,12 +23,16 @@ nonisolated enum TapbackReactionBubbleLogic {
 /// VoiceOver offers each reaction as an action of the message. With Reduce Motion on, nothing
 /// scales: the bar and the badge fade.
 struct TapbackReactionBubble<Content: View>: View {
+    /// The reaction shown as the badge, or nil for none. Choosing one writes it, and choosing it again clears it.
     @Binding var reaction: String?
+    /// Whether the bar of reactions is open. A long press sets it, and choosing a reaction clears it.
     @Binding var isPicking: Bool
+    /// The reactions in the bar, in order. Each one must be unique.
     var reactions = ["❤️", "👍", "👎", "😂", "‼️", "❓"]
     /// The side of the screen the message sits on. The bar grows from that side and the badge
     /// goes to the other corner, toward the middle of the screen.
     var side = HorizontalAlignment.leading
+    /// The message itself, which lifts while the bar is open.
     @ViewBuilder var content: () -> Content
 
     private let gap: CGFloat = 8

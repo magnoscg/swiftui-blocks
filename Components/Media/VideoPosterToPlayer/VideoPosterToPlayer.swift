@@ -9,10 +9,15 @@ import SwiftUI
 /// `VideoPlayer(player: player)`. Start and stop your player from `isPlaying`.
 /// With Reduce Motion on, the video fades in instead of opening from the button.
 struct VideoPosterToPlayer<Poster: View, Player: View>: View {
+    /// Whether the player shows instead of the poster. The component sets it to `true` from the play button and to `false` from the close button.
     @Binding var isPlaying: Bool
+    /// The width of the frame divided by its height. A value that is not positive falls back to 16:9.
     var aspectRatio: CGFloat = 16.0 / 9.0
+    /// The corner radius of the frame in points, which clips the poster and the player.
     var cornerRadius: CGFloat = 22
+    /// The still shown with the play button over it, hidden from VoiceOver.
     @ViewBuilder var poster: () -> Poster
+    /// The video, shown while `isPlaying` is `true`. It opens from the center as a growing circle.
     @ViewBuilder var player: () -> Player
 
     @ScaledMetric(relativeTo: .title) private var buttonSize = 72.0

@@ -5,6 +5,10 @@ import SwiftUI
 
 extension View {
     /// Marks this view as the place a tooltip points to.
+    ///
+    /// - Parameters:
+    ///   - id: The name ``TooltipPopoverHost`` looks for in its `activeID` to show this tooltip. Keep it unique on the screen.
+    ///   - text: What the tooltip says.
     func tooltipPopoverAnchor(id: String, text: LocalizedStringResource) -> some View {
         anchorPreference(key: TooltipPopoverAnchorKey.self, value: .bounds) { bounds in
             [id: TooltipPopoverAnchor(text: text, bounds: bounds)]

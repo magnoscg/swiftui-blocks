@@ -21,8 +21,11 @@ enum AvatarStackMath {
 
 /// Overlapping avatars of initials, with a +N badge for everyone who does not fit.
 struct AvatarStack: View {
+    /// The people in the stack, in order. Each avatar shows the initials of the first and last word.
     let names: [String]
+    /// How many avatars show before the rest fold into the +N badge.
     var maxVisible = 4
+    /// The width of each avatar, in points. It grows with Dynamic Type.
     var diameter: CGFloat = 48
 
     @ScaledMetric(relativeTo: .body) private var textScale = 1.0

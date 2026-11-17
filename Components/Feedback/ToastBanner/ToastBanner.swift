@@ -5,8 +5,11 @@ import SwiftUI
 
 /// The capsule shown by the `.toast(isPresented:)` modifier.
 struct ToastBanner: View {
+    /// The text of the banner, which VoiceOver also announces.
     let message: LocalizedStringResource
+    /// The SF Symbol before the message.
     var systemImage: String = "checkmark.circle.fill"
+    /// The color of the symbol, drawn as a gradient. The message keeps the primary style.
     var tint: Color = .green
 
     var body: some View {
@@ -64,6 +67,13 @@ extension View {
     /// Slides a banner in from the top, announces it to VoiceOver and dismisses it after `duration` seconds.
     ///
     /// With Reduce Motion on, the banner fades instead of sliding.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the banner shows. Set it to `true` to show it; the modifier sets it back to `false` when the banner times out.
+    ///   - message: The text of the banner, also announced to VoiceOver. A new message while it shows restarts the timer.
+    ///   - systemImage: The SF Symbol before the message.
+    ///   - tint: The color of the symbol, drawn as a gradient.
+    ///   - duration: How many seconds the banner stays before it dismisses itself.
     func toast(
         isPresented: Binding<Bool>,
         message: LocalizedStringResource,

@@ -43,9 +43,11 @@ nonisolated enum ScrollableBarChartMath {
 ///
 /// It starts on the latest days. Swift Charts gives VoiceOver every bar and an audio graph.
 struct ScrollableBarChart: View {
+    /// The value of each day, one bar each. The chart scrolls through all of them.
     let entries: [ScrollableBarChartEntry]
     /// The entries of the days in sight, kept up to date as the chart scrolls.
     @Binding var visible: [ScrollableBarChartEntry]
+    /// How many days fit in sight at once.
     var visibleDays = 7
 
     @State private var position = Date.now

@@ -23,10 +23,16 @@ enum BillingPeriodTogglePricing {
 ///
 /// With Reduce Motion on, everything changes at once.
 struct BillingPeriodToggle: View {
+    /// The billing period chosen. The segments write it.
     @Binding var period: BillingPeriodToggleOption
+    /// The price of one month on the monthly plan.
     var monthlyPrice: Double = 12
+    /// The price of a whole year on the yearly plan. It shows divided by 12, and the badge compares
+    /// it with 12 monthly payments.
     var yearlyPrice: Double = 99
+    /// The ISO 4217 code the prices are formatted in, like `"EUR"`.
     var currencyCode: String = "USD"
+    /// The fill of the selected segment.
     var tint: Color = .indigo
 
     @Namespace private var namespace

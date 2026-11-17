@@ -29,8 +29,11 @@ nonisolated struct AnimatableRingArc: Shape {
 /// With Reduce Motion on, the ring jumps to the new value.
 @available(iOS 26, *)
 struct AnimatableRing: View {
+    /// How full the ring is, from 0 to 1. Values outside stop at the ends, and the center shows it as a percent.
     let progress: Double
+    /// What VoiceOver calls the ring before reading the percent.
     var title: LocalizedStringKey = "Progress"
+    /// The colors of the angular gradient around the arc. Repeat the first color last for a seamless join.
     var colors: [Color] = [.mint, .cyan, .blue, .mint]
 
     @ScaledMetric(relativeTo: .largeTitle) private var lineWidth = 26.0

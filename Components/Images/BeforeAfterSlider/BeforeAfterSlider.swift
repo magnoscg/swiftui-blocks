@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// `position` runs from 0, all after, to 1, all before. VoiceOver adjusts it by swiping up or down.
 struct BeforeAfterSlider: View {
+    /// The image shown on the leading side of the handle. Both images fill the frame and are cropped to it.
     let before: Image
+    /// The image shown on the trailing side of the handle.
     let after: Image
+    /// Where the handle sits, from 0 at the leading edge to 1 at the trailing edge. The component writes it while dragging, and VoiceOver moves it in steps of 0.1.
     @Binding var position: Double
+    /// The tag in the top leading corner, also read by VoiceOver. It fades as the handle nears the leading edge.
     var beforeTitle = "Before"
+    /// The tag in the top trailing corner, also read by VoiceOver. It fades as the handle nears the trailing edge.
     var afterTitle = "After"
 
     @ScaledMetric(relativeTo: .body) private var knobSize = 44.0

@@ -66,12 +66,17 @@ nonisolated enum MapRouteTrackerMath {
 /// Set `progress` from 0 to 1 as the trip advances. The route is yours: take it from
 /// `MKDirections` or from your own data.
 struct MapRouteTracker: View {
+    /// The points of the route, from the start to the destination, which gets a flag.
     let route: [MapRouteTrackerPoint]
     /// How much of the route is done, from 0 to 1.
     var progress: Double
+    /// The SF Symbol on the moving marker.
     var symbol = "bicycle"
+    /// The color of the route, of the marker's symbol and ring and of the destination flag.
     var color = Color.blue
+    /// The name of the moving marker, which VoiceOver reads with the share of the route done.
     var markerTitle = "Courier"
+    /// The name of the destination flag.
     var destinationTitle = "Destination"
     /// Whether the camera travels with the marker. Otherwise it shows the whole route.
     var followsMarker = true

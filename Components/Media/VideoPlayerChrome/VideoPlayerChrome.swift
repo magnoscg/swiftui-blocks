@@ -13,11 +13,17 @@ struct VideoPlayerChrome<Video: View>: View {
         let activity: Int
     }
 
+    /// The name shown at the top of the controls, on up to two lines.
     let title: String
+    /// The length of the video in seconds. At zero, the slider is disabled.
     let duration: TimeInterval
+    /// The playback position in seconds. The component writes it while scrubbing and on each 10-second skip, kept between 0 and `duration`.
     @Binding var currentTime: TimeInterval
+    /// Whether the video plays. The component toggles it from the play button. The controls only hide while it is `true`.
     @Binding var isPlaying: Bool
+    /// How many seconds the controls stay after the last touch while the video plays. They stay while scrubbing.
     var hideDelay: TimeInterval = 3
+    /// The video view the controls sit over, like `VideoPlayer(player: player)`.
     @ViewBuilder var video: () -> Video
 
     @State private var isVisible = true

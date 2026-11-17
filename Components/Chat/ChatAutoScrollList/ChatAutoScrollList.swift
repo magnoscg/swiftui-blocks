@@ -17,6 +17,12 @@ struct ChatAutoScrollList<Item: Identifiable, Row: View>: View where Item.ID: Se
     @State private var isUserScrolling = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a list that opens on its newest message.
+    ///
+    /// - Parameters:
+    ///   - items: The messages, oldest first. A new last item scrolls into view while the list follows.
+    ///   - spacing: The gap between rows, in points.
+    ///   - row: The view of each message.
     init(items: [Item], spacing: CGFloat = 8, @ViewBuilder row: @escaping (Item) -> Row) {
         self.items = items
         self.spacing = spacing

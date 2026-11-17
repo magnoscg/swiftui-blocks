@@ -7,11 +7,17 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the shape appears at once.
 struct PathTrimDrawOn<Outline: Shape>: View {
+    /// The outline to draw, in the order its path runs.
     let shape: Outline
+    /// Whether the stroke is drawn. Turning it true draws the shape on, and false erases it back.
     let isDrawn: Bool
+    /// What VoiceOver reads for the drawing.
     var label: LocalizedStringResource = "Logo"
+    /// The gradient of the stroke, from the top leading corner to the bottom trailing one.
     var colors: [Color] = [.pink, .orange]
+    /// The width of the stroke and of the guide under it, in points.
     var lineWidth: CGFloat = 8
+    /// The seconds the stroke takes to draw on or off.
     var duration: Double = 1.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

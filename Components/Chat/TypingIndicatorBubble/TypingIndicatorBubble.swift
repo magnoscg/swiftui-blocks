@@ -29,11 +29,17 @@ nonisolated enum TypingIndicatorBubbleTiming {
 /// Set `isTyping` to false and the bubble shrinks away into its corner. With Reduce Motion
 /// on, the dots only brighten in turn and the bubble fades. VoiceOver reads `label`.
 struct TypingIndicatorBubble: View {
+    /// Whether the bubble shows. Setting it to false shrinks it away into its bottom leading corner.
     var isTyping = true
+    /// What VoiceOver reads for the bubble.
     var label: LocalizedStringResource = "Typing"
+    /// The fill of the bubble.
     var bubbleColor = Color(.secondarySystemFill)
+    /// The fill of the dots.
     var dotColor = Color.secondary
+    /// How many dots bounce, one at least.
     var dotCount = 3
+    /// The seconds of one round of bounces. It stretches when the last dot would not have time to bounce.
     var period = 1.3
 
     @ScaledMetric(relativeTo: .body) private var dotSize = 9.0

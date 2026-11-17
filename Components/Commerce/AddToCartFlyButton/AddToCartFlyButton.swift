@@ -9,12 +9,19 @@ import SwiftUI
 /// count goes up when the copy lands. With Reduce Motion on, or with no `cartFrame`, the
 /// count goes up at once and nothing flies.
 struct AddToCartFlyButton: View {
+    /// The product picture, shown large and as the copy that flies. A symbol takes the tint.
     let image: Image
+    /// The number of items in the cart. The button adds one when a copy lands, or at once when nothing flies.
     @Binding var count: Int
+    /// The frame of the cart icon in the `.global` space, where copies land. Nil adds without flying.
     var cartFrame: CGRect?
+    /// The text of the add button.
     var title: LocalizedStringResource = "Add to Cart"
+    /// What VoiceOver reads for the product picture.
     var imageLabel: LocalizedStringResource = "Product"
+    /// The color of the button, of the panel behind the picture and of a symbol image.
     var tint: Color = .indigo
+    /// Runs each time an item is added, right after `count` changes.
     var onAdd: () -> Void = {}
 
     @State private var flights: [AddToCartFlyButtonLaunch] = []
