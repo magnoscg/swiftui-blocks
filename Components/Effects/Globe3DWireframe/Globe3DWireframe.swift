@@ -23,7 +23,7 @@ struct Globe3DWireframe: View {
     /// Whether the globe spins by itself. A drag still turns it either way.
     var autoRotates = true
     /// The name VoiceOver reads for the globe.
-    var label = "Globe"
+    var label: LocalizedStringResource = "Globe"
 
     @State private var yaw = 0.0
     @State private var pitch = 0.35
@@ -104,7 +104,7 @@ struct Globe3DWireframe: View {
                 }
         )
         .accessibilityElement()
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(label))
         .accessibilityValue("Rotated \(Globe3DWireframeMath.degrees(yaw)) degrees")
         .accessibilityAdjustableAction { direction in
             switch direction {

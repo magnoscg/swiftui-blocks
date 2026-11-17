@@ -47,7 +47,7 @@ struct WhatsNewSheet: View {
     /// The rows, in order, each with a symbol, a title, a line of text and a tint for the symbol.
     let features: [WhatsNewSheetFeature]
     /// The text of the button pinned to the bottom.
-    var buttonTitle = "Continue"
+    var buttonTitle: LocalizedStringResource = "Continue"
     /// Runs when the button is tapped. Dismiss the sheet here.
     var onContinue: () -> Void
 

@@ -16592,7 +16592,7 @@ struct Globe3DWireframe: View {
     /// Whether the globe spins by itself. A drag still turns it either way.
     var autoRotates = true
     /// The name VoiceOver reads for the globe.
-    var label = "Globe"
+    var label: LocalizedStringResource = "Globe"
 
     @State private var yaw = 0.0
     @State private var pitch = 0.35
@@ -16673,7 +16673,7 @@ struct Globe3DWireframe: View {
                 }
         )
         .accessibilityElement()
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(label))
         .accessibilityValue("Rotated \(Globe3DWireframeMath.degrees(yaw)) degrees")
         .accessibilityAdjustableAction { direction in
             switch direction {
@@ -18521,7 +18521,7 @@ struct VoiceOrb: View {
     /// The colors that swirl inside the orb. The first also fills it and tints its glow.
     var colors: [Color] = [.blue, .purple, .pink, .cyan]
     /// The name VoiceOver reads for the orb, which reads the state as its value.
-    var label = "Assistant"
+    var label: LocalizedStringResource = "Assistant"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -18536,7 +18536,7 @@ struct VoiceOrb: View {
             .animation(.spring(duration: 0.35), value: energy)
             .animation(.easeInOut(duration: 0.5), value: state)
             .accessibilityElement()
-            .accessibilityLabel(label)
+            .accessibilityLabel(Text(label))
             .accessibilityValue(state.rawValue)
     }
 }
@@ -20586,7 +20586,7 @@ struct CompletionSwipeRow<Content: View>: View {
     /// The rounding of the row's corners, in points.
     var cornerRadius: CGFloat = 16
     /// The name of the accessibility action that completes the row without a swipe.
-    var actionName = "Complete"
+    var actionName: LocalizedStringResource = "Complete"
     /// Runs once, after the row has collapsed. Remove the row here.
     var onComplete: () -> Void
     /// The row itself. A forward swipe of 40% of its width, or 140 points at most, completes it.
@@ -20636,7 +20636,7 @@ struct CompletionSwipeRow<Content: View>: View {
             .simultaneousGesture(swipe)
             .sensoryFeedback(.impact(weight: .medium), trigger: isPastThreshold) { _, isNowPast in isNowPast }
             .accessibilityElement(children: .combine)
-            .accessibilityAction(named: actionName) { complete() }
+            .accessibilityAction(named: Text(actionName)) { complete() }
     }
 
     private var swipe: some Gesture {
@@ -21217,9 +21217,9 @@ import SwiftUI
 /// highlight changes color without growing.
 struct DropZoneHighlight<Payload: Transferable>: View {
     /// The text shown while nothing hovers over the zone.
-    var title = "Drop here"
+    var title: LocalizedStringResource = "Drop here"
     /// The text that replaces `title` while something hovers over the zone.
-    var hint = "Release to add"
+    var hint: LocalizedStringResource = "Release to add"
     /// The SF Symbol above the text.
     var systemImage = "tray.and.arrow.down"
     /// The color of the icon, the text and the dashed border, and the fill while something hovers, when the text turns white.
@@ -21367,7 +21367,7 @@ struct LongPressRadialMenu<Label: View>: View {
     /// The color of the icons, and the fill of the action under the finger.
     var tint: Color = .indigo
     /// The name VoiceOver reads for the label, which offers the actions in its Actions list.
-    var accessibilityTitle = "Actions"
+    var accessibilityTitle: LocalizedStringResource = "Actions"
     /// The view to long-press. It shrinks a little while pressed, and the ring opens around its center.
     @ViewBuilder var label: () -> Label
 
@@ -21401,7 +21401,7 @@ struct LongPressRadialMenu<Label: View>: View {
             .sensoryFeedback(.impact(weight: .medium), trigger: isOpen) { _, nowOpen in nowOpen }
             .sensoryFeedback(.selection, trigger: hoveredIndex)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(accessibilityTitle)
+            .accessibilityLabel(Text(accessibilityTitle))
             .accessibilityActions {
                 ForEach(items) { item in
                     Button(item.title, action: item.action)
@@ -45027,7 +45027,7 @@ struct WhatsNewSheet: View {
     /// The rows, in order, each with a symbol, a title, a line of text and a tint for the symbol.
     let features: [WhatsNewSheetFeature]
     /// The text of the button pinned to the bottom.
-    var buttonTitle = "Continue"
+    var buttonTitle: LocalizedStringResource = "Continue"
     /// Runs when the button is tapped. Dismiss the sheet here.
     var onContinue: () -> Void
 
@@ -46673,9 +46673,9 @@ struct ReadMoreText: View {
     /// How many lines show while collapsed, at least 1.
     var collapsedLines = 3
     /// The text of the button that expands the paragraph.
-    var moreLabel = "Read more"
+    var moreLabel: LocalizedStringResource = "Read more"
     /// The text of the button that collapses it again.
-    var lessLabel = "Show less"
+    var lessLabel: LocalizedStringResource = "Show less"
 
     @State private var isExpanded = false
     @State private var fullHeight: CGFloat = 0

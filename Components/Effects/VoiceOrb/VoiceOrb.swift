@@ -52,7 +52,7 @@ struct VoiceOrb: View {
     /// The colors that swirl inside the orb. The first also fills it and tints its glow.
     var colors: [Color] = [.blue, .purple, .pink, .cyan]
     /// The name VoiceOver reads for the orb, which reads the state as its value.
-    var label = "Assistant"
+    var label: LocalizedStringResource = "Assistant"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -67,7 +67,7 @@ struct VoiceOrb: View {
             .animation(.spring(duration: 0.35), value: energy)
             .animation(.easeInOut(duration: 0.5), value: state)
             .accessibilityElement()
-            .accessibilityLabel(label)
+            .accessibilityLabel(Text(label))
             .accessibilityValue(state.rawValue)
     }
 }

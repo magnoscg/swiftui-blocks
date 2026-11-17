@@ -24,7 +24,7 @@ struct LongPressRadialMenu<Label: View>: View {
     /// The color of the icons, and the fill of the action under the finger.
     var tint: Color = .indigo
     /// The name VoiceOver reads for the label, which offers the actions in its Actions list.
-    var accessibilityTitle = "Actions"
+    var accessibilityTitle: LocalizedStringResource = "Actions"
     /// The view to long-press. It shrinks a little while pressed, and the ring opens around its center.
     @ViewBuilder var label: () -> Label
 
@@ -58,7 +58,7 @@ struct LongPressRadialMenu<Label: View>: View {
             .sensoryFeedback(.impact(weight: .medium), trigger: isOpen) { _, nowOpen in nowOpen }
             .sensoryFeedback(.selection, trigger: hoveredIndex)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(accessibilityTitle)
+            .accessibilityLabel(Text(accessibilityTitle))
             .accessibilityActions {
                 ForEach(items) { item in
                     Button(item.title, action: item.action)

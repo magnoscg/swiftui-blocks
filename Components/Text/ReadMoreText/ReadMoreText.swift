@@ -13,9 +13,9 @@ struct ReadMoreText: View {
     /// How many lines show while collapsed, at least 1.
     var collapsedLines = 3
     /// The text of the button that expands the paragraph.
-    var moreLabel = "Read more"
+    var moreLabel: LocalizedStringResource = "Read more"
     /// The text of the button that collapses it again.
-    var lessLabel = "Show less"
+    var lessLabel: LocalizedStringResource = "Show less"
 
     @State private var isExpanded = false
     @State private var fullHeight: CGFloat = 0
