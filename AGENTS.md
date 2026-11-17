@@ -20,6 +20,7 @@ easy to copy matters as much as the code itself.
 | `scripts/` | Validates the components and generates the files below |
 | `catalog.json`, `llms.txt`, `components.tsv`, `llms-full.txt`, `catalog/` | Generated: the indexes for agents and tools, and a page per category with every preview |
 | `skills/swiftui-blocks/` | The skill people install so their agent finds and copies a component. Written by hand: keep its steps in line with `llms.txt` |
+| `skill-distribution/` | The plugin manifests and README of magnoscg/swiftui-blocks-skill, the small repository agents install the skill from. `make publish-skill` sends them with the skill after each release |
 | `README.md` | Written by hand, except the index between the `catalog` markers |
 | `docs/` | The site, built with Astro Starlight. See [The site](#the-site) |
 | `.github/` | Issue and pull request templates, CI, the Pages deploy and Dependabot. `readme/` has the logo and the button of the README, two animated SVG files |

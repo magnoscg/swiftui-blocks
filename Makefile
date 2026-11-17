@@ -1,9 +1,14 @@
-.PHONY: catalog check test preview cards record docs docs-dev showcase-build showcase-build-mainactor showcase-test verify
+.PHONY: catalog check test preview cards record docs docs-dev publish-skill showcase-build showcase-build-mainactor showcase-test verify
 
 PROJECT = Showcase/Showcase.xcodeproj
 DESTINATION ?= platform=iOS Simulator,name=iPhone 18 Pro
 XCBEAUTIFY := $(if $(shell which xcbeautify),| xcbeautify)
 XCODEBUILD = xcodebuild -project $(PROJECT) -scheme Showcase -destination '$(DESTINATION)'
+
+# Sends the skill and its plugin manifests to magnoscg/swiftui-blocks-skill,
+# after a release. `scripts/publish-skill.sh <folder>` builds it without sending.
+publish-skill:
+	scripts/publish-skill.sh --publish
 
 # Rewrites the files generated from the component metadata.
 catalog:

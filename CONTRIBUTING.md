@@ -72,3 +72,8 @@ and tags are `X.Y.Z` without a `v`.
 3. Merge it into `main` without fast-forward, tag `main` with an annotated
    `X.Y.Z` tag and push both. The push to `main` publishes the site.
 4. Merge `main` back into `develop`.
+5. `make publish-skill`, which sends the skill in `skills/` and the plugin
+   manifests in `skill-distribution/` to
+   [magnoscg/swiftui-blocks-skill](https://github.com/magnoscg/swiftui-blocks-skill),
+   the small repository agents install it from, with the version of the
+   release.

@@ -1,6 +1,6 @@
 ---
 name: swiftui-blocks
-description: Find a ready-made SwiftUI component, animation or transition in the SwiftUI Blocks catalog and copy its file into the project. Use when the user asks for a SwiftUI button, card, chart, loader, background, sheet, text effect, gesture or any other UI piece for iOS 18 to 27, or mentions SwiftUI Blocks.
+description: Find a ready-made SwiftUI component, animation or transition in the SwiftUI Blocks catalog and copy its file into the project. Use when the user asks for a SwiftUI button, card, chart, loader, background, sheet, paywall, onboarding, text effect, gesture or any other piece of interface for iOS 18 to 27, or mentions SwiftUI Blocks. Do not use for UIKit, macOS-only or web interfaces, for app logic, networking or data, for fixing a build, or when the user wants the view written from scratch.
 ---
 
 # SwiftUI Blocks
