@@ -47,7 +47,7 @@ function meta(overrides = {}) {
 }
 
 function swift(name = 'GlowButton', body = '') {
-  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n#Preview { ${name}Demo() }\n`;
+  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n\n#Preview {\n    ${name}Demo()\n}\n`;
 }
 
 // A Swift file that names its shader, as a component with one must.
@@ -554,7 +554,13 @@ describe('invalid source', () => {
   });
 
   it('rejects code after the preview, because agents check that a download ends with it', () => {
-    assertRejected({ source: `${swift()}private extension Color {}\n` }, /must end with its #Preview block/);
+    assertRejected({ source: `${swift()}private extension Color {}\n` }, /must end with these three lines/);
+  });
+
+  it('rejects a preview with more than the demo, which agents would take for a cut download', () => {
+    const source = swift().replace('    GlowButtonDemo()\n', '    GlowButtonDemo()\n        .padding()\n');
+
+    assertRejected({ source }, /must end with these three lines/);
   });
 
   it('rejects a newer minimum without @available', () => {

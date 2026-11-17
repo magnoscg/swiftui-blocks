@@ -371,8 +371,8 @@ function validateSource(meta, source, relative, name, errors) {
   if (!new RegExp(`\\bstruct\\s+${name}Demo\\b`).test(source)) fail(`missing struct ${name}Demo`);
   if (!source.includes('#Preview')) {
     fail('missing #Preview');
-  } else if (!/#Preview[^{}\n]*\{[^{}]*\}\s*$/.test(source)) {
-    fail('must end with its #Preview block, which agents check to know a download arrived whole');
+  } else if (!source.endsWith(`\n#Preview {\n    ${name}Demo()\n}\n`)) {
+    fail(`must end with these three lines, which agents check to know a download arrived whole: #Preview {, ${name}Demo() indented by four spaces, }`);
   }
 
   if (meta.minIOS !== BASELINE && !availabilityPattern(meta.minIOS).test(source)) {

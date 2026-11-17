@@ -143,8 +143,9 @@ Two more are optional and only steer the recording: `previewSteps` and
 rest are on you.
 
 1. **One file to copy, or two with a shader.** ✓ Keep the component, a
-   `<Name>Demo` view and its `#Preview` in `<Name>.swift`, with the
-   `#Preview` last: agents check it to know a download arrived whole. It may not import
+   `<Name>Demo` view and its `#Preview` in `<Name>.swift`. The file ends
+   with exactly `#Preview {`, `    <Name>Demo()` and `}`: agents check those
+   three lines to know a download arrived whole. It may not import
    another component, a package or an asset, which the check does not see.
    The one exception is a Metal
    shader, because SwiftUI's `ShaderLibrary` only loads compiled Metal: a
