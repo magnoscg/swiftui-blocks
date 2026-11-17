@@ -70,10 +70,10 @@ Ask your coding agent for what you need. Change the first line of this prompt:
 
 ```text
 Add a SwiftUI component for: a like button that bursts into hearts.
-Find it in https://swiftuiblocks.dev/llms.txt, check its minimum iOS against
-my deployment target, download its file into my project with curl (and its
-.metal file if it has one) without replacing a file I have, keep the license
-header and show me how to use it.
+Find it in https://swiftuiblocks.dev/llms.txt and check its minimum iOS against
+my deployment target. Download its file into my project with curl (and its
+.metal file if it has one), keep the license header and show me how to use it.
+Ask me before replacing a file or changing anything else.
 ```
 
 If you use the catalog often, install the [skill](skills/swiftui-blocks/SKILL.md)

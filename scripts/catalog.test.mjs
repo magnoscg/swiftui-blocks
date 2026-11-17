@@ -1095,6 +1095,7 @@ describe('the short index for agents', () => {
     assert.match(index, /components\.tsv \| grep -i/);
     assert.match(index, /grep -i -F -- '<word>'/);
     assert.match(index, /curl -fsS -o '<Name>\.swift' /);
+    assert.match(index, /Without a shell, read the page of its category: `[^`]+\/HEAD\/catalog\/<Category>\.md`/);
     assert.doesNotMatch(index, /catalog\.json/);
   });
 });
