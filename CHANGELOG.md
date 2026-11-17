@@ -18,6 +18,8 @@ on `main`.
   minimum iOS and the file it adds, or its question when the component needs
   a newer iOS than the app. Every line is worked out from `components.tsv` and
   the Swift file when the site is built.
+- Anatomy of a file, a page under Reference that walks through a component
+  file part by part, the shader included.
 
 ### Changed
 

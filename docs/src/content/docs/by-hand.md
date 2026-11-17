@@ -9,6 +9,7 @@ description: Find a component, copy its file and use it in your app, without an 
    app target, or press **Download .swift**. A component drawn by a Metal
    shader shows a second file: add it to the same target as `<Name>.metal`.
 4. Use it. The `Demo` view and the `#Preview` at the end of the file show how,
-   and you can delete them afterwards.
+   and you can delete them afterwards. [Anatomy of a file](/anatomy/) explains
+   each part.
 
 Keep the two lines at the top of each file: they are its license notice.
