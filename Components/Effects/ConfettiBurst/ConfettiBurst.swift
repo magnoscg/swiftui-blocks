@@ -103,6 +103,12 @@ struct ConfettiBurstMotion {
 
 extension View {
     /// Fires a one-shot burst of confetti over this view every time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - trigger: A value whose every change fires a new burst.
+    ///   - count: How many pieces each burst throws.
+    ///   - origin: Where the pieces start, as a fraction of the view. They fly
+    ///     mostly upward from there and fall back.
     func confettiBurst(trigger: Int, count: Int = 120, origin: UnitPoint = UnitPoint(x: 0.5, y: 0.68)) -> some View {
         modifier(ConfettiBurst(trigger: trigger, count: count, origin: origin))
     }

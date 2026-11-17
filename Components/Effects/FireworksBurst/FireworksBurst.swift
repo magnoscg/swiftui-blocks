@@ -53,7 +53,9 @@ private struct FireworksBurstRocket: Identifiable {
 ///
 /// With Reduce Motion on, each burst appears in place and fades without moving.
 struct FireworksBurst: View {
+    /// How many sparks each burst throws, from 1 to 300.
     var sparkCount: Int = 64
+    /// The colors a rocket picks from at random, one per burst. Empty bursts in white.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .cyan, .purple]
 
     @State private var rockets: [FireworksBurstRocket] = []

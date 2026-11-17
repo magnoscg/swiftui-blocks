@@ -15,7 +15,9 @@ enum GridPulseBackgroundMath {
 ///
 /// With Reduce Motion on, it shows one still ring.
 struct GridPulseBackground: View {
+    /// The color of the dots, dim at rest and bright where the pulse passes.
     var color: Color = .cyan
+    /// The distance between neighbouring dots, in points. Zero or less draws nothing.
     var spacing: Double = 26
     /// Seconds for the pulse to travel from the center to the corners.
     var period: Double = 2.6

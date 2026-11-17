@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the wheel moves straight to the result.
 struct SpinWheelRoulette: View {
+    /// The labels of the slices, drawn clockwise from the top. With none, the wheel cannot spin.
     let slices: [String]
+    /// Called with the label of the winning slice when the wheel stops.
     var onResult: (String) -> Void = { _ in }
 
     @State private var rotation = 0.0

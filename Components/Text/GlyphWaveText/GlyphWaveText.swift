@@ -7,6 +7,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the text sits still on its baseline.
 struct GlyphWaveText: View {
+    /// The text whose glyphs ride the wave. It keeps the font and size set around it.
     let text: String
     /// Full waves per second.
     var speed: Double = 0.8

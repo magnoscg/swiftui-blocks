@@ -7,6 +7,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, a long line is truncated instead of scrolling.
 struct MarqueeText: View {
+    /// The line to show. It scrolls only when it is wider than the space it is given.
     let text: String
     /// Points per second.
     var speed: Double = 42

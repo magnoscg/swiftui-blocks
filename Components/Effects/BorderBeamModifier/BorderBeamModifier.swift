@@ -89,6 +89,15 @@ struct BorderBeamModifier: ViewModifier {
 
 extension View {
     /// Sends a light beam around this view's border. Match `cornerRadius` to the view's shape.
+    ///
+    /// - Parameters:
+    ///   - cornerRadius: The corner radius of the border the beam follows, in points.
+    ///   - lineWidth: The thickness of the beam, in points. A blurred glow twice as
+    ///     thick surrounds it. Zero hides the beam.
+    ///   - head: The color at the front of the beam.
+    ///   - tail: The color the beam fades from at its back end.
+    ///   - duration: The seconds the beam takes to go once around the border.
+    ///   - length: How much of the border the beam covers, as a fraction from 0 to 1.
     func borderBeam(
         cornerRadius: CGFloat = 20,
         lineWidth: CGFloat = 2,

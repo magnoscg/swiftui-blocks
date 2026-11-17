@@ -11,9 +11,13 @@ struct ActivityRingsRing {
 
 /// Concentric gradient rings that close as their goals are reached.
 struct ActivityRings: View {
+    /// The rings to draw, from the outermost inward. Rings that do not fit inside `diameter` are left out.
     let rings: [ActivityRingsRing]
+    /// The width and height of the outermost ring, in points.
     var diameter: CGFloat = 240
+    /// The thickness of each ring, in points.
     var lineWidth: CGFloat = 28
+    /// The space between neighbouring rings, in points.
     var gap: CGFloat = 5
 
     var body: some View {

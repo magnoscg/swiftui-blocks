@@ -36,6 +36,10 @@ extension View {
     ///
     /// The bands change ten times a second. With Reduce Motion on they stand still, and only
     /// the colors come apart. It only changes how the view looks, not what VoiceOver reads.
+    ///
+    /// - Parameters:
+    ///   - amount: How strong the glitch is, from 0, off, to 1. At 1 the colors split
+    ///     by up to 7 points and the bands jump up to 26. Values outside clamp.
     func chromaticGlitch(_ amount: Double) -> some View {
         modifier(ChromaticGlitchShaderModifier(amount: amount))
     }

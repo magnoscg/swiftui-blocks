@@ -8,8 +8,11 @@ import SwiftUI
 /// The blobs are blurred and then cut at half their opacity, so two blobs that
 /// touch join with a smooth neck. With Reduce Motion on, it shows a still frame.
 struct MetaballLavaLamp: View {
+    /// How many blobs rise and fall, up to 48, besides the pools of wax at the top and the bottom.
     var blobCount = 7
+    /// The gradient that fills the wax, from the bottom to the top. Empty fills it orange.
     var colors: [Color] = [.red, .orange, .yellow]
+    /// How fast the blobs move, where 1 is the normal pace and 0 stops them.
     var speed = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

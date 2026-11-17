@@ -8,10 +8,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the card changes state without animating.
 struct MatchedHeroCard<Detail: View>: View {
+    /// The large heading of the card, also what VoiceOver reads for it while it is collapsed.
     let title: String
+    /// The line under the title.
     let subtitle: String
+    /// The SF Symbol drawn above the title.
     let systemImage: String
+    /// The gradient behind the card, from the top-leading corner to the bottom-trailing one.
     var colors: [Color] = [.indigo, .purple]
+    /// The view shown under the header once the card is expanded. Whatever does not fit is clipped.
     @ViewBuilder var detail: () -> Detail
 
     @State private var isExpanded = false

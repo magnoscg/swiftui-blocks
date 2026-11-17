@@ -128,11 +128,24 @@ private struct RippleShaderEffectOnTap: ViewModifier {
 
 extension View {
     /// Starts a wave wherever this view is tapped, without blocking its own controls.
+    ///
+    /// - Parameters:
+    ///   - amplitude: How far the wave moves what is under it, in points.
+    ///   - wavelength: The width of the wave, in points.
+    ///   - speed: How fast the wave spreads, in points per second.
     func rippleShaderEffect(amplitude: Double = 10, wavelength: Double = 110, speed: Double = 650) -> some View {
         modifier(RippleShaderEffectOnTap(amplitude: amplitude, wavelength: wavelength, speed: speed))
     }
 
     /// Starts a wave at `origin`, in this view's own coordinates, every time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - origin: Where the wave starts, in points from the top-left corner of
+    ///     this view.
+    ///   - trigger: A value whose every change starts a new wave.
+    ///   - amplitude: How far the wave moves what is under it, in points.
+    ///   - wavelength: The width of the wave, in points.
+    ///   - speed: How fast the wave spreads, in points per second.
     func rippleShaderEffect(
         at origin: CGPoint,
         trigger: some Equatable & Sendable,

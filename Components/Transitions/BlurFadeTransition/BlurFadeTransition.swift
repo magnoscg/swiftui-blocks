@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view only fades.
 struct BlurFadeTransition: Transition {
+    /// How blurred the view is when it is fully out, in points.
     var radius: CGFloat = 18
+    /// The size of the view when it is fully out, as a fraction of its own size.
     var scale: CGFloat = 0.9
 
     func body(content: Content, phase: TransitionPhase) -> some View {

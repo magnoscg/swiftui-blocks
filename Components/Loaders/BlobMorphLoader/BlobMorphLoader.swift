@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows one still blob.
 struct BlobMorphLoader: View {
+    /// The gradient that fills the blob, its direction slowly turning.
     var colors: [Color] = [.pink, .purple, .indigo]
+    /// The width and height of the loader, in points.
     var size: CGFloat = 96
+    /// How fast the blob changes shape, as a multiplier of time. Zero holds it still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

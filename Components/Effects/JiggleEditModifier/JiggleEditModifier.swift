@@ -7,6 +7,13 @@ extension View {
     /// Wobbles the view, like an app icon in edit mode.
     ///
     /// Give each view a different `seed` so they do not move in step.
+    ///
+    /// - Parameters:
+    ///   - isActive: Whether the view wobbles. It eases back to rest when this
+    ///     turns false.
+    ///   - amplitude: The farthest the view tilts each way, in degrees.
+    ///   - seed: A number that shifts where the wobble starts. Views with the same
+    ///     seed move together.
     func jiggleEditing(_ isActive: Bool, amplitude: Double = 2.4, seed: Int = 0) -> some View {
         modifier(JiggleEditModifier(isActive: isActive, amplitude: amplitude, seed: seed))
     }

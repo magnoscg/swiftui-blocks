@@ -66,10 +66,15 @@ enum BreathingGuideCircleMath {
 ///
 /// With Reduce Motion on, the circle stays still and the label keeps guiding.
 struct BreathingGuideCircle: View {
+    /// How long the circle takes to expand, in seconds. A negative duration counts as zero.
     var inhale = 4.0
+    /// How long the circle stays expanded before breathing out, in seconds. Zero skips the hold.
     var hold = 4.0
+    /// How long the circle takes to contract, in seconds. A negative duration counts as zero.
     var exhale = 6.0
+    /// The color of the rings, which blends into blue in the innermost one.
     var tint: Color = .teal
+    /// The size of the square the circle grows in, in points. Fully expanded, the outer ring fills it.
     var diameter: CGFloat = 260
 
     @State private var start = Date.now
@@ -176,8 +181,11 @@ private enum KeyframeTimelineShowcaseTiming {
 ///
 /// With Reduce Motion on, the content rests and the timeline stays still.
 struct KeyframeTimelineShowcase<Content: View>: View {
+    /// The fill of the tile at the start and end of each loop.
     var restColor: Color = .indigo
+    /// The fill the tile blends to in the middle of each loop, also used for the color track.
     var peakColor: Color = .pink
+    /// The view drawn on the tile, like an SF Symbol. The tile is 120 points square and scales with Dynamic Type.
     @ViewBuilder var content: () -> Content
 
     @ScaledMetric(relativeTo: .largeTitle) private var tileSize = 120.0
@@ -339,7 +347,9 @@ private enum PhaseAnimatorCyclePhase: CaseIterable {
 ///
 /// With Reduce Motion on, the card stays in its first phase.
 struct PhaseAnimatorCycle<Content: View>: View {
+    /// The corner radius of the card behind the content, in points. A negative value counts as zero.
     var cornerRadius: CGFloat = 32
+    /// The view on the card. The card takes its size, so pad it to leave room around it.
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -427,7 +437,9 @@ enum SplitFlapCounterMath {
 ///
 /// With Reduce Motion on, digits change without flipping.
 struct SplitFlapCounter: View {
+    /// The number shown. A change flips only the digits that differ, and a negative number shows a leading minus.
     let value: Int
+    /// The fewest digits shown, padded with zeros on the left. Capped at 20.
     var minimumDigits = 1
 
     var body: some View {
@@ -654,6 +666,12 @@ struct SpringStudyPlayground: View {
     @ScaledMetric(relativeTo: .title2) private var ballSize = 44.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a playground that starts from the spring you give it.
+    ///
+    /// - Parameters:
+    ///   - response: The starting response, in seconds, clamped to 0.1…1.5.
+    ///   - damping: The starting damping ratio, clamped to 0.1…1. At 1 the spring
+    ///     does not overshoot.
     init(response: Double = 0.55, damping: Double = 0.55) {
         _response = State(initialValue: SpringStudyPlaygroundMath.clamped(response, to: SpringStudyPlaygroundMath.responseRange))
         _damping = State(initialValue: SpringStudyPlaygroundMath.clamped(damping, to: SpringStudyPlaygroundMath.dampingRange))
@@ -930,6 +948,7 @@ enum AnimatedGradientBackgroundMath {
 ///
 /// With Reduce Motion on, it shows a still gradient.
 struct AnimatedGradientBackground: View {
+    /// The palette the gradient cycles through, in order and wrapping around. A single color gives a flat fill.
     var colors: [Color] = [.indigo, .purple, .pink, .orange]
     /// How many color steps pass each second.
     var speed: Double = 0.2
@@ -1005,9 +1024,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows a still gradient.
 struct AuroraMeshBackground: View {
+    /// The color of the corners and most of the mesh.
     var first: Color = .indigo
+    /// The color of the center and of two edges.
     var second: Color = .purple
+    /// The accent color at the left edge and the bottom-right corner.
     var third: Color = .teal
+    /// How fast the mesh points sway, as a multiplier of time. Zero holds it still.
     var speed: Double = 0.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1083,8 +1106,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bubbles hold still.
 struct BubblesBackground: View {
+    /// The tint of the bubbles' fill, rim and shine.
     var color: Color = .white
+    /// How many bubbles are drawn.
     var count: Int = 36
+    /// How fast the bubbles rise and sway, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1192,7 +1218,9 @@ import SwiftUI
 struct ColorOrbsBackground: View {
     /// One orb per color.
     var colors: [Color] = [.pink, .purple, .blue, .teal, .orange]
+    /// The fill under the orbs, which blend over it in screen mode.
     var base: Color = Color(red: 0.05, green: 0.04, blue: 0.13)
+    /// How fast the orbs drift, as a multiplier of time. Zero holds them still.
     var speed: Double = 0.4
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1296,7 +1324,9 @@ enum GridPulseBackgroundMath {
 ///
 /// With Reduce Motion on, it shows one still ring.
 struct GridPulseBackground: View {
+    /// The color of the dots, dim at rest and bright where the pulse passes.
     var color: Color = .cyan
+    /// The distance between neighbouring dots, in points. Zero or less draws nothing.
     var spacing: Double = 26
     /// Seconds for the pulse to travel from the center to the corners.
     var period: Double = 2.6
@@ -1450,8 +1480,11 @@ struct ImageDerivedGradientBackground: View {
         let bands: Int
     }
 
+    /// The picture whose colors fill the gradient.
     let image: Image
+    /// How many colors to sample, one per horizontal band of the image from top to bottom, at least 1.
     var bands = 3
+    /// The gradient shown before the first image is sampled, or when it cannot be.
     var fallback: [Color] = [.indigo, .black]
 
     @State private var colors: [Color]?
@@ -1592,9 +1625,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the field holds still.
 struct ParticleFieldBackground: View {
+    /// The color of the points and of the lines between them.
     var color: Color = .white
+    /// How many points drift in the field.
     var count: Int = 70
+    /// How close two points must be, in points, to be joined by a line. Closer pairs draw a stronger line.
     var linkDistance: Double = 105
+    /// How fast the points drift, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1706,9 +1743,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the flakes hold still.
 struct SnowfallBackground: View {
+    /// The color of the flakes, fainter in the far depths.
     var color: Color = .white
     /// Multiplies the number of flakes in every depth.
     var density: Double = 1
+    /// How fast the flakes fall and sway, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -1827,7 +1866,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows a still field of dots.
 struct StarfieldBackground: View {
+    /// The color of the streaks, fainter far away.
     var color: Color = .white
+    /// How many stars are in flight at once.
     var count: Int = 320
     /// Depth covered per second, where 1 is the whole way from the horizon to the viewer.
     var speed: Double = 0.22
@@ -1941,13 +1982,17 @@ enum SynthwaveGridBackgroundMath {
 ///
 /// With Reduce Motion on, the grid stops moving.
 struct SynthwaveGridBackground: View {
+    /// The color of the grid lines, drawn with a soft glow.
     var lineColor: Color = .cyan
+    /// The gradient of the sky, from the top edge down to the horizon.
     var skyColors: [Color] = [
         Color(red: 0.07, green: 0.03, blue: 0.2),
         Color(red: 0.42, green: 0.08, blue: 0.5),
         Color(red: 0.95, green: 0.25, blue: 0.5),
     ]
+    /// How many horizontal lines cross the ground at once, up to 128.
     var lineCount = 14
+    /// How many lines scroll past each second. Zero holds the grid still.
     var speed = 0.5
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -2057,6 +2102,7 @@ import SwiftUI
 struct WavesBackground: View {
     /// One wave per color, from back to front.
     var colors: [Color] = [.teal, .cyan, .blue, .indigo]
+    /// The height of the back wave's swell above and below its baseline, in points. Each wave in front is a little lower.
     var amplitude: Double = 26
     /// Seconds for the slowest wave to complete one cycle.
     var period: Double = 7
@@ -14814,9 +14860,13 @@ import SwiftUI
 ///
 /// It is decorative, so VoiceOver skips it.
 struct BlurredImageBackdrop: View {
+    /// The picture blurred to fill the backdrop, scaled to fill and cropped at the edges.
     let image: Image
+    /// How strong the blur is, in points. Zero shows the image sharp.
     var blurRadius: CGFloat = 40
+    /// The color laid over the blurred image, to keep the content on top readable.
     var tint: Color = .black
+    /// How much the tint covers the image, from 0, none, to 1, the tint alone.
     var tintOpacity: Double = 0.35
 
     var body: some View {
@@ -15027,6 +15077,15 @@ struct BorderBeamModifier: ViewModifier {
 
 extension View {
     /// Sends a light beam around this view's border. Match `cornerRadius` to the view's shape.
+    ///
+    /// - Parameters:
+    ///   - cornerRadius: The corner radius of the border the beam follows, in points.
+    ///   - lineWidth: The thickness of the beam, in points. A blurred glow twice as
+    ///     thick surrounds it. Zero hides the beam.
+    ///   - head: The color at the front of the beam.
+    ///   - tail: The color the beam fades from at its back end.
+    ///   - duration: The seconds the beam takes to go once around the border.
+    ///   - length: How much of the border the beam covers, as a fraction from 0 to 1.
     func borderBeam(
         cornerRadius: CGFloat = 20,
         lineWidth: CGFloat = 2,
@@ -15138,6 +15197,10 @@ extension View {
     ///
     /// The bands change ten times a second. With Reduce Motion on they stand still, and only
     /// the colors come apart. It only changes how the view looks, not what VoiceOver reads.
+    ///
+    /// - Parameters:
+    ///   - amount: How strong the glitch is, from 0, off, to 1. At 1 the colors split
+    ///     by up to 7 points and the bands jump up to 26. Values outside clamp.
     func chromaticGlitch(_ amount: Double) -> some View {
         modifier(ChromaticGlitchShaderModifier(amount: amount))
     }
@@ -15354,6 +15417,14 @@ struct CoinFlipView: View {
 
     private let flipDuration = 1.5
 
+    /// Creates a coin that shows the side you bind.
+    ///
+    /// - Parameters:
+    ///   - side: The side facing up. The coin writes the result here when a flip
+    ///     lands, and setting it from outside turns the coin over without a flip.
+    ///   - size: The diameter of the coin, in points.
+    ///   - turns: The full turns of each flip before it lands, from 1 to 100.
+    ///   - onLanded: Called with the side the coin landed on, after each flip.
     init(
         side: Binding<CoinFlipViewSide>,
         size: CGFloat = 180,
@@ -15531,9 +15602,13 @@ nonisolated enum ColorRevealImageMath {
 /// Outside a scroll view it stays black and white until tapped. With Reduce Motion
 /// on, a tap changes it at once. Scrolling still fades the color, which adds no movement.
 struct ColorRevealImage: View {
+    /// The picture, scaled to fill the frame and cropped at its edges.
     let image: Image
+    /// What VoiceOver reads for the image, which is also the label of its button.
     let title: LocalizedStringResource
+    /// The width of the frame divided by its height. Zero or less makes it square.
     var aspectRatio: CGFloat = 4.0 / 3.0
+    /// The corner radius of the frame, in points.
     var cornerRadius: CGFloat = 24
 
     @State private var isRevealed = false
@@ -15748,6 +15823,12 @@ struct ConfettiBurstMotion {
 
 extension View {
     /// Fires a one-shot burst of confetti over this view every time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - trigger: A value whose every change fires a new burst.
+    ///   - count: How many pieces each burst throws.
+    ///   - origin: Where the pieces start, as a fraction of the view. They fly
+    ///     mostly upward from there and fall back.
     func confettiBurst(trigger: Int, count: Int = 120, origin: UnitPoint = UnitPoint(x: 0.5, y: 0.68)) -> some View {
         modifier(ConfettiBurst(trigger: trigger, count: count, origin: origin))
     }
@@ -15863,7 +15944,9 @@ private struct FireworksBurstRocket: Identifiable {
 ///
 /// With Reduce Motion on, each burst appears in place and fades without moving.
 struct FireworksBurst: View {
+    /// How many sparks each burst throws, from 1 to 300.
     var sparkCount: Int = 64
+    /// The colors a rocket picks from at random, one per burst. Empty bursts in white.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .cyan, .purple]
 
     @State private var rockets: [FireworksBurstRocket] = []
@@ -16033,9 +16116,13 @@ private struct FloatingReactionsEmitterReaction: Identifiable {
 ///
 /// With Reduce Motion on, the emoji stays where it was tapped and fades out.
 struct FloatingReactionsEmitter<Content: View>: View {
+    /// The emoji a tap picks from at random. Empty sends nothing.
     var emojis: [String] = ["❤️", "🔥", "👏", "😂", "🎉"]
+    /// How long each emoji floats before it fades out, in seconds. Zero or less counts as one second.
     var lifetime: Double = 1.8
+    /// How far each emoji climbs from where it was tapped, in points.
     var rise: CGFloat = 320
+    /// The view that takes the taps. It fills the space the emitter is given.
     @ViewBuilder var content: () -> Content
 
     @State private var reactions: [FloatingReactionsEmitterReaction] = []
@@ -16171,8 +16258,11 @@ import SwiftUI
 /// Every frame is computed from the time alone, so there is no state to keep.
 /// With Reduce Motion on, it draws one still frame. It looks best on a dark background.
 struct FlowFieldParticles: View {
+    /// How many particles drift at once, up to 2,000.
     var count = 260
+    /// The colors the particles take in turn. They add up where streaks cross. Empty draws white.
     var colors: [Color] = [.cyan, .indigo, .pink]
+    /// How fast the particles and the field move, where 1 is the normal pace and 0 stops them.
     var speed = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -16312,11 +16402,17 @@ struct Globe3DWireframePin {
 ///
 /// With Reduce Motion on, it stops spinning by itself and only moves with the finger.
 struct Globe3DWireframe: View {
+    /// How many lines run from pole to pole, up to 90.
     var meridians = 12
+    /// How many lines circle the globe between the poles, up to 90.
     var parallels = 7
+    /// The color of the lines, the outline and the shading of the sphere.
     var color: Color = .cyan
+    /// The places marked with a white dot, in degrees of latitude and longitude. A pin on the far side hides.
     var pins: [Globe3DWireframePin] = []
+    /// Whether the globe spins by itself. A drag still turns it either way.
     var autoRotates = true
+    /// The name VoiceOver reads for the globe.
     var label = "Globe"
 
     @State private var yaw = 0.0
@@ -16652,6 +16748,13 @@ struct IntelligenceGlowBorder: ViewModifier {
 
 extension View {
     /// Draws a moving glow around this view's edge while `isActive` is true. Match `cornerRadius` to the view's shape.
+    ///
+    /// - Parameters:
+    ///   - isActive: Whether the glow shows. It fades in and out, or switches at once
+    ///     with Reduce Motion on.
+    ///   - cornerRadius: The corner radius of the border, in points.
+    ///   - lineWidth: The thickness of the crisp line at the edge, in points. The
+    ///     softer light spreads inward to about seven times this.
     func intelligenceGlowBorder(isActive: Bool = true, cornerRadius: CGFloat = 28, lineWidth: CGFloat = 3) -> some View {
         modifier(IntelligenceGlowBorder(isActive: isActive, cornerRadius: cornerRadius, lineWidth: lineWidth))
     }
@@ -16712,6 +16815,13 @@ extension View {
     /// Wobbles the view, like an app icon in edit mode.
     ///
     /// Give each view a different `seed` so they do not move in step.
+    ///
+    /// - Parameters:
+    ///   - isActive: Whether the view wobbles. It eases back to rest when this
+    ///     turns false.
+    ///   - amplitude: The farthest the view tilts each way, in degrees.
+    ///   - seed: A number that shifts where the wobble starts. Views with the same
+    ///     seed move together.
     func jiggleEditing(_ isActive: Bool, amplitude: Double = 2.4, seed: Int = 0) -> some View {
         modifier(JiggleEditModifier(isActive: isActive, amplitude: amplitude, seed: seed))
     }
@@ -16874,8 +16984,11 @@ import SwiftUI
 /// The blobs are blurred and then cut at half their opacity, so two blobs that
 /// touch join with a smooth neck. With Reduce Motion on, it shows a still frame.
 struct MetaballLavaLamp: View {
+    /// How many blobs rise and fall, up to 48, besides the pools of wax at the top and the bottom.
     var blobCount = 7
+    /// The gradient that fills the wax, from the bottom to the top. Empty fills it orange.
     var colors: [Color] = [.red, .orange, .yellow]
+    /// How fast the blobs move, where 1 is the normal pace and 0 stops them.
     var speed = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -17029,6 +17142,10 @@ struct NoiseGrainOverlay: ViewModifier {
 
 extension View {
     /// Adds a subtle animated film grain on top of this view.
+    ///
+    /// - Parameters:
+    ///   - intensity: The opacity of each speck, from 0, invisible, to 1.
+    ///   - grainSize: The side of each speck, in points.
     func noiseGrainOverlay(intensity: Double = 0.16, grainSize: Double = 1.25) -> some View {
         modifier(NoiseGrainOverlay(intensity: intensity, grainSize: grainSize))
     }
@@ -17114,6 +17231,11 @@ extension View {
     ///
     /// It only changes how the view looks: hide it from VoiceOver yourself while it is a secret.
     /// With Reduce Motion on, the view goes from blocks to sharp in one step.
+    ///
+    /// - Parameters:
+    ///   - amount: How pixelated the view is, from 0, sharp, to 1, in the biggest
+    ///     blocks. Values outside clamp.
+    ///   - blockSize: The side of the blocks at an `amount` of 1, in points.
     func pixelate(_ amount: Double, blockSize: CGFloat = 22) -> some View {
         modifier(PixelateShaderEffectModifier(amount: amount, blockSize: blockSize))
     }
@@ -17272,6 +17394,11 @@ extension View {
     /// scroll view itself, comes out empty.
     ///
     /// With Reduce Transparency on, the content is left sharp.
+    ///
+    /// - Parameters:
+    ///   - height: How far down from the top edge of the scroll view the blur fades
+    ///     to nothing, in points.
+    ///   - radius: The strength of the blur right at the top edge, in points.
     func progressiveBlurHeader(height: CGFloat = 130, radius: CGFloat = 14) -> some View {
         modifier(ProgressiveBlurHeaderModifier(height: height, radius: radius))
     }
@@ -17551,11 +17678,24 @@ private struct RippleShaderEffectOnTap: ViewModifier {
 
 extension View {
     /// Starts a wave wherever this view is tapped, without blocking its own controls.
+    ///
+    /// - Parameters:
+    ///   - amplitude: How far the wave moves what is under it, in points.
+    ///   - wavelength: The width of the wave, in points.
+    ///   - speed: How fast the wave spreads, in points per second.
     func rippleShaderEffect(amplitude: Double = 10, wavelength: Double = 110, speed: Double = 650) -> some View {
         modifier(RippleShaderEffectOnTap(amplitude: amplitude, wavelength: wavelength, speed: speed))
     }
 
     /// Starts a wave at `origin`, in this view's own coordinates, every time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - origin: Where the wave starts, in points from the top-left corner of
+    ///     this view.
+    ///   - trigger: A value whose every change starts a new wave.
+    ///   - amplitude: How far the wave moves what is under it, in points.
+    ///   - wavelength: The width of the wave, in points.
+    ///   - speed: How fast the wave spreads, in points per second.
     func rippleShaderEffect(
         at origin: CGPoint,
         trigger: some Equatable & Sendable,
@@ -17742,6 +17882,12 @@ struct RippleTapEffect: ViewModifier {
 
 extension View {
     /// Spawns a ripple at every tap on this view.
+    ///
+    /// - Parameters:
+    ///   - color: The color of the two rings of each ripple and their faint fill.
+    ///   - maxRadius: How far the outer ring grows before it fades out, in points.
+    ///   - cornerRadius: The corner radius of the area that takes taps and clips the
+    ///     ripples, in points. Match it to the view's shape.
     func rippleTapEffect(color: Color = .white, maxRadius: Double = 170, cornerRadius: Double = 0) -> some View {
         modifier(RippleTapEffect(color: color, maxRadius: maxRadius, cornerRadius: cornerRadius))
     }
@@ -17795,9 +17941,11 @@ import SwiftUI
 struct SpotlightOverlay: ViewModifier {
     /// The center of the hole, as a fraction of the view.
     @Binding var center: UnitPoint
+    /// The distance from the center to where the dark is full, in points.
     var radius: Double = 130
     /// How much of the radius is the soft edge, from 0 to 1.
     var softness: Double = 0.55
+    /// The color that covers the view outside the hole, with its opacity.
     var dimming: Color = .black.opacity(0.88)
 
     @Environment(\.layoutDirection) private var layoutDirection
@@ -17833,6 +17981,14 @@ struct SpotlightOverlay: ViewModifier {
 
 extension View {
     /// Darkens this view except for a soft hole at `center`, which follows the finger.
+    ///
+    /// - Parameters:
+    ///   - center: The center of the hole, as a fraction of the view. The overlay
+    ///     writes it as the finger drags.
+    ///   - radius: The distance from the center to where the dark is full, in points.
+    ///   - softness: How much of `radius` fades from clear to dark, from 0, a hard
+    ///     edge, to 1.
+    ///   - dimming: The color that covers the view outside the hole, with its opacity.
     func spotlightOverlay(
         center: Binding<UnitPoint>,
         radius: Double = 130,
@@ -17936,8 +18092,11 @@ import SwiftUI
 /// The content keeps receiving its own touches. With Reduce Motion on, the
 /// particles stay where they were left and only fade.
 struct TouchParticleTrail<Content: View>: View {
+    /// The colors each particle picks from at random. They add up where particles overlap. Empty draws white.
     var colors: [Color] = [.cyan, .purple, .pink]
+    /// How long each particle lasts before it has faded out, in seconds, at least 0.05.
     var lifetime = 0.9
+    /// The view the finger drags over. It keeps its own touches, and the trail is drawn over it.
     @ViewBuilder var content: () -> Content
 
     @State private var emitter = TouchParticleTrailEmitter()
@@ -18176,10 +18335,13 @@ nonisolated enum VoiceOrbMath {
 /// microphone. With Reduce Motion on, the colors stay still and the orb brightens instead of
 /// swelling.
 struct VoiceOrb: View {
+    /// What the assistant is doing. Idle mutes the colors, thinking keeps the orb half lively, speaking shifts its hue, and listening or speaking follow `level`.
     var state = VoiceOrbState.idle
     /// How loud the voice is, from 0 to 1.
     var level = 0.0
+    /// The colors that swirl inside the orb. The first also fills it and tints its glow.
     var colors: [Color] = [.blue, .purple, .pink, .cyan]
+    /// The name VoiceOver reads for the orb, which reads the state as its value.
     var label = "Assistant"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -29931,10 +30093,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the arcs stay still.
 struct ArcSegmentsLoader: View {
+    /// The angular gradient that runs around both rings. Repeat the first color last for a seamless loop.
     var colors: [Color] = [.pink, .orange, .purple, .pink]
     /// The length of each arc, as a fraction of the ring.
     var lengths: [Double] = [0.32, 0.16, 0.07]
+    /// The width and height of the loader, in points. The stroke scales with it.
     var size: CGFloat = 64
+    /// Seconds for the outer ring to make one turn. The inner ring turns 1.4 times as fast.
     var period: TimeInterval = 1.8
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -30031,8 +30196,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows one still blob.
 struct BlobMorphLoader: View {
+    /// The gradient that fills the blob, its direction slowly turning.
     var colors: [Color] = [.pink, .purple, .indigo]
+    /// The width and height of the loader, in points.
     var size: CGFloat = 96
+    /// How fast the blob changes shape, as a multiplier of time. Zero holds it still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -30149,8 +30317,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dots stay still.
 struct DotsPulseLoader: View {
+    /// The fill of the dots, drawn as a gradient.
     var color: Color = .indigo
+    /// How many dots pulse in turn.
     var dotCount: Int = 3
+    /// The diameter of each dot at rest, in points. The spacing scales with it.
     var dotSize: CGFloat = 14
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -30237,9 +30408,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dots stay still, evenly spaced around the center.
 struct OrbitLoader: View {
+    /// The color of the center, the dots and the faint orbit track.
     var color: Color = .indigo
+    /// How many dots circle the center.
     var dotCount: Int = 3
+    /// The width and height of the loader, in points. The dots and the center scale with it.
     var size: CGFloat = 64
+    /// Seconds for a dot to complete one orbit.
     var period: TimeInterval = 1.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -30333,6 +30508,10 @@ extension View {
     ///
     /// Apply it to the content inside a card, not to the card: the shimmer masks the
     /// view, so a shadow drawn outside its bounds would be cut off.
+    ///
+    /// - Parameters:
+    ///   - active: Whether the placeholder shows. While true, the view is redacted,
+    ///     ignores touches and reads as "Loading" to VoiceOver.
     func skeletonShimmer(active: Bool) -> some View {
         modifier(SkeletonShimmerModifier(active: active))
     }
@@ -30491,9 +30670,13 @@ enum SymbolBreatheLoaderEffect {
 ///
 /// With Reduce Motion on, the symbol stays still.
 struct SymbolBreatheLoader: View {
+    /// The SF Symbol that animates.
     var systemName: String = "sparkles"
+    /// Whether the symbol breathes, rotates or does both.
     var effect: SymbolBreatheLoaderEffect = .breathe
+    /// The tint of the symbol, drawn in hierarchical layers.
     var color: Color = .indigo
+    /// The font that sets the size of the symbol, so it scales with Dynamic Type.
     var font: Font = .largeTitle
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -30560,10 +30743,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bars hold one uneven, still shape.
 struct WaveBarsLoader: View {
+    /// The gradient of every bar, from bottom to top.
     var colors: [Color] = [.blue, .cyan, .mint]
+    /// How many bars rise and fall.
     var barCount: Int = 5
+    /// The width of each bar, in points, which is also its shortest height. The spacing scales with it.
     var barWidth: CGFloat = 8
+    /// The height of the loader, in points. The bars reach between about a tenth and all of it.
     var height: CGFloat = 44
+    /// How fast the bars move, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -39172,9 +39360,13 @@ import SwiftUI
 
 /// A sheet of bubbles that pop with a quick shrink and stay flat until `popped` is cleared.
 struct BubbleWrapPop: View {
+    /// The indices of the popped bubbles, counted from 0. The sheet adds to it on every pop; empty it to refill the sheet.
     @Binding var popped: Set<Int>
+    /// How many bubbles fit in a row, from 1 to 16.
     var columns: Int = 6
+    /// How many bubbles the sheet holds, up to 600.
     var count: Int = 48
+    /// The color of the bubbles and their shadow.
     var tint: Color = .cyan
 
     var body: some View {
@@ -39303,10 +39495,15 @@ nonisolated enum SlotMachineReelsMath {
 /// `onResult` gets the symbols under the line once the last reel stops. With Reduce Motion
 /// on, the reels change to their result without spinning.
 struct SlotMachineReels: View {
+    /// The symbols on every reel, in order, usually emoji. With none, the spin button is disabled.
     let symbols: [String]
+    /// How many reels spin side by side, at least 1.
     var reelCount = 3
+    /// The text of the button that starts a spin.
     var spinTitle: LocalizedStringResource = "Spin"
+    /// The color of the cabinet and the button. The button's text and the win line take white or black from it.
     var tint: Color = .red
+    /// Called with the symbol under the line on each reel, from leading to trailing, when the last reel stops.
     var onResult: ([String]) -> Void = { _ in }
 
     @State private var positions: [Int] = []
@@ -39494,7 +39691,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the wheel moves straight to the result.
 struct SpinWheelRoulette: View {
+    /// The labels of the slices, drawn clockwise from the top. With none, the wheel cannot spin.
     let slices: [String]
+    /// Called with the label of the winning slice when the wheel stops.
     var onResult: (String) -> Void = { _ in }
 
     @State private var rotation = 0.0
@@ -40371,9 +40570,13 @@ struct ActivityRingsRing {
 
 /// Concentric gradient rings that close as their goals are reached.
 struct ActivityRings: View {
+    /// The rings to draw, from the outermost inward. Rings that do not fit inside `diameter` are left out.
     let rings: [ActivityRingsRing]
+    /// The width and height of the outermost ring, in points.
     var diameter: CGFloat = 240
+    /// The thickness of each ring, in points.
     var lineWidth: CGFloat = 28
+    /// The space between neighbouring rings, in points.
     var gap: CGFloat = 5
 
     var body: some View {
@@ -40548,10 +40751,15 @@ enum CircularProgressRingMath {
 ///
 /// With Reduce Motion on, the ring and the number change without animating.
 struct CircularProgressRing: View {
+    /// How full the ring is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The angular gradient along the ring, starting at the top.
     var colors: [Color] = [.cyan, .blue, .purple]
+    /// The thickness of the ring, in points.
     var lineWidth: CGFloat = 18
+    /// The font of the percentage in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -40682,11 +40890,17 @@ enum CountdownRingMath {
 ///
 /// With Reduce Motion on, the ring moves once per second instead of continuously.
 struct CountdownRing: View {
+    /// The moment the countdown reaches zero. Changing it starts a new countdown.
     var endDate: Date
+    /// The length of a full ring, in seconds. Time left beyond it is capped, so the ring never overfills.
     var duration: TimeInterval
+    /// The gradient of the ring, from top to bottom.
     var colors: [Color] = [.orange, .pink]
+    /// The thickness of the ring, in points.
     var lineWidth: CGFloat = 18
+    /// The font of the number in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// Runs once when `endDate` is reached, or right away if it has already passed.
     var onFinish: (() -> Void)? = nil
 
     @State private var isFinished = false
@@ -40809,9 +41023,13 @@ enum DownloadPillProgressState: Equatable {
 
 /// A capsule button that shrinks into a progress ring while downloading, then shows a checkmark.
 struct DownloadPillProgress: View {
+    /// The text of the pill before the download starts, and the name VoiceOver reads.
     var title: LocalizedStringResource = "Download"
+    /// Whether the pill shows the title, a progress ring at a fraction from 0 to 1, or a checkmark.
     let state: DownloadPillProgressState
+    /// The fill of the pill and the color of the ring. The title takes white or black from it.
     var tint: Color = .blue
+    /// Runs when the pill is tapped, in any state.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .headline) private var height: CGFloat = 46
@@ -40976,9 +41194,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the fill changes without animating.
 struct GradientProgressBar: View {
+    /// How full the bar is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The gradient of the fill, from leading to trailing. The last color tints the glow.
     var colors: [Color] = [.cyan, .blue, .purple]
+    /// The thickness of the bar, in points, which is also the shortest fill shown above zero.
     var height: CGFloat = 12
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -41081,9 +41303,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the surface stands still and the level changes without animating.
 struct LiquidFillProgress: View {
+    /// How full the circle is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The color of the liquid, the rim and the percentage. Where the liquid covers it, the percentage takes white or black from it.
     var color: Color = .blue
+    /// The font of the percentage in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -41242,8 +41468,11 @@ import SwiftUI
 /// `currentStep` starts at 0. Passing `steps.count` marks every step as done.
 /// With Reduce Motion on, the steps change without animating.
 struct StepProgressIndicator: View {
+    /// The names of the steps, shown under their numbered markers from leading to trailing.
     let steps: [String]
+    /// The index of the step in progress, from 0. Earlier steps show a checkmark, and values out of range are clamped.
     var currentStep: Int
+    /// The fill of the done and current markers and of the line between them.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .subheadline) private var markerSize = 36
@@ -44875,7 +45104,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the gradient stays still.
 struct AnimatedGradientText: View {
+    /// The text to show, which keeps the font and size set around it.
     let text: String
+    /// The colors that drift through the letters, from leading to trailing, wrapping around.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .cyan, .purple]
     /// Seconds for the colors to drift one full cycle.
     var duration: Double = 4
@@ -44946,6 +45177,7 @@ import SwiftUI
 /// Letters are laid out one by one, so it suits a short single line.
 /// With Reduce Motion on, it is plain text.
 struct BouncyLettersText: View {
+    /// The text whose letters hop, best kept to a short single line.
     let text: String
     /// Seconds between one letter's hop and the next one's.
     var stagger: Double = 0.08
@@ -45063,8 +45295,11 @@ enum CountingNumberTextMath {
 ///
 /// With Reduce Motion on, it jumps straight to the value.
 struct CountingNumberText: View {
+    /// The number to count to. It counts from 0 when it appears, and from the number shown whenever it changes.
     let value: Int
+    /// Seconds a count takes, easing out as it nears the value.
     var duration: Double = 1.2
+    /// How the number is written, like `.number` or `.percent`. VoiceOver reads the final value in it.
     var format: IntegerFormatStyle<Int> = .number
 
     @State private var shown = 0
@@ -45168,8 +45403,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the copies rest in a still, slightly split position.
 struct GlitchText: View {
+    /// The text to show, with two colored copies behind it.
     let text: String
+    /// The color of the copy that rests slightly to the leading side.
     var firstColor: Color = .cyan
+    /// The color of the copy that rests slightly to the trailing side.
     var secondColor: Color = .pink
 
     /// Ticks per second while flickering, one burst lasts `burstTicks` out of every `cycleTicks`.
@@ -45256,6 +45494,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the text sits still on its baseline.
 struct GlyphWaveText: View {
+    /// The text whose glyphs ride the wave. It keeps the font and size set around it.
     let text: String
     /// Full waves per second.
     var speed: Double = 0.8
@@ -45345,9 +45584,13 @@ import SwiftUI
 
 /// Text with every match of a search query highlighted, ignoring case and accents.
 struct HighlightedSearchText: View {
+    /// The text to show and search.
     let text: String
+    /// The text to find, trimmed of surrounding spaces. An empty query highlights nothing.
     let query: String
+    /// The background behind each match.
     var highlightColor: Color = .yellow
+    /// The color of the letters inside each match, chosen to read on `highlightColor`.
     var highlightedTextColor: Color = .black
 
     var body: some View {
@@ -45505,6 +45748,7 @@ nonisolated enum KaraokeLyricsTextMath {
 /// color and alignment, wraps like any other, and follows the direction of its language.
 /// With Reduce Motion on, each line lights up at once instead of filling.
 struct KaraokeLyricsText: View {
+    /// The lyrics to show, which may wrap over several lines.
     let text: String
     /// How much of the text has been sung, from 0 to 1.
     var progress: Double
@@ -45624,6 +45868,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, a long line is truncated instead of scrolling.
 struct MarqueeText: View {
+    /// The line to show. It scrolls only when it is wider than the space it is given.
     let text: String
     /// Points per second.
     var speed: Double = 42
@@ -45758,9 +46003,13 @@ import SwiftUI
 /// The button only appears when the text does not fit. With Reduce Motion on, the
 /// paragraph changes height at once. VoiceOver always reads the whole paragraph.
 struct ReadMoreText: View {
+    /// The paragraph to show, truncated until it is expanded.
     let text: String
+    /// How many lines show while collapsed, at least 1.
     var collapsedLines = 3
+    /// The text of the button that expands the paragraph.
     var moreLabel = "Read more"
+    /// The text of the button that collapses it again.
     var lessLabel = "Show less"
 
     @State private var isExpanded = false
@@ -45877,6 +46126,7 @@ import SwiftUI
 /// It reserves the width of the longest word, so nothing around it moves.
 /// With Reduce Motion on, the words crossfade.
 struct RotatingWordsText: View {
+    /// The words that take turns, in order and looping. A single word stays still.
     let words: [String]
     /// Seconds each word stays on screen.
     var interval: Double = 1.6
@@ -45962,8 +46212,11 @@ import SwiftUI
 ///
 /// It plays again when `text` changes. With Reduce Motion on, the text appears directly.
 struct ScrambleText: View {
+    /// The text the scramble settles into, drawn in a monospaced font.
     let text: String
+    /// Seconds from the first random character to the settled text.
     var duration: Double = 1.2
+    /// The characters drawn at random before each letter settles. Whitespace is never scrambled.
     var characters: [Character] = ScrambleTextScrambler.defaultCharacters
 
     @State private var displayed: String?
@@ -46077,8 +46330,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the text is drawn plainly in the highlight color.
 struct ShimmerText: View {
+    /// The text the light sweeps across.
     let text: String
+    /// The color of the letters outside the band of light.
     var baseColor: Color = .secondary
+    /// The color at the center of the band of light.
     var highlightColor: Color = .primary
     /// Seconds for one sweep.
     var duration: Double = 2.2
@@ -46195,7 +46451,9 @@ nonisolated enum StreamingTextMath {
 /// Text that is replaced rather than extended starts again from where the two differ.
 /// With Reduce Motion on, new text shows at once.
 struct StreamingText: View {
+    /// The text received so far. Extend it as new chunks arrive.
     let text: String
+    /// How fast the new text fades in. Each chunk takes between 0.15 and 1.5 seconds whatever its length.
     var charactersPerSecond = 80.0
     /// How many characters the soft edge of the new text spans.
     var fade = 10.0
@@ -46311,7 +46569,9 @@ import SwiftUI
 ///
 /// Animate `progress` from 0 to 1 with `withAnimation`. With Reduce Motion on, the text is shown in full.
 struct TextBlurReveal: View {
+    /// The text to reveal, one line after another.
     let text: String
+    /// How far the reveal has gone, from 0 for hidden to 1 for fully shown. Lines start in turn and overlap.
     var progress: Double = 1
 
     @ScaledMetric(relativeTo: .title) private var blurRadius = 12.0
@@ -46424,8 +46684,11 @@ import SwiftUI
 ///
 /// It restarts when `text` changes. With Reduce Motion on, the text appears in full with no cursor.
 struct TypewriterText: View {
+    /// The text to type. Changing it starts typing again.
     let text: String
+    /// How fast characters appear. Zero or less shows the text at once.
     var charactersPerSecond: Double = 20
+    /// The color of the cursor, which blinks once the text is typed.
     var cursorColor: Color = .accentColor
 
     @State private var started: (text: String, date: Date)?
@@ -46873,7 +47136,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view only fades.
 struct BlurFadeTransition: Transition {
+    /// How blurred the view is when it is fully out, in points.
     var radius: CGFloat = 18
+    /// The size of the view when it is fully out, as a fraction of its own size.
     var scale: CGFloat = 0.9
 
     func body(content: Content, phase: TransitionPhase) -> some View {
@@ -46969,6 +47234,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view fades instead.
 struct CircleRevealTransition: Transition {
+    /// Where the circle grows from, as a fraction of the view. It grows until it covers the farthest corner.
     var origin: UnitPoint = .center
 
     func body(content: Content, phase: TransitionPhase) -> some View {
@@ -47097,7 +47363,9 @@ enum ContentSwapTransitionStyle {
 ///
 /// With Reduce Motion on, numbers fade instead of rolling.
 struct ContentSwapTransition: View {
+    /// The text shown. A change inside an animation plays the transition.
     let text: String
+    /// How the old text turns into the new: rolling digits toward a number, a morph between the shapes, or a fade.
     var style: ContentSwapTransitionStyle = .opacity
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -47213,6 +47481,12 @@ struct CrossFadeNavigation<SheetContent: View>: ViewModifier {
 
 @available(iOS 27, *)
 extension View {
+    /// Presents a sheet that fades in over this view instead of sliding up.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the sheet shows. The sheet sets it to false when
+    ///     it is dismissed.
+    ///   - content: The view shown in the sheet.
     func crossFadeSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> SheetContent
@@ -47529,8 +47803,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the faces swap without rotating.
 struct FlipCardTransition<Front: View, Back: View>: View {
+    /// Whether the back faces the viewer. A change flips the card around its vertical axis.
     let isFlipped: Bool
+    /// The face shown while `isFlipped` is false.
     @ViewBuilder var front: () -> Front
+    /// The face shown while `isFlipped` is true.
     @ViewBuilder var back: () -> Back
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -47684,8 +47961,11 @@ enum InteractivePagerTransitionMath {
 /// VoiceOver can change page with a three-finger swipe or by adjusting the page dots. With
 /// Reduce Motion on, pages slide plainly under the finger and settle at once.
 struct InteractivePagerTransition<Page: Identifiable, PageContent: View>: View {
+    /// The items, one per page, in order. Only the current page and its neighbours are built.
     let pages: [Page]
+    /// The position of the current page in `pages`. The pager writes it when a swipe completes, and an index out of range shows the nearest page.
     @Binding var index: Int
+    /// The view for a page, drawn at the full width of the pager.
     @ViewBuilder var content: (Page) -> PageContent
 
     @GestureState private var dragTranslation: CGFloat = 0
@@ -47846,10 +48126,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the card changes state without animating.
 struct MatchedHeroCard<Detail: View>: View {
+    /// The large heading of the card, also what VoiceOver reads for it while it is collapsed.
     let title: String
+    /// The line under the title.
     let subtitle: String
+    /// The SF Symbol drawn above the title.
     let systemImage: String
+    /// The gradient behind the card, from the top-leading corner to the bottom-trailing one.
     var colors: [Color] = [.indigo, .purple]
+    /// The view shown under the header once the card is expanded. Whatever does not fit is clipped.
     @ViewBuilder var detail: () -> Detail
 
     @State private var isExpanded = false
@@ -48018,8 +48303,11 @@ enum ParallaxPushTransitionMath {
 /// A `Transition` cannot read the environment, so pass Reduce Motion in: with it on, the
 /// pages crossfade. Give the page on top the higher `zIndex`.
 struct ParallaxPushTransition: Transition {
+    /// Whether the move goes forward, with the new page sliding in over the old one. When false, the old page slides away to uncover the new one.
     var isForward = true
+    /// Pass the environment's `accessibilityReduceMotion` here. When true, the pages crossfade instead of moving.
     var reduceMotion = false
+    /// How far the page underneath moves, as a fraction of the page width. At 1 it keeps pace with the page on top.
     var parallax: CGFloat = 0.3
 
     func body(content: Content, phase: TransitionPhase) -> some View {
@@ -48140,8 +48428,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view only fades.
 struct SlideScaleTransition: Transition {
+    /// The direction of the slide. A view enters from the trailing or bottom side and leaves toward the leading or top one.
     var axis: Axis = .horizontal
+    /// How far the view slides, in points.
     var distance: CGFloat = 220
+    /// The size of the view when it is fully out, as a fraction of its own size.
     var scale: CGFloat = 0.8
 
     func body(content: Content, phase: TransitionPhase) -> some View {
@@ -48261,9 +48552,13 @@ enum StaggeredAppearListTiming {
 ///
 /// With Reduce Motion on, every row fades in at once without moving.
 struct StaggeredAppearList<Item: Identifiable, Row: View>: View {
+    /// The rows, in order. Each one enters 0.07 seconds after the previous one, with no row waiting more than 0.6 seconds.
     let items: [Item]
+    /// The space between rows, in points.
     var spacing: CGFloat = 12
+    /// How far below its place each row starts, in points.
     var travel: CGFloat = 28
+    /// The view for an item.
     @ViewBuilder var row: (Item) -> Row
 
     @State private var isVisible = false
@@ -48365,10 +48660,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the symbols fade.
 struct SymbolMorphToggle: View {
+    /// The text under the symbol, also what VoiceOver reads for the toggle.
     let title: LocalizedStringResource
+    /// The SF Symbol shown while the toggle is on.
     let onSymbol: String
+    /// The SF Symbol shown while the toggle is off. A symbol related to `onSymbol` morphs into it.
     let offSymbol: String
+    /// Whether the toggle is on. A tap flips it.
     @Binding var isOn: Bool
+    /// The color of the symbol while the toggle is on. Off, it is gray.
     var tint: Color = .blue
 
     @ScaledMetric(relativeTo: .largeTitle) private var symbolSize = 44.0
@@ -48452,10 +48752,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the detail opens with the standard navigation transition.
 struct ZoomHeroTransition<Item: Identifiable & Hashable, Card: View, Detail: View>: View {
+    /// The items, one card each, in grid order.
     let items: [Item]
+    /// How many columns of cards the grid has.
     var columns: Int = 2
+    /// The corner radius each card is clipped to, in points.
     var cornerRadius: CGFloat = 24
+    /// The view for an item in the grid. A tap on it opens its detail.
     @ViewBuilder var card: (Item) -> Card
+    /// The screen the card zooms into, pushed on the surrounding `NavigationStack`.
     @ViewBuilder var detail: (Item) -> Detail
 
     @Namespace private var namespace

@@ -35,6 +35,11 @@ extension View {
     ///
     /// It only changes how the view looks: hide it from VoiceOver yourself while it is a secret.
     /// With Reduce Motion on, the view goes from blocks to sharp in one step.
+    ///
+    /// - Parameters:
+    ///   - amount: How pixelated the view is, from 0, sharp, to 1, in the biggest
+    ///     blocks. Values outside clamp.
+    ///   - blockSize: The side of the blocks at an `amount` of 1, in points.
     func pixelate(_ amount: Double, blockSize: CGFloat = 22) -> some View {
         modifier(PixelateShaderEffectModifier(amount: amount, blockSize: blockSize))
     }

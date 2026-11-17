@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the copies rest in a still, slightly split position.
 struct GlitchText: View {
+    /// The text to show, with two colored copies behind it.
     let text: String
+    /// The color of the copy that rests slightly to the leading side.
     var firstColor: Color = .cyan
+    /// The color of the copy that rests slightly to the trailing side.
     var secondColor: Color = .pink
 
     /// Ticks per second while flickering, one burst lasts `burstTicks` out of every `cycleTicks`.

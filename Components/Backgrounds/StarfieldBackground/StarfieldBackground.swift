@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows a still field of dots.
 struct StarfieldBackground: View {
+    /// The color of the streaks, fainter far away.
     var color: Color = .white
+    /// How many stars are in flight at once.
     var count: Int = 320
     /// Depth covered per second, where 1 is the whole way from the horizon to the viewer.
     var speed: Double = 0.22

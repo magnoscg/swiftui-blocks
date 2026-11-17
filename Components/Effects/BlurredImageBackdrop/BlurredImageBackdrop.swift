@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// It is decorative, so VoiceOver skips it.
 struct BlurredImageBackdrop: View {
+    /// The picture blurred to fill the backdrop, scaled to fill and cropped at the edges.
     let image: Image
+    /// How strong the blur is, in points. Zero shows the image sharp.
     var blurRadius: CGFloat = 40
+    /// The color laid over the blurred image, to keep the content on top readable.
     var tint: Color = .black
+    /// How much the tint covers the image, from 0, none, to 1, the tint alone.
     var tintOpacity: Double = 0.35
 
     var body: some View {

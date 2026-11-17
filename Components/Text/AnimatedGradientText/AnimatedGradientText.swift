@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the gradient stays still.
 struct AnimatedGradientText: View {
+    /// The text to show, which keeps the font and size set around it.
     let text: String
+    /// The colors that drift through the letters, from leading to trailing, wrapping around.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .cyan, .purple]
     /// Seconds for the colors to drift one full cycle.
     var duration: Double = 4

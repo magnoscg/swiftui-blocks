@@ -29,10 +29,15 @@ nonisolated enum SlotMachineReelsMath {
 /// `onResult` gets the symbols under the line once the last reel stops. With Reduce Motion
 /// on, the reels change to their result without spinning.
 struct SlotMachineReels: View {
+    /// The symbols on every reel, in order, usually emoji. With none, the spin button is disabled.
     let symbols: [String]
+    /// How many reels spin side by side, at least 1.
     var reelCount = 3
+    /// The text of the button that starts a spin.
     var spinTitle: LocalizedStringResource = "Spin"
+    /// The color of the cabinet and the button. The button's text and the win line take white or black from it.
     var tint: Color = .red
+    /// Called with the symbol under the line on each reel, from leading to trailing, when the last reel stops.
     var onResult: ([String]) -> Void = { _ in }
 
     @State private var positions: [Int] = []

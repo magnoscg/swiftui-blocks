@@ -71,6 +71,12 @@ struct SpringStudyPlayground: View {
     @ScaledMetric(relativeTo: .title2) private var ballSize = 44.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a playground that starts from the spring you give it.
+    ///
+    /// - Parameters:
+    ///   - response: The starting response, in seconds, clamped to 0.1…1.5.
+    ///   - damping: The starting damping ratio, clamped to 0.1…1. At 1 the spring
+    ///     does not overshoot.
     init(response: Double = 0.55, damping: Double = 0.55) {
         _response = State(initialValue: SpringStudyPlaygroundMath.clamped(response, to: SpringStudyPlaygroundMath.responseRange))
         _damping = State(initialValue: SpringStudyPlaygroundMath.clamped(damping, to: SpringStudyPlaygroundMath.dampingRange))

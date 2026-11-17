@@ -24,6 +24,12 @@ struct CrossFadeNavigation<SheetContent: View>: ViewModifier {
 
 @available(iOS 27, *)
 extension View {
+    /// Presents a sheet that fades in over this view instead of sliding up.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the sheet shows. The sheet sets it to false when
+    ///     it is dismissed.
+    ///   - content: The view shown in the sheet.
     func crossFadeSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> SheetContent

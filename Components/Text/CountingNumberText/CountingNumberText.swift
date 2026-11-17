@@ -17,8 +17,11 @@ enum CountingNumberTextMath {
 ///
 /// With Reduce Motion on, it jumps straight to the value.
 struct CountingNumberText: View {
+    /// The number to count to. It counts from 0 when it appears, and from the number shown whenever it changes.
     let value: Int
+    /// Seconds a count takes, easing out as it nears the value.
     var duration: Double = 1.2
+    /// How the number is written, like `.number` or `.percent`. VoiceOver reads the final value in it.
     var format: IntegerFormatStyle<Int> = .number
 
     @State private var shown = 0

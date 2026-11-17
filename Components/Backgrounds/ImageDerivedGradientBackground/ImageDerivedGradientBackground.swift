@@ -56,8 +56,11 @@ struct ImageDerivedGradientBackground: View {
         let bands: Int
     }
 
+    /// The picture whose colors fill the gradient.
     let image: Image
+    /// How many colors to sample, one per horizontal band of the image from top to bottom, at least 1.
     var bands = 3
+    /// The gradient shown before the first image is sampled, or when it cannot be.
     var fallback: [Color] = [.indigo, .black]
 
     @State private var colors: [Color]?

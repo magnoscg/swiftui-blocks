@@ -19,13 +19,17 @@ enum SynthwaveGridBackgroundMath {
 ///
 /// With Reduce Motion on, the grid stops moving.
 struct SynthwaveGridBackground: View {
+    /// The color of the grid lines, drawn with a soft glow.
     var lineColor: Color = .cyan
+    /// The gradient of the sky, from the top edge down to the horizon.
     var skyColors: [Color] = [
         Color(red: 0.07, green: 0.03, blue: 0.2),
         Color(red: 0.42, green: 0.08, blue: 0.5),
         Color(red: 0.95, green: 0.25, blue: 0.5),
     ]
+    /// How many horizontal lines cross the ground at once, up to 128.
     var lineCount = 14
+    /// How many lines scroll past each second. Zero holds the grid still.
     var speed = 0.5
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
