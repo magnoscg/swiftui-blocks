@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.13.0 - 2026-11-17
+
 ### Added
 
 - A skill, `skills/swiftui-blocks/SKILL.md`, that teaches a coding agent to
