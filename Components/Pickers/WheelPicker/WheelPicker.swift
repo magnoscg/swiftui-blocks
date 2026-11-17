@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// `values` must be unique. With Reduce Motion on, rows stay flat and only fade.
 struct WheelPicker<Value: Hashable>: View {
+    /// The name VoiceOver reads for the wheel. It is not drawn.
     let title: LocalizedStringResource
+    /// The rows of the wheel, in order. Each must be unique.
     let values: [Value]
+    /// The value in the center. The wheel writes it as it scrolls or a row is tapped, and scrolls when it changes from outside.
     @Binding var selection: Value
+    /// How many rows tall the wheel is, from 1 to 15.
     var visibleRows: Int = 5
+    /// The text of the row for each value, also read by VoiceOver.
     var text: (Value) -> String
 
     @ScaledMetric(relativeTo: .title3) private var rowHeight: CGFloat = 44

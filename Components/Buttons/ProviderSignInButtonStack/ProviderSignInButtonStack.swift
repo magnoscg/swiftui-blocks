@@ -17,7 +17,9 @@ struct ProviderSignInButtonStackOption: Identifiable {
 ///
 /// For Sign in with Apple, use the system `SignInWithAppleButton`: Apple's guidelines require it.
 struct ProviderSignInButtonStack: View {
+    /// The providers, one full-width button each, from top to bottom.
     let options: [ProviderSignInButtonStackOption]
+    /// The vertical gap between buttons, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
 
     @State private var loadingID: ProviderSignInButtonStackOption.ID?

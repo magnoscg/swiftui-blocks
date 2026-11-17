@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the calendar appears and disappears without animating.
 struct InlineDatePickerDisclosure: View {
+    /// The text of the row, beside the date, and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The date shown in the row. The calendar writes it, and closes once a different day is picked.
     @Binding var date: Date
+    /// The days the calendar lets the person pick.
     var range: ClosedRange<Date> = Date.distantPast...Date.distantFuture
 
     @State private var isExpanded = false

@@ -51,9 +51,13 @@ enum WeekdaySegmentedPickerCalendar {
 /// The selection holds `Calendar` weekday numbers, 1 for Sunday. With Reduce
 /// Motion on, a day changes color without popping.
 struct WeekdaySegmentedPicker: View {
+    /// The days picked, as `Calendar` weekday numbers from 1 for Sunday to 7 for Saturday. The picker writes it on each tap.
     @Binding var selection: Set<Int>
+    /// Sets the first day of the row and the letters and names of the days.
     var calendar: Calendar = .current
+    /// The fill of a picked day. Its letter takes white or black from it.
     var color: Color = .accentColor
+    /// Whether a line under the days names the selection, like "Weekdays" or "Never".
     var showsSummary = true
 
     @ScaledMetric(relativeTo: .body) private var size = 40.0

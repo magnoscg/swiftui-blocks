@@ -9,10 +9,15 @@ import SwiftUI
 /// With Reduce Motion on, the ring still fills, because it carries the meaning,
 /// but the button does not squeeze. VoiceOver users confirm with a double tap.
 struct HoldToConfirmButton: View {
+    /// The text under the button, which VoiceOver also reads as its name.
     let title: LocalizedStringResource
+    /// The SF Symbol in the middle. It turns into a checkmark once confirmed.
     var systemImage: String = "checkmark"
+    /// The fill and the ring while held. Both turn green once confirmed, and the symbol takes white or black from the fill.
     var tint: Color = .red
+    /// The seconds the button must be held for the ring to fill and the action to run.
     var holdDuration: Double = 1.2
+    /// Runs once the hold completes, or when VoiceOver activates the button. The button resets 1.2 seconds later.
     let action: () -> Void
 
     @State private var progress = 0.0

@@ -113,6 +113,11 @@ private struct CollapsingBottomBarSlot: View {
 }
 
 extension View {
+    /// Adds a bottom bar that shrinks to a pill while this scroll view scrolls down.
+    ///
+    /// - Parameters:
+    ///   - items: The actions of the bar, from leading to trailing. Their titles show
+    ///     under the icons only while the bar is expanded.
     func collapsingBottomBar(items: [CollapsingBottomBarItem]) -> some View {
         modifier(CollapsingBottomBar(items: items))
     }

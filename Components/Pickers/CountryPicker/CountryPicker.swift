@@ -16,7 +16,9 @@ struct CountryPickerCountry: Identifiable, Hashable, Sendable {
 ///
 /// It opens on the selected country, or on the region of the device if there is none.
 struct CountryPicker: View {
+    /// The ISO region code of the checked country, like `ES`. The picker writes it when a row is tapped.
     @Binding var selection: String?
+    /// The rows, in order. By default, every region the system knows that has a dial code, named in the current language and sorted by name.
     var countries: [CountryPickerCountry] = CountryPickerData.all
 
     @State private var query = ""

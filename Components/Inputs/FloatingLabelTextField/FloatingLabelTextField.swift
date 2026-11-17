@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the label changes place without sliding.
 struct FloatingLabelTextField: View {
+    /// The label that sits in the field as a placeholder and floats above the text.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it.
     @Binding var text: String
+    /// The color of the border, the floating label and the cursor while the field has focus.
     var tint: Color = .indigo
 
     @FocusState private var isFocused: Bool

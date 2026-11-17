@@ -17,7 +17,9 @@ struct GooeyFloatingMenuItem: Identifiable {
 /// shrink when the width cannot hold the fan at their full size.
 /// With Reduce Motion on, the options appear without moving.
 struct GooeyFloatingMenu: View {
+    /// The options fanned in an arc above the main button. A tap on one closes the menu and runs it.
     let items: [GooeyFloatingMenuItem]
+    /// The color of the liquid and its shadow. The icons take white or black from it.
     var tint: Color = .indigo
 
     @State private var isOpen = false

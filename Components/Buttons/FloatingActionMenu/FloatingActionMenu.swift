@@ -56,9 +56,13 @@ enum FloatingActionMenuMath {
 /// wide and nine at 393. Any more stay on screen but overlap, so use a list for longer menus.
 /// With Reduce Motion on, the actions appear in place without moving.
 struct FloatingActionMenu: View {
+    /// The actions fanned out around the button, from `startDegrees` to `endDegrees`. A tap on one closes the menu and runs it.
     let items: [FloatingActionMenuItem]
+    /// The fill of the main button. Its icon takes white or black from it.
     var tint: Color = .indigo
+    /// The angle of the first item, in degrees: 0 points to the trailing side, 90 down, 180 to the leading side and 270 up.
     var startDegrees = 180.0
+    /// The angle of the last item, measured like `startDegrees`. The items between are spread evenly.
     var endDegrees = 270.0
 
     var body: some View {

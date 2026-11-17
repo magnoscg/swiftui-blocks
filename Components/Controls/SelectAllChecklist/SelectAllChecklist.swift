@@ -31,10 +31,15 @@ enum SelectAllChecklistState: Equatable {
 /// The selection is a `Set` of IDs, like a `List` with selection. With Reduce
 /// Motion on, the checkmarks appear without being drawn.
 struct SelectAllChecklist<Item: Identifiable, Row: View>: View {
+    /// The text of the "select all" row, beside the count.
     let title: LocalizedStringResource
+    /// The rows, in order.
     let items: [Item]
+    /// The IDs of the checked rows. The list writes it as rows or the "select all" box are tapped, and leaves IDs not in `items` alone.
     @Binding var selection: Set<Item.ID>
+    /// The fill of a checked box. Its checkmark or dash takes white or black from it.
     var color: Color = .accentColor
+    /// The content of each row, beside its box.
     @ViewBuilder let row: (Item) -> Row
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize

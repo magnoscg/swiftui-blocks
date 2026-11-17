@@ -2672,6 +2672,12 @@ struct AsyncActionButton<Label: View>: View {
     @State private var run = AsyncActionButtonRun()
     @State private var runID: UUID?
 
+    /// Creates a button with a label of your own.
+    ///
+    /// - Parameters:
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
+    ///   - label: The view the spinner replaces while the action runs.
     init(action: @escaping @MainActor () async -> Void, @ViewBuilder label: () -> Label) {
         self.action = action
         self.label = label()
@@ -2721,12 +2727,25 @@ private struct AsyncActionButtonSpinner: View {
 }
 
 extension AsyncActionButton where Label == Text {
+    /// Creates a button with a text label.
+    ///
+    /// - Parameters:
+    ///   - title: The text of the button.
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
     init(_ title: LocalizedStringResource, action: @escaping @MainActor () async -> Void) {
         self.init(action: action) { Text(title) }
     }
 }
 
 extension AsyncActionButton where Label == SwiftUI.Label<Text, Image> {
+    /// Creates a button with a text and an icon.
+    ///
+    /// - Parameters:
+    ///   - title: The text of the button.
+    ///   - systemImage: The SF Symbol shown before the text.
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
     init(_ title: LocalizedStringResource, systemImage: String, action: @escaping @MainActor () async -> Void) {
         self.init(action: action) { SwiftUI.Label { Text(title) } icon: { Image(systemName: systemImage) } }
     }
@@ -2810,11 +2829,17 @@ enum BadgedIconButtonBadge {
 ///
 /// With Reduce Motion on, the badge fades and the icon stays still.
 struct BadgedIconButton: View {
+    /// The name VoiceOver reads for the button, like "Notifications".
     let title: LocalizedStringResource
+    /// The SF Symbol drawn as the icon.
     let systemImage: String
+    /// The number in the badge. At zero or below, the badge hides.
     let count: Int
+    /// The highest number the badge shows. Past it, the badge reads the limit and a plus, like `99+`.
     var limit = 99
+    /// The fill of the badge. Its number takes white or black from it.
     var badgeColor: Color = .red
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @State private var bounces = 0
@@ -2948,7 +2973,9 @@ struct ButtonVariantStyle: ButtonStyle {
         case filled, tinted, outlined, plain
     }
 
+    /// The look: a solid fill, a soft tinted fill, a border, or the label alone.
     var variant: Variant = .filled
+    /// The color the variant draws with. A destructive role replaces it with red, and on `filled` the label takes white or black from it.
     var color: Color = .accentColor
 
     func makeBody(configuration: Configuration) -> some View {
@@ -3122,10 +3149,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button stays in place and only dims while pressed.
 struct ElasticDragButton: View {
+    /// The SF Symbol drawn in the middle of the circle.
     let systemImage: String
+    /// The name VoiceOver reads for the button.
     let label: LocalizedStringResource
+    /// The fill of the circle and its shadow. The symbol takes white or black from it.
     var tint: Color = .indigo
+    /// The farthest the button follows the finger, in points. The pull eases off as it nears this distance.
     var reach: Double = 80
+    /// Runs on a tap, or on a press that travels less than 12 points before release.
     let action: () -> Void
 
     @State private var pull = CGSize.zero
@@ -3287,8 +3319,11 @@ struct EmojiReactionPicker: View {
         case active(location: CGPoint?)
     }
 
+    /// The chosen reaction, or nil for none. The picker writes it on a tap or a pick.
     @Binding var selection: EmojiReactionPickerOption?
+    /// The reactions in the row, in order. A tap toggles the first one.
     var options = EmojiReactionPickerOption.defaults
+    /// Called with the new reaction, or nil when a tap clears it, each time the person changes it.
     var onSelect: (EmojiReactionPickerOption?) -> Void = { _ in }
 
     @GestureState private var press = Press.idle
@@ -3490,8 +3525,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the field appears without animating.
 struct ExpandingSearchButton: View {
+    /// The text in the field. The button writes it as the person types and empties it on close.
     @Binding var text: String
+    /// The placeholder shown while the field is empty.
     var prompt: LocalizedStringResource = "Search"
+    /// Runs when the person presses Search on the keyboard.
     var onSubmit: () -> Void = {}
 
     @State private var isExpanded = false
@@ -3680,9 +3718,13 @@ enum FloatingActionMenuMath {
 /// wide and nine at 393. Any more stay on screen but overlap, so use a list for longer menus.
 /// With Reduce Motion on, the actions appear in place without moving.
 struct FloatingActionMenu: View {
+    /// The actions fanned out around the button, from `startDegrees` to `endDegrees`. A tap on one closes the menu and runs it.
     let items: [FloatingActionMenuItem]
+    /// The fill of the main button. Its icon takes white or black from it.
     var tint: Color = .indigo
+    /// The angle of the first item, in degrees: 0 points to the trailing side, 90 down, 180 to the leading side and 270 up.
     var startDegrees = 180.0
+    /// The angle of the last item, measured like `startDegrees`. The items between are spread evenly.
     var endDegrees = 270.0
 
     var body: some View {
@@ -3844,10 +3886,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the gradient stays still.
 struct GradientBorderButton<Content: View>: View {
+    /// The colors around the border, in order. End with the first one so the loop has no seam.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .blue, .purple, .pink]
+    /// The width of the border, in points. A blurred copy under it adds the glow.
     var lineWidth: Double = 3
+    /// The seconds the gradient takes to turn once around the border.
     var period: Double = 3
+    /// Runs when the button is tapped.
     let action: () -> Void
+    /// The content inside the capsule, set in a bold `title3` font.
     @ViewBuilder let label: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -3980,9 +4027,13 @@ nonisolated struct HamburgerMenuButtonShape: Shape {
 ///
 /// With Reduce Motion on, the icon changes without morphing.
 struct HamburgerMenuButton: View {
+    /// Whether the icon shows the cross. The button flips it on each tap.
     @Binding var isOpen: Bool
+    /// The stroke of the bars and of the cross.
     var color: Color = .primary
+    /// The name VoiceOver reads while `isOpen` is false.
     var openLabel = "Open menu"
+    /// The name VoiceOver reads while `isOpen` is true.
     var closeLabel = "Close menu"
 
     @ScaledMetric(relativeTo: .title2) private var size = 24.0
@@ -4064,10 +4115,15 @@ import SwiftUI
 /// With Reduce Motion on, the ring still fills, because it carries the meaning,
 /// but the button does not squeeze. VoiceOver users confirm with a double tap.
 struct HoldToConfirmButton: View {
+    /// The text under the button, which VoiceOver also reads as its name.
     let title: LocalizedStringResource
+    /// The SF Symbol in the middle. It turns into a checkmark once confirmed.
     var systemImage: String = "checkmark"
+    /// The fill and the ring while held. Both turn green once confirmed, and the symbol takes white or black from the fill.
     var tint: Color = .red
+    /// The seconds the button must be held for the ring to fill and the action to run.
     var holdDuration: Double = 1.2
+    /// Runs once the hold completes, or when VoiceOver activates the button. The button resets 1.2 seconds later.
     let action: () -> Void
 
     @State private var progress = 0.0
@@ -4213,8 +4269,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the heart simply fills, with no pop or burst.
 struct LikeBurstButton: View {
+    /// Whether the heart is filled. The button flips it on each tap.
     @Binding var isLiked: Bool
+    /// The fill of the liked heart, and one of the particle colors along with orange and yellow.
     var color: Color = .pink
+    /// How many particles fly out, spread evenly around the heart.
     var particleCount: Int = 12
 
     @State private var burstCount = 0
@@ -4358,10 +4417,15 @@ private enum MorphingSubmitButtonPhase {
 ///
 /// With Reduce Motion on, the button keeps its shape and only its content crossfades.
 struct MorphingSubmitButton: View {
+    /// The text of the button while idle.
     let title: LocalizedStringResource
+    /// The fill while idle and loading. The text and the spinner take white or black from it.
     var tint: Color = .blue
+    /// The fill while the checkmark shows.
     var successColor: Color = .green
+    /// The seconds the checkmark stays before the button returns to its title.
     var successDuration: Double = 1.2
+    /// The work to run on a tap. The spinner shows until it returns, and taps meanwhile are ignored.
     let action: @MainActor () async -> Void
 
     @State private var phase = MorphingSubmitButtonPhase.idle
@@ -4537,7 +4601,9 @@ nonisolated struct PlayPauseMorphButtonShape: Shape {
 ///
 /// With Reduce Motion on, the icon changes without morphing.
 struct PlayPauseMorphButton: View {
+    /// Whether the button shows the pause bars. The button flips it on each tap.
     @Binding var isPlaying: Bool
+    /// The gradient of the circle, from top leading to bottom trailing. The first color also tints the shadow.
     var colors: [Color] = [.pink, .purple]
 
     @ScaledMetric(relativeTo: .largeTitle) private var size = 92.0
@@ -4609,7 +4675,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button only dims.
 struct PressableButtonStyle: ButtonStyle {
+    /// The size while pressed, as a fraction of the full size. Reduce Motion leaves it at 1.
     var pressedScale: CGFloat = 0.94
+    /// The opacity while pressed, from 0 to 1.
     var pressedOpacity: Double = 0.8
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -4684,7 +4752,9 @@ struct ProviderSignInButtonStackOption: Identifiable {
 ///
 /// For Sign in with Apple, use the system `SignInWithAppleButton`: Apple's guidelines require it.
 struct ProviderSignInButtonStack: View {
+    /// The providers, one full-width button each, from top to bottom.
     let options: [ProviderSignInButtonStackOption]
+    /// The vertical gap between buttons, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
 
     @State private var loadingID: ProviderSignInButtonStackOption.ID?
@@ -4829,13 +4899,21 @@ private enum PulseRingButtonPhase {
 /// With Reduce Motion on, a single still halo replaces the rings. Set `isPulsing`
 /// to false to leave the button without them, as when what it signals has stopped.
 struct PulseRingButton: View {
+    /// The SF Symbol drawn in the middle of the button.
     let systemImage: String
+    /// The name VoiceOver reads for the button.
     let label: LocalizedStringResource
+    /// The fill of the button and of its rings. The symbol takes white or black from it.
     var tint: Color = .red
+    /// How many rings radiate at once.
     var ringCount: Int = 3
+    /// The seconds each ring takes to grow to two and a half times the button and fade out.
     var ringDuration: Double = 1.6
+    /// The seconds between the start of one ring and the next.
     var stagger: Double = 0.35
+    /// Whether the rings, or the still halo under Reduce Motion, show behind the button.
     var isPulsing = true
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .largeTitle) private var diameter = 104.0
@@ -4951,11 +5029,17 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the sweep is removed and the button stays still.
 struct ShimmerButton: View {
+    /// The text of the button, drawn in white.
     let title: LocalizedStringResource
+    /// An SF Symbol shown before the title, or nil for none.
     var systemImage: String?
+    /// The gradient of the capsule, from leading to trailing. The first color also tints the shadow.
     var colors: [Color] = [.indigo, .purple]
+    /// The seconds the band of light takes to cross the button.
     var sweepDuration: Double = 1.1
+    /// The seconds of rest after each sweep before the next one starts.
     var pause: Double = 0.9
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -5076,10 +5160,15 @@ enum ShrinkingExtendedButtonMath {
 /// Pass `isExtended`, or drive it from a scroll view with `ShrinkingExtendedButtonScrollTracker`.
 /// With Reduce Motion on, it changes shape without animating.
 struct ShrinkingExtendedButton: View {
+    /// The text beside the icon while extended, which VoiceOver reads as the name in both shapes.
     let title: LocalizedStringResource
+    /// The SF Symbol the button keeps in both shapes.
     let systemImage: String
+    /// Whether the button shows its title as a pill, or shrinks to a round icon.
     var isExtended = true
+    /// The fill of the button and its shadow. The icon and the title take white or black from it.
     var tint: Color = .indigo
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .headline) private var height = 58.0
@@ -11334,9 +11423,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dot appears at once and there is no pulse.
 struct AnimatedRadioButton: View {
+    /// The text beside the circle.
     let title: LocalizedStringResource
+    /// Whether the dot shows. The button does not change it: set it in `action`.
     let isSelected: Bool
+    /// The color of the dot, of the ring when selected, and of the pulse.
     var tint: Color = .indigo
+    /// Runs when the row is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .body) private var size = 26.0
@@ -11464,6 +11557,7 @@ import SwiftUI
 /// macOS only, and the two names would collide in a multiplatform app.
 /// With Reduce Motion on, the checkmark appears without being drawn.
 struct CheckmarkBoxToggleStyle: ToggleStyle {
+    /// The fill of the box when on or mixed. The checkmark or dash takes white or black from it.
     var color: Color = .accentColor
 
     func makeBody(configuration: Configuration) -> some View {
@@ -11682,7 +11776,9 @@ nonisolated enum CircularRangeSliderMath {
 /// `start` and `end` go from 0 up to `total`, which is one full turn. Set the color with `tint`.
 /// VoiceOver reads each handle as an adjustable value, described by `valueText`.
 struct CircularRangeSlider<Center: View>: View {
+    /// Where the range begins, from 0 up to `total`. The slider writes it as the start handle or the band moves.
     @Binding var start: Double
+    /// Where the range ends, from 0 up to `total`, clockwise from `start`. The slider writes it as the end handle or the band moves.
     @Binding var end: Double
     /// The value of a full turn.
     var total = 24.0
@@ -11690,12 +11786,19 @@ struct CircularRangeSlider<Center: View>: View {
     var step = 0.25
     /// The shortest range, which is also the shortest gap left outside it.
     var minimumSpan = 0.0
+    /// The thickness of the ring in points. The handles are 8 points smaller, and the center view sits 12 points inside the ring.
     var lineWidth: CGFloat = 40
+    /// The SF Symbol drawn on the start handle, or none.
     var startSymbol: String?
+    /// The SF Symbol drawn on the end handle, or none.
     var endSymbol: String?
+    /// The name VoiceOver reads for the start handle.
     var startLabel = "Start"
+    /// The name VoiceOver reads for the end handle.
     var endLabel = "End"
+    /// Turns a handle's value into the text VoiceOver reads, like `23:00`.
     var valueText: (Double) -> String = { $0.formatted() }
+    /// The view inside the ring, like the length of the range.
     @ViewBuilder var center: () -> Center
 
     private let handleInset: CGFloat = 4
@@ -11945,10 +12048,15 @@ enum CounterStepperValue {
 ///
 /// With Reduce Motion on, the number changes without rolling.
 struct CounterStepper: View {
+    /// The number shown. The stepper writes it on each tap.
     @Binding var value: Int
+    /// The values allowed. A button turns gray and disabled when it cannot step further.
     var range: ClosedRange<Int> = 0...99
+    /// How much each tap adds or takes away. A step past an end stops at that end.
     var step: Int = 1
+    /// The name VoiceOver reads for the number.
     var title: LocalizedStringResource = "Value"
+    /// The fill of the enabled buttons, under a white symbol.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .title) private var buttonSize = 56.0
@@ -12043,7 +12151,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it changes without sliding.
 struct DayNightToggle: View {
+    /// Whether the switch shows the moon and the night sky. The switch writes it on each tap.
     @Binding var isNight: Bool
+    /// The name VoiceOver reads for the switch. It is not drawn.
     var title: LocalizedStringResource = "Night mode"
 
     var body: some View {
@@ -12249,9 +12359,13 @@ nonisolated struct FilterChipGroupFlowLayout: Layout {
 ///
 /// With Reduce Motion on, the checkmark fades in instead of growing.
 struct FilterChipGroup<Option: Hashable>: View {
+    /// The chips, in the order they flow.
     let options: [Option]
+    /// The options turned on. The group writes it as chips are tapped.
     @Binding var selection: Set<Option>
+    /// The fill of a selected chip. Its text and checkmark take white or black from it.
     var color: Color = .accentColor
+    /// The text of the chip for each option, kept to one line.
     let title: (Option) -> LocalizedStringResource
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -12382,8 +12496,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the knob slides without bouncing and the symbols crossfade.
 struct IconSwitchToggleStyle: ToggleStyle {
+    /// The SF Symbol on the knob when the toggle is on.
     var onSymbol = "checkmark"
+    /// The SF Symbol on the knob when the toggle is off.
     var offSymbol = "xmark"
+    /// The track when on, and the symbol on the knob. Off, the track is gray.
     var color: Color = .green
 
     func makeBody(configuration: Configuration) -> some View {
@@ -12552,14 +12669,19 @@ nonisolated enum RangeSliderMath {
 /// to it. Set the color with `tint`. VoiceOver reads each thumb as an adjustable value, described
 /// by `valueText`, and the slider follows the layout direction.
 struct RangeSlider: View {
+    /// The range picked, inside `bounds`. The slider writes it as a thumb moves.
     @Binding var range: ClosedRange<Double>
+    /// The values at the two ends of the track.
     var bounds: ClosedRange<Double> = 0...1
     /// The thumbs stop at multiples of it. Zero lets them stop anywhere.
     var step = 0.0
     /// The shortest distance the thumbs keep between them.
     var minimumSpan = 0.0
+    /// The name VoiceOver reads for the lower thumb.
     var lowerLabel = "Minimum"
+    /// The name VoiceOver reads for the upper thumb.
     var upperLabel = "Maximum"
+    /// Turns a thumb's value into the text VoiceOver reads, like a price.
     var valueText: (Double) -> String = { $0.formatted() }
 
     private let thumbSize: CGFloat = 28
@@ -12809,12 +12931,19 @@ struct RulerScrollPickerScale: Equatable {
 /// Dragging writes the value, and changing the value from outside scrolls the ruler.
 /// With Reduce Motion on, outside changes jump instead of gliding.
 struct RulerScrollPicker: View {
+    /// The name VoiceOver reads for the ruler. It is not drawn.
     let title: LocalizedStringResource
+    /// The value under the center indicator. The picker writes it while the ruler is dragged, and scrolls when it changes from outside.
     @Binding var value: Double
+    /// The values at the two ends of the ruler. It draws at most 20,000 ticks.
     var range: ClosedRange<Double> = 0...100
+    /// The value between two ticks. Zero or less counts as 1.
     var step: Double = 1
+    /// How many ticks apart the tall, labeled ticks are. Halfway between them, a medium tick. Less than 1 counts as 1.
     var majorEvery: Int = 10
+    /// The distance between two ticks, in points. At least 4.
     var tickSpacing: CGFloat = 12
+    /// The color of the center indicator.
     var tint: Color = .indigo
 
     @State private var position = ScrollPosition(x: 0)
@@ -13025,10 +13154,15 @@ enum SelectAllChecklistState: Equatable {
 /// The selection is a `Set` of IDs, like a `List` with selection. With Reduce
 /// Motion on, the checkmarks appear without being drawn.
 struct SelectAllChecklist<Item: Identifiable, Row: View>: View {
+    /// The text of the "select all" row, beside the count.
     let title: LocalizedStringResource
+    /// The rows, in order.
     let items: [Item]
+    /// The IDs of the checked rows. The list writes it as rows or the "select all" box are tapped, and leaves IDs not in `items` alone.
     @Binding var selection: Set<Item.ID>
+    /// The fill of a checked box. Its checkmark or dash takes white or black from it.
     var color: Color = .accentColor
+    /// The content of each row, beside its box.
     @ViewBuilder let row: (Item) -> Row
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -13218,10 +13352,15 @@ import SwiftUI
 ///
 /// The symbol bounces when the switch turns on, except with Reduce Motion on.
 struct SettingsToggleRow: View {
+    /// The main text of the row.
     let title: LocalizedStringResource
+    /// A smaller, secondary line under the title, or none.
     var subtitle: LocalizedStringResource?
+    /// The SF Symbol on the colored square.
     let systemImage: String
+    /// The fill of the square behind the symbol. The symbol takes white or black from it.
     var iconColor: Color = .blue
+    /// Whether the switch is on. The row writes it on each tap.
     @Binding var isOn: Bool
 
     @State private var bounces = 0
@@ -13328,9 +13467,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the pill moves without animating.
 struct SlidingSegmentedPicker<Option: Hashable>: View {
+    /// The option under the pill. The picker writes it on each tap.
     @Binding var selection: Option
+    /// The segments, in order, sharing the width equally.
     let options: [Option]
+    /// The color of the pill, under white text.
     var tint: Color = .indigo
+    /// The text of the segment for each option. It shrinks to 70% before truncating.
     let title: (Option) -> String
 
     @Namespace private var namespace
@@ -13434,6 +13577,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the knob slides without bouncing or widening.
 struct SpringToggleStyle: ToggleStyle {
+    /// The track when the toggle is on. Off, it is gray.
     var onColor: Color = .green
 
     func makeBody(configuration: Configuration) -> some View {
@@ -13555,10 +13699,15 @@ enum SwipeToConfirmSliderMath {
 /// With Reduce Motion on, the thumb returns without bouncing. VoiceOver users
 /// confirm with a double tap.
 struct SwipeToConfirmSlider: View {
+    /// The text on the track before confirming, like "Slide to pay". It fades as the thumb moves.
     let title: LocalizedStringResource
+    /// The text on the track once confirmed, until it resets.
     var confirmedTitle: LocalizedStringResource = "Confirmed"
+    /// The fill behind the thumb and the color of its symbol.
     var tint: Color = .indigo
+    /// How long the slider stays confirmed before it springs back, in seconds.
     var resetDelay: Double = 1.4
+    /// Runs once when the thumb is let go past 92% of the track, or on a VoiceOver double tap.
     let onConfirm: () -> Void
 
     @State private var progress = 0.0
@@ -13733,13 +13882,19 @@ nonisolated enum TickMarkSliderMath {
 /// such as a balance or an offset. It is a system `Slider`, so VoiceOver and Dynamic Type are the system's.
 @available(iOS 26, *)
 struct TickMarkSlider: View {
+    /// The value of the slider. The slider writes it while dragged, and moves it to the nearest mark when let go.
     @Binding var value: Double
+    /// The values at the two ends of the track.
     var range: ClosedRange<Double> = 0...1
+    /// The values that get a mark. Those outside `range` are left out, and repeats are drawn once.
     let ticks: [Double]
+    /// Where the tinted part of the track starts. `nil` leaves it to the system.
     var neutralValue: Double?
+    /// The name of the slider, which VoiceOver reads.
     var label = "Value"
     /// Whether the slider moves to the nearest mark when it is let go.
     var snapsToTicks = true
+    /// Turns a value into the text of its mark and of the current value, read by assistive technologies.
     var tickLabel: (Double) -> String = { $0.formatted() }
 
     var body: some View {
@@ -13878,9 +14033,13 @@ enum WeekdaySegmentedPickerCalendar {
 /// The selection holds `Calendar` weekday numbers, 1 for Sunday. With Reduce
 /// Motion on, a day changes color without popping.
 struct WeekdaySegmentedPicker: View {
+    /// The days picked, as `Calendar` weekday numbers from 1 for Sunday to 7 for Saturday. The picker writes it on each tap.
     @Binding var selection: Set<Int>
+    /// Sets the first day of the row and the letters and names of the days.
     var calendar: Calendar = .current
+    /// The fill of a picked day. Its letter takes white or black from it.
     var color: Color = .accentColor
+    /// Whether a line under the days names the selection, like "Weekdays" or "Never".
     var showsSummary = true
 
     @ScaledMetric(relativeTo: .body) private var size = 40.0
@@ -21809,6 +21968,7 @@ struct GlassActionMenu: View {
         case item(String)
     }
 
+    /// The actions that morph out above the button, from top to bottom. A tap on one closes the menu and runs it.
     let items: [GlassActionItem]
 
     @State private var isExpanded = false
@@ -21933,9 +22093,11 @@ import SwiftUI
 /// The styles draw their own press response, which the system adapts to Reduce Motion.
 @available(iOS 26, *)
 struct GlassButtonGallery: View {
+    /// The colors of the Tints row, each shown as a glass and a prominent icon button. The name starts their VoiceOver labels.
     var tints: [(name: String, color: Color)] = [
         ("Blue", .blue), ("Pink", .pink), ("Orange", .orange), ("Green", .green),
     ]
+    /// Called with the VoiceOver label of the pressed button, like `Small glass` or `Blue prominent`.
     var onPress: (String) -> Void = { _ in }
 
     private let sizes: [(name: String, size: ControlSize)] = [
@@ -22064,9 +22226,13 @@ import SwiftUI
 /// With Reduce Motion on, the thumb jumps to the new segment.
 @available(iOS 26, *)
 struct GlassSegmentedControl<Segment: Hashable>: View {
+    /// The options, from leading to trailing, each given the same width.
     let segments: [Segment]
+    /// The selected segment. The control writes it on a tap, or as a finger drags along it.
     @Binding var selection: Segment
+    /// A tint for the glass thumb, or nil for plain glass.
     var tint: Color?
+    /// Returns the text shown for a segment, kept to one line.
     let title: (Segment) -> String
 
     @ScaledMetric(relativeTo: .subheadline) private var height = 44.0
@@ -22189,9 +22355,13 @@ import SwiftUI
 /// With Reduce Motion on, the tab bar stays at its full size.
 @available(iOS 26, *)
 struct GlassTabAccessory<Selection: Hashable, Tabs: TabContent<Selection>, Accessory: View>: View {
+    /// The tag of the selected tab. The tab view writes it when the person picks a tab.
     @Binding var selection: Selection
+    /// When the tab bar shrinks as content scrolls. Reduce Motion replaces it with `.never`.
     var minimizeBehavior: TabBarMinimizeBehavior = .onScrollDown
+    /// The tabs, each tagged with a value of `Selection`.
     @TabContentBuilder<Selection> let tabs: () -> Tabs
+    /// The content of the glass bar above the tab bar, like a mini player.
     @ViewBuilder let accessory: () -> Accessory
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -22324,9 +22494,13 @@ struct GlassTagCloudTag: Identifiable {
 /// selecting a tag changes it without animating.
 @available(iOS 26, *)
 struct GlassTagCloud: View {
+    /// The tags, flowing from leading to trailing and wrapping onto new rows.
     let tags: [GlassTagCloudTag]
+    /// The titles of the selected tags. The cloud adds or removes one on each tap.
     @Binding var selection: Set<String>
+    /// The gap between tags, across and down, in points.
     var spacing: CGFloat = 16
+    /// The gap, in points, below which neighbouring tags blend into one piece of glass. Above `spacing`, every neighbour melts together.
     var mergeDistance: CGFloat = 10
 
     @ScaledMetric(relativeTo: .subheadline) private var horizontalPadding = 16.0
@@ -22505,9 +22679,13 @@ struct GlassToolStripTool: Identifiable {
 /// With Reduce Motion on, tools change without animating.
 @available(iOS 26, *)
 struct GlassToolStrip: View {
+    /// The tool buttons, from leading to trailing.
     let tools: [GlassToolStripTool]
+    /// The `id` of the selected tool, or nil for none. A tap selects a tool, and a second tap clears it.
     @Binding var selection: String?
+    /// Whether tools sharing a `group` fuse into one piece of glass. When false, each tool keeps its own.
     var isGrouped = true
+    /// The color of the selected tool's symbol. The others use the primary color.
     var tint: Color = .accentColor
 
     @Namespace private var namespace
@@ -24727,9 +24905,13 @@ enum CharacterCountTextEditorLevel: Equatable {
 /// Chinese and pasting, so the caller disables sending instead. The ring and
 /// the count change without motion, so Reduce Motion needs nothing different.
 struct CharacterCountTextEditor: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it and never cuts it at the limit.
     @Binding var text: String
+    /// The most characters allowed. The count turns orange from 90% of it and red past it.
     var limit = 280
+    /// The fewest and most lines the field shows. Past the most, it scrolls.
     var lineLimit: ClosedRange<Int> = 3...8
 
     @FocusState private var isFocused: Bool
@@ -24864,9 +25046,13 @@ import SwiftUI
 /// Clearing keeps the focus, so the keyboard stays up for the next text.
 /// With Reduce Motion on, the clear button and the error fade instead of moving.
 struct ClearableTextField: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it, and the clear button empties it.
     @Binding var text: String
+    /// The SF Symbol before the text, or none.
     var systemImage: String?
+    /// A message shown in red under the field, which also turns the border red. `nil` hides it.
     var errorMessage: LocalizedStringResource?
 
     @FocusState private var isFocused: Bool
@@ -24992,7 +25178,9 @@ struct ColorSwatchPickerOption: Hashable, Identifiable {
 ///
 /// With Reduce Motion on, the ring fades in without growing.
 struct ColorSwatchPicker: View {
+    /// The swatches, in order. VoiceOver reads the name of each.
     let options: [ColorSwatchPickerOption]
+    /// The swatch with the ring. The picker writes it on each tap.
     @Binding var selection: ColorSwatchPickerOption
 
     @ScaledMetric(relativeTo: .title) private var swatchSize = 48.0
@@ -25089,8 +25277,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the label changes place without sliding.
 struct FloatingLabelTextField: View {
+    /// The label that sits in the field as a placeholder and floats above the text.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it.
     @Binding var text: String
+    /// The color of the border, the floating label and the cursor while the field has focus.
     var tint: Color = .indigo
 
     @FocusState private var isFocused: Bool
@@ -25254,12 +25445,19 @@ nonisolated enum MaskedTextFieldFormatter {
 /// check what a mask cannot, like a month over 12. With Reduce Motion on, it appears without
 /// animating.
 struct MaskedTextField: View {
+    /// The label above the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The formatted text. The field writes it, rewriting each change to fit `mask`.
     @Binding var text: String
+    /// The pattern of the text: `#` takes a digit, `A` a letter, and any other character is written as is, like `##/##`.
     let mask: String
+    /// The placeholder. `nil` shows the mask itself.
     var prompt: LocalizedStringResource? = nil
+    /// The SF Symbol before the text, or none.
     var systemImage: String? = nil
+    /// The keyboard shown while typing. Use one with letters when the mask has `A`.
     var keyboard: UIKeyboardType = .numberPad
+    /// Checks what the mask cannot, like a month over 12. The checkmark shows only when the mask is full and it returns `true`.
     var isValid: (String) -> Bool = { _ in true }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -25397,8 +25595,11 @@ struct MultiStepFormProgress: Equatable {
 /// A form split into steps, with a progress bar on top. "Continue" stays disabled
 /// until the current step is valid, and there is no swipe that could skip it.
 struct MultiStepForm: View {
+    /// The pages of the form, in order, one segment of the progress bar each.
     let steps: [MultiStepFormStep]
+    /// The text of the main button on the last step, in place of "Continue".
     var finishTitle = "Finish"
+    /// Runs once when the last step is valid and its button is tapped. Going back lets it run again.
     var onFinish: () -> Void = {}
 
     @State private var progress = MultiStepFormProgress()
@@ -25606,10 +25807,15 @@ enum OTPCodeFieldInput {
 /// The field stays behind the boxes rather than hidden, so VoiceOver, paste and code
 /// autofill reach it. With Reduce Motion on, digits appear without a pop.
 struct OTPCodeField: View {
+    /// The digits entered. The field writes it, keeping only ASCII digits and cutting it to `length`.
     @Binding var code: String
+    /// How many digits the code has, one box each.
     var length: Int = 6
+    /// The name VoiceOver reads for the field. It is not drawn.
     var title: LocalizedStringResource = "Verification code"
+    /// The border of the box that takes the next digit while the field has focus.
     var tint: Color = .indigo
+    /// Called with the code when its last digit is entered or pasted.
     var onComplete: ((String) -> Void)? = nil
 
     @FocusState private var isFocused: Bool
@@ -25738,8 +25944,11 @@ nonisolated enum PasscodeKeypadLogic {
 /// dots turn red, shake and empty, with a haptic and a VoiceOver announcement. The digits are
 /// never shown or read aloud. With Reduce Motion on, the dots turn red without shaking.
 struct PasscodeKeypad: View {
+    /// The text above the dots, which VoiceOver also reads for them.
     var title = "Enter Passcode"
+    /// How many digits the passcode has, one dot each.
     var length = 6
+    /// Called with the code when its last digit is entered. Returns `false` to reject it, which shakes and empties the dots.
     var onComplete: (String) -> Bool
 
     private let rejectionSeconds = 0.5
@@ -25942,8 +26151,11 @@ enum PasswordStrengthFieldMeter {
 
 /// A password field with a strength meter and a checklist of rules that tick off as they are met.
 struct PasswordStrengthField: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The password typed. The field writes it.
     @Binding var password: String
+    /// The requirements listed under the meter. The share met sets the level, from Weak to Strong.
     var rules = PasswordStrengthFieldRule.defaults
 
     @State private var isRevealed = false
@@ -26113,7 +26325,9 @@ nonisolated enum RichTextEditorLogic {
 /// each button shows whether its format is on at the cursor.
 @available(iOS 26, *)
 struct RichTextEditor: View {
+    /// The formatted text. The editor writes it as the person types and as the bar changes the selection.
     @Binding var text: AttributedString
+    /// The highlight colors, one button each, applied at 40% opacity. Tapping the color the text already has removes it.
     var highlights: [Color] = [.yellow, .green, .pink]
 
     private let buttonSize: CGFloat = 44
@@ -26314,7 +26528,18 @@ struct SearchFieldWithSuggestions: ViewModifier {
 }
 
 extension View {
+    /// Adds a search field that lists the suggestions matching what the person types.
+    ///
     /// Needs a navigation container, such as `NavigationStack`, to show the field.
+    ///
+    /// - Parameters:
+    ///   - text: The text in the search field. The modifier writes it as the person types,
+    ///     and choosing a suggestion fills it.
+    ///   - suggestions: Every candidate. The list shows those that contain the text, ignoring
+    ///     case and accents, with prefix matches first, and hides once the text is a full suggestion.
+    ///   - placement: Where the search field goes, as in `searchable`.
+    ///   - prompt: The placeholder of the empty field.
+    ///   - limit: The most suggestions listed at once.
     func searchFieldWithSuggestions(
         text: Binding<String>,
         suggestions: [String],
@@ -26446,7 +26671,9 @@ nonisolated enum TagInputFieldLogic {
 /// left out. VoiceOver reads each tag with a Remove action. Keyboard options such as
 /// `autocorrectionDisabled` reach the field when set on this view.
 struct TagInputField: View {
+    /// The tags, in the order added. The field writes it as tags are added or removed, trimmed and without repeats regardless of case.
     @Binding var tags: [String]
+    /// The placeholder shown while nothing is typed, and the name VoiceOver reads for the field.
     var prompt = "Add a tag"
 
     private let cornerRadius: CGFloat = 14
@@ -26640,7 +26867,9 @@ struct ValidatedTextFieldFeedback: Equatable {
 
 /// A text field that checks its value when it loses focus and shows its error only after that.
 struct ValidatedTextField: View {
+    /// The label above the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it.
     @Binding var text: String
     /// Returns the message to show, or `nil` when the value is fine.
     let validate: (String) -> String?
@@ -32850,11 +33079,22 @@ private struct CoachMarkTourAnchorKey: PreferenceKey {
 
 extension View {
     /// Marks this view as the target of the tour step with the same id.
+    ///
+    /// - Parameters:
+    ///   - id: The `id` of the ``CoachMarkTourStep`` that highlights this view.
     func coachMarkTourTarget(_ id: String) -> some View {
         anchorPreference(key: CoachMarkTourAnchorKey.self, value: .bounds) { [id: $0] }
     }
 
     /// Runs a guided tour over this view. Apply it to a container of all the targets.
+    ///
+    /// - Parameters:
+    ///   - steps: The steps, in order. Each highlights the view marked with its `id`
+    ///     through `coachMarkTourTarget(_:)`, and without one its card shows with no hole.
+    ///   - isPresented: Whether the tour shows. Setting it to true starts from the first step,
+    ///     and the tour sets it to false when the person finishes or skips it.
+    ///   - onFinish: Runs once when the person finishes or skips the tour, or right away
+    ///     when it is presented with no steps.
     func coachMarkTour(
         steps: [CoachMarkTourStep],
         isPresented: Binding<Bool>,
@@ -33125,6 +33365,7 @@ enum CommandPaletteFilter {
 /// The search field takes focus when it appears, and Return runs the first match.
 /// Running a command closes the sheet first.
 struct CommandPalette: View {
+    /// The commands to list, grouped by section in the order each section first appears. The search matches a title, a section or a keyword.
     let commands: [CommandPaletteCommand]
 
     @State private var query = ""
@@ -33296,9 +33537,13 @@ import SwiftUI
 /// The system animates the lift and simplifies it for Reduce Motion. VoiceOver
 /// users find the menu items in the actions rotor. Give the preview a fixed size.
 struct ContextMenuPreviewCard<Card: View, Preview: View, MenuItems: View>: View {
+    /// The corner radius, in points, of the card and of the shape the system lifts with it.
     var cornerRadius: CGFloat = 22
+    /// The content shown in place, clipped to the rounded shape.
     @ViewBuilder var card: () -> Card
+    /// The richer view lifted above the menu on a long press. Give it a fixed size.
     @ViewBuilder var preview: () -> Preview
+    /// The buttons of the menu shown under the preview.
     @ViewBuilder var menuItems: () -> MenuItems
 
     var body: some View {
@@ -33430,10 +33675,15 @@ import SwiftUI
 /// The list floats over the views below, so use it in a stack where it can overlap
 /// them. It raises itself with `zIndex` while open, and a tap outside closes it.
 struct DropdownSelectMenu<Option: Hashable>: View {
+    /// The caption above the value, which VoiceOver reads as the name of the field.
     let title: LocalizedStringResource
+    /// The choices in the list, from top to bottom. Past 280 points the list scrolls.
     let options: [Option]
+    /// The chosen option, or nil for none. The menu writes it when the person picks one.
     @Binding var selection: Option?
+    /// The text the field shows while `selection` is nil.
     var placeholder = "Choose"
+    /// Returns the text shown for an option, in the field and in the list.
     let label: (Option) -> String
 
     @State private var isOpen = false
@@ -33635,7 +33885,9 @@ struct GooeyFloatingMenuItem: Identifiable {
 /// shrink when the width cannot hold the fan at their full size.
 /// With Reduce Motion on, the options appear without moving.
 struct GooeyFloatingMenu: View {
+    /// The options fanned in an arc above the main button. A tap on one closes the menu and runs it.
     let items: [GooeyFloatingMenuItem]
+    /// The color of the liquid and its shadow. The icons take white or black from it.
     var tint: Color = .indigo
 
     @State private var isOpen = false
@@ -37871,7 +38123,9 @@ struct CountryPickerCountry: Identifiable, Hashable, Sendable {
 ///
 /// It opens on the selected country, or on the region of the device if there is none.
 struct CountryPicker: View {
+    /// The ISO region code of the checked country, like `ES`. The picker writes it when a row is tapped.
     @Binding var selection: String?
+    /// The rows, in order. By default, every region the system knows that has a dial code, named in the current language and sorted by name.
     var countries: [CountryPickerCountry] = CountryPickerData.all
 
     @State private var query = ""
@@ -38083,9 +38337,13 @@ struct EmojiPickerCategory: Identifiable, Hashable, Sendable {
 ///
 /// With Reduce Motion on, tabs jump to their section without animating.
 struct EmojiPicker: View {
+    /// The emoji used last, newest first, shown in a row above the tabs when not empty. The picker writes it on each pick.
     @Binding var recents: [String]
+    /// The sections of the grid, one tab each, in order.
     var categories: [EmojiPickerCategory] = EmojiPickerCategory.standard
+    /// The most emoji `recents` keeps. The oldest drop off.
     var recentLimit = 12
+    /// Called with the emoji when one is tapped, in the grid or in the recent row.
     let onSelect: (String) -> Void
 
     @State private var visibleIDs: [String] = []
@@ -38276,8 +38534,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the calendar appears and disappears without animating.
 struct InlineDatePickerDisclosure: View {
+    /// The text of the row, beside the date, and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The date shown in the row. The calendar writes it, and closes once a different day is picked.
     @Binding var date: Date
+    /// The days the calendar lets the person pick.
     var range: ClosedRange<Date> = Date.distantPast...Date.distantFuture
 
     @State private var isExpanded = false
@@ -38419,8 +38680,11 @@ import SwiftUI
 ///
 /// `thumbnail` draws each photo. `MultiPhotoPickerTrayThumbnail` loads one from the library.
 struct MultiPhotoPickerTray<Thumbnail: View>: View {
+    /// The photos picked, in the order chosen. The tray writes it from the picker and when a thumbnail is removed.
     @Binding var selection: [PhotosPickerItem]
+    /// The most photos the picker lets the person choose. Less than 1 counts as 1.
     var maxCount: Int = 5
+    /// Draws a photo in the tray, cropped to a rounded square. `MultiPhotoPickerTrayThumbnail` loads it from the library.
     @ViewBuilder var thumbnail: (PhotosPickerItem) -> Thumbnail
 
     @ScaledMetric(relativeTo: .body) private var tileSize: CGFloat = 92
@@ -38628,10 +38892,15 @@ import SwiftUI
 
 /// A grid of time slots. Unavailable times are disabled and the chosen one is highlighted.
 struct TimeSlotGridPicker: View {
+    /// The times offered, one cell each. The grid sorts them and drops repeats.
     let slots: [Date]
+    /// The slots shown struck through and disabled.
     var unavailable: Set<Date> = []
+    /// The slot chosen, or `nil`. The grid writes it on each tap.
     @Binding var selection: Date?
+    /// How each time is written in its cell.
     var format: Date.FormatStyle = .dateTime.hour().minute()
+    /// The fill of the chosen slot, under white text.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .subheadline) private var minimumWidth: CGFloat = 96
@@ -38748,10 +39017,15 @@ import SwiftUI
 ///
 /// `values` must be unique. With Reduce Motion on, rows stay flat and only fade.
 struct WheelPicker<Value: Hashable>: View {
+    /// The name VoiceOver reads for the wheel. It is not drawn.
     let title: LocalizedStringResource
+    /// The rows of the wheel, in order. Each must be unique.
     let values: [Value]
+    /// The value in the center. The wheel writes it as it scrolls or a row is tapped, and scrolls when it changes from outside.
     @Binding var selection: Value
+    /// How many rows tall the wheel is, from 1 to 15.
     var visibleRows: Int = 5
+    /// The text of the row for each value, also read by VoiceOver.
     var text: (Value) -> String
 
     @ScaledMetric(relativeTo: .title3) private var rowHeight: CGFloat = 44
@@ -46368,6 +46642,11 @@ private struct CollapsingBottomBarSlot: View {
 }
 
 extension View {
+    /// Adds a bottom bar that shrinks to a pill while this scroll view scrolls down.
+    ///
+    /// - Parameters:
+    ///   - items: The actions of the bar, from leading to trailing. Their titles show
+    ///     under the icons only while the bar is expanded.
     func collapsingBottomBar(items: [CollapsingBottomBarItem]) -> some View {
         modifier(CollapsingBottomBar(items: items))
     }
@@ -46458,7 +46737,10 @@ enum FloatingDockBarMath {
 /// With Reduce Motion on, the magnification is small and has no spring. The dock only
 /// holds icons, so it stops growing past the larger text sizes.
 struct FloatingDockBar: View {
+    /// The icons, from leading to trailing. They shrink to fit the width, down to 20 points each.
     let items: [FloatingDockBarItem]
+    /// How much the icon under the finger grows, as a multiple of its size. At 1 or below
+    /// nothing grows, and Reduce Motion caps it at 1.15.
     var maxScale: CGFloat = 1.6
 
     var body: some View {

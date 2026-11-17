@@ -52,7 +52,9 @@ nonisolated struct PlayPauseMorphButtonShape: Shape {
 ///
 /// With Reduce Motion on, the icon changes without morphing.
 struct PlayPauseMorphButton: View {
+    /// Whether the button shows the pause bars. The button flips it on each tap.
     @Binding var isPlaying: Bool
+    /// The gradient of the circle, from top leading to bottom trailing. The first color also tints the shadow.
     var colors: [Color] = [.pink, .purple]
 
     @ScaledMetric(relativeTo: .largeTitle) private var size = 92.0

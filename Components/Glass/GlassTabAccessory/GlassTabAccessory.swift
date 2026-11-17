@@ -8,9 +8,13 @@ import SwiftUI
 /// With Reduce Motion on, the tab bar stays at its full size.
 @available(iOS 26, *)
 struct GlassTabAccessory<Selection: Hashable, Tabs: TabContent<Selection>, Accessory: View>: View {
+    /// The tag of the selected tab. The tab view writes it when the person picks a tab.
     @Binding var selection: Selection
+    /// When the tab bar shrinks as content scrolls. Reduce Motion replaces it with `.never`.
     var minimizeBehavior: TabBarMinimizeBehavior = .onScrollDown
+    /// The tabs, each tagged with a value of `Selection`.
     @TabContentBuilder<Selection> let tabs: () -> Tabs
+    /// The content of the glass bar above the tab bar, like a mini player.
     @ViewBuilder let accessory: () -> Accessory
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

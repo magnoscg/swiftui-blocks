@@ -22,7 +22,9 @@ nonisolated enum RichTextEditorLogic {
 /// each button shows whether its format is on at the cursor.
 @available(iOS 26, *)
 struct RichTextEditor: View {
+    /// The formatted text. The editor writes it as the person types and as the bar changes the selection.
     @Binding var text: AttributedString
+    /// The highlight colors, one button each, applied at 40% opacity. Tapping the color the text already has removes it.
     var highlights: [Color] = [.yellow, .green, .pink]
 
     private let buttonSize: CGFloat = 44

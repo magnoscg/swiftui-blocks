@@ -73,9 +73,13 @@ nonisolated struct FilterChipGroupFlowLayout: Layout {
 ///
 /// With Reduce Motion on, the checkmark fades in instead of growing.
 struct FilterChipGroup<Option: Hashable>: View {
+    /// The chips, in the order they flow.
     let options: [Option]
+    /// The options turned on. The group writes it as chips are tapped.
     @Binding var selection: Set<Option>
+    /// The fill of a selected chip. Its text and checkmark take white or black from it.
     var color: Color = .accentColor
+    /// The text of the chip for each option, kept to one line.
     let title: (Option) -> LocalizedStringResource
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

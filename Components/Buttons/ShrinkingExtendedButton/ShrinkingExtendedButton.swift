@@ -15,10 +15,15 @@ enum ShrinkingExtendedButtonMath {
 /// Pass `isExtended`, or drive it from a scroll view with `ShrinkingExtendedButtonScrollTracker`.
 /// With Reduce Motion on, it changes shape without animating.
 struct ShrinkingExtendedButton: View {
+    /// The text beside the icon while extended, which VoiceOver reads as the name in both shapes.
     let title: LocalizedStringResource
+    /// The SF Symbol the button keeps in both shapes.
     let systemImage: String
+    /// Whether the button shows its title as a pill, or shrinks to a round icon.
     var isExtended = true
+    /// The fill of the button and its shadow. The icon and the title take white or black from it.
     var tint: Color = .indigo
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .headline) private var height = 58.0

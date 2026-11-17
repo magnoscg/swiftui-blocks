@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dot appears at once and there is no pulse.
 struct AnimatedRadioButton: View {
+    /// The text beside the circle.
     let title: LocalizedStringResource
+    /// Whether the dot shows. The button does not change it: set it in `action`.
     let isSelected: Bool
+    /// The color of the dot, of the ring when selected, and of the pulse.
     var tint: Color = .indigo
+    /// Runs when the row is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .body) private var size = 26.0

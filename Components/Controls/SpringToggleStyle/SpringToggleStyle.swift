@@ -8,6 +8,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the knob slides without bouncing or widening.
 struct SpringToggleStyle: ToggleStyle {
+    /// The track when the toggle is on. Off, it is gray.
     var onColor: Color = .green
 
     func makeBody(configuration: Configuration) -> some View {

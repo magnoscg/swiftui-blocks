@@ -12,13 +12,21 @@ private enum PulseRingButtonPhase {
 /// With Reduce Motion on, a single still halo replaces the rings. Set `isPulsing`
 /// to false to leave the button without them, as when what it signals has stopped.
 struct PulseRingButton: View {
+    /// The SF Symbol drawn in the middle of the button.
     let systemImage: String
+    /// The name VoiceOver reads for the button.
     let label: LocalizedStringResource
+    /// The fill of the button and of its rings. The symbol takes white or black from it.
     var tint: Color = .red
+    /// How many rings radiate at once.
     var ringCount: Int = 3
+    /// The seconds each ring takes to grow to two and a half times the button and fade out.
     var ringDuration: Double = 1.6
+    /// The seconds between the start of one ring and the next.
     var stagger: Double = 0.35
+    /// Whether the rings, or the still halo under Reduce Motion, show behind the button.
     var isPulsing = true
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .largeTitle) private var diameter = 104.0

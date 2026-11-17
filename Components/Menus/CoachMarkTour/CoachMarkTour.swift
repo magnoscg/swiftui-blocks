@@ -52,11 +52,22 @@ private struct CoachMarkTourAnchorKey: PreferenceKey {
 
 extension View {
     /// Marks this view as the target of the tour step with the same id.
+    ///
+    /// - Parameters:
+    ///   - id: The `id` of the ``CoachMarkTourStep`` that highlights this view.
     func coachMarkTourTarget(_ id: String) -> some View {
         anchorPreference(key: CoachMarkTourAnchorKey.self, value: .bounds) { [id: $0] }
     }
 
     /// Runs a guided tour over this view. Apply it to a container of all the targets.
+    ///
+    /// - Parameters:
+    ///   - steps: The steps, in order. Each highlights the view marked with its `id`
+    ///     through `coachMarkTourTarget(_:)`, and without one its card shows with no hole.
+    ///   - isPresented: Whether the tour shows. Setting it to true starts from the first step,
+    ///     and the tour sets it to false when the person finishes or skips it.
+    ///   - onFinish: Runs once when the person finishes or skips the tour, or right away
+    ///     when it is presented with no steps.
     func coachMarkTour(
         steps: [CoachMarkTourStep],
         isPresented: Binding<Bool>,

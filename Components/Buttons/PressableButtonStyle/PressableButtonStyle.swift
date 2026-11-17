@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button only dims.
 struct PressableButtonStyle: ButtonStyle {
+    /// The size while pressed, as a fraction of the full size. Reduce Motion leaves it at 1.
     var pressedScale: CGFloat = 0.94
+    /// The opacity while pressed, from 0 to 1.
     var pressedOpacity: Double = 0.8
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

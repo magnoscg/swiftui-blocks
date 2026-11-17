@@ -52,6 +52,7 @@ enum CommandPaletteFilter {
 /// The search field takes focus when it appears, and Return runs the first match.
 /// Running a command closes the sheet first.
 struct CommandPalette: View {
+    /// The commands to list, grouped by section in the order each section first appears. The search matches a title, a section or a keyword.
     let commands: [CommandPaletteCommand]
 
     @State private var query = ""

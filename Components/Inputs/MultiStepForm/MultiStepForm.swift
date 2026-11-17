@@ -48,8 +48,11 @@ struct MultiStepFormProgress: Equatable {
 /// A form split into steps, with a progress bar on top. "Continue" stays disabled
 /// until the current step is valid, and there is no swipe that could skip it.
 struct MultiStepForm: View {
+    /// The pages of the form, in order, one segment of the progress bar each.
     let steps: [MultiStepFormStep]
+    /// The text of the main button on the last step, in place of "Continue".
     var finishTitle = "Finish"
+    /// Runs once when the last step is valid and its button is tapped. Going back lets it run again.
     var onFinish: () -> Void = {}
 
     @State private var progress = MultiStepFormProgress()
