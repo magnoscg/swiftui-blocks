@@ -49,7 +49,7 @@ is your code. Swift 6, nothing deprecated, and a preview of every one.
 | Accessibility | Reduce Motion, Dynamic Type, VoiceOver and right-to-left layouts |
 | Texts | What you pass to a component is a `LocalizedStringResource`, so it lands in your String Catalog |
 | Search | Keywords on every component, in English and Spanish, for people and for AI agents |
-| For agents | `llms.txt`, `llms-full.txt` and `catalog.json`, generated from the same metadata |
+| For agents | A short `llms.txt`, a search index for `grep` and a skill, so finding a component costs an agent a few thousand tokens |
 | License | MIT. Every file carries its notice |
 
 ## Contents
@@ -66,23 +66,29 @@ is your code. Swift 6, nothing deprecated, and a preview of every one.
 
 ## For AI agents
 
-To add a component to an app you only need the index. Point your agent at it
-and ask for what you need:
+Ask your coding agent for what you need. Change the first line of this prompt:
 
 ```text
-Find a SwiftUI component for <what you need> in
-https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/llms.txt
-and copy its file into my project.
+Add a SwiftUI component for: a like button that bursts into hearts.
+Find it in https://swiftuiblocks.dev/llms.txt, check its minimum iOS against
+my deployment target, download its file into my project with curl (and its
+.metal file if it has one), keep the license header and show me how to use it.
 ```
+
+If you use the catalog often, install the [skill](skills/swiftui-blocks/SKILL.md)
+and just ask: *add a SwiftUI like button*. The
+[For AI agents](https://swiftuiblocks.dev/for-ai-agents/#install-the-skill)
+page has the command for Claude Code, Codex, Cursor and Gemini CLI.
 
 | File | What it is for |
 |---|---|
-| [llms.txt](llms.txt) | The short index: every component with its summary and the address of its source |
-| [llms-full.txt](llms-full.txt) | The same index with the source of every component inline |
-| [catalog.json](catalog.json) | Every component as data: keywords in English and Spanish, minimum iOS, APIs, level, and `rawURL` to fetch, with `shaderRawURL` when it has a shader |
+| [llms.txt](llms.txt) | The short index: how to add a component, and every name by category |
+| [components.tsv](components.tsv) | One line per component, for `grep`: path, minimum iOS, shader, title, summary and keywords in English and Spanish |
+| [catalog.json](catalog.json) | Every component as data, for tools |
+| [llms-full.txt](llms-full.txt) | Every component with its source inline. Large: an agent does not need it |
 
-- Compare the `minIOS` of a component with the deployment target before you copy it.
-- A component with a `shaderRawURL` is two files. Copy both into the same target: it draws nothing without its shader.
+- Compare the minimum iOS of a component with the deployment target before you copy it.
+- A component with a shader is two files. Copy both into the same target: it draws nothing without its shader.
 - Keep the two lines at the top of each file. They are the license notice.
 
 To change the catalog itself, read [AGENTS.md](AGENTS.md).

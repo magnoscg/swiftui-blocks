@@ -18,7 +18,8 @@ easy to copy matters as much as the code itself.
 | `Components/<Category>/<Name>/` | One component: `<Name>.swift`, `<Name>.meta.json`, `<Name>.webp`, `<Name>.jpg`, and `<Name>.metal` when it draws with a Metal shader |
 | `Showcase/` | The iOS 18 app that compiles every component and hosts the tests. `Generated/ComponentRegistry.swift` comes from the metadata |
 | `scripts/` | Validates the components and generates the files below |
-| `catalog.json`, `llms.txt`, `llms-full.txt`, `catalog/` | Generated: the indexes for agents and tools, and a page per category with every preview |
+| `catalog.json`, `llms.txt`, `components.tsv`, `llms-full.txt`, `catalog/` | Generated: the indexes for agents and tools, and a page per category with every preview |
+| `skills/swiftui-blocks/` | The skill people install so their agent finds and copies a component. Written by hand: keep its steps in line with `llms.txt` |
 | `README.md` | Written by hand, except the index between the `catalog` markers |
 | `docs/` | The site, built with Astro Starlight. See [The site](#the-site) |
 | `.github/` | Issue and pull request templates, CI, the Pages deploy and Dependabot. `readme/` has the logo and the button of the README, two animated SVG files |

@@ -2,15 +2,16 @@
 // The prompt that hands the catalog to a coding agent, in a box with a button
 // to copy it.
 const prompt = [
-  'Find a SwiftUI component for <what you need> in',
-  'https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/llms.txt',
-  'and copy its file into my project.',
+  'Add a SwiftUI component for: a like button that bursts into hearts.',
+  'Find it in https://swiftuiblocks.dev/llms.txt, check its minimum iOS against',
+  'my deployment target, download its file into my project with curl (and its',
+  '.metal file if it has one), keep the license header and show me how to use it.',
 ].join('\n');
 ---
 
 <div class="agent-prompt not-content">
   <div class="bar">
-    <span>Paste into Claude Code, Codex, Cursor…</span>
+    <span>Change the first line, then paste it into your agent</span>
     <button type="button" data-copy={prompt} data-done="Copied">Copy</button>
   </div>
   <pre tabindex="0"><code>{prompt}</code></pre>

@@ -1,11 +1,15 @@
 ---
-// Every category with its count, each a link to the catalog filtered by it.
-import { categories } from '../lib/catalog';
+// The categories with the most components, each a link to its page, and a
+// link to the whole catalog. All of them would be a wall of chips.
+import { SITE_BASE, categories } from '../lib/catalog';
+
+const SHOWN = 8;
+const popular = [...categories].sort((a, b) => b.count - a.count || (a.name < b.name ? -1 : 1)).slice(0, SHOWN);
 ---
 
 <ul class="category-cloud not-content">
   {
-    categories.map((category) => (
+    popular.map((category) => (
       <li>
         <a href={category.href}>
           {category.name} <span>{category.count}</span>
@@ -13,6 +17,11 @@ import { categories } from '../lib/catalog';
       </li>
     ))
   }
+  <li>
+    <a class="all" href={`${SITE_BASE}/catalog/`}>
+      All {categories.length} categories <span aria-hidden="true">→</span>
+    </a>
+  </li>
 </ul>
 
 <style>
@@ -46,6 +55,10 @@ import { categories } from '../lib/catalog';
   .category-cloud a:focus-visible {
     border-color: var(--sl-color-accent);
     background: color-mix(in srgb, var(--sl-color-accent) 14%, var(--sl-color-black));
+  }
+
+  .category-cloud .all {
+    background: transparent;
   }
 
   .category-cloud span {
