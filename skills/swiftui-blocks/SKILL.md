@@ -26,8 +26,9 @@ component is one Swift file, and two when it draws with a Metal shader.
 3. Compare its minimum iOS with the deployment target of the project. If the
    component needs a newer iOS, tell the user before adding it.
 4. Check that `<Category>` and `<Name>` hold only letters and digits, and
-   stop if they do not. If the project already has a `<Name>.swift`, ask the
-   user before going on. Then download the file into the project instead of
+   stop if they do not. If the project already has a `<Name>.swift`, or a
+   `<Name>.metal` when the shader column says `metal`, ask the user before
+   going on. Then download the file into the project instead of
    retyping it, keeping its license header:
 
    ```sh

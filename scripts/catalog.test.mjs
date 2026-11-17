@@ -1096,6 +1096,7 @@ describe('the short index for agents', () => {
     assert.match(index, /grep -i -F -- '<word>'/);
     assert.match(index, /curl -fsS -o '<Name>\.swift' /);
     assert.match(index, /Without a shell, read the page of its category: `[^`]+\/HEAD\/catalog\/<Category>\.md`/);
+    assert.match(index, /Without a shell, fetch the raw file as it is and write it unchanged; check that it starts with `\/\/ SPDX-License-Identifier: MIT`/);
     assert.doesNotMatch(index, /catalog\.json/);
   });
 });
