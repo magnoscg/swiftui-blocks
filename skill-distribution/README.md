@@ -17,8 +17,9 @@ Any agent that reads skills, with the
 npx skills add magnoscg/swiftui-blocks-skill
 ```
 
-Or with your agent's own plugin system, which also updates it. Use one way
-per agent: two copies of the skill make some agents warn about a conflict.
+Or with your agent's own plugin system, which also updates it. Pick one way
+on each computer: two copies of the skill make some agents warn about a
+conflict.
 
 ```sh
 # Claude Code

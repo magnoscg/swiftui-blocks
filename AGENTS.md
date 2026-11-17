@@ -52,7 +52,7 @@ separate download: `xcodebuild -downloadComponent MetalToolchain`.
 ```sh
 make catalog                   # rewrite the generated files after changing a component
 make check                     # fail if a component breaks a rule or a generated file is stale
-make test                      # the tests of the catalog tooling
+make test                      # the tests of the catalog tooling and of the skill build
 make record                    # record the previews of one component or all of them
 make preview                   # turn a recording into a component's preview and social card
 make cards                     # remake the social cards of one component or all of them

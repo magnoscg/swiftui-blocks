@@ -31,6 +31,10 @@ build() {
   # Gemini CLI needs its own manifest; Codex and Copilot CLI read the Claude Code ones.
   sed "s/\"version\": \"0.0.0\"/\"version\": \"$version\"/" \
     "$root/skill-distribution/gemini-extension.json" > "$out/gemini-extension.json"
+  for manifest in .claude-plugin/plugin.json gemini-extension.json; do
+    grep -q "\"version\": \"$version\"" "$out/$manifest" ||
+      fail "$manifest did not get version $version: keep \"version\": \"0.0.0\" in skill-distribution/$manifest."
+  done
   cp "$root/skill-distribution/README.md" "$out/README.md"
   cp "$root/LICENSE" "$out/LICENSE"
   cp "$root/skills/swiftui-blocks/SKILL.md" "$out/skills/swiftui-blocks/SKILL.md"
