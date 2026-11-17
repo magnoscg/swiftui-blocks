@@ -1,0 +1,31 @@
+---
+title: Introduction
+description: What SwiftUI Blocks is and how you use a component.
+---
+
+SwiftUI Blocks is a catalog of copy-paste SwiftUI components, animations and
+transitions for iOS 18 through iOS 27. It is not a package: each component is
+one Swift file that you add to your project, and two when it draws with a
+Metal shader. From then on it is your code, with no version to track.
+
+## Two ways to add a component
+
+- **With your coding agent.** [Install the skill](/install/) once and ask for
+  what you need. [Prompts that work](/prompts/) has examples.
+- **By hand.** Find it in the [catalog](/catalog/) and copy its file.
+  [Add a component by hand](/by-hand/) has the steps.
+
+## Requirements
+
+Components are written for Swift 6, with complete concurrency checking, and
+compile whether or not your project uses the main actor as its default
+isolation. iOS 18 is the baseline. A component that needs a newer iOS marks its types with
+`@available`, so you decide how to handle older versions in your app.
+
+## License
+
+The catalog is under the
+[MIT license](https://github.com/magnoscg/swiftui-blocks/blob/HEAD/LICENSE).
+Keep the copyright header at the top of a file when you copy it. Code adapted
+from other projects keeps its original license, which its header and its page
+in the catalog state.

@@ -8,9 +8,9 @@ import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import { REPOSITORY, SITE_BASE } from '../lib/catalog';
 
 const links = [
-  { label: 'Docs', href: `${SITE_BASE}/getting-started/`, section: /\/(getting-started|rules|accessibility|contributing|changelog)\// },
+  { label: 'Docs', href: `${SITE_BASE}/introduction/`, section: /\/(introduction|prompts|by-hand|rules|accessibility|files-for-agents|contributing|changelog)\// },
   { label: 'Catalog', href: `${SITE_BASE}/catalog/`, section: /\/catalog\// },
-  { label: 'For agents', href: `${SITE_BASE}/for-ai-agents/`, section: /\/for-ai-agents\// },
+  { label: 'Install', href: `${SITE_BASE}/install/`, section: /\/install\// },
 ];
 const path = Astro.url.pathname;
 ---

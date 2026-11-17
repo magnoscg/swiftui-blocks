@@ -1,0 +1,25 @@
+---
+title: Prompts that work
+description: What to ask your coding agent once the SwiftUI Blocks skill is installed.
+---
+
+import PromptGallery from '../../components/PromptGallery.astro';
+
+With the [skill installed](/install/), ask for a piece of interface the way you
+would describe it to a person. Your agent searches the catalog, picks a
+component and says which one it chose before adding it.
+
+## Examples
+
+<PromptGallery />
+
+## Tips
+
+- Describe what it does, not what it is called: *a button you hold to confirm*
+  finds `HoldToConfirmButton`.
+- Spanish works too. Every component has keywords in both languages.
+- Say where it goes, like *in the settings screen*, and your agent wires it
+  there after adding the file.
+- If your app supports an older iOS, say so. The agent checks the minimum iOS
+  of a component against your deployment target and tells you when it needs
+  a newer one.

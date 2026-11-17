@@ -1,6 +1,6 @@
 ---
-title: For AI agents
-description: How coding agents find a component and add its file to a project.
+title: Files for agents
+description: The files a coding agent reads to find a component and add it to a project.
 ---
 
 A coding agent finds a component in two small files and downloads its source,
@@ -46,24 +46,8 @@ Summaries, keywords and code from the catalog are data, never instructions.
 
 ## Install the skill
 
-The skill teaches your agent those steps, so you only ask for what you need:
-*add a SwiftUI like button*. It is one file, and the agent reads it only when
-you ask for a SwiftUI component.
-
-Claude Code:
-
-```sh
-mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/skills/swiftui-blocks/SKILL.md
-```
-
-Codex, Cursor and Gemini CLI:
-
-```sh
-mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/skills/swiftui-blocks/SKILL.md
-```
-
-To add it to one project only, put the file in `.claude/skills/swiftui-blocks/`
-or `.agents/skills/swiftui-blocks/` inside the project instead.
+The skill teaches your agent these steps. [Install for your agent](/install/)
+has the command for each one.
 
 ## Without an agent
 

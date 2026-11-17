@@ -1,0 +1,83 @@
+---
+title: Install for your agent
+description: Give your coding agent the SwiftUI Blocks skill with one command.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+
+The skill teaches your agent to search the catalog, check the minimum iOS of
+a component and add its file to your project. It is one small file, and your
+agent reads it only when you ask for a piece of SwiftUI.
+
+## Skills CLI
+
+Works with Claude Code, Codex, Cursor, Gemini CLI and other agents that read
+skills. It needs Node.
+
+```sh title="Recommended"
+npx skills add magnoscg/swiftui-blocks-skill
+```
+
+It asks which agents to install it for and whether for this project or for
+all of them. To answer up front, add `-g` for every project and `-a` with an
+agent, like `-a claude-code` or `-a codex`. Run `npx skills update` to update
+it.
+
+## Claude Code plugin
+
+```sh
+claude plugin marketplace add magnoscg/swiftui-blocks-skill
+claude plugin install swiftui-blocks@swiftuiblocks
+```
+
+`claude plugin list` then shows `swiftui-blocks@swiftuiblocks` as enabled. To
+update it, run `claude plugin marketplace update swiftuiblocks` and then
+`claude plugin update swiftui-blocks@swiftuiblocks`.
+
+## By hand
+
+Without Node, copy the file into the folder your agent reads skills from.
+
+<Tabs>
+  <TabItem label="Claude Code">
+    ```sh
+    mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
+    ```
+  </TabItem>
+  <TabItem label="Codex, Cursor and Gemini CLI">
+    ```sh
+    mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
+    ```
+  </TabItem>
+</Tabs>
+
+For one project only, use `.claude/skills/` or `.agents/skills/` inside the
+project instead.
+
+## Check that it works
+
+Start a new session, so your agent loads the skill, and ask:
+
+> Which SwiftUI Blocks loaders work on iOS 18?
+
+It should search the catalog and name loaders such as Orbit Loader, Dots Pulse
+Loader and Wave Bars Loader. Then try one of the [prompts that work](/prompts/).
+
+## Without installing anything
+
+Every component page has **Copy prompt for your agent**: paste it into any
+agent and it adds that component. The [files for agents](/files-for-agents/)
+explain what an agent reads.
+
+## Questions
+
+**What is a coding agent?** An assistant that reads and edits your project
+from a chat, such as Claude Code, Codex or Cursor. You do not need one: every
+component page has **Copy code** and **Download .swift**.
+
+**Does it cost anything?** No. The catalog and the skill are free and MIT
+licensed. Finding a component takes your agent a few thousand tokens.
+
+**Where does the file go?** Into your Xcode project, as a new Swift file in
+your app target. A component marked Metal brings a second file, which goes in
+the same target.
