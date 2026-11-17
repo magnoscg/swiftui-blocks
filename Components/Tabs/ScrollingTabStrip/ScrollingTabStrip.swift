@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the row and the underline jump to the new tab.
 struct ScrollingTabStrip: View {
+    /// The titles of the tabs, in order. Each title also identifies its tab, so keep them unique.
     let tabs: [String]
+    /// The title of the selected tab. The strip writes it when a tab is tapped, and scrolls it into the middle.
     @Binding var selection: String
+    /// The color of the underline below the selected tab.
     var tint: Color = .pink
 
     @Namespace private var namespace

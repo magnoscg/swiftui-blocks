@@ -8,9 +8,13 @@ import SwiftUI
 /// `speed` is in points per second. With Reduce Motion on, the row stops
 /// moving and becomes a normal horizontal scroll view.
 struct InfiniteMarqueeRow<Content: View>: View {
+    /// How fast the row moves, in points per second.
     var speed: Double = 40
+    /// The space between the views, and between one copy of the row and the next, in points.
     var spacing: CGFloat = 12
+    /// Whether the row moves towards the trailing edge instead of the leading one.
     var reversed = false
+    /// The views laid out in a row and repeated as many times as it takes to fill the width.
     @ViewBuilder var content: () -> Content
 
     @State private var contentWidth: CGFloat = 0

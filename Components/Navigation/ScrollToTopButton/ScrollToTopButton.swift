@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button fades and the view jumps to the top.
 struct ScrollToTopButton<Content: View>: View {
+    /// How far down, in points, the content must scroll before the button appears.
     var threshold: CGFloat = 320
+    /// The fill of the button. Its arrow takes white or black from it.
     var tint: Color = .indigo
+    /// The content of the scroll view.
     @ViewBuilder var content: Content
 
     @State private var position = ScrollPosition(edge: .top)

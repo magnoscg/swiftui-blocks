@@ -6,9 +6,13 @@ import SwiftUI
 /// A grid of tiles the user can drag into a new order.
 @available(iOS 27, *)
 struct ReorderableGrid<Item: Identifiable & Sendable, Tile: View>: View where Item.ID: Sendable {
+    /// The items, one tile each, in order. The grid writes the new order when a drag ends.
     @Binding var items: [Item]
+    /// The narrowest a tile may get, in points. The grid fits as many columns of at least this width as it can.
     var minimumTileWidth: CGFloat = 100
+    /// The gap between tiles, across and down, in points.
     var spacing: CGFloat = 14
+    /// Draws the tile for an item.
     @ViewBuilder let tile: (Item) -> Tile
 
     var body: some View {

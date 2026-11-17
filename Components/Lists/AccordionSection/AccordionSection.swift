@@ -6,9 +6,13 @@ import SwiftUI
 /// A stack of sections where opening one closes the others. Bind `expandedID`
 /// to open or close a section from outside.
 struct AccordionSection<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one section each, stacked in order.
     let data: Data
+    /// The ID of the open section, or `nil` when all are closed. A tap on a header writes it.
     @Binding var expandedID: Data.Element.ID?
+    /// Returns the text of an item's header, which VoiceOver also reads.
     let title: (Data.Element) -> String
+    /// Draws the body of an item's section, shown below its header while it is open.
     @ViewBuilder let content: (Data.Element) -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

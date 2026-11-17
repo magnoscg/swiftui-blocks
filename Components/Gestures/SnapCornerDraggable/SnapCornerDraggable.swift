@@ -40,8 +40,11 @@ enum SnapCornerDraggableCorner: CaseIterable, Hashable, Sendable {
 /// Use it as an overlay: the empty space lets touches through. VoiceOver offers an action for
 /// each corner, and with Reduce Motion on it moves there without a spring.
 struct SnapCornerDraggable<Content: View>: View {
+    /// The corner the view rests in. The view writes it when a drag ends or a VoiceOver action moves it.
     @Binding var corner: SnapCornerDraggableCorner
+    /// The gap between the view and the edges of the container, in points. A negative value counts as zero.
     var inset: CGFloat = 16
+    /// The floating view to drag.
     @ViewBuilder var content: () -> Content
 
     @State private var containerSize = CGSize.zero

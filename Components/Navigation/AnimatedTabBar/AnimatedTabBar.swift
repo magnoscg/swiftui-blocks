@@ -15,8 +15,11 @@ struct AnimatedTabBarItem<Value: Hashable>: Identifiable {
 ///
 /// With Reduce Motion on, the indicator jumps and the icons stay still.
 struct AnimatedTabBar<Value: Hashable>: View {
+    /// The tabs, in order, each with a title and an SF Symbol.
     let items: [AnimatedTabBarItem<Value>]
+    /// The value of the selected tab. The bar writes it when a tab is tapped.
     @Binding var selection: Value
+    /// The color of the selected tab's icon and title, and of its indicator.
     var tint: Color = .indigo
 
     @State private var bounces: [Value: Int] = [:]

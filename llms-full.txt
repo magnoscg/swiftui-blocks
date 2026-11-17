@@ -20343,11 +20343,17 @@ import SwiftUI
 /// `onComplete` runs once, after the row has collapsed, and is where the caller
 /// should remove the row. With Reduce Motion on, the row completes at once.
 struct CompletionSwipeRow<Content: View>: View {
+    /// The color revealed behind the row as it slides. The checkmark takes white or black from it.
     var tint: Color = .green
+    /// The fill behind the content, which slides with it.
     var rowBackground: Color = Color(.secondarySystemGroupedBackground)
+    /// The rounding of the row's corners, in points.
     var cornerRadius: CGFloat = 16
+    /// The name of the accessibility action that completes the row without a swipe.
     var actionName = "Complete"
+    /// Runs once, after the row has collapsed. Remove the row here.
     var onComplete: () -> Void
+    /// The row itself. A forward swipe of 40% of its width, or 140 points at most, completes it.
     @ViewBuilder var content: () -> Content
 
     private enum Phase {
@@ -20527,10 +20533,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the heart appears in place and fades out.
 struct DoubleTapHeartOverlay<Content: View>: View {
+    /// Whether the photo is liked. A double tap sets it to `true`, and the accessibility action toggles it.
     @Binding var isLiked: Bool
+    /// The color of the hearts.
     var tint: Color = .pink
     /// Throws a heart without a touch, for demos. Each new value throws one more.
     var programmaticBurst: DoubleTapHeartOverlayRequest? = nil
+    /// The photo, or any view, that takes the double tap. The hearts draw over it.
     @ViewBuilder var content: () -> Content
 
     @State private var hearts: [DoubleTapHeartOverlayBurst] = []
@@ -20751,10 +20760,15 @@ import SwiftUI
 /// Tiles are square, and a tap toggles one. Starting on a selected tile deselects
 /// instead. Keep it out of a `ScrollView`, or the scroll will take the drag.
 struct DragSelectGrid<Item: Identifiable, Tile: View>: View {
+    /// The items, one square tile each, laid out row by row.
     let items: [Item]
+    /// The IDs of the selected items. Taps and drags write it.
     @Binding var selection: Set<Item.ID>
+    /// The number of columns, kept between 1 and 24.
     var columns = 4
+    /// The gap between tiles, across and down, in points. A negative value counts as zero.
     var spacing: CGFloat = 4
+    /// Draws a tile from its item and whether it is selected. It fills a square.
     @ViewBuilder var tile: (Item, Bool) -> Tile
 
     private struct Stroke {
@@ -20966,10 +20980,15 @@ import SwiftUI
 /// `onDrop` returns whether the drop was accepted. With Reduce Motion on, the
 /// highlight changes color without growing.
 struct DropZoneHighlight<Payload: Transferable>: View {
+    /// The text shown while nothing hovers over the zone.
     var title = "Drop here"
+    /// The text that replaces `title` while something hovers over the zone.
     var hint = "Release to add"
+    /// The SF Symbol above the text.
     var systemImage = "tray.and.arrow.down"
+    /// The color of the icon, the text and the dashed border, and the fill while something hovers, when the text turns white.
     var tint: Color = .blue
+    /// Called with the dropped items, never empty. Returns whether the drop was accepted.
     var onDrop: ([Payload]) -> Bool
 
     @State private var isTargeted = false
@@ -21103,11 +21122,17 @@ struct LongPressRadialMenuItem: Identifiable {
 /// VoiceOver offers the same actions in its Actions list. With Reduce Motion on,
 /// the ring fades in place.
 struct LongPressRadialMenu<Label: View>: View {
+    /// The actions, spaced evenly around the ring clockwise from the top.
     let items: [LongPressRadialMenuItem]
+    /// The distance from the center of the label to each action, in points. The finger must travel 45% of it before an action is chosen.
     var radius: CGFloat = 104
+    /// How long the press lasts before the ring opens, in seconds.
     var minimumDuration = 0.35
+    /// The color of the icons, and the fill of the action under the finger.
     var tint: Color = .indigo
+    /// The name VoiceOver reads for the label, which offers the actions in its Actions list.
     var accessibilityTitle = "Actions"
+    /// The view to long-press. It shrinks a little while pressed, and the ring opens around its center.
     @ViewBuilder var label: () -> Label
 
     private enum Press: Equatable {
@@ -21342,9 +21367,13 @@ enum PinchZoomViewMath {
 ///
 /// Double tap toggles the zoom. With Reduce Motion on, it settles without a spring.
 struct PinchZoomView<Content: View>: View {
+    /// The zoom, where 1 fits the content. The view writes it after a pinch, a double tap or a VoiceOver zoom, kept between `minScale` and `maxScale`.
     @Binding var scale: CGFloat
+    /// The smallest zoom a gesture settles at. A pinch can overshoot it a little before springing back.
     var minScale: CGFloat = 1
+    /// The largest zoom a gesture settles at. A double tap zooms to 2, or to this when it is smaller.
     var maxScale: CGFloat = 4
+    /// The view to zoom and pan. It fills the space offered and is clipped to it.
     @ViewBuilder var content: () -> Content
 
     @State private var pinch: CGFloat = 1
@@ -21557,10 +21586,15 @@ struct ScratchToRevealCoverage: Equatable {
 /// The rest falls away once `revealThreshold` of the cover is gone. To start over, change the
 /// view's `id`. VoiceOver users double tap to reveal, and Reduce Motion removes the final fade.
 struct ScratchToReveal<Content: View, Cover: View>: View {
+    /// The width of the line a finger scratches, in points. Values below 1 count as 1.
     var brushWidth: CGFloat = 44
+    /// The fraction of the cover, from 0.01 to 1, that must be scratched off before the rest falls away.
     var revealThreshold: Double = 0.6
+    /// Runs once, when the content is revealed by scratching or by VoiceOver.
     var onReveal: (() -> Void)? = nil
+    /// The view under the cover. It sets the size of the card, and VoiceOver skips it until it is revealed.
     @ViewBuilder var content: () -> Content
+    /// The view scratched away, stretched over the content.
     @ViewBuilder var cover: () -> Cover
 
     @State private var strokes: [[CGPoint]] = []
@@ -21746,8 +21780,11 @@ enum SnapCornerDraggableCorner: CaseIterable, Hashable, Sendable {
 /// Use it as an overlay: the empty space lets touches through. VoiceOver offers an action for
 /// each corner, and with Reduce Motion on it moves there without a spring.
 struct SnapCornerDraggable<Content: View>: View {
+    /// The corner the view rests in. The view writes it when a drag ends or a VoiceOver action moves it.
     @Binding var corner: SnapCornerDraggableCorner
+    /// The gap between the view and the edges of the container, in points. A negative value counts as zero.
     var inset: CGFloat = 16
+    /// The floating view to drag.
     @ViewBuilder var content: () -> Content
 
     @State private var containerSize = CGSize.zero
@@ -21894,8 +21931,11 @@ enum SwipeActionRowPhysics {
 /// Vertical drags are left to the scroll view around it. VoiceOver reaches the same buttons as
 /// custom actions, and with Reduce Motion on the row settles without animating.
 struct SwipeActionRow<Content: View>: View {
+    /// The buttons revealed on the trailing side, in order. Each closes the row before running its handler.
     let actions: [SwipeActionRowAction]
+    /// The width of each button, in points. The row opens by this times the number of actions.
     var buttonWidth: CGFloat = 80
+    /// The row itself, drawn on the secondary grouped background.
     @ViewBuilder var content: () -> Content
 
     @State private var id = UUID()
@@ -27743,10 +27783,15 @@ enum AdaptiveColumnsGridMath {
 /// A grid that computes its column count from the width it gets: fewer columns on
 /// iPhone, more on iPad, with an upper limit that `.adaptive` grid items do not offer.
 struct AdaptiveColumnsGrid<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one cell each, laid out row by row.
     let data: Data
+    /// The narrowest a column may get, in points. The grid fits as many columns of at least this width as it can.
     var minColumnWidth: CGFloat = 150
+    /// The gap between cells, across and down, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
+    /// The most columns the grid shows, however wide it gets. At least 1.
     var maxColumns = 6
+    /// Draws the cell for an item. It gets the full width of its column.
     @ViewBuilder let content: (Data.Element) -> Content
 
     @State private var width: CGFloat = 0
@@ -27864,8 +27909,11 @@ import SwiftUI
 /// A group that lays out its content in a row when there is room, and animates to a
 /// column when the width drops below `threshold` or the text gets very large.
 struct AnyLayoutAdaptiveSwitch<Content: View>: View {
+    /// The width, in points, below which the content stacks in a column. At accessibility text sizes it stacks whatever the width.
     var threshold: CGFloat = 340
+    /// The gap between the views, in the row and in the column, in points.
     var spacing: CGFloat = 12
+    /// The views to lay out, as you would write them inside an `HStack`.
     @ViewBuilder let content: () -> Content
 
     @State private var availableWidth = CGFloat.infinity
@@ -28028,8 +28076,11 @@ extension View {
 
 /// A grid that packs tiles of varied spans, leaving as few holes as it can.
 struct BentoGridLayout: Layout {
+    /// The number of columns the width is split into. A tile wider than this is narrowed to fit.
     var columns = 4
+    /// The height of one row, in points. A tile spanning several rows also covers the spacing between them.
     var rowHeight: CGFloat = 110
+    /// The gap between tiles, across and down, in points.
     var spacing: CGFloat = 12
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -28177,7 +28228,9 @@ nonisolated enum FlowTagsLayoutMath {
 
 /// A layout that wraps its views onto as many lines as they need.
 struct FlowTagsLayout: Layout {
+    /// The gap between views on the same line, in points.
     var spacing: CGFloat = 8
+    /// The gap between lines, in points.
     var lineSpacing: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -28340,6 +28393,13 @@ struct KanbanBoard: View {
 
     private let cardCornerRadius: CGFloat = 12
 
+    /// Creates a board from its columns.
+    ///
+    /// - Parameters:
+    ///   - columns: The columns and their cards, in order. The board writes it when a card
+    ///     moves, appending the card to the end of its new column.
+    ///   - columnWidth: The width of each column, in points at the default text size. It
+    ///     grows with Dynamic Type and never drops below 120.
     init(columns: Binding<[KanbanBoardColumn]>, columnWidth: CGFloat = 220) {
         _columns = columns
         _columnWidth = ScaledMetric(wrappedValue: columnWidth, relativeTo: .body)
@@ -28503,7 +28563,9 @@ nonisolated enum MasonryLayoutMath {
 /// A layout that places items of different heights into the shortest of several
 /// columns, like a Pinterest board. Put it inside a `ScrollView` when it can grow.
 struct MasonryLayout: Layout {
+    /// The number of columns, kept between 1 and 64. Each item goes into the shortest one so far.
     var columns = 2
+    /// The gap between columns and between items in a column, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
 
     /// More columns than this makes no sense on any screen.
@@ -28621,10 +28683,15 @@ import SwiftUI
 ///
 /// `content` also receives `isGrid`, so a cell can change its own design.
 struct MorphingLayoutSwitch<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one cell each.
     let data: Data
+    /// Whether the items show as a grid of `columns` columns, rather than a single-column list. A change animates.
     let isGrid: Bool
+    /// The number of columns in grid mode, kept between 1 and 64.
     var columns = 2
+    /// The gap between cells, across and down, in points.
     var spacing: CGFloat = 12
+    /// Draws the cell for an item, given whether the layout is a grid.
     @ViewBuilder let content: (Data.Element, Bool) -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -28737,7 +28804,9 @@ nonisolated enum RadialLayoutMath {
 /// Change the number of views inside `withAnimation` and the others glide to their new places.
 /// Leave `radius` as `nil` to fill the space it is given.
 struct RadialLayout: Layout {
+    /// The distance from the center to the center of each view, in points. `nil` fits the circle to the space offered, keeping the views inside it.
     var radius: CGFloat?
+    /// Where the first view sits. The default, -90 degrees, is the top, and the rest follow clockwise.
     var startAngle: Angle = .degrees(-90)
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -28861,6 +28930,12 @@ struct ReadableWidthContainer<Content: View>: View {
     @ScaledMetric private var maxWidth: CGFloat
     private let content: Content
 
+    /// Creates a container that caps the width of its content.
+    ///
+    /// - Parameters:
+    ///   - maxWidth: The widest the content gets, in points at the default text size. It
+    ///     grows with Dynamic Type. A negative value counts as zero, and an infinite one as 640.
+    ///   - content: The view to cap, aligned to the leading edge of the centered column.
     init(maxWidth: CGFloat = 640, @ViewBuilder content: () -> Content) {
         _maxWidth = ScaledMetric(wrappedValue: maxWidth.isFinite ? max(0, maxWidth) : 640, relativeTo: .body)
         self.content = content()
@@ -28959,7 +29034,9 @@ extension View {
 /// `ForEach(subviews:)` sees each resolved child, so it works the same for
 /// static views and for children that come from a `ForEach` or an `if`.
 struct SubviewCardContainer<Content: View>: View {
+    /// The vertical gap between cards, in points.
     var spacing: CGFloat = 12
+    /// The children, each drawn as a card. Give one a color with `subviewCardTint(_:)`, or it takes the accent color.
     @ViewBuilder var content: Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -29057,9 +29134,13 @@ import SwiftUI
 /// A stack of sections where opening one closes the others. Bind `expandedID`
 /// to open or close a section from outside.
 struct AccordionSection<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one section each, stacked in order.
     let data: Data
+    /// The ID of the open section, or `nil` when all are closed. A tap on a header writes it.
     @Binding var expandedID: Data.Element.ID?
+    /// Returns the text of an item's header, which VoiceOver also reads.
     let title: (Data.Element) -> String
+    /// Draws the body of an item's section, shown below its header while it is open.
     @ViewBuilder let content: (Data.Element) -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -29196,7 +29277,9 @@ enum DisclosureTreeViewRows {
 
 /// A nested tree of rows that expand and collapse, indenting each level.
 struct DisclosureTreeView: View {
+    /// The top-level nodes, with their children nested inside them.
     let nodes: [DisclosureTreeViewNode]
+    /// The IDs of the open nodes. A tap on a node with children writes it. A node shows only while every ancestor is open.
     @Binding var expandedIDs: Set<String>
 
     @ScaledMetric(relativeTo: .body) private var indent = 20.0
@@ -29323,8 +29406,11 @@ import SwiftUI
 /// Place it inside a `NavigationStack`, because Select and Done go in the toolbar.
 /// With Reduce Motion on, the bar appears without sliding.
 struct EditModeMultiSelect<Row: Identifiable, RowContent: View, Actions: View>: View {
+    /// The items, one row each. When it changes, the selection drops IDs that are gone, and Select mode ends if it is empty.
     let rows: [Row]
+    /// The IDs of the selected rows. The list writes it, and clears it when Select mode ends.
     @Binding var selection: Set<Row.ID>
+    /// Draws the row for an item.
     @ViewBuilder var rowContent: (Row) -> RowContent
     /// The bulk actions. They are disabled while nothing is selected.
     @ViewBuilder var actions: () -> Actions
@@ -29537,8 +29623,11 @@ final class LoadMoreFooterPager<Element> {
 
 /// The last row of an infinite list. It asks for the next page as soon as it appears.
 struct LoadMoreFooter: View {
+    /// The state of the next page: a spinner while idle or loading, a retry button when it failed, and `finishedText` when there is nothing left.
     let phase: LoadMoreFooterPhase
+    /// The text shown once every page has loaded.
     var finishedText = "You're all caught up"
+    /// Runs when the footer appears while `phase` is idle, and when the retry button is tapped.
     let onLoad: () -> Void
 
     var body: some View {
@@ -29638,7 +29727,9 @@ import SwiftUI
 /// A stack of cards the user can drag into a new order, without using `List`.
 @available(iOS 27, *)
 struct ReorderableCardList<Item: Identifiable & Sendable, Card: View>: View where Item.ID: Sendable {
+    /// The items, one card each, in order. The list writes the new order when a drag ends.
     @Binding var items: [Item]
+    /// Draws the card for an item. The list stacks the cards 12 points apart in a scroll view.
     @ViewBuilder let card: (Item) -> Card
 
     var body: some View {
@@ -29742,9 +29833,13 @@ import SwiftUI
 /// A grid of tiles the user can drag into a new order.
 @available(iOS 27, *)
 struct ReorderableGrid<Item: Identifiable & Sendable, Tile: View>: View where Item.ID: Sendable {
+    /// The items, one tile each, in order. The grid writes the new order when a drag ends.
     @Binding var items: [Item]
+    /// The narrowest a tile may get, in points. The grid fits as many columns of at least this width as it can.
     var minimumTileWidth: CGFloat = 100
+    /// The gap between tiles, across and down, in points.
     var spacing: CGFloat = 14
+    /// Draws the tile for an item.
     @ViewBuilder let tile: (Item) -> Tile
 
     var body: some View {
@@ -29865,8 +29960,11 @@ struct StickySectionHeadersGroup<Element: Identifiable>: Identifiable {
 
 /// A scrolling list whose section headers pin to the top until the next one pushes them off.
 struct StickySectionHeaders<Element: Identifiable, Row: View>: View {
+    /// The sections, in order, each with the title of its header and its elements. Keep the titles unique.
     let groups: [StickySectionHeadersGroup<Element>]
+    /// The color of the header text.
     var tint: Color = .accentColor
+    /// Draws the row for an element. Rows sit with no spacing between them.
     @ViewBuilder var row: (Element) -> Row
 
     var body: some View {
@@ -29979,8 +30077,11 @@ nonisolated enum SwipeActionCardsLogic {
 /// gesture, haptics and VoiceOver actions.
 @available(iOS 27, *)
 struct SwipeActionCards<Item: Identifiable, Card: View, Actions: View>: View {
+    /// The items, one card each, in order.
     let items: [Item]
+    /// The vertical gap between cards, in points.
     var spacing: CGFloat = 12
+    /// Draws the card for an item.
     @ViewBuilder var card: (Item) -> Card
     /// The buttons a card shows when it is swiped from its trailing edge, the first one outermost.
     @ViewBuilder var actions: (Item) -> Actions
@@ -34872,8 +34973,11 @@ import SwiftUI
 /// On iPad the toolbar button collapses the view to the detail alone. On iPhone the same
 /// value decides whether the sidebar or the detail is on top of the stack.
 struct AdaptiveSidebarLayout<Sidebar: View, Detail: View>: View {
+    /// Whether the sidebar shows. The toolbar button on iPad and the back button on iPhone write it.
     @Binding var showsSidebar: Bool
+    /// The content of the sidebar column.
     @ViewBuilder let sidebar: () -> Sidebar
+    /// The content of the detail column. On iPad it gets a toolbar button that shows and hides the sidebar.
     @ViewBuilder let detail: () -> Detail
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
@@ -35022,8 +35126,11 @@ struct AnimatedTabBarItem<Value: Hashable>: Identifiable {
 ///
 /// With Reduce Motion on, the indicator jumps and the icons stay still.
 struct AnimatedTabBar<Value: Hashable>: View {
+    /// The tabs, in order, each with a title and an SF Symbol.
     let items: [AnimatedTabBarItem<Value>]
+    /// The value of the selected tab. The bar writes it when a tab is tapped.
     @Binding var selection: Value
+    /// The color of the selected tab's icon and title, and of its indicator.
     var tint: Color = .indigo
 
     @State private var bounces: [Value: Int] = [:]
@@ -35173,8 +35280,11 @@ enum BottomDrawerSnapping {
 /// Place it above your content in a `ZStack`. The whole drawer is draggable, so keep scrolling
 /// content out of it. VoiceOver adjusts the handle. With Reduce Motion on, the drawer snaps without a spring.
 struct BottomDrawer<Content: View>: View {
+    /// The stop the drawer rests at, one of `detents`. The drawer writes it when a drag or VoiceOver moves it.
     @Binding var detent: CGFloat
+    /// The heights the drawer can rest at, as fractions of the available height from 0 to 1. The highest sets the height of the drawer.
     var detents: [CGFloat] = [0.16, 0.5, 0.88]
+    /// The content below the handle, aligned to the top of the drawer.
     @ViewBuilder var content: Content
 
     @State private var dragTranslation: CGFloat = 0
@@ -35325,7 +35435,9 @@ struct BreadcrumbTrailItem: Identifiable, Hashable {
 ///
 /// If even the shortest form does not fit, as at the largest text sizes, the row scrolls.
 struct BreadcrumbTrail: View {
+    /// The crumbs from the root to the current page. The last one is the current page, shown in bold and not tappable.
     let items: [BreadcrumbTrailItem]
+    /// Called with a crumb when it is tapped, in the row or in the menu of hidden crumbs.
     let onSelect: (BreadcrumbTrailItem) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -35498,8 +35610,11 @@ import SwiftUI
 /// Remove the view from `onDismiss`. With Reduce Motion on, the page does not scale and
 /// leaves at once. VoiceOver users dismiss it with the escape gesture.
 struct DragToDismissScreen<Content: View>: View {
+    /// How far down, in points, a drag must go to dismiss. A quick flick heading twice as far also dismisses.
     var threshold: CGFloat = 140
+    /// Runs once the page has left the screen. Remove the view here.
     let onDismiss: () -> Void
+    /// The page that follows the drag.
     @ViewBuilder let content: () -> Content
 
     @GestureState private var liveOffset: CGFloat = 0
@@ -35686,6 +35801,7 @@ nonisolated enum EmbeddedWebBrowserLogic {
 /// Create the `WebPage`, load what it should start on, and hand it over.
 @available(iOS 26, *)
 struct EmbeddedWebBrowser: View {
+    /// The page to show and control. Create it and start loading it before handing it over.
     let page: WebPage
 
     @State private var address = ""
@@ -35852,8 +35968,11 @@ struct FullScreenMenuOverlayLink: Identifiable {
 ///
 /// With Reduce Motion on, the menu and its links appear at once.
 struct FullScreenMenuOverlay: View {
+    /// Whether the menu shows. The close button, the escape gesture and every link set it to `false`.
     @Binding var isPresented: Bool
+    /// The rows of the menu, from the top. Tapping one closes the menu and runs its action.
     let links: [FullScreenMenuOverlayLink]
+    /// The colors of the background gradient, from the top leading corner to the bottom trailing one. The links are drawn in white over it.
     var colors: [Color] = [.indigo, .purple, .pink]
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -36013,6 +36132,7 @@ import SwiftUI
 @MainActor
 @Observable
 final class NavigationPathRouter<Destination: Hashable> {
+    /// The screens pushed above the root, which the stack reads and writes, also when the back button pops.
     var path = NavigationPath()
 
     var depth: Int { path.count }
@@ -36143,8 +36263,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the capsule changes without animating.
 struct PageDotsIndicator: View {
+    /// How many pages there are, one dot each.
     let count: Int
+    /// The index of the current page, from 0. Its dot stretches into a capsule.
     let current: Int
+    /// The color of the current dot. The others take it at 25% opacity.
     var tint: Color = .primary
 
     @ScaledMetric(relativeTo: .caption) private var dotSize = 8.0
@@ -36230,8 +36353,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, jumps and the highlight happen without animation.
 struct ScrollSpyHeader<Element: Identifiable, Content: View>: View where Element.ID: Sendable {
+    /// The sections, in the order they scroll and their chips appear.
     let sections: [Element]
+    /// Returns the text of the chip for a section.
     let title: (Element) -> String
+    /// Builds the content of a section in the scroll view.
     @ViewBuilder let content: (Element) -> Content
 
     @State private var activeID: Element.ID?
@@ -36442,8 +36568,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button fades and the view jumps to the top.
 struct ScrollToTopButton<Content: View>: View {
+    /// How far down, in points, the content must scroll before the button appears.
     var threshold: CGFloat = 320
+    /// The fill of the button. Its arrow takes white or black from it.
     var tint: Color = .indigo
+    /// The content of the scroll view.
     @ViewBuilder var content: Content
 
     @State private var position = ScrollPosition(edge: .top)
@@ -36559,12 +36688,19 @@ import SwiftUI
 ///
 /// Tapping a suggestion fills in the field. The suggestions narrow as the person types.
 struct SearchScopesAndSuggestions<Scope: Hashable>: ViewModifier {
+    /// The text in the search field. The field writes it, and so does tapping a suggestion.
     @Binding var text: String
+    /// Whether the search is active. The field writes it when the person starts or cancels a search.
     @Binding var isPresented: Bool
+    /// The selected scope, one of `scopes`. The scope bar writes it.
     @Binding var scope: Scope
+    /// The scopes the bar offers, in order. The bar shows while the search is active.
     let scopes: [Scope]
+    /// Returns the text of the button for a scope.
     let scopeTitle: (Scope) -> String
+    /// The texts to suggest. The field shows up to five that contain what is typed, ignoring case, and leaves out repeats and the typed text itself.
     let suggestions: [String]
+    /// The placeholder of the empty field.
     var prompt: LocalizedStringResource = "Search"
 
     func body(content: Content) -> some View {
@@ -36685,9 +36821,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the menu opens and closes without sliding.
 struct SideDrawer<MenuContent: View, Content: View>: View {
+    /// Whether the menu is open. The drawer writes it when a drag ends past half the menu width and when the content is tapped.
     @Binding var isOpen: Bool
+    /// The width of the menu in points, which is also how far the content moves aside.
     var menuWidth: CGFloat = 280
+    /// The menu, on the leading edge.
     @ViewBuilder var menu: MenuContent
+    /// The main content, pushed aside while the menu is open.
     @ViewBuilder var content: Content
 
     @State private var dragTranslation: CGFloat = 0
@@ -36849,8 +36989,11 @@ struct SidebarAdaptiveTabsItem<Value: Hashable>: Identifiable {
 
 /// The same tabs as a bottom tab bar on iPhone and as a sidebar people can show on iPad.
 struct SidebarAdaptiveTabs<Value: Hashable, Content: View>: View {
+    /// The value of the selected tab. The tab bar or the sidebar writes it.
     @Binding var selection: Value
+    /// The tabs, in order, each with a title, an SF Symbol and a value.
     let tabs: [SidebarAdaptiveTabsItem<Value>]
+    /// Builds the screen of a tab.
     @ViewBuilder let content: (SidebarAdaptiveTabsItem<Value>) -> Content
 
     var body: some View {
@@ -36993,9 +37136,13 @@ struct TabNavigationStatePreserveItem<TabID: Hashable>: Identifiable {
 /// Switching away and back restores the screen you left. Tapping the current tab pops
 /// it to the root, on the iOS versions where `TabView` reports a repeated selection.
 struct TabNavigationStatePreserve<TabID: Hashable, Route: Hashable, Root: View, Screen: View>: View {
+    /// Holds the selected tab and the path of each tab. Change its paths to reset or restore a tab.
     let store: TabNavigationStatePreserveStore<TabID>
+    /// The tabs, in order, each with a title, an SF Symbol and its identifier.
     let tabs: [TabNavigationStatePreserveItem<TabID>]
+    /// Builds the root screen of a tab.
     @ViewBuilder let root: (TabID) -> Root
+    /// Builds the screen pushed for a route, in any tab.
     @ViewBuilder let screen: (Route) -> Screen
 
     var body: some View {
@@ -37114,11 +37261,17 @@ import SwiftUI
 /// split view is expected to have: the button that hides the list, the swipe back on iPhone
 /// and the keyboard. The list selects with its own selection, so VoiceOver reads the selected row.
 struct TwoPaneSplitLayout<Item: Identifiable & Hashable, Row: View, Detail: View>: View {
+    /// The navigation title of the list.
     let title: LocalizedStringResource
+    /// The rows of the list, in order.
     let items: [Item]
+    /// The item shown in the detail, or `nil` for none. The list writes it when a row is tapped.
     @Binding var selection: Item?
+    /// The ideal width of the list, in points, when the two panes are side by side.
     var listWidth: CGFloat = 320
+    /// Builds the row of an item.
     @ViewBuilder let row: (Item) -> Row
+    /// Builds the detail of the selected item. With nothing selected, the pane says so instead.
     @ViewBuilder let detail: (Item) -> Detail
 
     var body: some View {
@@ -37226,14 +37379,23 @@ struct PermissionPrimerScreenBenefit: Identifiable {
 /// to be the system's question, as Apple asks before the tracking prompt. With Reduce Motion
 /// on, the rings stand still and the benefits appear together.
 struct PermissionPrimerScreen: View {
+    /// The SF Symbol in the circle at the top, which takes white or black from `tint`.
     let systemImage: String
+    /// The heading, which names the permission.
     let title: LocalizedStringResource
+    /// The text under the heading, which says what the permission is for.
     let message: LocalizedStringResource
+    /// The rows of what the person gets, each with an icon, a title and a line of text. They appear one after another.
     let benefits: [PermissionPrimerScreenBenefit]
+    /// The text of the main button, at the bottom.
     var continueTitle: LocalizedStringResource = "Continue"
+    /// The text of the secondary button below it. `nil` hides it.
     var skipTitle: LocalizedStringResource? = "Not Now"
+    /// The color of the circle, its rings, the benefit icons and the main button.
     var tint: Color = .blue
+    /// Runs when the main button is tapped. Ask the system for the permission here.
     let onContinue: () -> Void
+    /// Runs when the secondary button is tapped.
     var onSkip: () -> Void = {}
 
     @State private var hasAppeared = false
@@ -37450,8 +37612,11 @@ enum VerticalTimelineStatus: Equatable {
 ///
 /// With Reduce Motion on, the current step does not pulse and changes are not animated.
 struct VerticalTimeline: View {
+    /// The steps, from top to bottom.
     let steps: [VerticalTimelineStep]
+    /// The index of the step in progress. Steps before it are done and the rest upcoming. Past the end, all are done, and below zero none has started.
     let currentIndex: Int
+    /// The color of the done and current markers and of the line between done steps.
     var tint: Color = .indigo
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -41615,8 +41780,11 @@ import SwiftUI
 ///
 /// It stays still with Reduce Motion or VoiceOver on, and can always be swiped by hand.
 struct AutoAdvanceCarousel<Item: Identifiable, Content: View>: View {
+    /// The pages, in order. After the last one the carousel wraps to the first.
     let items: [Item]
+    /// The seconds each page stays before the next one, at least 0.5.
     var interval: TimeInterval = 3
+    /// Builds a page, as wide as the carousel.
     @ViewBuilder var content: (Item) -> Content
 
     @State private var currentID: Item.ID?
@@ -41786,7 +41954,9 @@ struct CoverFlowCarouselItem: Identifiable {
 ///
 /// With Reduce Motion on, items stay flat and only fade.
 struct CoverFlowCarousel: View {
+    /// The cards, in order, each with an image and a title drawn over it.
     let items: [CoverFlowCarouselItem]
+    /// The `id` of the centered card. The carousel writes it as it scrolls, and setting it scrolls there.
     @Binding var selection: String?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -41946,8 +42116,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bar fades instead of sliding. With VoiceOver on, it stays visible.
 struct HideOnScrollBar<Content: View, Bar: View>: View {
+    /// How far, in points, the content must scroll in one direction before the bar hides or returns.
     var threshold: Double = 16
+    /// The content of the scroll view.
     @ViewBuilder var content: () -> Content
+    /// The bar pinned to the bottom, which slides out of view while scrolling down.
     @ViewBuilder var bar: () -> Bar
 
     @State private var tracker = HideOnScrollBarTracker()
@@ -42129,9 +42302,13 @@ import SwiftUI
 /// `speed` is in points per second. With Reduce Motion on, the row stops
 /// moving and becomes a normal horizontal scroll view.
 struct InfiniteMarqueeRow<Content: View>: View {
+    /// How fast the row moves, in points per second.
     var speed: Double = 40
+    /// The space between the views, and between one copy of the row and the next, in points.
     var spacing: CGFloat = 12
+    /// Whether the row moves towards the trailing edge instead of the leading one.
     var reversed = false
+    /// The views laid out in a row and repeated as many times as it takes to fill the width.
     @ViewBuilder var content: () -> Content
 
     @State private var contentWidth: CGFloat = 0
@@ -42251,7 +42428,9 @@ struct NetflixRowsScrollerRow: Identifiable {
 
 /// A vertical stack of titled horizontal rows where each row scrolls on its own.
 struct NetflixRowsScroller: View {
+    /// The rows, from the top, each with a title and its posters. Three posters fit across the width.
     let rows: [NetflixRowsScrollerRow]
+    /// Called with a title when its poster is tapped.
     var onSelect: (NetflixRowsScrollerTitle) -> Void = { _ in }
 
     private let posterSpacing: CGFloat = 10
@@ -42409,8 +42588,11 @@ struct OnboardingPagerPage {
 /// A full-screen onboarding flow with swipeable pages, a progress indicator and a button
 /// that advances or finishes. `onFinish` runs once.
 struct OnboardingPager: View {
+    /// The pages, in order, each with a symbol, a title, a message and the colors of its background. With none, the view is empty.
     let pages: [OnboardingPagerPage]
+    /// The text of the button on the last page. The others read Continue.
     var finishTitle: LocalizedStringResource = "Get Started"
+    /// Runs once, when the button on the last page is tapped.
     var onFinish: () -> Void = {}
 
     @State private var page = 0
@@ -42571,10 +42753,15 @@ struct PagedGridLauncherItem: Identifiable {
 
 /// A launcher of icon grids that pages horizontally, each page filled row by row.
 struct PagedGridLauncher: View {
+    /// The icons, in order, filling each page row by row before the next.
     let items: [PagedGridLauncherItem]
+    /// The index of the visible page, from 0. The launcher writes it when swiped, and setting it scrolls there.
     @Binding var page: Int
+    /// How many icons fit across a page, from 1 to 12. At accessibility text sizes it drops to 2 at most.
     var columns: Int = 4
+    /// How many rows of icons fill a page, from 1 to 12.
     var rows: Int = 5
+    /// Called with an icon when it is tapped.
     var onSelect: (PagedGridLauncherItem) -> Void = { _ in }
 
     @State private var scrolledPage: Int?
@@ -42770,10 +42957,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the artwork stays still inside the card.
 struct ParallaxCardsRow<Item: Identifiable, Artwork: View, Overlay: View>: View {
+    /// The cards, in order.
     let items: [Item]
+    /// The height of each card, in points.
     var height: CGFloat = 460
+    /// The most the artwork shifts inside its card, in points. The artwork is widened by as much on each side. With Reduce Motion on, it does not shift.
     var strength: CGFloat = 70
+    /// Builds the background of a card, which moves slower than the card and is clipped to its rounded shape.
     @ViewBuilder var artwork: (Item) -> Artwork
+    /// Builds what sits over the artwork, in the bottom leading corner of a card.
     @ViewBuilder var overlay: (Item) -> Overlay
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -42877,9 +43069,13 @@ import SwiftUI
 /// `peek` is how much of each neighbour stays visible. Give the cards a height.
 /// With Reduce Motion on, side cards keep their size and only dim.
 struct PeekCarousel<Item: Identifiable, Card: View>: View {
+    /// The cards, in order, with a dot each below the carousel.
     let items: [Item]
+    /// How much of each neighbouring card stays visible, in points.
     var peek: CGFloat = 28
+    /// The space between the cards, in points.
     var spacing: CGFloat = 12
+    /// Builds a card. It fills the width left by the peeks, so give it a height.
     @ViewBuilder var card: (Item) -> Card
 
     @State private var currentID: Item.ID?
@@ -43007,9 +43203,13 @@ enum PullProgressRefreshMath {
 ///
 /// With Reduce Motion on, the content moves into place without a spring.
 struct PullProgressRefresh<Content: View>: View {
+    /// How far, in points, the content must be pulled for the ring to fill and a release to refresh.
     var threshold: CGFloat = 90
+    /// The color of the ring, its arrow and the spinner.
     var tint: Color = .accentColor
+    /// The work to run on a refresh. The spinner shows until it returns.
     let action: @MainActor () async -> Void
+    /// The content of the scroll view.
     @ViewBuilder var content: () -> Content
 
     @State private var pull: CGFloat = 0
@@ -43169,10 +43369,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the cards fade without scaling.
 struct ScrollFadeCards<Item: Identifiable, Card: View>: View {
+    /// The cards, from the top.
     let items: [Item]
+    /// The space between the cards, in points.
     var spacing: CGFloat = 16
+    /// The scale a card shrinks to at the edge of the scroll view, from 0 to 1. With Reduce Motion on, cards keep their size.
     var minimumScale: Double = 0.84
+    /// The opacity a card fades to at the edge of the scroll view, from 0 to 1.
     var minimumOpacity: Double = 0.2
+    /// Builds a card.
     @ViewBuilder var card: (Item) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -43318,6 +43523,11 @@ struct ScrollProgressBar: ViewModifier {
 }
 
 extension View {
+    /// Pins a bar to the top of this scroll view that fills as the content is scrolled to its end.
+    ///
+    /// - Parameters:
+    ///   - tint: The fill of the progressed part of the bar.
+    ///   - height: The thickness of the bar, in points.
     func scrollProgressBar(
         tint: LinearGradient = LinearGradient(colors: [.pink, .orange], startPoint: .leading, endPoint: .trailing),
         height: CGFloat = 5
@@ -43427,7 +43637,14 @@ struct ScrollVisibilityReveal: ViewModifier {
 }
 
 extension View {
+    /// Fades and slides this view into place the first time it becomes visible in a scroll view.
+    ///
     /// A low threshold means a section taller than the screen still gets revealed.
+    ///
+    /// - Parameters:
+    ///   - threshold: The fraction of the view, from 0 to 1, that must be on screen to reveal it.
+    ///   - distance: How far below its place, in points, the view starts. With Reduce Motion on,
+    ///     it does not slide.
     func scrollVisibilityReveal(threshold: Double = 0.15, distance: CGFloat = 36) -> some View {
         modifier(ScrollVisibilityReveal(threshold: threshold, distance: distance))
     }
@@ -43542,10 +43759,15 @@ enum StickyParallaxHeaderMath {
 /// `title` receives how collapsed the header is, from 0 to 1.
 /// With Reduce Motion on, the backdrop does not drift.
 struct StickyParallaxHeader<Backdrop: View, Title: View, Content: View>: View {
+    /// The height of the header at rest, in points, below the top safe area.
     var expandedHeight: CGFloat = 260
+    /// The height of the pinned bar the header collapses into, in points, below the top safe area.
     var collapsedHeight: CGFloat = 60
+    /// The image or color behind the header. It stretches on overscroll and is hidden from VoiceOver.
     @ViewBuilder var backdrop: () -> Backdrop
+    /// Builds the title in the bottom leading corner of the header, given how collapsed it is, from 0 expanded to 1 pinned.
     @ViewBuilder var title: (_ collapse: CGFloat) -> Title
+    /// The content that scrolls below the header.
     @ViewBuilder var content: () -> Content
 
     @State private var offset: CGFloat = 0
@@ -43685,11 +43907,17 @@ nonisolated enum StickyStackedCardsMath {
 /// Place it inside a vertical `ScrollView`. With Reduce Motion on, the cards still pin in
 /// place but do not shrink.
 struct StickyStackedCards<Data: RandomAccessCollection, Card: View>: View where Data.Element: Identifiable {
+    /// The cards, from the top.
     let data: Data
+    /// The space between the cards before they pile up, in points.
     var spacing: CGFloat = 20
+    /// How far below the top of the scroll view the first card pins, in points.
     var top: CGFloat = 12
+    /// How much lower each next card pins, in points, so the edges of the pile stay visible.
     var peek: CGFloat = 12
+    /// How many cards step down. The cards after them pin where the last step left off.
     var maxPeeking = 3
+    /// Builds a card. Give it an opaque background, since the next cards slide over it.
     @ViewBuilder var card: (Data.Element) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -43829,7 +44057,9 @@ struct VerticalFullScreenFeedItem: Identifiable {
 ///
 /// The paging is driven by the finger, so Reduce Motion does not change it.
 struct VerticalFullScreenFeed: View {
+    /// The pages, from the top, each with an image, a title and a subtitle.
     let items: [VerticalFullScreenFeedItem]
+    /// The `id` of the page on screen. The feed writes it as it pages, and setting it scrolls there.
     var selection: Binding<String?> = .constant(nil)
 
     var body: some View {
@@ -43987,6 +44217,18 @@ struct CustomDetentSheet<SheetContent: View>: ViewModifier {
 }
 
 extension View {
+    /// Presents a sheet that snaps between the heights you give it.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the sheet is showing. The sheet sets it to `false` when
+    ///     the person dismisses it.
+    ///   - detents: The heights the sheet can rest at. When empty, it rests at `selection` only.
+    ///   - selection: The height the sheet is at. Set it to move the sheet, and the sheet
+    ///     writes it when the person drags it to another one.
+    ///   - interactiveUpThrough: The largest detent at which the content behind stays
+    ///     usable, or `nil` to leave that to the system.
+    ///   - content: The view inside the sheet, which shows a drag indicator and corners
+    ///     of 30 points.
     func customDetentSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
         detents: Set<PresentationDetent>,
@@ -44136,6 +44378,12 @@ extension View {
     ///
     /// Change the content inside `withAnimation` and the tray follows it. The content is measured
     /// at the height it asks for, so give a list too long for the screen a frame of its own.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the tray is showing. The tray sets it to `false` when the
+    ///     person dismisses it.
+    ///   - content: The view inside the tray. The tray is at least 80 points tall and at
+    ///     most 90% of the height of the view it is presented from.
     func dynamicHeightTray<Tray: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Tray) -> some View {
         modifier(DynamicHeightTrayModifier(isPresented: isPresented, tray: content))
     }
@@ -44382,9 +44630,13 @@ struct WhatsNewSheetFeature: Identifiable {
 /// Show it yourself in a sheet, or let `whatsNewSheet(version:features:)` show it once per version.
 /// The rows come in one after another. With Reduce Motion on, they fade in together.
 struct WhatsNewSheet: View {
+    /// The heading at the top of the page.
     var title: LocalizedStringResource = "What’s New"
+    /// The rows, in order, each with a symbol, a title, a line of text and a tint for the symbol.
     let features: [WhatsNewSheetFeature]
+    /// The text of the button pinned to the bottom.
     var buttonTitle = "Continue"
+    /// Runs when the button is tapped. Dismiss the sheet here.
     var onContinue: () -> Void
 
     private let margin: CGFloat = 32
@@ -44493,6 +44745,13 @@ struct WhatsNewSheetModifier: ViewModifier {
 extension View {
     /// Shows `WhatsNewSheet` the first time the app runs a `version` newer than the last one it
     /// was shown for, and remembers it in `UserDefaults` when the sheet closes.
+    ///
+    /// - Parameters:
+    ///   - version: The version of the app now running, like `2.10`, compared number by
+    ///     number with the last one shown.
+    ///   - title: The heading at the top of the sheet.
+    ///   - features: The rows of the sheet, in order.
+    ///   - storageKey: The `UserDefaults` key that keeps the last version shown.
     func whatsNewSheet(version: String, title: LocalizedStringResource = "What’s New", features: [WhatsNewSheetFeature], storageKey: String = "WhatsNewSheet.seenVersion") -> some View {
         modifier(WhatsNewSheetModifier(version: version, title: title, features: features, storageKey: storageKey))
     }
@@ -44562,8 +44821,11 @@ import SwiftUI
 /// scroll view for the bar to react.
 @available(iOS 26, *)
 struct MinimizingTabBar<Selection: Hashable, Tabs: TabContent>: View where Tabs.TabValue == Selection {
+    /// The value of the selected tab. The tab bar writes it.
     @Binding var selection: Selection
+    /// When the bar shrinks: by default on scrolling down, and it returns on scrolling up.
     var behavior: TabBarMinimizeBehavior = .onScrollDown
+    /// The tabs, written as `Tab` values tagged with a selection value.
     @TabContentBuilder<Selection> var tabs: () -> Tabs
 
     var body: some View {
@@ -44712,8 +44974,11 @@ nonisolated struct NotchedTabBarShape: Shape {
 ///
 /// With Reduce Motion on, the notch moves to the new tab without sliding.
 struct NotchedTabBar: View {
+    /// The tabs, in order, each with a title and an SF Symbol.
     let items: [NotchedTabBarItem]
+    /// The `id` of the selected tab. The bar writes it when a tab is tapped.
     @Binding var selection: String
+    /// The color of the bubble behind the selected icon and of the selected title.
     var tint: Color = .indigo
 
     var body: some View {
@@ -44850,8 +45115,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the row and the underline jump to the new tab.
 struct ScrollingTabStrip: View {
+    /// The titles of the tabs, in order. Each title also identifies its tab, so keep them unique.
     let tabs: [String]
+    /// The title of the selected tab. The strip writes it when a tab is tapped, and scrolls it into the middle.
     @Binding var selection: String
+    /// The color of the underline below the selected tab.
     var tint: Color = .pink
 
     @Namespace private var namespace
@@ -44991,10 +45259,15 @@ nonisolated enum TabsPickerPagesLogic {
 /// and the keyboard are the system's. With Reduce Motion on, the pages cross-fade.
 @available(iOS 27, *)
 struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
+    /// The tabs, in order. Their order decides the side each new page slides in from.
     let options: [Option]
+    /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
+    /// The name of the picker, which VoiceOver reads.
     var title = "Section"
+    /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
+    /// Builds the page of an option, aligned to the top of the space below the tabs.
     @ViewBuilder var page: (Option) -> Page
 
     @State private var movesForward = true

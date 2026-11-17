@@ -64,8 +64,11 @@ extension View {
 
 /// A grid that packs tiles of varied spans, leaving as few holes as it can.
 struct BentoGridLayout: Layout {
+    /// The number of columns the width is split into. A tile wider than this is narrowed to fit.
     var columns = 4
+    /// The height of one row, in points. A tile spanning several rows also covers the spacing between them.
     var rowHeight: CGFloat = 110
+    /// The gap between tiles, across and down, in points.
     var spacing: CGFloat = 12
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {

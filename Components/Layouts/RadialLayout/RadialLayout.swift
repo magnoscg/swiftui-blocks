@@ -24,7 +24,9 @@ nonisolated enum RadialLayoutMath {
 /// Change the number of views inside `withAnimation` and the others glide to their new places.
 /// Leave `radius` as `nil` to fill the space it is given.
 struct RadialLayout: Layout {
+    /// The distance from the center to the center of each view, in points. `nil` fits the circle to the space offered, keeping the views inside it.
     var radius: CGFloat?
+    /// Where the first view sits. The default, -90 degrees, is the top, and the rest follow clockwise.
     var startAngle: Angle = .degrees(-90)
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {

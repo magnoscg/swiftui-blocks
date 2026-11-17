@@ -13,8 +13,11 @@ struct OnboardingPagerPage {
 /// A full-screen onboarding flow with swipeable pages, a progress indicator and a button
 /// that advances or finishes. `onFinish` runs once.
 struct OnboardingPager: View {
+    /// The pages, in order, each with a symbol, a title, a message and the colors of its background. With none, the view is empty.
     let pages: [OnboardingPagerPage]
+    /// The text of the button on the last page. The others read Continue.
     var finishTitle: LocalizedStringResource = "Get Started"
+    /// Runs once, when the button on the last page is tapped.
     var onFinish: () -> Void = {}
 
     @State private var page = 0

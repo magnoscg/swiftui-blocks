@@ -12,10 +12,15 @@ struct PagedGridLauncherItem: Identifiable {
 
 /// A launcher of icon grids that pages horizontally, each page filled row by row.
 struct PagedGridLauncher: View {
+    /// The icons, in order, filling each page row by row before the next.
     let items: [PagedGridLauncherItem]
+    /// The index of the visible page, from 0. The launcher writes it when swiped, and setting it scrolls there.
     @Binding var page: Int
+    /// How many icons fit across a page, from 1 to 12. At accessibility text sizes it drops to 2 at most.
     var columns: Int = 4
+    /// How many rows of icons fill a page, from 1 to 12.
     var rows: Int = 5
+    /// Called with an icon when it is tapped.
     var onSelect: (PagedGridLauncherItem) -> Void = { _ in }
 
     @State private var scrolledPage: Int?

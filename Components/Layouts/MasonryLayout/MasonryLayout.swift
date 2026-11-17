@@ -34,7 +34,9 @@ nonisolated enum MasonryLayoutMath {
 /// A layout that places items of different heights into the shortest of several
 /// columns, like a Pinterest board. Put it inside a `ScrollView` when it can grow.
 struct MasonryLayout: Layout {
+    /// The number of columns, kept between 1 and 64. Each item goes into the shortest one so far.
     var columns = 2
+    /// The gap between columns and between items in a column, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
 
     /// More columns than this makes no sense on any screen.

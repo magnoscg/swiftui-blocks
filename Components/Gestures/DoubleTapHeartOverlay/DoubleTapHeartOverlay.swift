@@ -7,10 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the heart appears in place and fades out.
 struct DoubleTapHeartOverlay<Content: View>: View {
+    /// Whether the photo is liked. A double tap sets it to `true`, and the accessibility action toggles it.
     @Binding var isLiked: Bool
+    /// The color of the hearts.
     var tint: Color = .pink
     /// Throws a heart without a touch, for demos. Each new value throws one more.
     var programmaticBurst: DoubleTapHeartOverlayRequest? = nil
+    /// The photo, or any view, that takes the double tap. The hearts draw over it.
     @ViewBuilder var content: () -> Content
 
     @State private var hearts: [DoubleTapHeartOverlayBurst] = []

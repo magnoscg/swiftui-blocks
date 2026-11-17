@@ -7,12 +7,19 @@ import SwiftUI
 ///
 /// Tapping a suggestion fills in the field. The suggestions narrow as the person types.
 struct SearchScopesAndSuggestions<Scope: Hashable>: ViewModifier {
+    /// The text in the search field. The field writes it, and so does tapping a suggestion.
     @Binding var text: String
+    /// Whether the search is active. The field writes it when the person starts or cancels a search.
     @Binding var isPresented: Bool
+    /// The selected scope, one of `scopes`. The scope bar writes it.
     @Binding var scope: Scope
+    /// The scopes the bar offers, in order. The bar shows while the search is active.
     let scopes: [Scope]
+    /// Returns the text of the button for a scope.
     let scopeTitle: (Scope) -> String
+    /// The texts to suggest. The field shows up to five that contain what is typed, ignoring case, and leaves out repeats and the typed text itself.
     let suggestions: [String]
+    /// The placeholder of the empty field.
     var prompt: LocalizedStringResource = "Search"
 
     func body(content: Content) -> some View {

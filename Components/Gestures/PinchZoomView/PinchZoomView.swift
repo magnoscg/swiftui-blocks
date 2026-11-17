@@ -32,9 +32,13 @@ enum PinchZoomViewMath {
 ///
 /// Double tap toggles the zoom. With Reduce Motion on, it settles without a spring.
 struct PinchZoomView<Content: View>: View {
+    /// The zoom, where 1 fits the content. The view writes it after a pinch, a double tap or a VoiceOver zoom, kept between `minScale` and `maxScale`.
     @Binding var scale: CGFloat
+    /// The smallest zoom a gesture settles at. A pinch can overshoot it a little before springing back.
     var minScale: CGFloat = 1
+    /// The largest zoom a gesture settles at. A double tap zooms to 2, or to this when it is smaller.
     var maxScale: CGFloat = 4
+    /// The view to zoom and pan. It fills the space offered and is clipped to it.
     @ViewBuilder var content: () -> Content
 
     @State private var pinch: CGFloat = 1

@@ -19,10 +19,15 @@ nonisolated enum TabsPickerPagesLogic {
 /// and the keyboard are the system's. With Reduce Motion on, the pages cross-fade.
 @available(iOS 27, *)
 struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
+    /// The tabs, in order. Their order decides the side each new page slides in from.
     let options: [Option]
+    /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
+    /// The name of the picker, which VoiceOver reads.
     var title = "Section"
+    /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
+    /// Builds the page of an option, aligned to the top of the space below the tabs.
     @ViewBuilder var page: (Option) -> Page
 
     @State private var movesForward = true

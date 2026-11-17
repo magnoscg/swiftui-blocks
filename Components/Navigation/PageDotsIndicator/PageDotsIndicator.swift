@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the capsule changes without animating.
 struct PageDotsIndicator: View {
+    /// How many pages there are, one dot each.
     let count: Int
+    /// The index of the current page, from 0. Its dot stretches into a capsule.
     let current: Int
+    /// The color of the current dot. The others take it at 25% opacity.
     var tint: Color = .primary
 
     @ScaledMetric(relativeTo: .caption) private var dotSize = 8.0

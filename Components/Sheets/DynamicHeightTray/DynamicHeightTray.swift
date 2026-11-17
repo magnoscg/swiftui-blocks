@@ -19,6 +19,12 @@ extension View {
     ///
     /// Change the content inside `withAnimation` and the tray follows it. The content is measured
     /// at the height it asks for, so give a list too long for the screen a frame of its own.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the tray is showing. The tray sets it to `false` when the
+    ///     person dismisses it.
+    ///   - content: The view inside the tray. The tray is at least 80 points tall and at
+    ///     most 90% of the height of the view it is presented from.
     func dynamicHeightTray<Tray: View>(isPresented: Binding<Bool>, @ViewBuilder content: @escaping () -> Tray) -> some View {
         modifier(DynamicHeightTrayModifier(isPresented: isPresented, tray: content))
     }

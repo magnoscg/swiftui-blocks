@@ -8,8 +8,11 @@ import SwiftUI
 /// On iPad the toolbar button collapses the view to the detail alone. On iPhone the same
 /// value decides whether the sidebar or the detail is on top of the stack.
 struct AdaptiveSidebarLayout<Sidebar: View, Detail: View>: View {
+    /// Whether the sidebar shows. The toolbar button on iPad and the back button on iPhone write it.
     @Binding var showsSidebar: Bool
+    /// The content of the sidebar column.
     @ViewBuilder let sidebar: () -> Sidebar
+    /// The content of the detail column. On iPad it gets a toolbar button that shows and hides the sidebar.
     @ViewBuilder let detail: () -> Detail
 
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

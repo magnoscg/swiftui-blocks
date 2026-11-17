@@ -8,10 +8,15 @@ import SwiftUI
 ///
 /// `content` also receives `isGrid`, so a cell can change its own design.
 struct MorphingLayoutSwitch<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one cell each.
     let data: Data
+    /// Whether the items show as a grid of `columns` columns, rather than a single-column list. A change animates.
     let isGrid: Bool
+    /// The number of columns in grid mode, kept between 1 and 64.
     var columns = 2
+    /// The gap between cells, across and down, in points.
     var spacing: CGFloat = 12
+    /// Draws the cell for an item, given whether the layout is a grid.
     @ViewBuilder let content: (Data.Element, Bool) -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -30,6 +30,18 @@ struct CustomDetentSheet<SheetContent: View>: ViewModifier {
 }
 
 extension View {
+    /// Presents a sheet that snaps between the heights you give it.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the sheet is showing. The sheet sets it to `false` when
+    ///     the person dismisses it.
+    ///   - detents: The heights the sheet can rest at. When empty, it rests at `selection` only.
+    ///   - selection: The height the sheet is at. Set it to move the sheet, and the sheet
+    ///     writes it when the person drags it to another one.
+    ///   - interactiveUpThrough: The largest detent at which the content behind stays
+    ///     usable, or `nil` to leave that to the system.
+    ///   - content: The view inside the sheet, which shows a drag indicator and corners
+    ///     of 30 points.
     func customDetentSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
         detents: Set<PresentationDetent>,

@@ -9,6 +9,12 @@ struct ReadableWidthContainer<Content: View>: View {
     @ScaledMetric private var maxWidth: CGFloat
     private let content: Content
 
+    /// Creates a container that caps the width of its content.
+    ///
+    /// - Parameters:
+    ///   - maxWidth: The widest the content gets, in points at the default text size. It
+    ///     grows with Dynamic Type. A negative value counts as zero, and an infinite one as 640.
+    ///   - content: The view to cap, aligned to the leading edge of the centered column.
     init(maxWidth: CGFloat = 640, @ViewBuilder content: () -> Content) {
         _maxWidth = ScaledMetric(wrappedValue: maxWidth.isFinite ? max(0, maxWidth) : 640, relativeTo: .body)
         self.content = content()

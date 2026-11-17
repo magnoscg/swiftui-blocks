@@ -8,8 +8,11 @@ import SwiftUI
 /// Place it inside a `NavigationStack`, because Select and Done go in the toolbar.
 /// With Reduce Motion on, the bar appears without sliding.
 struct EditModeMultiSelect<Row: Identifiable, RowContent: View, Actions: View>: View {
+    /// The items, one row each. When it changes, the selection drops IDs that are gone, and Select mode ends if it is empty.
     let rows: [Row]
+    /// The IDs of the selected rows. The list writes it, and clears it when Select mode ends.
     @Binding var selection: Set<Row.ID>
+    /// Draws the row for an item.
     @ViewBuilder var rowContent: (Row) -> RowContent
     /// The bulk actions. They are disabled while nothing is selected.
     @ViewBuilder var actions: () -> Actions

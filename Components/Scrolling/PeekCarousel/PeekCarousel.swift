@@ -8,9 +8,13 @@ import SwiftUI
 /// `peek` is how much of each neighbour stays visible. Give the cards a height.
 /// With Reduce Motion on, side cards keep their size and only dim.
 struct PeekCarousel<Item: Identifiable, Card: View>: View {
+    /// The cards, in order, with a dot each below the carousel.
     let items: [Item]
+    /// How much of each neighbouring card stays visible, in points.
     var peek: CGFloat = 28
+    /// The space between the cards, in points.
     var spacing: CGFloat = 12
+    /// Builds a card. It fills the width left by the peeks, so give it a height.
     @ViewBuilder var card: (Item) -> Card
 
     @State private var currentID: Item.ID?

@@ -31,6 +31,7 @@ nonisolated enum EmbeddedWebBrowserLogic {
 /// Create the `WebPage`, load what it should start on, and hand it over.
 @available(iOS 26, *)
 struct EmbeddedWebBrowser: View {
+    /// The page to show and control. Create it and start loading it before handing it over.
     let page: WebPage
 
     @State private var address = ""

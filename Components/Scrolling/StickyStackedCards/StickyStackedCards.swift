@@ -27,11 +27,17 @@ nonisolated enum StickyStackedCardsMath {
 /// Place it inside a vertical `ScrollView`. With Reduce Motion on, the cards still pin in
 /// place but do not shrink.
 struct StickyStackedCards<Data: RandomAccessCollection, Card: View>: View where Data.Element: Identifiable {
+    /// The cards, from the top.
     let data: Data
+    /// The space between the cards before they pile up, in points.
     var spacing: CGFloat = 20
+    /// How far below the top of the scroll view the first card pins, in points.
     var top: CGFloat = 12
+    /// How much lower each next card pins, in points, so the edges of the pile stay visible.
     var peek: CGFloat = 12
+    /// How many cards step down. The cards after them pin where the last step left off.
     var maxPeeking = 3
+    /// Builds a card. Give it an opaque background, since the next cards slide over it.
     @ViewBuilder var card: (Data.Element) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

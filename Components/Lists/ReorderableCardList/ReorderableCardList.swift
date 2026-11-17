@@ -6,7 +6,9 @@ import SwiftUI
 /// A stack of cards the user can drag into a new order, without using `List`.
 @available(iOS 27, *)
 struct ReorderableCardList<Item: Identifiable & Sendable, Card: View>: View where Item.ID: Sendable {
+    /// The items, one card each, in order. The list writes the new order when a drag ends.
     @Binding var items: [Item]
+    /// Draws the card for an item. The list stacks the cards 12 points apart in a scroll view.
     @ViewBuilder let card: (Item) -> Card
 
     var body: some View {
