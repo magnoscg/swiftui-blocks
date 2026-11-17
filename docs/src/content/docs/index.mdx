@@ -13,80 +13,64 @@ hero:
       link: /catalog/
       icon: right-arrow
     - text: How it works
-      link: /getting-started/
+      link: /introduction/
       variant: minimal
 ---
 
-import AgentPrompt from '../../components/AgentPrompt.astro';
+import { LinkButton, TabItem, Tabs } from '@astrojs/starlight/components';
 import CatalogSearch from '../../components/CatalogSearch.astro';
-import CategoryCloud from '../../components/CategoryCloud.astro';
-import FeatureGrid from '../../components/FeatureGrid.astro';
-import LandingStats from '../../components/LandingStats.astro';
 import PreviewMarquee from '../../components/PreviewMarquee.astro';
+import PromptGallery from '../../components/PromptGallery.astro';
+import { count } from '../../lib/catalog';
 
 <CatalogSearch />
 
 <PreviewMarquee />
 
-<LandingStats />
+## Give your agent the whole catalog
 
-## Copy, paste, done
+Install the skill once, then ask in plain words. Your agent searches the {count}
+components, checks the one it picks against your deployment target and adds
+one Swift file to your project.
 
-Find a component, copy its file into your project and use it. It is your
-code from then on: no package, no version to track.
-
-```swift
-PulseRingButton(systemImage: "mic.fill", label: "Record") {
-    startRecording()
-}
+```sh title="Recommended"
+npx skills add magnoscg/swiftui-blocks-skill
 ```
 
-## What every component keeps
+It works with Claude Code, Codex, Cursor, Gemini CLI and other agents that
+read skills.
 
-<FeatureGrid />
+<div class="landing-actions">
+  <LinkButton href="/install/">Get started</LinkButton>
+  <LinkButton href="/catalog/" variant="secondary">Browse the catalog</LinkButton>
+  <LinkButton href="https://github.com/magnoscg/swiftui-blocks" variant="minimal">View on GitHub</LinkButton>
+</div>
 
-## Use it with your coding agent
+## Or install it the way your agent does
 
-A coding agent, like Claude Code, Codex or Cursor, can find a component for
-you and add its file to your project. It asks before it changes anything
-else. Start where you are:
+<Tabs>
+  <TabItem label="Claude Code">
+    ```sh
+    claude plugin marketplace add magnoscg/swiftui-blocks-skill
+    claude plugin install swiftui-blocks@swiftuiblocks
+    ```
+  </TabItem>
+  <TabItem label="By hand">
+    ```sh title="Claude Code"
+    mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
+    ```
+    ```sh title="Codex, Cursor and Gemini CLI"
+    mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
+    ```
+  </TabItem>
+</Tabs>
 
-| You… | Do this |
-|---|---|
-| Already found the component | Open its page and press **Copy prompt for your agent** |
-| Want your agent to look for it | Copy the prompt below and change its first line |
-| Use the catalog often | [Install the skill](/for-ai-agents/#install-the-skill), then just ask: *add a SwiftUI like button* |
-| Do not use an agent | Open a component, press **Copy code** and paste it into a new Swift file in Xcode |
+[All installation options](/install/)
 
-<AgentPrompt />
+## Then just ask
 
-<details>
-<summary>What is a coding agent?</summary>
+Prompts that work, and the component each one finds.
 
-An assistant that reads and edits your project from a chat, such as Claude
-Code, Codex or Cursor. You do not need one: every component page has
-**Copy code** and **Download .swift**.
+<PromptGallery />
 
-</details>
-
-<details>
-<summary>Does it cost anything?</summary>
-
-No. The catalog is free and MIT licensed. Your agent works as it always does,
-and finding a component takes it a few thousand tokens at most.
-
-</details>
-
-<details>
-<summary>Where does the file go?</summary>
-
-Into your Xcode project, as a new Swift file in your app target. A component
-marked Metal brings a second file, which goes in the same target.
-
-</details>
-
-[How agents use the catalog](/for-ai-agents/)
-
-## Popular categories
-
-<CategoryCloud />
+<p class="landing-endline">No agent? Every component page has <strong>Copy code</strong> and <strong>Download .swift</strong>. <a href="/by-hand/">Add one by hand</a>.</p>
