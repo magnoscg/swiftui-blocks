@@ -19,6 +19,8 @@ on `main`.
   Drop Zone Highlight, Long Press Radial Menu, What's New Sheet and
   Completion Swipe Row are `LocalizedStringResource`, so a literal lands in
   the app's String Catalog instead of showing untranslated.
+- Split Flap Counter keeps its digits in order in a right-to-left layout,
+  where it showed 1321 as 12310.
 
 ## 0.14.0 - 2026-11-17
 

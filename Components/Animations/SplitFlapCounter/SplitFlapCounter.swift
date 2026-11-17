@@ -44,6 +44,8 @@ struct SplitFlapCounter: View {
                 SplitFlapCounterCell(text: cells[cells.count - 1 - place])
             }
         }
+        // Digits read left to right in right-to-left languages too.
+        .environment(\.layoutDirection, .leftToRight)
     }
 }
 
