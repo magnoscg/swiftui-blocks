@@ -69,11 +69,12 @@ and tags are `X.Y.Z` without a `v`.
 1. `git switch -c release/X.Y.Z develop`
 2. Give the unreleased notes in [CHANGELOG.md](CHANGELOG.md) a dated heading,
    commit it as `chore(release): X.Y.Z` and push the branch.
-3. Merge it into `main` without fast-forward, tag `main` with an annotated
-   `X.Y.Z` tag and push both. The push to `main` publishes the site.
-4. Merge `main` back into `develop`.
-5. `make publish-skill`, which sends the skill in `skills/` and the plugin
-   manifests in `skill-distribution/` to
+3. `make publish-skill` from that branch. It sends the skill in `skills/` and
+   the plugin manifests in `skill-distribution/` to
    [magnoscg/swiftui-blocks-skill](https://github.com/magnoscg/swiftui-blocks-skill),
-   the small repository agents install it from, with the version of the
-   release.
+   the small repository agents install it from, with version X.Y.Z. It comes
+   before `main`, so the site never shows a command the skill repository
+   cannot answer yet.
+4. Merge it into `main` without fast-forward, tag `main` with an annotated
+   `X.Y.Z` tag and push both. The push to `main` publishes the site.
+5. Merge `main` back into `develop`.

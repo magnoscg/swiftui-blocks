@@ -6,7 +6,8 @@ XCBEAUTIFY := $(if $(shell which xcbeautify),| xcbeautify)
 XCODEBUILD = xcodebuild -project $(PROJECT) -scheme Showcase -destination '$(DESTINATION)'
 
 # Sends the skill and its plugin manifests to magnoscg/swiftui-blocks-skill,
-# after a release. `scripts/publish-skill.sh <folder>` builds it without sending.
+# from a clean release/X.Y.Z branch. `scripts/publish-skill.sh <folder>`
+# builds it into an empty folder without sending it.
 publish-skill:
 	scripts/publish-skill.sh --publish
 
