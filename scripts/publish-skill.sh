@@ -5,7 +5,7 @@
 #
 #   scripts/publish-skill.sh <folder>   builds it into a new or empty folder
 #   scripts/publish-skill.sh --publish  sends it to magnoscg/swiftui-blocks-skill,
-#                                       from a clean release/X.Y.Z branch
+#                                       from a clean release/X.Y.Z or hotfix/X.Y.Z branch
 set -eu
 
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -19,13 +19,10 @@ fail() {
 
 [ -n "$version" ] || fail "CHANGELOG.md has no release heading like '## 1.2.3 - 2026-01-31'."
 
-# Writes the files of the distribution repository into $1, which holds nothing
-# but, when it is a clone, its .git folder and the files this writes.
+# Writes the files of the distribution repository into $1, an empty folder or
+# a fresh clone in a temporary folder.
 build() {
   out=$1
-  for file in .claude-plugin/marketplace.json .claude-plugin/plugin.json README.md LICENSE skills/swiftui-blocks/SKILL.md; do
-    rm -f "$out/$file"
-  done
   mkdir -p "$out/.claude-plugin" "$out/skills/swiftui-blocks"
   cp "$root/skill-distribution/.claude-plugin/marketplace.json" "$out/.claude-plugin/marketplace.json"
   sed "s/\"version\": \"0.0.0\"/\"version\": \"$version\"/" \
@@ -38,11 +35,14 @@ build() {
 case "${1:-}" in
   --publish)
     branch=$(git -C "$root" rev-parse --abbrev-ref HEAD)
-    [ "$branch" = "release/$version" ] ||
-      fail "publish from release/$version, the branch of the release in CHANGELOG.md, not $branch."
+    [ "$branch" = "release/$version" ] || [ "$branch" = "hotfix/$version" ] ||
+      fail "publish from release/$version or hotfix/$version, the version in CHANGELOG.md, not $branch."
     [ -z "$(git -C "$root" status --porcelain)" ] || fail "commit or stash your changes first."
     work=$(mktemp -d)
     git clone --quiet -- "$repository" "$work"
+    # The clone lives in its own temporary folder, so emptying it is safe, and a
+    # file renamed or removed here does not linger in the repository.
+    find "$work" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
     build "$work"
     cd "$work"
     git add -A
