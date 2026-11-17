@@ -160,7 +160,7 @@ describe('a valid component', () => {
     assert.match(outputs.get('llms.txt'), /^- Buttons: GlowButton$/m);
     assert.equal(
       outputs.get('components.tsv').split('\n')[1],
-      'Components/Buttons/GlowButton/GlowButton.swift\t18.0\t-\tGlow Button\tA button that glows.\tbutton, boton',
+      'Buttons/GlowButton\t18.0\t-\tGlow Button\tA button that glows.\tbutton, boton',
     );
     assert.match(outputs.get('llms-full.txt'), /```swift\n\/\/ SPDX-License-Identifier: MIT/);
     assert.match(outputs.get('README.md'), /\| \[Buttons\]\(catalog\/Buttons\.md\) \| 1 \| \[Glow Button\]\(Components\/Buttons\/GlowButton\/GlowButton\.swift\) \|/);
@@ -306,6 +306,8 @@ describe('invalid components', () => {
     ['no APIs', { apis: [] }, /"apis" must be a non-empty list/],
     ['no English keywords', { keywords: { en: [], es: ['x'] } }, /"keywords\.en"/],
     ['no Spanish keywords', { keywords: { en: ['x'] } }, /"keywords\.es"/],
+    ['a name that is not a Swift type name', { name: 'Glow-Button' }, /"name" must be one word of letters and numbers/],
+    ['a title with a tab, which would split a row of the search index', { title: 'Glow\tButton' }, /"title" must be one line/],
     ['a summary over two lines', { summary: 'A button.\nThat glows.' }, /"summary" must be one line/],
     ['a summary too long for an index', { summary: `${'a'.repeat(200)}.` }, /"summary" must be one line of 200 characters at most/],
     ['a summary with a link', { summary: 'See https://x.dev for more.' }, /"summary" cannot hold a link or backticks/],
@@ -604,7 +606,7 @@ describe('a component with a shader', () => {
     const outputs = outputsFor();
 
     assert.match(outputs.get('llms.txt'), /^- Buttons: GlowButton \(Metal\)$/m);
-    assert.match(outputs.get('components.tsv'), /GlowButton\.swift\t18\.0\tComponents\/Buttons\/GlowButton\/GlowButton\.metal\t/);
+    assert.match(outputs.get('components.tsv'), /^Buttons\/GlowButton\t18\.0\tmetal\t/m);
   });
 
   it('adds the code of its shader to the full index', () => {
@@ -1091,7 +1093,8 @@ describe('the short index for agents', () => {
     const index = shortIndex({});
 
     assert.match(index, /components\.tsv \| grep -i/);
-    assert.match(index, /curl -fsSL -o <Name>\.swift /);
+    assert.match(index, /grep -i -F -- '<word>'/);
+    assert.match(index, /curl -fsS -o '<Name>\.swift' /);
     assert.doesNotMatch(index, /catalog\.json/);
   });
 });

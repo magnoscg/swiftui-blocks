@@ -72,7 +72,8 @@ Ask your coding agent for what you need. Change the first line of this prompt:
 Add a SwiftUI component for: a like button that bursts into hearts.
 Find it in https://swiftuiblocks.dev/llms.txt, check its minimum iOS against
 my deployment target, download its file into my project with curl (and its
-.metal file if it has one), keep the license header and show me how to use it.
+.metal file if it has one) without replacing a file I have, keep the license
+header and show me how to use it.
 ```
 
 If you use the catalog often, install the [skill](skills/swiftui-blocks/SKILL.md)
@@ -83,7 +84,7 @@ page has the command for Claude Code, Codex, Cursor and Gemini CLI.
 | File | What it is for |
 |---|---|
 | [llms.txt](llms.txt) | The short index: how to add a component, and every name by category |
-| [components.tsv](components.tsv) | One line per component, for `grep`: path, minimum iOS, shader, title, summary and keywords in English and Spanish |
+| [components.tsv](components.tsv) | One line per component, for `grep`: `Category/Name`, minimum iOS, shader, title, summary and keywords in English and Spanish |
 | [catalog.json](catalog.json) | Every component as data, for tools |
 | [llms-full.txt](llms-full.txt) | Every component with its source inline. Large: an agent does not need it |
 
