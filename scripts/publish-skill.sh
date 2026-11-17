@@ -25,6 +25,7 @@ build() {
   out=$1
   mkdir -p "$out/.claude-plugin" "$out/skills/swiftui-blocks"
   cp "$root/skill-distribution/.claude-plugin/marketplace.json" "$out/.claude-plugin/marketplace.json"
+  cp "$root/skill-distribution/.claude-plugin/icon.png" "$out/.claude-plugin/icon.png"
   sed "s/\"version\": \"0.0.0\"/\"version\": \"$version\"/" \
     "$root/skill-distribution/.claude-plugin/plugin.json" > "$out/.claude-plugin/plugin.json"
   cp "$root/skill-distribution/README.md" "$out/README.md"
