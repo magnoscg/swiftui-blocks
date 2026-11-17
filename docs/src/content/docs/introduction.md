@@ -1,20 +1,19 @@
 ---
-title: How it works
-description: Find a component, copy its file and use it in your app.
+title: Introduction
+description: What SwiftUI Blocks is and how you use a component.
 ---
 
-SwiftUI Blocks is a catalog, not a package. There is nothing to
-install.
+SwiftUI Blocks is a catalog of copy-paste SwiftUI components, animations and
+transitions for iOS 18 through iOS 27. It is not a package: each component is
+one Swift file that you add to your project, and two when it draws with a
+Metal shader. From then on it is your code, with no version to track.
 
-## Use a component
+## Two ways to add a component
 
-1. Find it in the [catalog](/catalog/) or with the search box.
-2. Check its minimum iOS.
-3. Copy its code into a new Swift file in your project. A component drawn by a
-   Metal shader shows a second file: add it to the same target as
-   `<Name>.metal`.
-4. Use it. The `Demo` view and the `#Preview` at the end of the file show how,
-   and you can delete them afterwards.
+- **With your coding agent.** [Install the skill](/install/) once and ask for
+  what you need. [Prompts that work](/prompts/) has examples.
+- **By hand.** Find it in the [catalog](/catalog/) and copy its file.
+  [Add a component by hand](/by-hand/) has the steps.
 
 ## Requirements
 

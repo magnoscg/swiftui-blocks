@@ -3,6 +3,11 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://swiftuiblocks.dev',
+  // Pages that moved keep their old address working, since links to them are out there.
+  redirects: {
+    '/getting-started/': '/introduction/',
+    '/for-ai-agents/': '/install/',
+  },
   integrations: [
     starlight({
       title: 'SwiftUI Blocks',
@@ -22,8 +27,9 @@ export default defineConfig({
         PageTitle: './src/components/PageTitle.astro',
       },
       sidebar: [
-        { label: 'Start here', items: ['getting-started', 'for-ai-agents'] },
-        { label: 'Reference', items: ['rules', 'accessibility', 'contributing', 'changelog'] },
+        { label: 'Get started', items: ['introduction', 'install', 'prompts', 'by-hand'] },
+        { label: 'Reference', items: ['rules', 'accessibility', 'files-for-agents'] },
+        { label: 'Project', items: ['contributing', 'changelog'] },
         // 288 names do not fit in a sidebar: each category opens on demand.
         { label: 'Catalog', items: [{ autogenerate: { directory: 'catalog', collapsed: true } }] },
       ],

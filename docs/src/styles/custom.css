@@ -192,6 +192,31 @@ h4 {
   color: var(--sl-color-gray-2);
 }
 
+[data-has-hero] .landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+}
+
+[data-has-hero] .landing-actions .sl-link-button {
+  border-radius: 0.7rem;
+  font-weight: 600;
+}
+
+/* Inside the content, the color of links would paint the label like its fill. */
+[data-has-hero] .landing-actions .sl-link-button.primary {
+  color: var(--sl-color-black);
+}
+
+[data-has-hero] .landing-endline {
+  margin-top: 3.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  color: var(--sl-color-gray-2);
+}
+
 /* The changelog is the file of the repository, which brings its own title. */
 .changelog > h1:first-child {
   display: none;

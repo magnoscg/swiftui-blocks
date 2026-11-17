@@ -7,6 +7,25 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- The skill installs with one command, `npx skills add
+  magnoscg/swiftui-blocks-skill`, and in Claude Code as a plugin, from a small
+  repository that holds only the skill, so installing it downloads a few
+  kilobytes instead of the catalog.
+- Pages to install the skill, with prompts that work, and to add a
+  component by hand.
+
+### Changed
+
+- Below the previews, the landing page now gives the install command, the
+  Claude Code plugin and twelve prompts with the component each one finds.
+  The figures, the six cards, the table, the questions and the category chips
+  are gone.
+- The docs are ordered as Get started, Reference and Project. How it works is
+  now Introduction, and For AI agents is now Install for your agent and Files
+  for agents. The old addresses redirect.
+
 ## 0.13.0 - 2026-11-17
 
 ### Added

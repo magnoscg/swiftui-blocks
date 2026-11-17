@@ -77,9 +77,20 @@ Ask me before replacing a file or changing anything else.
 ```
 
 If you use the catalog often, install the [skill](skills/swiftui-blocks/SKILL.md)
-and just ask: *add a SwiftUI like button*. The
-[For AI agents](https://swiftuiblocks.dev/for-ai-agents/#install-the-skill)
-page has the command for Claude Code, Codex, Cursor and Gemini CLI.
+and just ask: *add a SwiftUI like button*.
+
+```sh
+npx skills add magnoscg/swiftui-blocks-skill
+```
+
+In Claude Code it is also a plugin:
+
+```sh
+claude plugin marketplace add magnoscg/swiftui-blocks-skill
+claude plugin install swiftui-blocks@swiftuiblocks
+```
+
+[Install for your agent](https://swiftuiblocks.dev/install/) has every option.
 
 | File | What it is for |
 |---|---|
