@@ -38,6 +38,8 @@ case "${1:-}" in
     [ "$branch" = "release/$version" ] || [ "$branch" = "hotfix/$version" ] ||
       fail "publish from release/$version or hotfix/$version, the version in CHANGELOG.md, not $branch."
     [ -z "$(git -C "$root" status --porcelain)" ] || fail "commit or stash your changes first."
+    [ "$(git -C "$root" rev-parse HEAD)" = "$(git -C "$root" rev-parse '@{u}' 2>/dev/null || true)" ] ||
+      fail "send $branch to GitHub first, so what you publish is what its pull request checked."
     work=$(mktemp -d)
     git clone --quiet -- "$repository" "$work"
     # The clone lives in its own temporary folder, so emptying it is safe, and a
