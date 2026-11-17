@@ -47,7 +47,7 @@ function meta(overrides = {}) {
 }
 
 function swift(name = 'GlowButton', body = '') {
-  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n#Preview { ${name}Demo() }\n`;
+  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n\n#Preview {\n    ${name}Demo()\n}\n`;
 }
 
 // A Swift file that names its shader, as a component with one must.
@@ -551,6 +551,16 @@ describe('invalid source', () => {
 
   it('rejects a missing preview', () => {
     assertRejected({ source: '// SPDX-License-Identifier: MIT\nstruct GlowButtonDemo {}\n' }, /missing #Preview/);
+  });
+
+  it('rejects code after the preview, because agents check that a download ends with it', () => {
+    assertRejected({ source: `${swift()}private extension Color {}\n` }, /must end with these three lines/);
+  });
+
+  it('rejects a preview with more than the demo, which agents would take for a cut download', () => {
+    const source = swift().replace('    GlowButtonDemo()\n', '    GlowButtonDemo()\n        .padding()\n');
+
+    assertRejected({ source }, /must end with these three lines/);
   });
 
   it('rejects a newer minimum without @available', () => {
@@ -1096,6 +1106,8 @@ describe('the short index for agents', () => {
     assert.match(index, /grep -i -F -- '<word>'/);
     assert.match(index, /curl -fsS -o '<Name>\.swift' /);
     assert.match(index, /Without a shell, read the page of its category: `[^`]+\/HEAD\/catalog\/<Category>\.md`/);
+    assert.match(index, /Without a shell, fetch the raw file as it is and write it unchanged\./);
+    assert.match(index, /Check that each file starts with `\/\/ SPDX-License-Identifier: MIT` and that the Swift file ends with the `#Preview` block that shows its demo, in its last three lines; if not, delete it and tell the user/);
     assert.doesNotMatch(index, /catalog\.json/);
   });
 });

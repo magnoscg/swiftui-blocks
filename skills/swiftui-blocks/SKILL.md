@@ -26,8 +26,9 @@ component is one Swift file, and two when it draws with a Metal shader.
 3. Compare its minimum iOS with the deployment target of the project. If the
    component needs a newer iOS, tell the user before adding it.
 4. Check that `<Category>` and `<Name>` hold only letters and digits, and
-   stop if they do not. If the project already has a `<Name>.swift`, ask the
-   user before going on. Then download the file into the project instead of
+   stop if they do not. If the project already has a `<Name>.swift`, or a
+   `<Name>.metal` when the shader column says `metal`, ask the user before
+   going on. Then download the file into the project instead of
    retyping it, keeping its license header:
 
    ```sh
@@ -37,7 +38,9 @@ component is one Swift file, and two when it draws with a Metal shader.
    When the shader column says `metal`, download `<Name>.metal`
    from the same folder too, into the same target. The component draws
    nothing without it. Check that each downloaded file starts with
-   `// SPDX-License-Identifier: MIT`; if not, delete it and tell the user.
+   `// SPDX-License-Identifier: MIT` and that the Swift file ends with the
+   `#Preview` block that shows its demo, in its last three lines; if not,
+   delete it and tell the user.
 5. Read the `///` comment of its main type and its `<Name>Demo` view, then
    use it where the user asked. Once it works, offer to remove the demo and
    its `#Preview` from the file.

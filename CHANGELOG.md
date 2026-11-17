@@ -22,6 +22,11 @@ on `main`.
 - The landing page tells people where to start, with or without an agent,
   shows a prompt they only have to change in one line and lists the eight
   largest categories instead of all 36.
+- `llms.txt` tells an agent without a shell to write the raw file unchanged
+  and check its license header, and to ask before replacing a file it
+  already has. The skill asks about an existing `.metal` file too, and every
+  entry point checks that a download has its license header and ends with
+  its `#Preview`, which `make check` now requires.
 - `make check` keeps summaries to one line of 200 characters and keywords to
   40, with no links or backticks, because they reach agents that run
   commands.
