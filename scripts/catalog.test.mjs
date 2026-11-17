@@ -47,7 +47,7 @@ function meta(overrides = {}) {
 }
 
 function swift(name = 'GlowButton', body = '') {
-  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n#Preview { ${name}Demo() }\n`;
+  return `// SPDX-License-Identifier: MIT\nimport SwiftUI\n${body}\nstruct ${name}Demo: View {}\n\n#Preview {\n    ${name}Demo()\n}\n`;
 }
 
 // A Swift file that names its shader, as a component with one must.
@@ -157,7 +157,11 @@ describe('a valid component', () => {
     assert.equal(entry.shader, undefined);
     assert.equal(entry.shaderRawURL, undefined);
     assert.match(entry.rawURL, /\/HEAD\/Components\/Buttons\/GlowButton\/GlowButton\.swift$/);
-    assert.match(outputs.get('llms.txt'), /Glow Button.*iOS 18\.0\+.*button, boton/);
+    assert.match(outputs.get('llms.txt'), /^- Buttons: GlowButton$/m);
+    assert.equal(
+      outputs.get('components.tsv').split('\n')[1],
+      'Buttons/GlowButton\t18.0\t-\tGlow Button\tA button that glows.\tbutton, boton',
+    );
     assert.match(outputs.get('llms-full.txt'), /```swift\n\/\/ SPDX-License-Identifier: MIT/);
     assert.match(outputs.get('README.md'), /\| \[Buttons\]\(catalog\/Buttons\.md\) \| 1 \| \[Glow Button\]\(Components\/Buttons\/GlowButton\/GlowButton\.swift\) \|/);
     assert.match(outputs.get('catalog/Buttons.md'), /\| \[Glow Button\]\(\.\.\/Components\/Buttons\/GlowButton\/GlowButton\.swift\)/);
@@ -302,6 +306,14 @@ describe('invalid components', () => {
     ['no APIs', { apis: [] }, /"apis" must be a non-empty list/],
     ['no English keywords', { keywords: { en: [], es: ['x'] } }, /"keywords\.en"/],
     ['no Spanish keywords', { keywords: { en: ['x'] } }, /"keywords\.es"/],
+    ['a name that is not a Swift type name', { name: 'Glow-Button' }, /"name" must be one word of letters and numbers/],
+    ['a title with a tab, which would split a row of the search index', { title: 'Glow\tButton' }, /"title" must be one line/],
+    ['a summary over two lines', { summary: 'A button.\nThat glows.' }, /"summary" must be one line/],
+    ['a summary too long for an index', { summary: `${'a'.repeat(200)}.` }, /"summary" must be one line of 200 characters at most/],
+    ['a summary with a link', { summary: 'See https://x.dev for more.' }, /"summary" cannot hold a link or backticks/],
+    ['a summary with code', { summary: 'Run `rm -rf` first.' }, /"summary" cannot hold a link or backticks/],
+    ['a keyword with a link', { keywords: { en: ['www.x.dev'], es: ['x'] } }, /"keywords\.en" cannot hold a link or backticks/],
+    ['a keyword too long', { keywords: { en: ['x'], es: ['a'.repeat(41)] } }, /"keywords\.es" must be one line of 40 characters at most/],
     ['an unknown origin', { origin: { kind: 'internet' } }, /"origin\.kind" must be one of/],
     ['inspiration without credit', { origin: { kind: 'inspired', url: 'https://x.dev' } }, /"origin\.credit"/],
     ['inspiration without a link', { origin: { kind: 'inspired', credit: 'A talk' } }, /"origin\.url"/],
@@ -541,6 +553,16 @@ describe('invalid source', () => {
     assertRejected({ source: '// SPDX-License-Identifier: MIT\nstruct GlowButtonDemo {}\n' }, /missing #Preview/);
   });
 
+  it('rejects code after the preview, because agents check that a download ends with it', () => {
+    assertRejected({ source: `${swift()}private extension Color {}\n` }, /must end with these three lines/);
+  });
+
+  it('rejects a preview with more than the demo, which agents would take for a cut download', () => {
+    const source = swift().replace('    GlowButtonDemo()\n', '    GlowButtonDemo()\n        .padding()\n');
+
+    assertRejected({ source }, /must end with these three lines/);
+  });
+
   it('rejects a newer minimum without @available', () => {
     assertRejected({ metadata: meta({ minIOS: '26.0' }) }, /no matching @available/);
   });
@@ -590,11 +612,11 @@ describe('a component with a shader', () => {
     assert.equal(entry.shaderSource, undefined);
   });
 
-  it('links its shader in the short index', () => {
-    assert.match(
-      outputsFor().get('llms.txt'),
-      /Glow Button.*Copy its shader too: \[GlowButton\.metal\]\(https:\/\/raw\.githubusercontent\.com\/[^)]+\/GlowButton\.metal\)/,
-    );
+  it('marks its shader in the short index and in the search index', () => {
+    const outputs = outputsFor();
+
+    assert.match(outputs.get('llms.txt'), /^- Buttons: GlowButton \(Metal\)$/m);
+    assert.match(outputs.get('components.tsv'), /^Buttons\/GlowButton\t18\.0\tmetal\t/m);
   });
 
   it('adds the code of its shader to the full index', () => {
@@ -1048,7 +1070,45 @@ describe('the documentation site', () => {
 
     assert.equal(assets.get('llms.txt'), 'docs/public/llms.txt');
     assert.equal(assets.get('catalog.json'), 'docs/public/catalog.json');
+    assert.equal(assets.get('components.tsv'), 'docs/public/components.tsv');
     assert.equal(assets.has('Components/Buttons/GlowButton/GlowButton.webp'), false);
+  });
+});
+
+describe('the short index for agents', () => {
+  function shortIndex(...components) {
+    const root = makeRoot();
+    for (const options of components) addComponent(root, options);
+    const loaded = loadCatalog(root);
+    assert.deepEqual(loaded.errors, []);
+    return renderOutputs(root, loaded.components).get('llms.txt');
+  }
+
+  it('marks a component that needs a newer iOS', () => {
+    const source = swift().replace('struct GlowButton', '@available(iOS 26.0, *)\nstruct GlowButton');
+
+    assert.match(shortIndex({ metadata: meta({ minIOS: '26.0' }), source }), /^- Buttons: GlowButton \(iOS 26\.0\+\)$/m);
+  });
+
+  it('lists the names of a category in one line', () => {
+    const index = shortIndex(
+      {},
+      { name: 'ShineButton', metadata: meta({ id: 'shine-button', name: 'ShineButton', title: 'Shine Button' }) },
+    );
+
+    assert.match(index, /^- Buttons: GlowButton, ShineButton$/m);
+  });
+
+  it('sends agents to the search index and to curl, never to catalog.json', () => {
+    const index = shortIndex({});
+
+    assert.match(index, /components\.tsv \| grep -i/);
+    assert.match(index, /grep -i -F -- '<word>'/);
+    assert.match(index, /curl -fsS -o '<Name>\.swift' /);
+    assert.match(index, /Without a shell, read the page of its category: `[^`]+\/HEAD\/catalog\/<Category>\.md`/);
+    assert.match(index, /Without a shell, fetch the raw file as it is and write it unchanged\./);
+    assert.match(index, /Check that each file starts with `\/\/ SPDX-License-Identifier: MIT` and that the Swift file ends with the `#Preview` block that shows its demo, in its last three lines; if not, delete it and tell the user/);
+    assert.doesNotMatch(index, /catalog\.json/);
   });
 });
 

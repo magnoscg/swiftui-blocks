@@ -7,6 +7,32 @@ on `main`.
 
 ## Unreleased
 
+## 0.13.0 - 2026-11-17
+
+### Added
+
+- A skill, `skills/swiftui-blocks/SKILL.md`, that teaches a coding agent to
+  find a component, check its minimum iOS and download its files.
+- `components.tsv`, one line per component, which an agent searches with
+  `grep`, so only the matches reach it.
+
+### Changed
+
+- `llms.txt` is now a short index: how to add a component and every name by
+  category, 8 KB instead of 130 KB. A web fetch used to cut it before the
+  last 69 components.
+- The landing page tells people where to start, with or without an agent,
+  shows a prompt they only have to change in one line and lists the eight
+  largest categories instead of all 36.
+- `llms.txt` tells an agent without a shell to write the raw file unchanged
+  and check its license header, and to ask before replacing a file it
+  already has. The skill asks about an existing `.metal` file too, and every
+  entry point checks that a download has its license header and ends with
+  its `#Preview`, which `make check` now requires.
+- `make check` keeps summaries to one line of 200 characters and keywords to
+  40, with no links or backticks, because they reach agents that run
+  commands.
+
 ## 0.12.0 - 2026-11-14
 
 ### Added
