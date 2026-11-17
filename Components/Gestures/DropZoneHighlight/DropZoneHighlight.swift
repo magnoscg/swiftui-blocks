@@ -9,9 +9,9 @@ import SwiftUI
 /// highlight changes color without growing.
 struct DropZoneHighlight<Payload: Transferable>: View {
     /// The text shown while nothing hovers over the zone.
-    var title = "Drop here"
+    var title: LocalizedStringResource = "Drop here"
     /// The text that replaces `title` while something hovers over the zone.
-    var hint = "Release to add"
+    var hint: LocalizedStringResource = "Release to add"
     /// The SF Symbol above the text.
     var systemImage = "tray.and.arrow.down"
     /// The color of the icon, the text and the dashed border, and the fill while something hovers, when the text turns white.

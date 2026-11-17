@@ -13,6 +13,15 @@ on `main`.
   property or parameter does, with its range, units and edge cases, and Quick
   Help in Xcode shows the same text.
 
+### Fixed
+
+- The texts a caller passes to Read More Text, Globe 3D Wireframe, Voice Orb,
+  Drop Zone Highlight, Long Press Radial Menu, What's New Sheet and
+  Completion Swipe Row are `LocalizedStringResource`, so a literal lands in
+  the app's String Catalog instead of showing untranslated.
+- Split Flap Counter keeps its digits in order in a right-to-left layout,
+  where it showed 1321 as 12310.
+
 ## 0.14.0 - 2026-11-17
 
 ### Added

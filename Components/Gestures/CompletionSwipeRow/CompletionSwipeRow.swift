@@ -16,7 +16,7 @@ struct CompletionSwipeRow<Content: View>: View {
     /// The rounding of the row's corners, in points.
     var cornerRadius: CGFloat = 16
     /// The name of the accessibility action that completes the row without a swipe.
-    var actionName = "Complete"
+    var actionName: LocalizedStringResource = "Complete"
     /// Runs once, after the row has collapsed. Remove the row here.
     var onComplete: () -> Void
     /// The row itself. A forward swipe of 40% of its width, or 140 points at most, completes it.
@@ -66,7 +66,7 @@ struct CompletionSwipeRow<Content: View>: View {
             .simultaneousGesture(swipe)
             .sensoryFeedback(.impact(weight: .medium), trigger: isPastThreshold) { _, isNowPast in isNowPast }
             .accessibilityElement(children: .combine)
-            .accessibilityAction(named: actionName) { complete() }
+            .accessibilityAction(named: Text(actionName)) { complete() }
     }
 
     private var swipe: some Gesture {
