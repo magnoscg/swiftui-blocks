@@ -43911,6 +43911,9 @@ struct ScrollProgressBar: ViewModifier {
 extension View {
     /// Pins a bar to the top of this scroll view that fills as the content is scrolled to its end.
     ///
+    /// Apply it to the `ScrollView`. The bar follows the scroll position directly, so it has
+    /// no animation of its own.
+    ///
     /// - Parameters:
     ///   - tint: The fill of the progressed part of the bar.
     ///   - height: The thickness of the bar, in points.
@@ -44604,6 +44607,9 @@ struct CustomDetentSheet<SheetContent: View>: ViewModifier {
 
 extension View {
     /// Presents a sheet that snaps between the heights you give it.
+    ///
+    /// Set `interactiveUpThrough` to keep the content behind usable up to that height. The
+    /// system sheet animation already honours Reduce Motion.
     ///
     /// - Parameters:
     ///   - isPresented: Whether the sheet is showing. The sheet sets it to `false` when
@@ -47566,6 +47572,9 @@ private struct CollapsingBottomBarSlot: View {
 extension View {
     /// Adds a bottom bar that shrinks to a pill while this scroll view scrolls down.
     ///
+    /// Apply it to a `ScrollView`. It expands again when scrolling up. With Reduce Motion
+    /// on, the bar changes size at once.
+    ///
     /// - Parameters:
     ///   - items: The actions of the bar, from leading to trailing. Their titles show
     ///     under the icons only while the bar is expanded.
@@ -48140,7 +48149,12 @@ struct CrossFadeNavigation<SheetContent: View>: ViewModifier {
 
 @available(iOS 27, *)
 extension View {
-    /// Presents a sheet that fades in over this view instead of sliding up.
+    /// Presents a sheet that fades in over this view with the iOS 27 `.crossFade` transition,
+    /// instead of sliding up.
+    ///
+    /// Apple documents `.crossFade` for sheets. Keep `navigationTransition` on the root of the
+    /// sheet's content, outside any container such as `VStack`. A cross-fade has no movement,
+    /// so Reduce Motion needs nothing different.
     ///
     /// - Parameters:
     ///   - isPresented: Whether the sheet shows. The sheet sets it to false when

@@ -115,6 +115,9 @@ private struct CollapsingBottomBarSlot: View {
 extension View {
     /// Adds a bottom bar that shrinks to a pill while this scroll view scrolls down.
     ///
+    /// Apply it to a `ScrollView`. It expands again when scrolling up. With Reduce Motion
+    /// on, the bar changes size at once.
+    ///
     /// - Parameters:
     ///   - items: The actions of the bar, from leading to trailing. Their titles show
     ///     under the icons only while the bar is expanded.

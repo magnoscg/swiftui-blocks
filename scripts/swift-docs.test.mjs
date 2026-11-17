@@ -193,6 +193,27 @@ describe('the API of a component', () => {
     );
   });
 
+  it('passes attributes with nested parentheses, strings or a trailing comment', () => {
+    const docs = componentDocs(
+      file(
+        [
+          '/// A button that glows.',
+          '@available(*, deprecated, message: "use glow(level:) (soon)")',
+          '@MainActor // the views it builds are main-actor isolated',
+          'struct GlowButton: View {',
+          '    /// How bright it glows.',
+          '    @Guide(description: "a level (0 to 1)")',
+          '    var level = 0.5',
+          '}',
+        ].join('\n'),
+      ),
+      'GlowButton',
+    );
+
+    assert.deepEqual(docs.overview, [{ type: 'paragraph', text: 'A button that glows.' }]);
+    assert.equal(docs.api[0].rows[0].description, 'How bright it glows.');
+  });
+
   it('takes a type from an initializer and leaves one it cannot tell empty', () => {
     const docs = componentDocs(
       file('struct GlowButton: View {\n    var size = CGSize(width: 1, height: 2)\n    var rules = GlowButtonRule.defaults\n}\n'),

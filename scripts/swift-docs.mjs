@@ -8,7 +8,7 @@ const ASIDES = { Important: 'caution', Note: 'note', Tip: 'tip', Warning: 'dange
 const PARAMETER_CALLOUTS = /^- (?:Parameters?|Returns|Throws)\b/;
 // Wrappers whose value the view owns, so no caller sets it.
 const INITIALIZER = /^ {4}(?:(?:private|fileprivate|nonisolated|convenience|@\w+)\s+)*init[?!]?\s*[(<]/;
-const ATTRIBUTE_LINE = /^\s*(?:@[\w.]+(?:\([^)]*\))?\s*)+$/;
+const DECLARATION = /\b(?:var|let|func|init|subscript|struct|class|enum|actor|extension|protocol|typealias|case)\b/;
 const OWNED_WRAPPERS = /@(?:State|Environment|GestureState|ScaledMetric|Namespace|FocusState|AppStorage|SceneStorage)\b/;
 
 export function componentDocs(source, name) {
@@ -47,12 +47,18 @@ export function componentDocs(source, name) {
 // is a declaration of its own, not an attribute, and its comment is not lent.
 function docAbove(lines, index) {
   let line = index - 1;
-  while (line >= 0 && ATTRIBUTE_LINE.test(lines[line])) line -= 1;
+  while (line >= 0 && isAttributeLine(lines[line])) line -= 1;
   const doc = [];
   for (; line >= 0 && lines[line].trim().startsWith('///'); line -= 1) {
     doc.unshift(lines[line].trim().replace(/^\/\/\/ ?/, ''));
   }
   return doc;
+}
+
+// A line of attributes alone, past its strings and a trailing comment.
+function isAttributeLine(line) {
+  const code = line.replace(/"(?:[^"\\]|\\.)*"/g, '""').replace(/\/\/.*$/, '').trim();
+  return code.startsWith('@') && !DECLARATION.test(code);
 }
 
 function overviewOf(doc) {

@@ -32,6 +32,9 @@ struct CustomDetentSheet<SheetContent: View>: ViewModifier {
 extension View {
     /// Presents a sheet that snaps between the heights you give it.
     ///
+    /// Set `interactiveUpThrough` to keep the content behind usable up to that height. The
+    /// system sheet animation already honours Reduce Motion.
+    ///
     /// - Parameters:
     ///   - isPresented: Whether the sheet is showing. The sheet sets it to `false` when
     ///     the person dismisses it.
