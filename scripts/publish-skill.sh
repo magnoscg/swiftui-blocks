@@ -28,6 +28,9 @@ build() {
   cp "$root/skill-distribution/.claude-plugin/icon.png" "$out/.claude-plugin/icon.png"
   sed "s/\"version\": \"0.0.0\"/\"version\": \"$version\"/" \
     "$root/skill-distribution/.claude-plugin/plugin.json" > "$out/.claude-plugin/plugin.json"
+  # Gemini CLI needs its own manifest; Codex and Copilot CLI read the Claude Code ones.
+  sed "s/\"version\": \"0.0.0\"/\"version\": \"$version\"/" \
+    "$root/skill-distribution/gemini-extension.json" > "$out/gemini-extension.json"
   cp "$root/skill-distribution/README.md" "$out/README.md"
   cp "$root/LICENSE" "$out/LICENSE"
   cp "$root/skills/swiftui-blocks/SKILL.md" "$out/skills/swiftui-blocks/SKILL.md"

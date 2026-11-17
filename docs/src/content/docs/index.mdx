@@ -37,8 +37,8 @@ one Swift file to your project.
 npx skills add magnoscg/swiftui-blocks-skill
 ```
 
-It works with Claude Code, Codex, Cursor, Gemini CLI and other agents that
-read skills.
+It works with Claude Code, Codex, Copilot CLI, Cursor, Gemini CLI and other
+agents that read skills.
 
 <div class="landing-actions">
   <LinkButton href="/install/">Get started</LinkButton>
@@ -48,18 +48,35 @@ read skills.
 
 ## Or install it the way your agent does
 
-<Tabs>
+<Tabs syncKey="agent">
   <TabItem label="Claude Code">
     ```sh
     claude plugin marketplace add magnoscg/swiftui-blocks-skill
     claude plugin install swiftui-blocks@swiftuiblocks
     ```
   </TabItem>
+  <TabItem label="Codex">
+    ```sh
+    codex plugin marketplace add magnoscg/swiftui-blocks-skill
+    codex plugin add swiftui-blocks@swiftuiblocks
+    ```
+  </TabItem>
+  <TabItem label="Copilot CLI">
+    ```sh
+    copilot plugin marketplace add magnoscg/swiftui-blocks-skill
+    copilot plugin install swiftui-blocks@swiftuiblocks
+    ```
+  </TabItem>
+  <TabItem label="Gemini CLI">
+    ```sh
+    gemini extensions install https://github.com/magnoscg/swiftui-blocks-skill
+    ```
+  </TabItem>
   <TabItem label="By hand">
     ```sh title="Claude Code"
     mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
     ```
-    ```sh title="Codex, Cursor and Gemini CLI"
+    ```sh title="Codex, Copilot CLI, Cursor and Gemini CLI"
     mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
     ```
   </TabItem>

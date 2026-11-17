@@ -7,6 +7,13 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- The skill installs with the plugin commands of Codex and Copilot CLI, and as
+  a Gemini CLI extension, from the same repository as the Claude Code plugin,
+  so each agent can also update it on its own.
+- The Claude Code plugin has an icon.
+
 ## 0.14.0 - 2026-11-17
 
 ### Added
