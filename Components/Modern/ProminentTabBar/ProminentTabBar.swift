@@ -15,9 +15,13 @@ struct ProminentTabBarItem<Value: Hashable>: Identifiable {
 /// A tab view whose main action gets the system's prominent tab treatment.
 @available(iOS 27, *)
 struct ProminentTabBar<Value: Hashable, Content: View>: View {
+    /// The ordinary tabs, in order.
     let tabs: [ProminentTabBarItem<Value>]
+    /// The main action, drawn last with the system's prominent tab role.
     let prominent: ProminentTabBarItem<Value>
+    /// The value of the tab on screen. The tab bar writes it when a tab is chosen.
     @Binding var selection: Value
+    /// The screen of each tab, for its value.
     @ViewBuilder let content: (Value) -> Content
 
     var body: some View {

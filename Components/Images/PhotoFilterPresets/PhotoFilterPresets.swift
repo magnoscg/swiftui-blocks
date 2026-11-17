@@ -39,8 +39,11 @@ extension View {
 /// The row scrolls sideways and its tiles grow with Dynamic Type. With Reduce Motion on, a new
 /// look appears without a crossfade.
 struct PhotoFilterPresets: View {
+    /// The photo shown large with the chosen look, and small in every tile.
     let image: Image
+    /// The chosen look. The component writes it when a tile is tapped. Apply it elsewhere with `filtered(by:)`.
     @Binding var selection: PhotoFilterPreset
+    /// The looks offered in the row, in order. Each tile shows the photo with its look and its name.
     var presets = PhotoFilterPreset.all
 
     @ScaledMetric(relativeTo: .caption) private var tileSize = 72.0

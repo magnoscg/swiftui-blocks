@@ -8,8 +8,11 @@ import SwiftUI
 /// Remove the view from `onDismiss`. With Reduce Motion on, the page does not scale and
 /// leaves at once. VoiceOver users dismiss it with the escape gesture.
 struct DragToDismissScreen<Content: View>: View {
+    /// How far down, in points, a drag must go to dismiss. A quick flick heading twice as far also dismisses.
     var threshold: CGFloat = 140
+    /// Runs once the page has left the screen. Remove the view here.
     let onDismiss: () -> Void
+    /// The page that follows the drag.
     @ViewBuilder let content: () -> Content
 
     @GestureState private var liveOffset: CGFloat = 0

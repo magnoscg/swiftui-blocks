@@ -265,13 +265,14 @@ rest are on you.
 
     Do not present or dismiss a search or a sheet from that task when the
     person can also do it: record those with `previewSteps` instead.
-15. **Document what a caller uses.** What a caller reaches first has a `///`
+15. **Document what a caller uses.** ✓ What a caller reaches first has a `///`
     comment in the style of Swift's
     [API Design Guidelines](https://www.swift.org/documentation/api-design-guidelines/#write-doc-comment):
     the main type, or the function in `extension View` when the component is
     applied as a modifier, and every property or parameter a caller sets.
     Xcode shows it in Quick Help, and the site builds the page of the
-    component from it.
+    component from it. `make check` fails on a row of the API reference, a
+    property or a parameter, left without one.
     - Start with a summary: one sentence fragment that ends with a period. A
       type or a property says what it is, a function what it does or
       returns, an initializer what it creates:

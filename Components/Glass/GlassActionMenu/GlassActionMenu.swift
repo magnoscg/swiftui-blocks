@@ -21,6 +21,7 @@ struct GlassActionMenu: View {
         case item(String)
     }
 
+    /// The actions that morph out above the button, from top to bottom. A tap on one closes the menu and runs it.
     let items: [GlassActionItem]
 
     @State private var isExpanded = false

@@ -8,6 +8,7 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view fades instead.
 struct CircleRevealTransition: Transition {
+    /// Where the circle grows from, as a fraction of the view. It grows until it covers the farthest corner.
     var origin: UnitPoint = .center
 
     func body(content: Content, phase: TransitionPhase) -> some View {

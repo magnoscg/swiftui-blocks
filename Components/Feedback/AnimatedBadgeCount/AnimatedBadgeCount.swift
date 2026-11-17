@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// It hides at zero. With Reduce Motion on, the number changes without moving.
 struct AnimatedBadgeCount: View {
+    /// The number to show. At zero or below, the badge hides.
     var count: Int
+    /// The highest number the badge shows. Past it, the badge reads the limit and a plus, like `99+`.
     var maximum = 99
+    /// The fill of the capsule. Its number takes white or black from it.
     var tint: Color = .red
+    /// The word VoiceOver reads after the number, like "3 new".
     var unit = "new"
 
     @ScaledMetric(relativeTo: .caption) private var height = 22.0

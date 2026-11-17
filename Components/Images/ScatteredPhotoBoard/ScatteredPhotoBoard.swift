@@ -73,7 +73,9 @@ struct ScatteredPhotoBoard: View {
         let translation: CGSize
     }
 
+    /// The photos, scattered on a jittered grid that keeps each one in the same place for the same index.
     let photos: [ScatteredPhotoBoardPhoto]
+    /// The width of each card in points. Its height is 1.2 times the width.
     var cardWidth: CGFloat = 150
 
     @State private var offsets: [String: CGSize] = [:]

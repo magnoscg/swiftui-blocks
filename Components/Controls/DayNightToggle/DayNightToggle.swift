@@ -8,7 +8,9 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it changes without sliding.
 struct DayNightToggle: View {
+    /// Whether the switch shows the moon and the night sky. The switch writes it on each tap.
     @Binding var isNight: Bool
+    /// The name VoiceOver reads for the switch. It is not drawn.
     var title: LocalizedStringResource = "Night mode"
 
     var body: some View {

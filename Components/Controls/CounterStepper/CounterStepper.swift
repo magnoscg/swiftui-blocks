@@ -22,10 +22,15 @@ enum CounterStepperValue {
 ///
 /// With Reduce Motion on, the number changes without rolling.
 struct CounterStepper: View {
+    /// The number shown. The stepper writes it on each tap.
     @Binding var value: Int
+    /// The values allowed. A button turns gray and disabled when it cannot step further.
     var range: ClosedRange<Int> = 0...99
+    /// How much each tap adds or takes away. A step past an end stops at that end.
     var step: Int = 1
+    /// The name VoiceOver reads for the number.
     var title: LocalizedStringResource = "Value"
+    /// The fill of the enabled buttons, under a white symbol.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .title) private var buttonSize = 56.0

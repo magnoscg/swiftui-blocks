@@ -18,14 +18,23 @@ struct PermissionPrimerScreenBenefit: Identifiable {
 /// to be the system's question, as Apple asks before the tracking prompt. With Reduce Motion
 /// on, the rings stand still and the benefits appear together.
 struct PermissionPrimerScreen: View {
+    /// The SF Symbol in the circle at the top, which takes white or black from `tint`.
     let systemImage: String
+    /// The heading, which names the permission.
     let title: LocalizedStringResource
+    /// The text under the heading, which says what the permission is for.
     let message: LocalizedStringResource
+    /// The rows of what the person gets, each with an icon, a title and a line of text. They appear one after another.
     let benefits: [PermissionPrimerScreenBenefit]
+    /// The text of the main button, at the bottom.
     var continueTitle: LocalizedStringResource = "Continue"
+    /// The text of the secondary button below it. `nil` hides it.
     var skipTitle: LocalizedStringResource? = "Not Now"
+    /// The color of the circle, its rings, the benefit icons and the main button.
     var tint: Color = .blue
+    /// Runs when the main button is tapped. Ask the system for the permission here.
     let onContinue: () -> Void
+    /// Runs when the secondary button is tapped.
     var onSkip: () -> Void = {}
 
     @State private var hasAppeared = false

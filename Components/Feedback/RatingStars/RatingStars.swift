@@ -20,8 +20,11 @@ enum RatingStarsValue {
 ///
 /// VoiceOver treats the row as one adjustable value. With Reduce Motion on, the stars only change color.
 struct RatingStars: View {
+    /// The number of filled stars, from 0 to `maximum`. The component writes it on a tap, and a tap on the chosen star sets it to 0.
     @Binding var rating: Int
+    /// How many stars the row draws.
     var maximum: Int = 5
+    /// The fill of the chosen stars, drawn as a gradient. The rest are drawn in the quaternary style.
     var color: Color = .orange
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

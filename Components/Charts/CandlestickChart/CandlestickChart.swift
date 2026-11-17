@@ -52,9 +52,14 @@ nonisolated enum CandlestickChartMath {
 /// of a day at a time. With Differentiate Without Color on, the days
 /// that fell are drawn lighter, so the two kinds do not depend on the color alone.
 struct CandlestickChart: View {
+    /// The days to draw, one candle each.
     let candles: [CandlestickChartCandle]
+    /// The candle of the day being read, or nil. The chart writes the day nearest the finger, and
+    /// clears it when the drag ends.
     @Binding var selection: CandlestickChartCandle?
+    /// The color of a day that closed at or above its open.
     var risingColor = Color.green
+    /// The color of a day that closed below its open.
     var fallingColor = Color.red
 
     @State private var selectedDate: Date?

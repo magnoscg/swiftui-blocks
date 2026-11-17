@@ -33,6 +33,10 @@ struct ShakeErrorModifier<Trigger: Equatable & Sendable>: ViewModifier {
 
 extension View {
     /// Shakes the view each time `trigger` changes.
+    ///
+    /// - Parameters:
+    ///   - trigger: A value that starts a shake and an error haptic each time it changes, like a count of failed attempts.
+    ///   - distance: How far in points the view swings to each side on the first beat. The later beats swing less.
     func shakeError(trigger: some Equatable & Sendable, distance: CGFloat = 10) -> some View {
         modifier(ShakeErrorModifier(trigger: trigger, distance: distance))
     }

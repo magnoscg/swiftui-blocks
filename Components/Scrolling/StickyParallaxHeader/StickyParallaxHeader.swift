@@ -15,10 +15,15 @@ enum StickyParallaxHeaderMath {
 /// `title` receives how collapsed the header is, from 0 to 1.
 /// With Reduce Motion on, the backdrop does not drift.
 struct StickyParallaxHeader<Backdrop: View, Title: View, Content: View>: View {
+    /// The height of the header at rest, in points, below the top safe area.
     var expandedHeight: CGFloat = 260
+    /// The height of the pinned bar the header collapses into, in points, below the top safe area.
     var collapsedHeight: CGFloat = 60
+    /// The image or color behind the header. It stretches on overscroll and is hidden from VoiceOver.
     @ViewBuilder var backdrop: () -> Backdrop
+    /// Builds the title in the bottom leading corner of the header, given how collapsed it is, from 0 expanded to 1 pinned.
     @ViewBuilder var title: (_ collapse: CGFloat) -> Title
+    /// The content that scrolls below the header.
     @ViewBuilder var content: () -> Content
 
     @State private var offset: CGFloat = 0

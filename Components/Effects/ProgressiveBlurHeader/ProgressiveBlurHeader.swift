@@ -34,6 +34,11 @@ extension View {
     /// scroll view itself, comes out empty.
     ///
     /// With Reduce Transparency on, the content is left sharp.
+    ///
+    /// - Parameters:
+    ///   - height: How far down from the top edge of the scroll view the blur fades
+    ///     to nothing, in points.
+    ///   - radius: The strength of the blur right at the top edge, in points.
     func progressiveBlurHeader(height: CGFloat = 130, radius: CGFloat = 14) -> some View {
         modifier(ProgressiveBlurHeaderModifier(height: height, radius: radius))
     }

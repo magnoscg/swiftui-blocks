@@ -18,10 +18,15 @@ private struct BlurUpImageFocus: Transition {
 /// It fills the space it is given. With Reduce Motion on, the full image fades in without the
 /// focus pull. Use `BlurUpImageRemote` to load the full image from a URL.
 struct BlurUpImage: View {
+    /// A small or low-quality version of the image, shown blurred until `image` arrives.
     let preview: Image
+    /// The full image, or `nil` while it loads. Setting it brings it into focus over the preview.
     let image: Image?
+    /// What VoiceOver reads for the image.
     let label: LocalizedStringResource
+    /// How blurred the preview is, in points. The full image starts from the same blur.
     var blurRadius: CGFloat = 24
+    /// Whether to show a spinner over the preview while `image` is `nil`. Set it to `false` when loading fails.
     var isLoading = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

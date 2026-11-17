@@ -59,9 +59,13 @@ nonisolated struct HamburgerMenuButtonShape: Shape {
 ///
 /// With Reduce Motion on, the icon changes without morphing.
 struct HamburgerMenuButton: View {
+    /// Whether the icon shows the cross. The button flips it on each tap.
     @Binding var isOpen: Bool
+    /// The stroke of the bars and of the cross.
     var color: Color = .primary
+    /// The name VoiceOver reads while `isOpen` is false.
     var openLabel = "Open menu"
+    /// The name VoiceOver reads while `isOpen` is true.
     var closeLabel = "Close menu"
 
     @ScaledMetric(relativeTo: .title2) private var size = 24.0

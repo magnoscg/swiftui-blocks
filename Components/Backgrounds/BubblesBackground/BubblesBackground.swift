@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bubbles hold still.
 struct BubblesBackground: View {
+    /// The tint of the bubbles' fill, rim and shine.
     var color: Color = .white
+    /// How many bubbles are drawn.
     var count: Int = 36
+    /// How fast the bubbles rise and sway, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -7,15 +7,21 @@ import SwiftUI
 ///
 /// Pass any view as the artwork, usually `Image("cover").resizable().scaledToFill()`.
 struct AudioPlayerCard<Artwork: View>: View {
+    /// The episode or track name, in the headline style.
     let title: String
+    /// The line under the title, like the show or the artist.
     let subtitle: String
+    /// The length of the audio in seconds. At zero, the slider and the skip buttons are disabled.
     let duration: TimeInterval
+    /// The playback position in seconds. The component writes it while scrubbing and on each skip, kept between 0 and `duration`.
     @Binding var currentTime: TimeInterval
+    /// Whether the audio plays. The component toggles it from the play button.
     @Binding var isPlaying: Bool
     /// Seconds per skip. Matching SF Symbols exist for 5, 10, 15, 30, 45, 60, 75 and 90.
     var skipInterval = 15
     /// Called with `true` when a scrub starts and `false` when it ends.
     var onScrubbingChanged: (Bool) -> Void = { _ in }
+    /// The cover, drawn in a rounded square that grows with Dynamic Type.
     @ViewBuilder var artwork: () -> Artwork
 
     @ScaledMetric(relativeTo: .title) private var artworkSize = 84.0

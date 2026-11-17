@@ -29,8 +29,11 @@ enum Surface3DChartPreset: String, CaseIterable, Identifiable {
 /// With Reduce Motion on, the presets jump to their angle.
 @available(iOS 26, *)
 struct Surface3DChart: View {
+    /// The span of both horizontal axes, x and z. An empty range falls back to `-1...1`.
     var domain: ClosedRange<Double> = -3...3
+    /// The colors of the surface, from its lowest point to its highest.
     var gradient = Gradient(colors: [.indigo, .purple, .pink, .orange])
+    /// The height of the surface for an x and a z. A result that is not finite is drawn at zero.
     let function: @Sendable (Double, Double) -> Double
 
     @State private var pose = Surface3DChartPreset.angled.pose

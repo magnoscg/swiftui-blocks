@@ -8,8 +8,11 @@ import SwiftUI
 ///
 /// `thumbnail` draws each photo. `MultiPhotoPickerTrayThumbnail` loads one from the library.
 struct MultiPhotoPickerTray<Thumbnail: View>: View {
+    /// The photos picked, in the order chosen. The tray writes it from the picker and when a thumbnail is removed.
     @Binding var selection: [PhotosPickerItem]
+    /// The most photos the picker lets the person choose. Less than 1 counts as 1.
     var maxCount: Int = 5
+    /// Draws a photo in the tray, cropped to a rounded square. `MultiPhotoPickerTrayThumbnail` loads it from the library.
     @ViewBuilder var thumbnail: (PhotosPickerItem) -> Thumbnail
 
     @ScaledMetric(relativeTo: .body) private var tileSize: CGFloat = 92

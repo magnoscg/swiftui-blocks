@@ -8,8 +8,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the field appears without animating.
 struct ExpandingSearchButton: View {
+    /// The text in the field. The button writes it as the person types and empties it on close.
     @Binding var text: String
+    /// The placeholder shown while the field is empty.
     var prompt: LocalizedStringResource = "Search"
+    /// Runs when the person presses Search on the keyboard.
     var onSubmit: () -> Void = {}
 
     @State private var isExpanded = false

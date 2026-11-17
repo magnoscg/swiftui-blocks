@@ -20,9 +20,13 @@ enum PullProgressRefreshMath {
 ///
 /// With Reduce Motion on, the content moves into place without a spring.
 struct PullProgressRefresh<Content: View>: View {
+    /// How far, in points, the content must be pulled for the ring to fill and a release to refresh.
     var threshold: CGFloat = 90
+    /// The color of the ring, its arrow and the spinner.
     var tint: Color = .accentColor
+    /// The work to run on a refresh. The spinner shows until it returns.
     let action: @MainActor () async -> Void
+    /// The content of the scroll view.
     @ViewBuilder var content: () -> Content
 
     @State private var pull: CGFloat = 0

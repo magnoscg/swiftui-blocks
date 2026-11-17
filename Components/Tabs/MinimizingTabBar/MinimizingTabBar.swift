@@ -9,8 +9,11 @@ import SwiftUI
 /// scroll view for the bar to react.
 @available(iOS 26, *)
 struct MinimizingTabBar<Selection: Hashable, Tabs: TabContent>: View where Tabs.TabValue == Selection {
+    /// The value of the selected tab. The tab bar writes it.
     @Binding var selection: Selection
+    /// When the bar shrinks: by default on scrolling down, and it returns on scrolling up.
     var behavior: TabBarMinimizeBehavior = .onScrollDown
+    /// The tabs, written as `Tab` values tagged with a selection value.
     @TabContentBuilder<Selection> var tabs: () -> Tabs
 
     var body: some View {

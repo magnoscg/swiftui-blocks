@@ -17,7 +17,9 @@ struct NetflixRowsScrollerRow: Identifiable {
 
 /// A vertical stack of titled horizontal rows where each row scrolls on its own.
 struct NetflixRowsScroller: View {
+    /// The rows, from the top, each with a title and its posters. Three posters fit across the width.
     let rows: [NetflixRowsScrollerRow]
+    /// Called with a title when its poster is tapped.
     var onSelect: (NetflixRowsScrollerTitle) -> Void = { _ in }
 
     private let posterSpacing: CGFloat = 10

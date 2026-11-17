@@ -8,10 +8,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the symbols fade.
 struct SymbolMorphToggle: View {
+    /// The text under the symbol, also what VoiceOver reads for the toggle.
     let title: LocalizedStringResource
+    /// The SF Symbol shown while the toggle is on.
     let onSymbol: String
+    /// The SF Symbol shown while the toggle is off. A symbol related to `onSymbol` morphs into it.
     let offSymbol: String
+    /// Whether the toggle is on. A tap flips it.
     @Binding var isOn: Bool
+    /// The color of the symbol while the toggle is on. Off, it is gray.
     var tint: Color = .blue
 
     @ScaledMetric(relativeTo: .largeTitle) private var symbolSize = 44.0

@@ -8,8 +8,11 @@ import SwiftUI
 /// `currentStep` starts at 0. Passing `steps.count` marks every step as done.
 /// With Reduce Motion on, the steps change without animating.
 struct StepProgressIndicator: View {
+    /// The names of the steps, shown under their numbered markers from leading to trailing.
     let steps: [String]
+    /// The index of the step in progress, from 0. Earlier steps show a checkmark, and values out of range are clamped.
     var currentStep: Int
+    /// The fill of the done and current markers and of the line between them.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .subheadline) private var markerSize = 36

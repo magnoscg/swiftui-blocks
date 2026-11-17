@@ -54,14 +54,19 @@ nonisolated enum RangeSliderMath {
 /// to it. Set the color with `tint`. VoiceOver reads each thumb as an adjustable value, described
 /// by `valueText`, and the slider follows the layout direction.
 struct RangeSlider: View {
+    /// The range picked, inside `bounds`. The slider writes it as a thumb moves.
     @Binding var range: ClosedRange<Double>
+    /// The values at the two ends of the track.
     var bounds: ClosedRange<Double> = 0...1
     /// The thumbs stop at multiples of it. Zero lets them stop anywhere.
     var step = 0.0
     /// The shortest distance the thumbs keep between them.
     var minimumSpan = 0.0
+    /// The name VoiceOver reads for the lower thumb.
     var lowerLabel = "Minimum"
+    /// The name VoiceOver reads for the upper thumb.
     var upperLabel = "Maximum"
+    /// Turns a thumb's value into the text VoiceOver reads, like a price.
     var valueText: (Double) -> String = { $0.formatted() }
 
     private let thumbSize: CGFloat = 28

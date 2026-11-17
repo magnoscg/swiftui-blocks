@@ -14,8 +14,11 @@ struct FullScreenMenuOverlayLink: Identifiable {
 ///
 /// With Reduce Motion on, the menu and its links appear at once.
 struct FullScreenMenuOverlay: View {
+    /// Whether the menu shows. The close button, the escape gesture and every link set it to `false`.
     @Binding var isPresented: Bool
+    /// The rows of the menu, from the top. Tapping one closes the menu and runs its action.
     let links: [FullScreenMenuOverlayLink]
+    /// The colors of the background gradient, from the top leading corner to the bottom trailing one. The links are drawn in white over it.
     var colors: [Color] = [.indigo, .purple, .pink]
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

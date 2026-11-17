@@ -10,8 +10,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the knob slides without bouncing and the symbols crossfade.
 struct IconSwitchToggleStyle: ToggleStyle {
+    /// The SF Symbol on the knob when the toggle is on.
     var onSymbol = "checkmark"
+    /// The SF Symbol on the knob when the toggle is off.
     var offSymbol = "xmark"
+    /// The track when on, and the symbol on the knob. Off, the track is gray.
     var color: Color = .green
 
     func makeBody(configuration: Configuration) -> some View {

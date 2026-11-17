@@ -5,9 +5,13 @@ import SwiftUI
 
 /// A sheet of bubbles that pop with a quick shrink and stay flat until `popped` is cleared.
 struct BubbleWrapPop: View {
+    /// The indices of the popped bubbles, counted from 0. The sheet adds to it on every pop; empty it to refill the sheet.
     @Binding var popped: Set<Int>
+    /// How many bubbles fit in a row, from 1 to 16.
     var columns: Int = 6
+    /// How many bubbles the sheet holds, up to 600.
     var count: Int = 48
+    /// The color of the bubbles and their shadow.
     var tint: Color = .cyan
 
     var body: some View {

@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the fill changes without animating.
 struct GradientProgressBar: View {
+    /// How full the bar is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The gradient of the fill, from leading to trailing. The last color tints the glow.
     var colors: [Color] = [.cyan, .blue, .purple]
+    /// The thickness of the bar, in points, which is also the shortest fill shown above zero.
     var height: CGFloat = 12
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -521,6 +521,27 @@ describe('invalid source', () => {
     assert.deepEqual(errorsFor({ source }), []);
   });
 
+  it('rejects a property a caller sets without a description for its API reference', () => {
+    const source = swift('GlowButton', 'struct GlowButton: View {\n    /// The text it shows.\n    let title: String\n    var tint: Color = .red\n}\n');
+
+    assertRejected({ source }, /the API reference has no description for "tint": add a \/\/\/ comment above it/);
+  });
+
+  it('rejects a parameter of an initializer missing from its - Parameters: list', () => {
+    const source = swift(
+      'GlowButton',
+      'struct GlowButton: View {\n    /// Creates a button.\n    ///\n    /// - Parameters:\n    ///   - title: The text it shows.\n    init(title: String, tint: Color) {}\n}\n',
+    );
+
+    assertRejected({ source }, /the API reference has no description for "tint" in init\(title:tint:\): add it to the - Parameters: of its comment/);
+  });
+
+  it('accepts a component whose API reference describes every row', () => {
+    const source = swift('GlowButton', 'struct GlowButton: View {\n    /// The text it shows.\n    let title: String\n    /// The color of the glow.\n    var tint: Color = .red\n}\n');
+
+    assert.deepEqual(errorsFor({ source }), []);
+  });
+
   it('rejects a number written four times outside the demo', () => {
     const source = swift('GlowButton', 'let insets = [12, 12, 12, 12]');
 
@@ -982,6 +1003,7 @@ describe('the documentation site', () => {
       'struct GlowButton: View {',
       '    /// From 0 to 1.',
       '    var range: Range<Double> = 0..<1',
+      '    /// The text inside, as `{label}`.',
       '    @ViewBuilder var label: () -> Text',
       '}',
       '',
@@ -1023,7 +1045,7 @@ describe('the documentation site', () => {
         title: null,
         rows: [
           { name: 'range', type: 'Range<Double>', default: '0..<1', description: 'From 0 to 1.' },
-          { name: 'label', type: '() -> Text', default: null, description: '' },
+          { name: 'label', type: '() -> Text', default: null, description: 'The text inside, as `{label}`.' },
         ],
       },
     ]);

@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the surface stands still and the level changes without animating.
 struct LiquidFillProgress: View {
+    /// How full the circle is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The color of the liquid, the rim and the percentage. Where the liquid covers it, the percentage takes white or black from it.
     var color: Color = .blue
+    /// The font of the percentage in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

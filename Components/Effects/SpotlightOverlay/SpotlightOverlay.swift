@@ -9,9 +9,11 @@ import SwiftUI
 struct SpotlightOverlay: ViewModifier {
     /// The center of the hole, as a fraction of the view.
     @Binding var center: UnitPoint
+    /// The distance from the center to where the dark is full, in points.
     var radius: Double = 130
     /// How much of the radius is the soft edge, from 0 to 1.
     var softness: Double = 0.55
+    /// The color that covers the view outside the hole, with its opacity.
     var dimming: Color = .black.opacity(0.88)
 
     @Environment(\.layoutDirection) private var layoutDirection
@@ -47,6 +49,14 @@ struct SpotlightOverlay: ViewModifier {
 
 extension View {
     /// Darkens this view except for a soft hole at `center`, which follows the finger.
+    ///
+    /// - Parameters:
+    ///   - center: The center of the hole, as a fraction of the view. The overlay
+    ///     writes it as the finger drags.
+    ///   - radius: The distance from the center to where the dark is full, in points.
+    ///   - softness: How much of `radius` fades from clear to dark, from 0, a hard
+    ///     edge, to 1.
+    ///   - dimming: The color that covers the view outside the hole, with its opacity.
     func spotlightOverlay(
         center: Binding<UnitPoint>,
         radius: Double = 130,

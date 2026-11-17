@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the line stays still and the bar simply fades away on time.
 struct UndoSnackbar: View {
+    /// The line on the bar, announced to VoiceOver with "Undo available".
     let message: LocalizedStringResource
+    /// How many seconds the bar lasts before `onExpire` runs. Doubled while VoiceOver is on.
     var duration: Double = 5
+    /// The color of the Undo button and of the line that shrinks.
     var tint: Color = .yellow
+    /// Runs when the Undo button is tapped.
     let onUndo: () -> Void
+    /// Runs when `duration` runs out without an undo. Remove the bar there.
     let onExpire: () -> Void
 
     @State private var remaining = 1.0
@@ -92,6 +97,12 @@ private struct UndoSnackbarModifier: ViewModifier {
 
 extension View {
     /// Shows an `UndoSnackbar` at the bottom for `duration` seconds.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the bar shows. Set it to `true` to show it; the modifier sets it back to `false` on an undo or when the time runs out.
+    ///   - message: The line on the bar, announced to VoiceOver.
+    ///   - duration: How many seconds the bar lasts. Doubled while VoiceOver is on.
+    ///   - onUndo: Runs when the Undo button is tapped, after the bar starts to hide.
     func undoSnackbar(
         isPresented: Binding<Bool>,
         message: LocalizedStringResource,

@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// It plays again when `text` changes. With Reduce Motion on, the text appears directly.
 struct ScrambleText: View {
+    /// The text the scramble settles into, drawn in a monospaced font.
     let text: String
+    /// Seconds from the first random character to the settled text.
     var duration: Double = 1.2
+    /// The characters drawn at random before each letter settles. Whitespace is never scrambled.
     var characters: [Character] = ScrambleTextScrambler.defaultCharacters
 
     @State private var displayed: String?

@@ -10,9 +10,13 @@ import SwiftUI
 /// status bar while it is expanded, because it takes that space. With Reduce Motion on,
 /// it changes size without bouncing and its content only fades.
 struct DynamicIslandPill<Content: View>: View {
+    /// Whether the capsule is grown to show its content. Collapsed, it is an empty pill hidden from VoiceOver.
     var isExpanded: Bool
+    /// The size of the collapsed pill in points. Match it to the island of the device.
     var pillSize = CGSize(width: 126, height: 37)
+    /// The corner radius of the expanded capsule in points.
     var expandedCornerRadius: CGFloat = 36
+    /// The status shown while expanded, drawn in white over black, below the height of the pill.
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

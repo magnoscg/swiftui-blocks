@@ -44,10 +44,13 @@ struct SpinningVinylArtSpin: Equatable {
 /// Pass any view as the art, usually `Image("cover").resizable().scaledToFill()`.
 /// With Reduce Motion on, the disc stays still.
 struct SpinningVinylArt<Artwork: View>: View {
+    /// Whether the disc spins. It speeds up and eases to a stop over 0.9 seconds.
     let isPlaying: Bool
     /// Revolutions per minute. A 33 rpm record is slow enough to read the label.
     var rpm = 33.0
+    /// What VoiceOver reads for the disc.
     var accessibilityName = "Album art"
+    /// The cover, clipped to a circle in the middle 60% of the disc.
     @ViewBuilder var artwork: () -> Artwork
 
     @State private var spin = SpinningVinylArtSpin()

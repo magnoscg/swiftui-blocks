@@ -37,12 +37,15 @@ struct StructuredOutputFormDraft: Equatable, Sendable {
 /// A form whose fields the on-device model fills in from a free-form note, as a typed value.
 @available(iOS 27, *)
 struct StructuredOutputForm: View {
+    /// The free-form note the model reads, like "Lunch at Joe's, 18.50". The component writes it as the person types.
     @Binding var note: String
+    /// The values of the form. The component empties it when filling starts, writes each field as it arrives, restores it if filling fails, and writes the person's edits.
     @Binding var draft: StructuredOutputFormDraft
     /// Replaces the model with your own stream, for previews and for tests.
     var sampleStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
     /// Plays instead of an error when the model is unavailable or fails.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
+    /// The text shown under the form when the model is unavailable or fails and there is no `fallbackStream`.
     var failureMessage = "The on-device model couldn't fill in the form right now. Please try again later."
 
     @State private var fillTask: Task<Void, Never>?

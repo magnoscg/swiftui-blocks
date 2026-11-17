@@ -8,6 +8,7 @@ import SwiftUI
 /// Letters are laid out one by one, so it suits a short single line.
 /// With Reduce Motion on, it is plain text.
 struct BouncyLettersText: View {
+    /// The text whose letters hop, best kept to a short single line.
     let text: String
     /// Seconds between one letter's hop and the next one's.
     var stagger: Double = 0.08

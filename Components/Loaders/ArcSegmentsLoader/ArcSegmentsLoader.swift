@@ -7,10 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the arcs stay still.
 struct ArcSegmentsLoader: View {
+    /// The angular gradient that runs around both rings. Repeat the first color last for a seamless loop.
     var colors: [Color] = [.pink, .orange, .purple, .pink]
     /// The length of each arc, as a fraction of the ring.
     var lengths: [Double] = [0.32, 0.16, 0.07]
+    /// The width and height of the loader, in points. The stroke scales with it.
     var size: CGFloat = 64
+    /// Seconds for the outer ring to make one turn. The inner ring turns 1.4 times as fast.
     var period: TimeInterval = 1.8
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -19,7 +19,9 @@ extension View {
 /// `ForEach(subviews:)` sees each resolved child, so it works the same for
 /// static views and for children that come from a `ForEach` or an `if`.
 struct SubviewCardContainer<Content: View>: View {
+    /// The vertical gap between cards, in points.
     var spacing: CGFloat = 12
+    /// The children, each drawn as a card. Give one a color with `subviewCardTint(_:)`, or it takes the accent color.
     @ViewBuilder var content: Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

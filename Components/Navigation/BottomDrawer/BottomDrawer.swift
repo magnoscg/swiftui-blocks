@@ -30,8 +30,11 @@ enum BottomDrawerSnapping {
 /// Place it above your content in a `ZStack`. The whole drawer is draggable, so keep scrolling
 /// content out of it. VoiceOver adjusts the handle. With Reduce Motion on, the drawer snaps without a spring.
 struct BottomDrawer<Content: View>: View {
+    /// The stop the drawer rests at, one of `detents`. The drawer writes it when a drag or VoiceOver moves it.
     @Binding var detent: CGFloat
+    /// The heights the drawer can rest at, as fractions of the available height from 0 to 1. The highest sets the height of the drawer.
     var detents: [CGFloat] = [0.16, 0.5, 0.88]
+    /// The content below the handle, aligned to the top of the drawer.
     @ViewBuilder var content: Content
 
     @State private var dragTranslation: CGFloat = 0

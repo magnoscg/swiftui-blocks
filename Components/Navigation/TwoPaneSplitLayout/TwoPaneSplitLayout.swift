@@ -10,11 +10,17 @@ import SwiftUI
 /// split view is expected to have: the button that hides the list, the swipe back on iPhone
 /// and the keyboard. The list selects with its own selection, so VoiceOver reads the selected row.
 struct TwoPaneSplitLayout<Item: Identifiable & Hashable, Row: View, Detail: View>: View {
+    /// The navigation title of the list.
     let title: LocalizedStringResource
+    /// The rows of the list, in order.
     let items: [Item]
+    /// The item shown in the detail, or `nil` for none. The list writes it when a row is tapped.
     @Binding var selection: Item?
+    /// The ideal width of the list, in points, when the two panes are side by side.
     var listWidth: CGFloat = 320
+    /// Builds the row of an item.
     @ViewBuilder let row: (Item) -> Row
+    /// Builds the detail of the selected item. With nothing selected, the pane says so instead.
     @ViewBuilder let detail: (Item) -> Detail
 
     var body: some View {

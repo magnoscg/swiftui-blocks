@@ -8,8 +8,11 @@ import SwiftUI
 /// Every frame is computed from the time alone, so there is no state to keep.
 /// With Reduce Motion on, it draws one still frame. It looks best on a dark background.
 struct FlowFieldParticles: View {
+    /// How many particles drift at once, up to 2,000.
     var count = 260
+    /// The colors the particles take in turn. They add up where streaks cross. Empty draws white.
     var colors: [Color] = [.cyan, .indigo, .pink]
+    /// How fast the particles and the field move, where 1 is the normal pace and 0 stops them.
     var speed = 1.0
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -20,7 +20,9 @@ struct ValidatedTextFieldFeedback: Equatable {
 
 /// A text field that checks its value when it loses focus and shows its error only after that.
 struct ValidatedTextField: View {
+    /// The label above the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it.
     @Binding var text: String
     /// Returns the message to show, or `nil` when the value is fine.
     let validate: (String) -> String?

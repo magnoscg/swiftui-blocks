@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the view only fades.
 struct SlideScaleTransition: Transition {
+    /// The direction of the slide. A view enters from the trailing or bottom side and leaves toward the leading or top one.
     var axis: Axis = .horizontal
+    /// How far the view slides, in points.
     var distance: CGFloat = 220
+    /// The size of the view when it is fully out, as a fraction of its own size.
     var scale: CGFloat = 0.8
 
     func body(content: Content, phase: TransitionPhase) -> some View {

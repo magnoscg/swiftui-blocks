@@ -8,11 +8,17 @@ import SwiftUI
 /// It fills the space it is given and never shows an edge, because it only scales up around a
 /// point inside the image. With Reduce Motion on, the picture stays still.
 struct KenBurnsImage: View {
+    /// The picture, filling the space it is given and cropped to it.
     let image: Image
+    /// What VoiceOver reads for the picture.
     let label: LocalizedStringResource
+    /// How many seconds one pass takes, from `from` to `to`. It then eases back and repeats.
     var duration: Double = 12
+    /// How far the picture scales up at the end of a pass. Values below 1 act as 1.
     var zoom: CGFloat = 1.3
+    /// The point of the picture it zooms around at the start of a pass.
     var from: UnitPoint = .topLeading
+    /// The point of the picture it zooms around at the end of a pass.
     var to: UnitPoint = .bottomTrailing
 
     @State private var isAtEnd = false

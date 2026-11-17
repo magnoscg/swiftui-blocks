@@ -40,15 +40,19 @@ nonisolated enum WalletCardStackMath {
 /// Give it the height it can use: the stack tightens to fit, and the pile sits at the bottom edge.
 /// With Reduce Motion on, the cards change places without sliding.
 struct WalletCardStack<Item: Identifiable, Card: View, Detail: View>: View {
+    /// The cards, from the top of the stack down.
     let items: [Item]
     /// The card that is open, or `nil` when all of them are in the stack.
     @Binding var selection: Item.ID?
+    /// The height of each card, in points, in the stack and when it opens.
     var cardHeight: CGFloat = 200
     /// How much of a card shows above the next one in the stack. It grows with Dynamic Type.
     var peek: CGFloat = 64
     /// How much room the other cards keep at the bottom while one is open.
     var pileHeight: CGFloat = 76
+    /// The face of each card, drawn `cardHeight` tall.
     @ViewBuilder var card: (Item) -> Card
+    /// What shows under the open card, in the room left above the pile.
     @ViewBuilder var detail: (Item) -> Detail
 
     private let spacing: CGFloat = 16

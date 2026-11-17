@@ -40,7 +40,9 @@ nonisolated enum MapSearchSheetLogic {
 /// Typing filters the list and the markers. Choosing a place, in the list or on the map, flies
 /// the camera to it. The places are yours: fill them from `MKLocalSearch` or from your own data.
 struct MapSearchSheet: View {
+    /// Every place, on the map and in the list. Typing keeps those whose name or kind has every word.
     let places: [MapSearchSheetPlace]
+    /// The placeholder of the search field.
     var prompt: LocalizedStringResource = "Search places"
     /// How far above a chosen place the camera stops, in meters.
     var closeUpDistance = 1500.0

@@ -31,7 +31,9 @@ nonisolated enum StreamingTextMath {
 /// Text that is replaced rather than extended starts again from where the two differ.
 /// With Reduce Motion on, new text shows at once.
 struct StreamingText: View {
+    /// The text received so far. Extend it as new chunks arrive.
     let text: String
+    /// How fast the new text fades in. Each chunk takes between 0.15 and 1.5 seconds whatever its length.
     var charactersPerSecond = 80.0
     /// How many characters the soft edge of the new text spans.
     var fade = 10.0

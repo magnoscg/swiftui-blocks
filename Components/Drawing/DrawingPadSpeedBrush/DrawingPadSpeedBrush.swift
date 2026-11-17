@@ -29,10 +29,16 @@ enum DrawingPadSpeedBrushMath {
 ///
 /// A stroke the system interrupts is kept up to the point where it stopped.
 struct DrawingPadSpeedBrush: View {
+    /// The finished strokes, each a list of points with their widths. The pad appends one when a
+    /// finger lifts, and setting it to empty clears the pad.
     @Binding var strokes: [[DrawingPadSpeedBrushPoint]]
+    /// The ink of every stroke.
     var color: Color = .primary
+    /// The width of the stroke at `fullSpeed` and faster, in points. Half a point at the least.
     var thinWidth: CGFloat = 2
+    /// The width of the stroke when the finger is still, in points.
     var thickWidth: CGFloat = 16
+    /// The finger speed, in points per second, at which the stroke reaches `thinWidth`.
     var fullSpeed: CGFloat = 1400
 
     @State private var currentStroke: [DrawingPadSpeedBrushPoint] = []

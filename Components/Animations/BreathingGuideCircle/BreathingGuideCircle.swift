@@ -55,10 +55,15 @@ enum BreathingGuideCircleMath {
 ///
 /// With Reduce Motion on, the circle stays still and the label keeps guiding.
 struct BreathingGuideCircle: View {
+    /// How long the circle takes to expand, in seconds. A negative duration counts as zero.
     var inhale = 4.0
+    /// How long the circle stays expanded before breathing out, in seconds. Zero skips the hold.
     var hold = 4.0
+    /// How long the circle takes to contract, in seconds. A negative duration counts as zero.
     var exhale = 6.0
+    /// The color of the rings, which blends into blue in the innermost one.
     var tint: Color = .teal
+    /// The size of the square the circle grows in, in points. Fully expanded, the outer ring fills it.
     var diameter: CGFloat = 260
 
     @State private var start = Date.now

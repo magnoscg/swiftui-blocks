@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the heart simply fills, with no pop or burst.
 struct LikeBurstButton: View {
+    /// Whether the heart is filled. The button flips it on each tap.
     @Binding var isLiked: Bool
+    /// The fill of the liked heart, and one of the particle colors along with orange and yellow.
     var color: Color = .pink
+    /// How many particles fly out, spread evenly around the heart.
     var particleCount: Int = 12
 
     @State private var burstCount = 0

@@ -33,14 +33,23 @@ struct TrialTimelinePaywallPlan: Identifiable, Equatable {
 /// with StoreKit or whatever you use. The reminder step is a promise, so schedule that
 /// notification, or set `reminderLead` to 0 to leave the step out.
 struct TrialTimelinePaywall: View {
+    /// The heading at the top.
     var title: LocalizedStringResource = "How your free trial works"
+    /// The plans to choose from, as cards under the timeline.
     let plans: [TrialTimelinePaywallPlan]
+    /// The id of the chosen plan, whose trial the timeline shows. A tap on a card writes it, and an
+    /// id that matches no plan falls back to the first.
     @Binding var selection: TrialTimelinePaywallPlan.ID
     /// How many days before the trial ends the reminder is sent.
     var reminderLead = 2
+    /// The day the trial would start, from which the dates of the timeline are counted.
     var startDate = Date.now
+    /// Whether a purchase is in progress. The main button shows a spinner and stops answering, and
+    /// Restore Purchases is disabled.
     var isPurchasing = false
+    /// Called with the chosen plan when the main button is tapped. Start the purchase here.
     var onContinue: (TrialTimelinePaywallPlan) -> Void
+    /// Runs when Restore Purchases is tapped.
     var onRestore: () -> Void
 
     private let margin: CGFloat = 24

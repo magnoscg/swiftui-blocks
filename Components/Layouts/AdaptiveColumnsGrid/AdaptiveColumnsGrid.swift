@@ -18,10 +18,15 @@ enum AdaptiveColumnsGridMath {
 /// A grid that computes its column count from the width it gets: fewer columns on
 /// iPhone, more on iPad, with an upper limit that `.adaptive` grid items do not offer.
 struct AdaptiveColumnsGrid<Data: RandomAccessCollection, Content: View>: View where Data.Element: Identifiable {
+    /// The items, one cell each, laid out row by row.
     let data: Data
+    /// The narrowest a column may get, in points. The grid fits as many columns of at least this width as it can.
     var minColumnWidth: CGFloat = 150
+    /// The gap between cells, across and down, in points. A negative value counts as zero.
     var spacing: CGFloat = 12
+    /// The most columns the grid shows, however wide it gets. At least 1.
     var maxColumns = 6
+    /// Draws the cell for an item. It gets the full width of its column.
     @ViewBuilder let content: (Data.Element) -> Content
 
     @State private var width: CGFloat = 0

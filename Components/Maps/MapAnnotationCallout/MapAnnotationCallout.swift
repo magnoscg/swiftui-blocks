@@ -49,9 +49,14 @@ nonisolated enum MapAnnotationCalloutLogic {
 /// VoiceOver reads each pin by its title and label. With Reduce Motion on, the callout fades in
 /// and the camera does not fly.
 struct MapAnnotationCallout<Callout: View>: View {
+    /// The pins. The map opens on a region that fits them all.
     let items: [MapAnnotationCalloutItem]
+    /// The id of the pin whose callout is open, or nil. The map writes it on a tap, and clears it
+    /// on a tap elsewhere.
     @Binding var selection: MapAnnotationCalloutItem.ID?
+    /// The width of the callout's content, in points, inside its 12-point padding.
     var calloutWidth: CGFloat = 220
+    /// What the callout above the selected pin shows.
     @ViewBuilder var callout: (MapAnnotationCalloutItem) -> Callout
 
     private let shadow = Color.black.opacity(0.2)

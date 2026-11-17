@@ -30,8 +30,11 @@ private enum KeyframeTimelineShowcaseTiming {
 ///
 /// With Reduce Motion on, the content rests and the timeline stays still.
 struct KeyframeTimelineShowcase<Content: View>: View {
+    /// The fill of the tile at the start and end of each loop.
     var restColor: Color = .indigo
+    /// The fill the tile blends to in the middle of each loop, also used for the color track.
     var peakColor: Color = .pink
+    /// The view drawn on the tile, like an SF Symbol. The tile is 120 points square and scales with Dynamic Type.
     @ViewBuilder var content: () -> Content
 
     @ScaledMetric(relativeTo: .largeTitle) private var tileSize = 120.0

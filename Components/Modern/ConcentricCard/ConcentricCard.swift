@@ -6,9 +6,13 @@ import SwiftUI
 /// A card that publishes its corners, so `ConcentricCardSurface` views inside stay concentric.
 @available(iOS 26, *)
 struct ConcentricCard<Background: ShapeStyle, Content: View>: View {
+    /// The radius of the card's corners, in points. Surfaces inside take theirs from it.
     var cornerRadius: CGFloat = 36
+    /// The space between the card's edge and its content, in points.
     var padding: CGFloat = 12
+    /// The fill of the card.
     let background: Background
+    /// What the card holds. Put `ConcentricCardSurface` views here to match its corners.
     @ViewBuilder let content: () -> Content
 
     var body: some View {

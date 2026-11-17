@@ -9,6 +9,7 @@ import SwiftUI
 @MainActor
 @Observable
 final class NavigationPathRouter<Destination: Hashable> {
+    /// The screens pushed above the root, which the stack reads and writes, also when the back button pops.
     var path = NavigationPath()
 
     var depth: Int { path.count }

@@ -18,6 +18,15 @@ struct KeyboardTrackingInputBar<Content: View>: View {
     @ScaledMetric(relativeTo: .body) private var sendSize = 34.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    /// Creates a composer below some content.
+    ///
+    /// - Parameters:
+    ///   - text: The draft in the field. The bar writes what is typed, and empties it on send.
+    ///   - placeholder: The prompt in the empty field, also its VoiceOver label.
+    ///   - tint: The fill of the send button. Its arrow takes white or black from it.
+    ///   - onSend: Called with the draft, trimmed of spaces and new lines, when the send button is
+    ///     tapped. The button is disabled while that is empty.
+    ///   - content: The view above the bar, usually the conversation. It leaves room for the bar.
     init(
         text: Binding<String>,
         placeholder: LocalizedStringResource = "Message",

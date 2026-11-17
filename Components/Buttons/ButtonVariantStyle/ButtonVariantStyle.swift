@@ -13,7 +13,9 @@ struct ButtonVariantStyle: ButtonStyle {
         case filled, tinted, outlined, plain
     }
 
+    /// The look: a solid fill, a soft tinted fill, a border, or the label alone.
     var variant: Variant = .filled
+    /// The color the variant draws with. A destructive role replaces it with red, and on `filled` the label takes white or black from it.
     var color: Color = .accentColor
 
     func makeBody(configuration: Configuration) -> some View {

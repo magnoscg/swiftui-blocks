@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the detail opens with the standard navigation transition.
 struct ZoomHeroTransition<Item: Identifiable & Hashable, Card: View, Detail: View>: View {
+    /// The items, one card each, in grid order.
     let items: [Item]
+    /// How many columns of cards the grid has.
     var columns: Int = 2
+    /// The corner radius each card is clipped to, in points.
     var cornerRadius: CGFloat = 24
+    /// The view for an item in the grid. A tap on it opens its detail.
     @ViewBuilder var card: (Item) -> Card
+    /// The screen the card zooms into, pushed on the surrounding `NavigationStack`.
     @ViewBuilder var detail: (Item) -> Detail
 
     @Namespace private var namespace

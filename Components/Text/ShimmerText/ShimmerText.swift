@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the text is drawn plainly in the highlight color.
 struct ShimmerText: View {
+    /// The text the light sweeps across.
     let text: String
+    /// The color of the letters outside the band of light.
     var baseColor: Color = .secondary
+    /// The color at the center of the band of light.
     var highlightColor: Color = .primary
     /// Seconds for one sweep.
     var duration: Double = 2.2

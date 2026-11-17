@@ -60,10 +60,15 @@ nonisolated private struct CircularAvatarCropperDim: Shape {
 /// is the photo's width divided by its height. VoiceOver zooms by swiping up or down, and pans
 /// with custom actions.
 struct CircularAvatarCropper: View {
+    /// The photo to crop. It always covers the window.
     let image: Image
+    /// The photo's width divided by its height, used to size it and to compute the crop.
     let aspectRatio: CGFloat
+    /// The zoom and position of the photo. The component writes it when a pan or pinch ends, always kept in range.
     @Binding var crop: CircularAvatarCropperTransform
+    /// The largest zoom, as a multiple of the size that just fills the window. Values below 1 act as 1.
     var maxZoom: CGFloat = 4
+    /// The space in points between the circular window and the shorter side of the view.
     var windowInset: CGFloat = 24
 
     @GestureState private var translation = CGSize.zero

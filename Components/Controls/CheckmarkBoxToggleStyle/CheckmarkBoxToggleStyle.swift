@@ -11,6 +11,7 @@ import SwiftUI
 /// macOS only, and the two names would collide in a multiplatform app.
 /// With Reduce Motion on, the checkmark appears without being drawn.
 struct CheckmarkBoxToggleStyle: ToggleStyle {
+    /// The fill of the box when on or mixed. The checkmark or dash takes white or black from it.
     var color: Color = .accentColor
 
     func makeBody(configuration: Configuration) -> some View {

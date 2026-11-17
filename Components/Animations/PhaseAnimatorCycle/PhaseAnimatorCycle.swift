@@ -45,7 +45,9 @@ private enum PhaseAnimatorCyclePhase: CaseIterable {
 ///
 /// With Reduce Motion on, the card stays in its first phase.
 struct PhaseAnimatorCycle<Content: View>: View {
+    /// The corner radius of the card behind the content, in points. A negative value counts as zero.
     var cornerRadius: CGFloat = 32
+    /// The view on the card. The card takes its size, so pad it to leave room around it.
     @ViewBuilder var content: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

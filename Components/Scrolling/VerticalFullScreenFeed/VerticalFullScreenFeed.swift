@@ -16,7 +16,9 @@ struct VerticalFullScreenFeedItem: Identifiable {
 ///
 /// The paging is driven by the finger, so Reduce Motion does not change it.
 struct VerticalFullScreenFeed: View {
+    /// The pages, from the top, each with an image, a title and a subtitle.
     let items: [VerticalFullScreenFeedItem]
+    /// The `id` of the page on screen. The feed writes it as it pages, and setting it scrolls there.
     var selection: Binding<String?> = .constant(nil)
 
     var body: some View {

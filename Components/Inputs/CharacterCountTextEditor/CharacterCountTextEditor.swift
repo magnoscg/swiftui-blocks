@@ -31,9 +31,13 @@ enum CharacterCountTextEditorLevel: Equatable {
 /// Chinese and pasting, so the caller disables sending instead. The ring and
 /// the count change without motion, so Reduce Motion needs nothing different.
 struct CharacterCountTextEditor: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it and never cuts it at the limit.
     @Binding var text: String
+    /// The most characters allowed. The count turns orange from 90% of it and red past it.
     var limit = 280
+    /// The fewest and most lines the field shows. Past the most, it scrolls.
     var lineLimit: ClosedRange<Int> = 3...8
 
     @FocusState private var isFocused: Bool

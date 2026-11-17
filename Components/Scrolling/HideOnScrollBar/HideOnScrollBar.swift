@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bar fades instead of sliding. With VoiceOver on, it stays visible.
 struct HideOnScrollBar<Content: View, Bar: View>: View {
+    /// How far, in points, the content must scroll in one direction before the bar hides or returns.
     var threshold: Double = 16
+    /// The content of the scroll view.
     @ViewBuilder var content: () -> Content
+    /// The bar pinned to the bottom, which slides out of view while scrolling down.
     @ViewBuilder var bar: () -> Bar
 
     @State private var tracker = HideOnScrollBarTracker()

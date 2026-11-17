@@ -20,9 +20,13 @@ enum StaggeredAppearListTiming {
 ///
 /// With Reduce Motion on, every row fades in at once without moving.
 struct StaggeredAppearList<Item: Identifiable, Row: View>: View {
+    /// The rows, in order. Each one enters 0.07 seconds after the previous one, with no row waiting more than 0.6 seconds.
     let items: [Item]
+    /// The space between rows, in points.
     var spacing: CGFloat = 12
+    /// How far below its place each row starts, in points.
     var travel: CGFloat = 28
+    /// The view for an item.
     @ViewBuilder var row: (Item) -> Row
 
     @State private var isVisible = false

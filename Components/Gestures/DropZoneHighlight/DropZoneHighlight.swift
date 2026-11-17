@@ -8,10 +8,15 @@ import SwiftUI
 /// `onDrop` returns whether the drop was accepted. With Reduce Motion on, the
 /// highlight changes color without growing.
 struct DropZoneHighlight<Payload: Transferable>: View {
+    /// The text shown while nothing hovers over the zone.
     var title = "Drop here"
+    /// The text that replaces `title` while something hovers over the zone.
     var hint = "Release to add"
+    /// The SF Symbol above the text.
     var systemImage = "tray.and.arrow.down"
+    /// The color of the icon, the text and the dashed border, and the fill while something hovers, when the text turns white.
     var tint: Color = .blue
+    /// Called with the dropped items, never empty. Returns whether the drop was accepted.
     var onDrop: ([Payload]) -> Bool
 
     @State private var isTargeted = false

@@ -15,10 +15,15 @@ enum OTPCodeFieldInput {
 /// The field stays behind the boxes rather than hidden, so VoiceOver, paste and code
 /// autofill reach it. With Reduce Motion on, digits appear without a pop.
 struct OTPCodeField: View {
+    /// The digits entered. The field writes it, keeping only ASCII digits and cutting it to `length`.
     @Binding var code: String
+    /// How many digits the code has, one box each.
     var length: Int = 6
+    /// The name VoiceOver reads for the field. It is not drawn.
     var title: LocalizedStringResource = "Verification code"
+    /// The border of the box that takes the next digit while the field has focus.
     var tint: Color = .indigo
+    /// Called with the code when its last digit is entered or pasted.
     var onComplete: ((String) -> Void)? = nil
 
     @FocusState private var isFocused: Bool

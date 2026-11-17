@@ -45,10 +45,13 @@ nonisolated enum VoiceOrbMath {
 /// microphone. With Reduce Motion on, the colors stay still and the orb brightens instead of
 /// swelling.
 struct VoiceOrb: View {
+    /// What the assistant is doing. Idle mutes the colors, thinking keeps the orb half lively, speaking shifts its hue, and listening or speaking follow `level`.
     var state = VoiceOrbState.idle
     /// How loud the voice is, from 0 to 1.
     var level = 0.0
+    /// The colors that swirl inside the orb. The first also fills it and tints its glow.
     var colors: [Color] = [.blue, .purple, .pink, .cyan]
+    /// The name VoiceOver reads for the orb, which reads the state as its value.
     var label = "Assistant"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

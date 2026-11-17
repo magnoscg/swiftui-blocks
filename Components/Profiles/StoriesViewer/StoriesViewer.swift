@@ -17,9 +17,13 @@ struct StoriesViewerStory: Identifiable {
 /// Tap the left or right half to move, and hold to pause. Stories do not advance by themselves
 /// with Reduce Motion or VoiceOver on: the tap areas still work.
 struct StoriesViewer: View {
+    /// The stories, in the order they play, with a segment each in the progress bar.
     let stories: [StoriesViewerStory]
+    /// The seconds each story shows before the next, a tenth of a second at the least.
     var duration: TimeInterval = 4
+    /// Runs when the close button is tapped. Nil hides the button.
     var onClose: (() -> Void)?
+    /// Runs when the last story ends, by itself or with a tap forward.
     var onFinish: () -> Void = {}
 
     @State private var playback = StoriesViewerPlayback()

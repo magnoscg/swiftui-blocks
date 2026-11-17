@@ -15,9 +15,13 @@ enum AddToCartStepperMath {
 /// The capsule is one background around content that changes, so it resizes by itself
 /// and nothing has to match geometry. VoiceOver can also adjust the count directly.
 struct AddToCartStepper: View {
+    /// How many are in the cart. At zero the add button shows. The stepper writes it, kept from 0 to `maximum`.
     @Binding var quantity: Int
+    /// The highest quantity, from 0 to 1,000,000. The plus button stops there, and at 0 nothing can be added.
     var maximum: Int = 99
+    /// The text of the add button. VoiceOver reads it followed by "to cart".
     var title: LocalizedStringResource = "Add"
+    /// The fill of the capsule. Its symbols and text take white or black from it.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .headline) private var buttonSize = 44.0

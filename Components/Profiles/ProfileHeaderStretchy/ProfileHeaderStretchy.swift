@@ -38,10 +38,15 @@ nonisolated enum ProfileHeaderStretchyMath {
 /// The cover and the avatar follow the scroll itself, so there is nothing to slow down for
 /// Reduce Motion. Put it at the top of a screen: the cover runs under the status bar.
 struct ProfileHeaderStretchy<Cover: View, Avatar: View, Content: View>: View {
+    /// The name that shows in the bar once the cover has closed.
     let name: String
+    /// The height of the cover at rest, in points, measured from the top of the screen.
     var coverHeight: CGFloat = 190
+    /// The background of the header, usually an image. It is clipped to the cover's height as it changes.
     @ViewBuilder var cover: () -> Cover
+    /// The picture in the circle on the cover's leading edge, half under it.
     @ViewBuilder var avatar: () -> Avatar
+    /// The page that scrolls under the header.
     @ViewBuilder var content: () -> Content
 
     @State private var offset: CGFloat = 0

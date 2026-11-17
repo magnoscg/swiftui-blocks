@@ -24,6 +24,17 @@ struct CrossFadeNavigation<SheetContent: View>: ViewModifier {
 
 @available(iOS 27, *)
 extension View {
+    /// Presents a sheet that fades in over this view with the iOS 27 `.crossFade` transition,
+    /// instead of sliding up.
+    ///
+    /// Apple documents `.crossFade` for sheets. Keep `navigationTransition` on the root of the
+    /// sheet's content, outside any container such as `VStack`. A cross-fade has no movement,
+    /// so Reduce Motion needs nothing different.
+    ///
+    /// - Parameters:
+    ///   - isPresented: Whether the sheet shows. The sheet sets it to false when
+    ///     it is dismissed.
+    ///   - content: The view shown in the sheet.
     func crossFadeSheet<SheetContent: View>(
         isPresented: Binding<Bool>,
         @ViewBuilder content: @escaping () -> SheetContent

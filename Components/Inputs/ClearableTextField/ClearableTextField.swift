@@ -10,9 +10,13 @@ import SwiftUI
 /// Clearing keeps the focus, so the keyboard stays up for the next text.
 /// With Reduce Motion on, the clear button and the error fade instead of moving.
 struct ClearableTextField: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The text typed. The field writes it, and the clear button empties it.
     @Binding var text: String
+    /// The SF Symbol before the text, or none.
     var systemImage: String?
+    /// A message shown in red under the field, which also turns the border red. `nil` hides it.
     var errorMessage: LocalizedStringResource?
 
     @FocusState private var isFocused: Bool

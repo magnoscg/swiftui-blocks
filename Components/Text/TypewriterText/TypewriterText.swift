@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// It restarts when `text` changes. With Reduce Motion on, the text appears in full with no cursor.
 struct TypewriterText: View {
+    /// The text to type. Changing it starts typing again.
     let text: String
+    /// How fast characters appear. Zero or less shows the text at once.
     var charactersPerSecond: Double = 20
+    /// The color of the cursor, which blinks once the text is typed.
     var cursorColor: Color = .accentColor
 
     @State private var started: (text: String, date: Date)?

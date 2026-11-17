@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dots stay still.
 struct DotsPulseLoader: View {
+    /// The fill of the dots, drawn as a gradient.
     var color: Color = .indigo
+    /// How many dots pulse in turn.
     var dotCount: Int = 3
+    /// The diameter of each dot at rest, in points. The spacing scales with it.
     var dotSize: CGFloat = 14
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

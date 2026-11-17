@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the artwork stays still inside the card.
 struct ParallaxCardsRow<Item: Identifiable, Artwork: View, Overlay: View>: View {
+    /// The cards, in order.
     let items: [Item]
+    /// The height of each card, in points.
     var height: CGFloat = 460
+    /// The most the artwork shifts inside its card, in points. The artwork is widened by as much on each side. With Reduce Motion on, it does not shift.
     var strength: CGFloat = 70
+    /// Builds the background of a card, which moves slower than the card and is clipped to its rounded shape.
     @ViewBuilder var artwork: (Item) -> Artwork
+    /// Builds what sits over the artwork, in the bottom leading corner of a card.
     @ViewBuilder var overlay: (Item) -> Overlay
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

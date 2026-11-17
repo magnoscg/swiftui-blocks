@@ -8,6 +8,10 @@ extension View {
     ///
     /// Apply it to the content inside a card, not to the card: the shimmer masks the
     /// view, so a shadow drawn outside its bounds would be cut off.
+    ///
+    /// - Parameters:
+    ///   - active: Whether the placeholder shows. While true, the view is redacted,
+    ///     ignores touches and reads as "Loading" to VoiceOver.
     func skeletonShimmer(active: Bool) -> some View {
         modifier(SkeletonShimmerModifier(active: active))
     }

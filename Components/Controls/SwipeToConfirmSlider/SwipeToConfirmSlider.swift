@@ -25,10 +25,15 @@ enum SwipeToConfirmSliderMath {
 /// With Reduce Motion on, the thumb returns without bouncing. VoiceOver users
 /// confirm with a double tap.
 struct SwipeToConfirmSlider: View {
+    /// The text on the track before confirming, like "Slide to pay". It fades as the thumb moves.
     let title: LocalizedStringResource
+    /// The text on the track once confirmed, until it resets.
     var confirmedTitle: LocalizedStringResource = "Confirmed"
+    /// The fill behind the thumb and the color of its symbol.
     var tint: Color = .indigo
+    /// How long the slider stays confirmed before it springs back, in seconds.
     var resetDelay: Double = 1.4
+    /// Runs once when the thumb is let go past 92% of the track, or on a VoiceOver double tap.
     let onConfirm: () -> Void
 
     @State private var progress = 0.0

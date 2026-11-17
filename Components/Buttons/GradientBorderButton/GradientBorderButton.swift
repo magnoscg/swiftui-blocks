@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the gradient stays still.
 struct GradientBorderButton<Content: View>: View {
+    /// The colors around the border, in order. End with the first one so the loop has no seam.
     var colors: [Color] = [.pink, .orange, .yellow, .mint, .blue, .purple, .pink]
+    /// The width of the border, in points. A blurred copy under it adds the glow.
     var lineWidth: Double = 3
+    /// The seconds the gradient takes to turn once around the border.
     var period: Double = 3
+    /// Runs when the button is tapped.
     let action: () -> Void
+    /// The content inside the capsule, set in a bold `title3` font.
     @ViewBuilder let label: () -> Content
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

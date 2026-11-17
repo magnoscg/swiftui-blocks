@@ -13,9 +13,13 @@ enum SymbolBreatheLoaderEffect {
 ///
 /// With Reduce Motion on, the symbol stays still.
 struct SymbolBreatheLoader: View {
+    /// The SF Symbol that animates.
     var systemName: String = "sparkles"
+    /// Whether the symbol breathes, rotates or does both.
     var effect: SymbolBreatheLoaderEffect = .breathe
+    /// The tint of the symbol, drawn in hierarchical layers.
     var color: Color = .indigo
+    /// The font that sets the size of the symbol, so it scales with Dynamic Type.
     var font: Font = .largeTitle
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

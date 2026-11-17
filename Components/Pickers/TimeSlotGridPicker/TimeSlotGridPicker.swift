@@ -5,10 +5,15 @@ import SwiftUI
 
 /// A grid of time slots. Unavailable times are disabled and the chosen one is highlighted.
 struct TimeSlotGridPicker: View {
+    /// The times offered, one cell each. The grid sorts them and drops repeats.
     let slots: [Date]
+    /// The slots shown struck through and disabled.
     var unavailable: Set<Date> = []
+    /// The slot chosen, or `nil`. The grid writes it on each tap.
     @Binding var selection: Date?
+    /// How each time is written in its cell.
     var format: Date.FormatStyle = .dateTime.hour().minute()
+    /// The fill of the chosen slot, under white text.
     var tint: Color = .indigo
 
     @ScaledMetric(relativeTo: .subheadline) private var minimumWidth: CGFloat = 96

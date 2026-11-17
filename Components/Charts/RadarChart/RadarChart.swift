@@ -47,8 +47,11 @@ nonisolated enum RadarChartMath {
 /// The shapes grow from the center when they appear. VoiceOver reads each axis with the value
 /// of every series. With Reduce Motion on, the shapes are there from the start.
 struct RadarChart: View {
+    /// The names of the axes, clockwise from the top. The chart needs three or more to draw.
     let axes: [String]
+    /// The shapes to compare, each with one value per axis.
     let series: [RadarChartSeries]
+    /// The value at the outer ring. Higher values stop there, and values below zero at the center.
     var maximum = 100.0
     /// How many rings the grid has, the outer one included.
     var rings = 4

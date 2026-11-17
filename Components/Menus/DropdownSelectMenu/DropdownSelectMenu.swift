@@ -8,10 +8,15 @@ import SwiftUI
 /// The list floats over the views below, so use it in a stack where it can overlap
 /// them. It raises itself with `zIndex` while open, and a tap outside closes it.
 struct DropdownSelectMenu<Option: Hashable>: View {
+    /// The caption above the value, which VoiceOver reads as the name of the field.
     let title: LocalizedStringResource
+    /// The choices in the list, from top to bottom. Past 280 points the list scrolls.
     let options: [Option]
+    /// The chosen option, or nil for none. The menu writes it when the person picks one.
     @Binding var selection: Option?
+    /// The text the field shows while `selection` is nil.
     var placeholder = "Choose"
+    /// Returns the text shown for an option, in the field and in the list.
     let label: (Option) -> String
 
     @State private var isOpen = false

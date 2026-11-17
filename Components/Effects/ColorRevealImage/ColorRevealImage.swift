@@ -20,9 +20,13 @@ nonisolated enum ColorRevealImageMath {
 /// Outside a scroll view it stays black and white until tapped. With Reduce Motion
 /// on, a tap changes it at once. Scrolling still fades the color, which adds no movement.
 struct ColorRevealImage: View {
+    /// The picture, scaled to fill the frame and cropped at its edges.
     let image: Image
+    /// What VoiceOver reads for the image, which is also the label of its button.
     let title: LocalizedStringResource
+    /// The width of the frame divided by its height. Zero or less makes it square.
     var aspectRatio: CGFloat = 4.0 / 3.0
+    /// The corner radius of the frame, in points.
     var cornerRadius: CGFloat = 24
 
     @State private var isRevealed = false

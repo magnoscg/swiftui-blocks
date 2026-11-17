@@ -37,7 +37,10 @@ enum FloatingDockBarMath {
 /// With Reduce Motion on, the magnification is small and has no spring. The dock only
 /// holds icons, so it stops growing past the larger text sizes.
 struct FloatingDockBar: View {
+    /// The icons, from leading to trailing. They shrink to fit the width, down to 20 points each.
     let items: [FloatingDockBarItem]
+    /// How much the icon under the finger grows, as a multiple of its size. At 1 or below
+    /// nothing grows, and Reduce Motion caps it at 1.15.
     var maxScale: CGFloat = 1.6
 
     var body: some View {

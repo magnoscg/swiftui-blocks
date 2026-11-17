@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the faces swap without rotating.
 struct FlipCardTransition<Front: View, Back: View>: View {
+    /// Whether the back faces the viewer. A change flips the card around its vertical axis.
     let isFlipped: Bool
+    /// The face shown while `isFlipped` is false.
     @ViewBuilder var front: () -> Front
+    /// The face shown while `isFlipped` is true.
     @ViewBuilder var back: () -> Back
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

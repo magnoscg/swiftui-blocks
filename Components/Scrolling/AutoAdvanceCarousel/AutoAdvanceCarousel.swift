@@ -7,8 +7,11 @@ import SwiftUI
 ///
 /// It stays still with Reduce Motion or VoiceOver on, and can always be swiped by hand.
 struct AutoAdvanceCarousel<Item: Identifiable, Content: View>: View {
+    /// The pages, in order. After the last one the carousel wraps to the first.
     let items: [Item]
+    /// The seconds each page stays before the next one, at least 0.5.
     var interval: TimeInterval = 3
+    /// Builds a page, as wide as the carousel.
     @ViewBuilder var content: (Item) -> Content
 
     @State private var currentID: Item.ID?

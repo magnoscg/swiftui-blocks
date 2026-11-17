@@ -8,6 +8,7 @@ import SwiftUI
 /// It reserves the width of the longest word, so nothing around it moves.
 /// With Reduce Motion on, the words crossfade.
 struct RotatingWordsText: View {
+    /// The words that take turns, in order and looping. A single word stays still.
     let words: [String]
     /// Seconds each word stays on screen.
     var interval: Double = 1.6

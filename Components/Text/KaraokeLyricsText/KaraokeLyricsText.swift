@@ -33,6 +33,7 @@ nonisolated enum KaraokeLyricsTextMath {
 /// color and alignment, wraps like any other, and follows the direction of its language.
 /// With Reduce Motion on, each line lights up at once instead of filling.
 struct KaraokeLyricsText: View {
+    /// The lyrics to show, which may wrap over several lines.
     let text: String
     /// How much of the text has been sung, from 0 to 1.
     var progress: Double

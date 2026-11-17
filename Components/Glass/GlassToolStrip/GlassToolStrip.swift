@@ -17,9 +17,13 @@ struct GlassToolStripTool: Identifiable {
 /// With Reduce Motion on, tools change without animating.
 @available(iOS 26, *)
 struct GlassToolStrip: View {
+    /// The tool buttons, from leading to trailing.
     let tools: [GlassToolStripTool]
+    /// The `id` of the selected tool, or nil for none. A tap selects a tool, and a second tap clears it.
     @Binding var selection: String?
+    /// Whether tools sharing a `group` fuse into one piece of glass. When false, each tool keeps its own.
     var isGrouped = true
+    /// The color of the selected tool's symbol. The others use the primary color.
     var tint: Color = .accentColor
 
     @Namespace private var namespace

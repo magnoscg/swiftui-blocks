@@ -25,10 +25,15 @@ enum CircularProgressRingMath {
 ///
 /// With Reduce Motion on, the ring and the number change without animating.
 struct CircularProgressRing: View {
+    /// How full the ring is, from 0 to 1. Values outside that range are clamped.
     var progress: Double
+    /// The angular gradient along the ring, starting at the top.
     var colors: [Color] = [.cyan, .blue, .purple]
+    /// The thickness of the ring, in points.
     var lineWidth: CGFloat = 18
+    /// The font of the percentage in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// What VoiceOver reads before the percentage.
     var label: LocalizedStringKey = "Progress"
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
