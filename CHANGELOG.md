@@ -21,6 +21,9 @@ on `main`.
   a strip of prompts that work, each with the component it adds and a button to
   pause it. The big logo, the carousel and the three sections that repeated the
   install make way for them.
+- Search results and shared links now speak of agents: a new title and
+  description, and a social card in JPEG, light enough for WhatsApp, with the
+  two extra rows Slack shows under a link to the landing page.
 - Every row of the API reference of a component page now says what the
   property or parameter does, with its range, units and edge cases, and Quick
   Help in Xcode shows the same text.
