@@ -1,20 +1,22 @@
 ---
 // The hero of the landing page, in place of Starlight's: the title can carry {count}, and the install box sits
-// under it. The 404 page has a hero too, and keeps only its title, tagline and actions.
+// under it, in the language of the landing page. The 404 page has a hero too, and keeps only its title, tagline
+// and actions.
 import { LinkButton } from '@astrojs/starlight/components';
 import InstallBox from './InstallBox.astro';
-import { count, SITE_BASE } from '../lib/catalog';
+import { count } from '../lib/catalog';
+import { landingLang } from '../lib/landing';
 
 const { data } = Astro.locals.starlightRoute.entry;
 const { title = data.title, tagline, actions = [] } = data.hero ?? {};
 const heading = title.replaceAll('{count}', String(count));
-const isLanding = Astro.url.pathname === `${SITE_BASE}/`;
+const lang = landingLang(Astro.url.pathname);
 ---
 
 <div class="landing-hero">
   <h1 id="_top" data-page-title set:html={heading} />
   {tagline && <p class="tagline" set:html={tagline} />}
-  {isLanding && <InstallBox />}
+  {lang && <InstallBox lang={lang} />}
   {
     actions.length > 0 && (
       <div class="actions">

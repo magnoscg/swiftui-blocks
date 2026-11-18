@@ -9,6 +9,10 @@ on `main`.
 
 ### Added
 
+- The landing page also comes in Spanish, at /es/, with its own title,
+  description and social card, so search engines find the site in both
+  languages. The two versions point to each other; the rest of the site stays
+  in English.
 - The skill installs with the plugin commands of Codex and Copilot CLI, and as
   a Gemini CLI extension, from the same repository as the Claude Code plugin,
   so each agent can also update it on its own.

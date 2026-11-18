@@ -1,0 +1,31 @@
+---
+title: Componentes SwiftUI para tu agente de IA
+description: 'Componentes SwiftUI gratis para iOS 18 a 27. Tu agente de IA los añade con una skill, o úsalos a tu manera: un fichero Swift cada uno.'
+template: splash
+pagefind: false
+head:
+  - tag: meta
+    attrs:
+      property: og:type
+      content: website
+hero:
+  title: <span class="line">Dale a tu agente</span> <span class="line"><span class="nowrap">{count} componentes</span> <span class="brand-word">SwiftUI</span></span>
+  tagline: Instala la skill una vez y pide con tus propias palabras. Tu agente añade un fichero Swift para iOS 18 a 27. Gratis, MIT y sin paquetes.
+  actions:
+    - text: Ver el catálogo
+      link: /catalog/
+      icon: right-arrow
+      variant: secondary
+    - text: Cómo funciona
+      link: /introduction/
+      variant: minimal
+---
+
+import CatalogSearch from '../../../components/CatalogSearch.astro';
+import PromptStrip from '../../../components/PromptStrip.astro';
+
+<PromptStrip lang="es" />
+
+<CatalogSearch lang="es" />
+
+<p class="landing-endline">¿Sin agente? Cada página de componente tiene <strong>Copy code</strong> y <strong>Download .swift</strong>. <a href="/by-hand/">Añade uno a mano</a>.</p>
