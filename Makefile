@@ -20,7 +20,7 @@ check:
 	node scripts/catalog.mjs check
 
 test:
-	node --test scripts/catalog.test.mjs scripts/swift-docs.test.mjs scripts/publish-skill.test.mjs
+	node --test scripts/catalog.test.mjs scripts/swift-docs.test.mjs scripts/publish-skill.test.mjs scripts/agent-demo.test.mjs
 
 # make preview INPUT=recording.mov COMPONENT=Buttons/PressableButtonStyle
 preview:
