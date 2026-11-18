@@ -119,98 +119,16 @@ h4 {
   background: var(--sl-color-gray-5);
 }
 
-/* The landing page. Starlight keeps a column for an image beside the hero.
-   Here the image is the logo, above the title, and everything is centered. */
-[data-has-hero] body {
-  background-image:
-    radial-gradient(46rem 22rem at 50% -6rem, color-mix(in srgb, var(--brand-2) 16%, transparent), transparent 70%),
-    radial-gradient(30rem 16rem at 72% -4rem, color-mix(in srgb, var(--brand-3) 14%, transparent), transparent 70%);
-  background-repeat: no-repeat;
-}
-
-[data-has-hero] .hero {
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  padding-block: clamp(2.5rem, 7vw, 5rem) 1rem;
-}
-
-[data-has-hero] .hero > img {
-  order: -1;
-  width: 5.5rem;
-  height: 5.5rem;
-  margin-inline: auto;
-  filter: drop-shadow(0 18px 30px color-mix(in srgb, var(--brand-2) 35%, transparent));
-}
-
-[data-has-hero] .hero > .stack {
-  align-items: center;
-  text-align: center;
-}
-
-[data-has-hero] .hero .copy {
-  align-items: center;
-}
-
-[data-has-hero] .hero h1 {
-  max-width: 16ch;
-  font-size: clamp(2.6rem, 7vw, 4.6rem);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  color: var(--sl-color-white);
-}
-
-[data-has-hero] .hero .tagline {
-  max-width: 36rem;
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  color: var(--sl-color-gray-2);
-}
-
-[data-has-hero] .hero .actions {
-  justify-content: center;
-}
-
-[data-has-hero] .hero .actions .sl-link-button {
-  border-radius: 0.7rem;
-  font-weight: 600;
-}
-
-[data-has-hero] .hero h1,
-[data-has-hero] .hero .tagline {
-  margin-inline: auto;
-}
-
-[data-has-hero] .sl-markdown-content h2 {
-  margin-top: 4.5rem;
-  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-}
-
-[data-has-hero] .sl-markdown-content h2 + p {
-  max-width: 44rem;
-  color: var(--sl-color-gray-2);
-}
-
-[data-has-hero] .landing-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  align-items: center;
-}
-
-[data-has-hero] .landing-actions .sl-link-button {
-  border-radius: 0.7rem;
-  font-weight: 600;
-}
-
-/* Inside the content, the color of links would paint the label like its fill. */
-[data-has-hero] .landing-actions .sl-link-button.primary {
-  color: var(--sl-color-black);
+/* The landing page. Its hero is Hero.astro, and the strip, the install box and
+   the search style themselves. The strip spans 100vw, which counts a classic
+   scrollbar, so the frame clips the few pixels it would scroll sideways. */
+[data-has-hero] .main-frame {
+  overflow-x: clip;
 }
 
 [data-has-hero] .landing-endline {
-  margin-top: 3.5rem;
+  max-width: 45rem;
+  margin: 2.5rem auto 0;
   padding: 1rem 1.1rem;
   border: 1px solid var(--sl-color-gray-5);
   border-radius: 0.75rem;
@@ -220,14 +138,6 @@ h4 {
 /* The changelog is the file of the repository, which brings its own title. */
 .changelog > h1:first-child {
   display: none;
-}
-
-/* One word of the headline carries the gradient of the logo. */
-[data-has-hero] .hero h1 span {
-  background: var(--brand-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* A page of previews has no outline, so its grid takes the room the outline leaves. */

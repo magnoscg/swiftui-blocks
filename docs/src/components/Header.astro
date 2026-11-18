@@ -153,7 +153,14 @@ const path = Astro.url.pathname;
     color: var(--sl-color-white);
   }
 
+  /* A narrow bar keeps only the mark, except on the landing page, the first thing many people see. */
   @media (max-width: 30rem) {
+    :global(:root:not([data-has-hero])) .brand span {
+      display: none;
+    }
+  }
+
+  @media (max-width: 20rem) {
     .brand span {
       display: none;
     }
