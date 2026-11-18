@@ -74,6 +74,12 @@ const offset = (index: number) => (count - 1 - index) / count;
     const label = strip.querySelector<HTMLElement>('[data-strip-label]');
     const viewport = strip.querySelector<HTMLElement>('.viewport');
     const images = [...strip.querySelectorAll<HTMLImageElement>('img[data-still]')];
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+    // The still is scaled only once it has loaded, so the moving preview never shows enlarged, nor the still bare.
+    for (const image of images) {
+      image.addEventListener('load', () => image.classList.toggle('still', image.currentSrc === image.dataset.still));
+    }
 
     button?.addEventListener('click', () => {
       const paused = strip.toggleAttribute('data-paused');
@@ -90,7 +96,8 @@ const offset = (index: number) => (count - 1 - index) / count;
 
     // Focus scrolls the hidden overflow to show a card; once it leaves, the row goes back to its place.
     strip.addEventListener('focusout', (event) => {
-      if (viewport && !strip.contains(event.relatedTarget as Node | null)) viewport.scrollLeft = 0;
+      if (reduceMotion.matches || !viewport || strip.contains(event.relatedTarget as Node | null)) return;
+      viewport.scrollLeft = 0;
     });
   }
 </script>
@@ -208,7 +215,7 @@ const offset = (index: number) => (count - 1 - index) / count;
   }
 
   /* A social card holds the phone 580 px tall in 630: this fills the card with it. */
-  [data-paused] img {
+  img.still {
     scale: 1.0862;
   }
 
