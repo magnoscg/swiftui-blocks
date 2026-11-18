@@ -128,24 +128,9 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
 <noscript><style is:inline>.agent-demo .ad-run[hidden] { display: block; margin-top: 2rem; }</style></noscript>
 
 <script>
+  import { showStill, trackStill } from '../lib/still';
+
   const PLAY = '(prefers-reduced-motion: no-preference)';
-
-  function trackStill(image: HTMLImageElement) {
-    const update = () => image.classList.toggle('still', image.currentSrc === image.dataset.still);
-    image.addEventListener('load', update);
-    if (image.complete) update();
-  }
-
-  function showStill(image: HTMLImageElement, paused: boolean) {
-    const still = image.dataset.still;
-    if (!still) return;
-    if (paused && image.src !== still) {
-      image.dataset.moving = image.src;
-      image.src = still;
-    } else if (!paused && image.dataset.moving) {
-      image.src = image.dataset.moving;
-    }
-  }
 
   function play(demo: HTMLElement) {
     if (!matchMedia(PLAY).matches) return;
