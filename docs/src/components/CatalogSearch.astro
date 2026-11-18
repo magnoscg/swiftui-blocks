@@ -3,17 +3,24 @@
 // Spanish, and it lists the components that fit. It reads catalog.json the
 // first time the field is used. Without JavaScript it is a form that opens
 // the catalog with the same words.
-import { count, SITE_BASE } from '../lib/catalog';
+import { SITE_BASE } from '../lib/catalog';
+import { landingText, type LandingLang } from '../lib/landing';
+
+interface Props {
+  lang?: LandingLang;
+}
+
+const text = landingText[Astro.props.lang ?? 'en'];
 ---
 
-<form class="catalog-search not-content" action={`${SITE_BASE}/catalog/`} role="search" data-catalog={`${SITE_BASE}/catalog.json`} data-base={SITE_BASE}>
-  <label for="catalog-search-field">Describe what you need</label>
+<form class="catalog-search not-content" action={`${SITE_BASE}/catalog/`} role="search" data-catalog={`${SITE_BASE}/catalog.json`} data-base={SITE_BASE} data-nothing={text.searchNothing} data-one={text.searchOne} data-many={text.searchMany}>
+  <label for="catalog-search-field">{text.searchLabel}</label>
   <div class="field">
     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
       <circle cx="11" cy="11" r="7"></circle>
       <path d="m20 20-3.5-3.5"></path>
     </svg>
-    <input id="catalog-search-field" type="search" name="q" autocomplete="off" placeholder={`${count} components: “wallet cards”, “botón que brilla”…`} />
+    <input id="catalog-search-field" type="search" name="q" autocomplete="off" placeholder={text.searchPlaceholder} />
   </div>
   <p class="sr-only" role="status" data-status></p>
   <ul data-results hidden></ul>
@@ -113,11 +120,11 @@ import { count, SITE_BASE } from '../lib/catalog';
       if (found.length === 0) {
         const item = document.createElement('li');
         item.className = 'none';
-        item.textContent = 'Nothing fits those words. Try others, or browse the catalog.';
+        item.textContent = form.dataset.nothing ?? '';
         results.append(item);
       }
       results.hidden = false;
-      status.textContent = found.length === 1 ? '1 component' : `${found.length} components`;
+      status.textContent = found.length === 1 ? form.dataset.one! : `${found.length} ${form.dataset.many}`;
     };
 
     input.addEventListener('focus', () => void load().catch(() => {}), { once: true });

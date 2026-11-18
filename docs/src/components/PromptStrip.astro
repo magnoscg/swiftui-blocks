@@ -4,7 +4,14 @@
 // copies to come back at the other edge. With Reduce Motion on, the row stands still and scrolls by hand.
 // Paused, or with Reduce Motion, each card shows the still of its social card, the middle frame of the preview.
 import { cardURL, pageURL, previewBytes, previewURL } from '../lib/catalog';
+import { landingText, type LandingLang } from '../lib/landing';
 import { promptGroups } from '../lib/prompts';
+
+interface Props {
+  lang?: LandingLang;
+}
+
+const text = landingText[Astro.props.lang ?? 'en'];
 
 // A preview can weigh up to 2 MB. The landing page keeps to the light ones.
 const maximumBytes = 700 * 1024;
@@ -17,9 +24,9 @@ const count = shown.length;
 const offset = (index: number) => (count - 1 - index) / count;
 ---
 
-<section class="prompt-strip not-content" aria-labelledby="prompt-strip-title" style={`--count: ${count}`} data-prompt-strip>
+<section class="prompt-strip not-content" aria-labelledby="prompt-strip-title" style={`--count: ${count}`} data-prompt-strip data-pause={text.pause} data-play={text.play}>
   <div class="head">
-    <h2 id="prompt-strip-title">What you ask, and the file your agent adds</h2>
+    <h2 id="prompt-strip-title">{text.stripTitle}</h2>
     <button type="button" class="pause" data-strip-pause>
       <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
         <rect x="6" y="5" width="4" height="14" rx="1" />
@@ -28,7 +35,7 @@ const offset = (index: number) => (count - 1 - index) / count;
       <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
         <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z" />
       </svg>
-      <span data-strip-label>Pause</span>
+      <span data-strip-label>{text.pause}</span>
     </button>
   </div>
   <div class="viewport">
@@ -83,7 +90,7 @@ const offset = (index: number) => (count - 1 - index) / count;
 
     button?.addEventListener('click', () => {
       const paused = strip.toggleAttribute('data-paused');
-      if (label) label.textContent = paused ? 'Play' : 'Pause';
+      if (label) label.textContent = (paused ? strip.dataset.play : strip.dataset.pause) ?? '';
       for (const image of images) {
         if (paused) {
           image.dataset.moving = image.src;

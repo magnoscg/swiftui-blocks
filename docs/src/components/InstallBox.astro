@@ -3,6 +3,13 @@
 import { TabItem, Tabs } from '@astrojs/starlight/components';
 import { installWays, SKILL_URL } from '../lib/install';
 import { SITE_BASE } from '../lib/catalog';
+import { landingText, type LandingLang } from '../lib/landing';
+
+interface Props {
+  lang?: LandingLang;
+}
+
+const text = landingText[Astro.props.lang ?? 'en'];
 
 // A phone breaks a command before its last word, unless that word alone is wider than the box.
 const split = (command: string) => {
@@ -16,7 +23,7 @@ const split = (command: string) => {
   <Tabs syncKey="agent">
     {
       installWays.map((way) => (
-        <TabItem label={way.label}>
+        <TabItem label={way.kind === 'skills-cli' ? text.anyAgent : way.label}>
           <div class="command">
             <code>
               {way.commands.map((command) => {
@@ -34,26 +41,24 @@ const split = (command: string) => {
               type="button"
               class="copy"
               data-copy={way.commands.join(' && ')}
-              data-done="Copied"
-              aria-label={way.commands.length > 1 ? 'Copy both commands' : 'Copy the command'}
+              data-done={text.copied}
+              aria-label={way.commands.length > 1 ? text.copyCommands : text.copyCommand}
             >
               <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
                 <rect x="9" y="9" width="12" height="12" rx="2" />
                 <path d="M5 15V5a2 2 0 0 1 2-2h10" />
               </svg>
-              <span data-copy-label>Copy</span>
+              <span data-copy-label>{text.copy}</span>
             </button>
           </div>
           {way.kind === 'skills-cli' ? (
             <p class="note">
-              Recommended. Works with Claude Code, Codex, Copilot CLI, Cursor, Gemini CLI and other agents that read
-              skills. Needs Node; without it, <a href={`${SITE_BASE}/install/#by-hand`}>add it by hand</a>.{' '}
-              <a href={SKILL_URL}>Read the skill</a>
+              {text.skillsNote} <a href={`${SITE_BASE}/install/#by-hand`}>{text.skillsByHand}</a>.{' '}
+              <a href={SKILL_URL}>{text.readSkill}</a>
             </p>
           ) : (
             <p class="note">
-              Use one way on each computer: with two copies, your agent loads one, and updating the other changes
-              nothing. <a href={`${SITE_BASE}/install/`}>All options</a>
+              {text.pluginNote} <a href={`${SITE_BASE}/install/`}>{text.allOptions}</a>
             </p>
           )}
         </TabItem>
