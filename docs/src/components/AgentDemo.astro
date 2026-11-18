@@ -15,7 +15,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
   const sameIOS = run.matches.filter((row) => row.minIOS === run.pick.minIOS).length;
   const count = `${run.matches.length} ${run.matches.length === 1 ? 'match' : 'matches'}, ${
     sameIOS === run.matches.length ? 'all' : `${sameIOS} of them`
-  } for iOS ${run.pick.minIOS}`;
+  } for iOS ${iosName(run.pick.minIOS)}`;
   return {
     ...run,
     count,
@@ -42,7 +42,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
     runs.map((run, index) => {
       let step = 0;
       return (
-        <div class="ad-run" id={`agent-demo-${run.id}`} data-run>
+        <div class="ad-run" id={`agent-demo-${run.id}`} data-run hidden={index > 0}>
           <div class="ad-stage">
             <div class="ad-window">
               <div class="ad-bar" aria-hidden="true">
@@ -72,7 +72,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
                   <p class="ad-dim">{run.pick.summary}</p>
                   {run.fits && (
                     <p class="ad-dim">
-                      It needs iOS {run.pick.minIOS}; MyApp targets iOS {run.target}.
+                      It needs iOS {iosName(run.pick.minIOS)}; MyApp targets iOS {iosName(run.target)}.
                     </p>
                   )}
                 </div>
@@ -92,7 +92,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
                   </>
                 ) : (
                   <p class="ad-head ad-ask ad-step" style={`--i: ${step++}`}>
-                    It needs iOS {run.pick.minIOS}, and MyApp targets iOS {run.target}. Add it behind
+                    It needs iOS {iosName(run.pick.minIOS)}, and MyApp targets iOS {iosName(run.target)}. Add it behind
                     if #available(iOS {iosName(run.pick.minIOS)}, *), or look for one that runs on iOS {iosName(run.target)}?
                   </p>
                 )}
@@ -125,6 +125,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
     })
   }
 </figure>
+<noscript><style is:inline>.agent-demo .ad-run[hidden] { display: block; margin-top: 2rem; }</style></noscript>
 
 <script>
   const PLAY = '(prefers-reduced-motion: no-preference)';
@@ -156,7 +157,6 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
   for (const demo of document.querySelectorAll<HTMLElement>('.agent-demo')) {
     const buttons = [...demo.querySelectorAll<HTMLButtonElement>('.ad-pick-button')];
     demo.querySelector<HTMLElement>('.ad-picks')?.removeAttribute('hidden');
-    demo.querySelectorAll<HTMLElement>('[data-run]').forEach((run, index) => (run.hidden = index > 0));
 
     for (const run of demo.querySelectorAll<HTMLElement>('[data-run]')) {
       const image = run.querySelector<HTMLImageElement>('.ad-phone img');
@@ -392,10 +392,6 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1rem;
-  }
-
-  .ad-run:not([hidden]) + .ad-run:not([hidden]) {
-    margin-top: 2rem;
   }
 
   @media (pointer: coarse) {

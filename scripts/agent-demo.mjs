@@ -62,11 +62,11 @@ export function agentRun({ tsv, readSource, example, target }) {
   const matches = searchIndex(tsv, example.word);
   const pick = matches.find((row) => row.path === example.pick);
   if (!pick) throw new Error(`Agent demo: searching "${example.word}" no longer finds ${example.pick}`);
-  if (pick.shader !== '-') throw new Error(`Agent demo: ${example.pick} now needs a ${pick.shader} file, which the demo does not show`);
 
   const fits = compareVersions(pick.minIOS, target) <= 0;
   const run = { ...example, target, matches, pick, fits };
   if (!fits) return run;
+  if (pick.shader !== '-') throw new Error(`Agent demo: ${example.pick} now needs a ${pick.shader} file, which the demo does not show`);
 
   const check = checkSource(readSource(pick.path), pick.name);
   if (!check.license || !check.preview) {

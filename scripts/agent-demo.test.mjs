@@ -98,6 +98,12 @@ describe('agentRun', () => {
     assert.throws(() => agentRun({ tsv, readSource: (path) => swift(path.split('/')[1]), example: LIKE, target: '18.0' }), /metal/);
   });
 
+  it('accepts a Metal component it only asks about, since it adds no file', () => {
+    const tsv = TSV.replace('Glass/GlassToolStrip\t26.0\t-', 'Glass/GlassToolStrip\t26.0\tmetal');
+
+    assert.equal(agentRun({ tsv, readSource: () => '', example: GLASS, target: '18.0' }).fits, false);
+  });
+
   it('fails when the file it would add lacks the license header or the closing preview', () => {
     const readSource = (path) => swift(path.split('/')[1], { preview: '}\n' });
 
