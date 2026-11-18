@@ -13,6 +13,11 @@ on `main`.
   a Gemini CLI extension, from the same repository as the Claude Code plugin,
   so each agent can also update it on its own.
 - The Claude Code plugin has an icon.
+- The Introduction page shows an agent adding a component with the skill,
+  next to the component running: its search of the index, its check of the
+  minimum iOS and the file it adds, or its question when the component needs
+  a newer iOS than the app. Every line is worked out from `components.tsv` and
+  the Swift file when the site is built.
 
 ### Changed
 
