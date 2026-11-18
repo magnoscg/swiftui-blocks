@@ -1,0 +1,122 @@
+---
+// The hero of the landing page, in place of Starlight's: the title can carry {count}, and the install box sits under it.
+import { LinkButton } from '@astrojs/starlight/components';
+import InstallBox from './InstallBox.astro';
+import { count } from '../lib/catalog';
+
+const { data } = Astro.locals.starlightRoute.entry;
+const { title = data.title, tagline, actions = [] } = data.hero ?? {};
+const heading = title.replaceAll('{count}', String(count));
+---
+
+<div class="landing-hero">
+  <h1 id="_top" data-page-title set:html={heading} />
+  {tagline && <p class="tagline" set:html={tagline} />}
+  <InstallBox />
+  {
+    actions.length > 0 && (
+      <div class="actions">
+        {actions.map(({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
+          <LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
+            {text}
+          </LinkButton>
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .landing-hero {
+    max-width: 55rem;
+    margin: 0 auto;
+    padding-block: clamp(1.75rem, 4vw, 3rem) 0;
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.375rem, 5.2vw, 4rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--sl-color-white);
+    text-wrap: balance;
+  }
+
+  h1 :global(.nowrap) {
+    white-space: nowrap;
+  }
+
+  h1 :global(.brand-word) {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* The orange end of the logo reads at 2:1 on white, so the light theme darkens the same three hues. */
+  :global(:root[data-theme='light']) h1 :global(.brand-word) {
+    background-image: linear-gradient(110deg, #c2410c, #be123c 50%, #7e22ce);
+  }
+
+  .tagline {
+    max-width: 39rem;
+    margin: 1.125rem auto 1.875rem;
+    font-size: clamp(1rem, 1.6vw, 1.1875rem);
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+    text-wrap: pretty;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.625rem;
+    margin-top: 1.375rem;
+  }
+
+  .actions :global(.sl-link-button) {
+    min-height: 2.75rem;
+    margin: 0;
+    padding: 0 1.125rem;
+    border-radius: 0.625rem;
+    font-size: var(--sl-text-base);
+    font-weight: 600;
+  }
+
+  .actions :global(.sl-link-button.secondary) {
+    border-color: var(--sl-color-gray-4);
+    color: var(--sl-color-white);
+    background: transparent;
+  }
+
+  @media (min-width: 40rem) {
+    h1 :global(.line) {
+      display: block;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .actions {
+      flex-wrap: nowrap;
+    }
+
+    .actions :global(.sl-link-button) {
+      justify-content: center;
+      padding-inline: 0.875rem;
+      font-size: 0.9375rem;
+    }
+
+    .actions :global(.sl-link-button.secondary) {
+      flex: 1 1 auto;
+    }
+
+    .actions :global(.sl-link-button.minimal) {
+      flex: none;
+      padding-inline: 0.5rem;
+    }
+  }
+</style>

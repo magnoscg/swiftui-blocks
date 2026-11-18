@@ -16,6 +16,11 @@ on `main`.
 
 ### Changed
 
+- The landing page opens with the install command and what an agent does with
+  the catalog: a box with one tab per agent, whose choice /install/ keeps, and
+  a strip of prompts that work, each with the component it adds and a button to
+  pause it. The big logo, the carousel and the three sections that repeated the
+  install make way for them.
 - Every row of the API reference of a component page now says what the
   property or parameter does, with its range, units and edge cases, and Quick
   Help in Xcode shows the same text.

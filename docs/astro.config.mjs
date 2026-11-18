@@ -22,6 +22,7 @@ export default defineConfig({
       ],
       customCss: ['@fontsource-variable/outfit', './src/styles/custom.css'],
       components: {
+        Hero: './src/components/Hero.astro',
         Header: './src/components/Header.astro',
         Sidebar: './src/components/Sidebar.astro',
         PageTitle: './src/components/PageTitle.astro',

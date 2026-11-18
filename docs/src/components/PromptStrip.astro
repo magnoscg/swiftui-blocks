@@ -1,0 +1,278 @@
+---
+// The prompts that work, drifting under the hero: what someone asks, the component playing, and the file it
+// adds. Every card runs the whole loop on its own, one slot after the previous one, so the row needs no
+// copies to come back at the other edge. With Reduce Motion on, the row stands still and scrolls by hand.
+import { pageURL, previewBytes, previewURL } from '../lib/catalog';
+import { promptGroups } from '../lib/prompts';
+
+// A preview can weigh up to 2 MB. The landing page keeps to the light ones.
+const maximumBytes = 700 * 1024;
+const cards = promptGroups
+  .flatMap((group) => group.prompts)
+  .filter(({ component }) => previewBytes(component) <= maximumBytes);
+// Fewer cards than this leave a gap in the loop on the widest screens, so the list plays twice.
+const shown = cards.length < 16 ? [...cards, ...cards] : cards;
+const count = shown.length;
+const offset = (index: number) => (count - 1 - index) / count;
+---
+
+<section class="prompt-strip not-content" aria-labelledby="prompt-strip-title" style={`--count: ${count}`} data-prompt-strip>
+  <div class="head">
+    <h2 id="prompt-strip-title">What you ask, and the file your agent adds</h2>
+    <button type="button" class="pause" data-strip-pause>
+      <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+        <rect x="6" y="5" width="4" height="14" rx="1" />
+        <rect x="14" y="5" width="4" height="14" rx="1" />
+      </svg>
+      <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+        <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z" />
+      </svg>
+      <span data-strip-label>Pause</span>
+    </button>
+  </div>
+  <div class="viewport">
+    <ul>
+      {
+        shown.map(({ prompt, component }, index) => {
+          const copy = index >= cards.length;
+          return (
+            <li style={`--offset: ${offset(index)}`} aria-hidden={copy ? 'true' : undefined} class:list={{ copy }}>
+              <p class="ask">“{prompt}”</p>
+              <a href={pageURL(component)} tabindex={copy ? -1 : undefined}>
+                <img src={previewURL(component)} alt={component.title} width="192" height="417" loading="lazy" decoding="async" />
+                {component.minIOS !== '18.0' && <span class="ios">iOS {component.minIOS.replace('.0', '')}</span>}
+              </a>
+              <p class="adds">
+                <span aria-hidden="true">+ </span>
+                {component.name}
+                <wbr />
+                .swift
+              </p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<script>
+  for (const strip of document.querySelectorAll<HTMLElement>('[data-prompt-strip]')) {
+    const button = strip.querySelector<HTMLButtonElement>('[data-strip-pause]');
+    const label = strip.querySelector<HTMLElement>('[data-strip-label]');
+    button?.addEventListener('click', () => {
+      const paused = strip.toggleAttribute('data-paused');
+      if (label) label.textContent = paused ? 'Play' : 'Pause';
+    });
+  }
+</script>
+
+<style>
+  .prompt-strip {
+    --gap: 1.125rem;
+    --card-width: 12rem;
+    --ask-height: 4.375rem;
+    --shot-height: calc(var(--card-width) * 874 / 402);
+    --slot: calc(var(--card-width) + var(--gap));
+    --loop: calc(var(--count) * var(--slot));
+    --duration: calc(var(--count) * 9.4s);
+    margin: 3rem calc(50% - 50vw) 0;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 96rem;
+    margin: 0 auto 0.875rem;
+    padding-inline: max(1rem, 2vw);
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--sl-font);
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--sl-color-gray-3);
+  }
+
+  .pause {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5625rem;
+    background: transparent;
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .play-icon,
+  [data-paused] .pause-icon {
+    display: none;
+  }
+
+  [data-paused] .play-icon {
+    display: block;
+  }
+
+  .viewport {
+    padding-block: 0.25rem;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+
+  ul {
+    position: relative;
+    height: calc(var(--ask-height) + 0.625rem + var(--shot-height) + 3rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: absolute;
+    inset-block-start: 0;
+    left: 0;
+    width: var(--card-width);
+  }
+
+  .ask {
+    display: flex;
+    align-items: center;
+    height: var(--ask-height);
+    margin: 0 0 0.625rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.875rem 0.875rem 0.875rem 0.25rem;
+    background: var(--sl-color-gray-6);
+    font-size: 0.8125rem;
+    line-height: 1.38;
+    color: var(--sl-color-gray-1);
+    box-sizing: border-box;
+  }
+
+  a {
+    position: relative;
+    display: block;
+    border-radius: 1.75rem;
+    outline-offset: 3px;
+  }
+
+  img {
+    display: block;
+    width: var(--card-width);
+    height: auto;
+    aspect-ratio: 402 / 874;
+    object-fit: cover;
+    border: 1px solid color-mix(in srgb, var(--sl-color-white) 14%, transparent);
+    border-radius: 1.75rem;
+    background: var(--sl-color-gray-6);
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.55);
+  }
+
+  .ios {
+    position: absolute;
+    inset-block-start: 0.625rem;
+    inset-inline-start: 0.625rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: rgb(10 10 10 / 0.82);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #fafafa;
+  }
+
+  .adds {
+    margin: 0.5625rem 0 0 0.25rem;
+    font-family: var(--__sl-font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--sl-color-gray-2);
+    overflow-wrap: break-word;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    li {
+      animation: prompt-strip-drift var(--duration) linear infinite;
+      animation-delay: calc(var(--duration) * var(--offset) * -1);
+    }
+
+    img {
+      transition: transform 0.25s ease;
+    }
+
+    a:hover img,
+    a:focus-visible img {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .prompt-strip:hover li,
+    .prompt-strip:focus-within li,
+    .prompt-strip[data-paused] li {
+      animation-play-state: paused;
+    }
+  }
+
+  @keyframes prompt-strip-drift {
+    from {
+      transform: translateX(calc(var(--loop) - var(--slot)));
+    }
+    to {
+      transform: translateX(calc(var(--slot) * -1));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pause,
+    li.copy {
+      display: none;
+    }
+
+    .viewport {
+      overflow-x: auto;
+      mask-image: none;
+      scroll-snap-type: inline proximity;
+      scroll-padding-inline: max(1rem, 2vw);
+    }
+
+    ul {
+      display: flex;
+      gap: var(--gap);
+      width: max-content;
+      height: auto;
+      padding-inline: max(1rem, 2vw);
+    }
+
+    li {
+      position: static;
+      scroll-snap-align: start;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .pause {
+      min-height: 2.75rem;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .prompt-strip {
+      --card-width: 9.75rem;
+      --ask-height: 5.25rem;
+      margin-top: 2.5rem;
+    }
+
+    .ask {
+      font-size: 0.75rem;
+    }
+  }
+</style>

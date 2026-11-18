@@ -3,93 +3,23 @@ title: Copy-paste SwiftUI components
 description: Copy-paste SwiftUI components, animations and transitions for iOS 18 through iOS 27.
 template: splash
 hero:
-  title: <span>SwiftUI</span> Blocks
-  image:
-    file: ../../../../.github/readme/logo.svg
-    alt: ""
-  tagline: Copy-paste components, animations and transitions for iOS 18 through iOS 27. One Swift file each, and nothing to install.
+  title: <span class="line">Give your agent</span> <span class="line"><span class="nowrap">{count} <span class="brand-word">SwiftUI</span></span> components</span>
+  tagline: Install the skill once, then ask in plain words. Your agent adds one Swift file for iOS 18 to 27. Free, MIT, no package.
   actions:
     - text: Browse the catalog
       link: /catalog/
       icon: right-arrow
+      variant: secondary
     - text: How it works
       link: /introduction/
       variant: minimal
 ---
 
-import { LinkButton, TabItem, Tabs } from '@astrojs/starlight/components';
 import CatalogSearch from '../../components/CatalogSearch.astro';
-import PreviewMarquee from '../../components/PreviewMarquee.astro';
-import PromptGallery from '../../components/PromptGallery.astro';
-import { count } from '../../lib/catalog';
+import PromptStrip from '../../components/PromptStrip.astro';
+
+<PromptStrip />
 
 <CatalogSearch />
-
-<PreviewMarquee />
-
-## Give your agent the whole catalog
-
-Install the skill once, then ask in plain words. Your agent searches the {count}
-components, checks the one it picks against your deployment target and adds
-one Swift file to your project.
-
-```sh title="Recommended"
-npx skills add magnoscg/swiftui-blocks-skill
-```
-
-It works with Claude Code, Codex, Copilot CLI, Cursor, Gemini CLI and other
-agents that read skills.
-
-<div class="landing-actions">
-  <LinkButton href="/install/">Get started</LinkButton>
-  <LinkButton href="/catalog/" variant="secondary">Browse the catalog</LinkButton>
-  <LinkButton href="https://github.com/magnoscg/swiftui-blocks" variant="minimal">View on GitHub</LinkButton>
-</div>
-
-## Or install it the way your agent does
-
-Pick one way: with two copies of the skill, some agents warn about a conflict.
-
-<Tabs syncKey="agent">
-  <TabItem label="Claude Code">
-    ```sh
-    claude plugin marketplace add magnoscg/swiftui-blocks-skill
-    claude plugin install swiftui-blocks@swiftuiblocks
-    ```
-  </TabItem>
-  <TabItem label="Codex">
-    ```sh
-    codex plugin marketplace add magnoscg/swiftui-blocks-skill
-    codex plugin add swiftui-blocks@swiftuiblocks
-    ```
-  </TabItem>
-  <TabItem label="Copilot CLI">
-    ```sh
-    copilot plugin marketplace add magnoscg/swiftui-blocks-skill
-    copilot plugin install swiftui-blocks@swiftuiblocks
-    ```
-  </TabItem>
-  <TabItem label="Gemini CLI">
-    ```sh
-    gemini extensions install https://github.com/magnoscg/swiftui-blocks-skill
-    ```
-  </TabItem>
-  <TabItem label="By hand">
-    ```sh title="Claude Code"
-    mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
-    ```
-    ```sh title="Codex, Copilot CLI, Cursor and Gemini CLI"
-    mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
-    ```
-  </TabItem>
-</Tabs>
-
-[All installation options](/install/)
-
-## Then just ask
-
-Prompts that work, and the component each one finds.
-
-<PromptGallery />
 
 <p class="landing-endline">No agent? Every component page has <strong>Copy code</strong> and <strong>Download .swift</strong>. <a href="/by-hand/">Add one by hand</a>.</p>
