@@ -3,12 +3,11 @@
 // Every line comes from scripts/agent-demo.mjs, which replays the exchange on
 // components.tsv and the Swift file, so a changed catalog changes the demo.
 import { resolve } from 'node:path';
-import { loadAgentDemo } from '../../../scripts/agent-demo.mjs';
+import { iosName, loadAgentDemo } from '../../../scripts/agent-demo.mjs';
 import { cardURL, components, pageURL, previewURL } from '../lib/catalog';
 
 const MAX_ROWS = 4;
 const byPath = new Map(components.map((component) => [`${component.category}/${component.name}`, component]));
-const major = (version: string) => version.split('.')[0];
 
 const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
   const component = byPath.get(run.pick.path);
@@ -29,11 +28,21 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
 ---
 
 <figure class="agent-demo not-content" aria-label="What your agent does with the skill">
+  <div class="ad-picks" role="group" aria-label="Examples" hidden>
+    {
+      runs.map((run, index) => (
+        <button class="ad-pick-button" type="button" aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`agent-demo-${run.id}`}>
+          {run.label}
+          {!run.fits && <small>iOS {iosName(run.pick.minIOS)}</small>}
+        </button>
+      ))
+    }
+  </div>
   {
     runs.map((run, index) => {
       let step = 0;
       return (
-        <div class="ad-run" id={`agent-demo-${run.id}`} data-run hidden={index > 0}>
+        <div class="ad-run" id={`agent-demo-${run.id}`} data-run>
           <div class="ad-stage">
             <div class="ad-window">
               <div class="ad-bar" aria-hidden="true">
@@ -84,7 +93,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
                 ) : (
                   <p class="ad-head ad-ask ad-step" style={`--i: ${step++}`}>
                     It needs iOS {run.pick.minIOS}, and MyApp targets iOS {run.target}. Add it behind
-                    if #available(iOS {major(run.pick.minIOS)}, *), or look for one that runs on iOS {major(run.target)}?
+                    if #available(iOS {iosName(run.pick.minIOS)}, *), or look for one that runs on iOS {iosName(run.target)}?
                   </p>
                 )}
               </div>
@@ -95,7 +104,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
                 <img
                   src={run.preview}
                   data-still={run.still}
-                  alt={run.fits ? `${run.pick.title}, running in the app` : `${run.pick.title}, running on iOS ${major(run.pick.minIOS)}`}
+                  alt={run.fits ? `${run.pick.title}, running in the app` : `${run.pick.title}, running on iOS ${iosName(run.pick.minIOS)}`}
                   width="320"
                   height="696"
                   loading={index > 0 ? 'lazy' : undefined}
@@ -106,25 +115,15 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
           </div>
           <div class="ad-foot">
             <p class="ad-cap">
-              <a href={run.page}>{run.pick.title}</a> · {run.pick.category} · iOS {major(run.pick.minIOS)} ·{' '}
-              {run.fits ? 'the file your agent added, running' : `not added yet: it needs iOS ${major(run.pick.minIOS)}`}
+              <a href={run.page}>{run.pick.title}</a> · {run.pick.category} · iOS {iosName(run.pick.minIOS)} ·{' '}
+              {run.fits ? 'the file your agent added, running' : `not added yet: it needs iOS ${iosName(run.pick.minIOS)}`}
             </p>
-            <button class="ad-pause" type="button" aria-pressed="false" hidden>Pause</button>
+            <button class="ad-pause" type="button" hidden>Pause</button>
           </div>
         </div>
       );
     })
   }
-  <div class="ad-picks" role="group" aria-label="Examples" hidden>
-    {
-      runs.map((run, index) => (
-        <button class="ad-pick-button" type="button" aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`agent-demo-${run.id}`}>
-          {run.label}
-          {!run.fits && <small>iOS {major(run.pick.minIOS)}</small>}
-        </button>
-      ))
-    }
-  </div>
 </figure>
 
 <script>
@@ -157,6 +156,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
   for (const demo of document.querySelectorAll<HTMLElement>('.agent-demo')) {
     const buttons = [...demo.querySelectorAll<HTMLButtonElement>('.ad-pick-button')];
     demo.querySelector<HTMLElement>('.ad-picks')?.removeAttribute('hidden');
+    demo.querySelectorAll<HTMLElement>('[data-run]').forEach((run, index) => (run.hidden = index > 0));
 
     for (const run of demo.querySelectorAll<HTMLElement>('[data-run]')) {
       const image = run.querySelector<HTMLImageElement>('.ad-phone img');
@@ -166,8 +166,7 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
       if (!matchMedia(PLAY).matches) continue;
       pause.hidden = false;
       pause.addEventListener('click', () => {
-        const paused = pause.getAttribute('aria-pressed') !== 'true';
-        pause.setAttribute('aria-pressed', String(paused));
+        const paused = run.toggleAttribute('data-paused');
         pause.textContent = paused ? 'Play' : 'Pause';
         showStill(image, paused);
       });
@@ -323,6 +322,12 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
     scale: 1.0862;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .ad-phone img {
+      scale: 1.0862;
+    }
+  }
+
   .ad-phone picture {
     display: block;
     border-radius: 1.75rem;
@@ -386,7 +391,11 @@ const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-top: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .ad-run:not([hidden]) + .ad-run:not([hidden]) {
+    margin-top: 2rem;
   }
 
   @media (pointer: coarse) {

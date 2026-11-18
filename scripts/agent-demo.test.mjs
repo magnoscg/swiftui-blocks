@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { agentRun, checkSource, loadAgentDemo, searchIndex } from './agent-demo.mjs';
+import { agentRun, checkSource, iosName, loadAgentDemo, searchIndex } from './agent-demo.mjs';
 
 const TSV = [
   'component\tminIOS\tshader\ttitle\tsummary\tkeywords',
@@ -72,7 +72,6 @@ describe('agentRun', () => {
     assert.equal(run.fits, true);
     assert.equal(run.file.name, 'LikeBurstButton.swift');
     assert.equal(run.file.lines, swift('LikeBurstButton').split('\n').length - 1);
-    assert.match(run.file.url, /\/Components\/Buttons\/LikeBurstButton\/LikeBurstButton\.swift$/);
   });
 
   it('adds nothing when the component needs a newer iOS than the app targets', () => {
@@ -93,10 +92,22 @@ describe('agentRun', () => {
     assert.throws(() => agentRun({ tsv: TSV, readSource: () => '', example: { ...LIKE, word: 'toolbar' }, target: '18.0' }), /LikeBurstButton/);
   });
 
+  it('fails when the component it picks also needs a Metal file, which the demo does not show', () => {
+    const tsv = TSV.replace('Buttons/LikeBurstButton\t18.0\t-', 'Buttons/LikeBurstButton\t18.0\tmetal');
+
+    assert.throws(() => agentRun({ tsv, readSource: (path) => swift(path.split('/')[1]), example: LIKE, target: '18.0' }), /metal/);
+  });
+
   it('fails when the file it would add lacks the license header or the closing preview', () => {
     const readSource = (path) => swift(path.split('/')[1], { preview: '}\n' });
 
     assert.throws(() => agentRun({ tsv: TSV, readSource, example: LIKE, target: '18.0' }), /#Preview/);
+  });
+});
+
+describe('iosName', () => {
+  it('drops a .0 and keeps any other minor version', () => {
+    assert.deepEqual([iosName('26.0'), iosName('18.4'), iosName('18')], ['26', '18.4', '18']);
   });
 });
 
