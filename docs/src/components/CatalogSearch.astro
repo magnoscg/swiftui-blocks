@@ -3,7 +3,7 @@
 // Spanish, and it lists the components that fit. It reads catalog.json the
 // first time the field is used. Without JavaScript it is a form that opens
 // the catalog with the same words.
-import { count, SITE_BASE } from '../lib/catalog';
+import { SITE_BASE } from '../lib/catalog';
 import { landingText, type LandingLang } from '../lib/landing';
 
 interface Props {
@@ -20,7 +20,7 @@ const text = landingText[Astro.props.lang ?? 'en'];
       <circle cx="11" cy="11" r="7"></circle>
       <path d="m20 20-3.5-3.5"></path>
     </svg>
-    <input id="catalog-search-field" type="search" name="q" autocomplete="off" placeholder={text.searchPlaceholder(count)} />
+    <input id="catalog-search-field" type="search" name="q" autocomplete="off" placeholder={text.searchPlaceholder} />
   </div>
   <p class="sr-only" role="status" data-status></p>
   <ul data-results hidden></ul>
