@@ -38,7 +38,7 @@ export default defineConfig({
       },
       sidebar: [
         { label: 'Get started', items: ['introduction', 'install', 'prompts', 'by-hand'] },
-        { label: 'Reference', items: ['rules', 'accessibility', 'files-for-agents'] },
+        { label: 'Reference', items: ['anatomy', 'rules', 'accessibility', 'files-for-agents'] },
         { label: 'Project', items: ['contributing', 'changelog'] },
         // 288 names do not fit in a sidebar: each category opens on demand.
         { label: 'Catalog', items: [{ autogenerate: { directory: 'catalog', collapsed: true } }] },
