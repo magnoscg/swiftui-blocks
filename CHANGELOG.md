@@ -41,6 +41,9 @@ on `main`.
   the app's String Catalog instead of showing untranslated.
 - Split Flap Counter keeps its digits in order in a right-to-left layout,
   where it showed 1321 as 12310.
+- With Reduce Motion on, the previews of the site's catalog and component
+  pages stand still on their middle frame instead of playing, and the preview
+  on the page of a component has a button to pause it.
 
 ## 0.14.0 - 2026-11-17
 

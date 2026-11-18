@@ -39,6 +39,9 @@ const apis = [...uses]
 const hasShaders = items.some((item) => item.shader);
 const capitalized = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 const major = (version: string) => version.replace(/\.0$/, '');
+// The social card next to each preview holds its middle frame: the still shown with Reduce Motion. The grid
+// has no Pause button of its own; the page of each component has one.
+const still = (preview: string) => preview.replace(/\.webp$/, '.jpg');
 const sections = fixedCategory
   ? [{ category: undefined, items }]
   : categories.map((category) => ({ category, items: items.filter((item) => item.category === category) }));
@@ -120,7 +123,12 @@ const sections = fixedCategory
             >
               <a href={item.href}>
                 <span class="frame">
-                  <img src={item.preview} alt="" width="160" loading="lazy" />
+                  <span class="screen">
+                    <picture>
+                      <source media="(prefers-reduced-motion: reduce)" srcset={still(item.preview)} />
+                      <img src={item.preview} alt="" width="160" loading="lazy" />
+                    </picture>
+                  </span>
                 </span>
                 <span class="title">
                   <strong>{item.title}</strong>
@@ -299,19 +307,26 @@ const sections = fixedCategory
   }
 
   /* The shape of a phone screen, kept before the preview loads, so the grid does not jump. */
-  .grid img {
+  .screen {
+    display: block;
     width: min(11.5rem, 82%);
-    height: auto;
-    aspect-ratio: 402 / 874;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 1.4rem;
     border: 1px solid var(--sl-color-gray-5);
     background: var(--sl-color-gray-6);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  .grid a:hover img,
-  .grid a:focus-visible img {
+  .grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 402 / 874;
+    object-fit: cover;
+  }
+
+  .grid a:hover .screen,
+  .grid a:focus-visible .screen {
     transform: scale(1.03);
   }
 
@@ -341,15 +356,20 @@ const sections = fixedCategory
 
   @media (prefers-reduced-motion: reduce) {
     .grid a,
-    .grid img,
+    .screen,
     .arrow {
       transition: none;
     }
 
+    /* A social card holds the phone 580 px tall in 630: this fills the screen with it. */
+    .grid img {
+      scale: 1.0862;
+    }
+
     .grid a:hover,
     .grid a:focus-visible,
-    .grid a:hover img,
-    .grid a:focus-visible img,
+    .grid a:hover .screen,
+    .grid a:focus-visible .screen,
     .grid a:hover .arrow,
     .grid a:focus-visible .arrow,
     .section-title a:hover .arrow,
