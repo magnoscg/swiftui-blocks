@@ -2,11 +2,11 @@
 // of the site, which astro.config.mjs sets for every other page, and gives the
 // landing page the two extra rows Slack shows under a shared link.
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data';
-import { cardURL, components, count } from './lib/catalog';
+import { cardURL, components, count, SITE_BASE } from './lib/catalog';
 
 export const onRequest = defineRouteMiddleware((context) => {
   const { entry, head } = context.locals.starlightRoute;
-  if (entry.data.hero) {
+  if (context.url.pathname === `${SITE_BASE}/`) {
     head.push(
       { tag: 'meta', attrs: { name: 'twitter:label1', content: 'Components' } },
       { tag: 'meta', attrs: { name: 'twitter:data1', content: `${count} · iOS 18 to 27` } },

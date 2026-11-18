@@ -120,7 +120,12 @@ h4 {
 }
 
 /* The landing page. Its hero is Hero.astro, and the strip, the install box and
-   the search style themselves. */
+   the search style themselves. The strip spans 100vw, which counts a classic
+   scrollbar, so the frame clips the few pixels it would scroll sideways. */
+[data-has-hero] .main-frame {
+  overflow-x: clip;
+}
+
 [data-has-hero] .landing-endline {
   max-width: 45rem;
   margin: 2.5rem auto 0;

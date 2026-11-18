@@ -95,7 +95,6 @@ const split = (command: string) => {
     border-bottom: 1px solid var(--sl-color-gray-5);
   }
 
-  /* On a narrow screen the tabs scroll, and each edge fades while there are more tabs beyond it. */
   .install-box :global([role='tablist']) {
     --fade-size: 2.5rem;
     gap: 0.125rem;
@@ -105,17 +104,24 @@ const split = (command: string) => {
     overflow-x: auto;
     scrollbar-width: none;
     scroll-padding-inline: var(--fade-size);
-    mask:
-      linear-gradient(black, black) no-clip subtract,
-      linear-gradient(to right, black, transparent) 0 0 / var(--fade-start) 100% no-repeat no-clip,
-      linear-gradient(to right, transparent, black) 100% 0 / var(--fade-end) 100% no-repeat no-clip;
-    animation:
-      install-box-fade-start linear both,
-      install-box-fade-end linear both;
-    animation-timeline: scroll(self inline);
-    animation-range:
-      0 var(--fade-size),
-      calc(100% - var(--fade-size)) 100%;
+  }
+
+  /* On a narrow screen the tabs scroll, and each edge fades while there are more tabs beyond it.
+     Without scroll-driven animations the fades would stay on, so those browsers go without. */
+  @supports (animation-timeline: scroll()) {
+    .install-box :global([role='tablist']) {
+      mask:
+        linear-gradient(black, black) no-clip subtract,
+        linear-gradient(to right, black, transparent) 0 0 / var(--fade-start) 100% no-repeat no-clip,
+        linear-gradient(to right, transparent, black) 100% 0 / var(--fade-end) 100% no-repeat no-clip;
+      animation:
+        install-box-fade-start linear both,
+        install-box-fade-end linear both;
+      animation-timeline: scroll(self inline);
+      animation-range:
+        0 var(--fade-size),
+        calc(100% - var(--fade-size)) 100%;
+    }
   }
 
   @keyframes install-box-fade-start {

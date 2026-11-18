@@ -2,7 +2,8 @@
 // The prompts that work, drifting under the hero: what someone asks, the component playing, and the file it
 // adds. Every card runs the whole loop on its own, one slot after the previous one, so the row needs no
 // copies to come back at the other edge. With Reduce Motion on, the row stands still and scrolls by hand.
-import { pageURL, previewBytes, previewURL } from '../lib/catalog';
+// Paused, or with Reduce Motion, each card shows the still of its social card, the middle frame of the preview.
+import { cardURL, pageURL, previewBytes, previewURL } from '../lib/catalog';
 import { promptGroups } from '../lib/prompts';
 
 // A preview can weigh up to 2 MB. The landing page keeps to the light ones.
@@ -39,7 +40,18 @@ const offset = (index: number) => (count - 1 - index) / count;
             <li style={`--offset: ${offset(index)}`} aria-hidden={copy ? 'true' : undefined} class:list={{ copy }}>
               <p class="ask">“{prompt}”</p>
               <a href={pageURL(component)} tabindex={copy ? -1 : undefined}>
-                <img src={previewURL(component)} alt={component.title} width="192" height="417" loading="lazy" decoding="async" />
+                <picture>
+                  <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
+                  <img
+                    src={previewURL(component)}
+                    alt={component.title}
+                    width="192"
+                    height="417"
+                    loading="lazy"
+                    decoding="async"
+                    data-still={cardURL(component)}
+                  />
+                </picture>
                 {component.minIOS !== '18.0' && <span class="ios">iOS {component.minIOS.replace('.0', '')}</span>}
               </a>
               <p class="adds">
@@ -60,9 +72,25 @@ const offset = (index: number) => (count - 1 - index) / count;
   for (const strip of document.querySelectorAll<HTMLElement>('[data-prompt-strip]')) {
     const button = strip.querySelector<HTMLButtonElement>('[data-strip-pause]');
     const label = strip.querySelector<HTMLElement>('[data-strip-label]');
+    const viewport = strip.querySelector<HTMLElement>('.viewport');
+    const images = [...strip.querySelectorAll<HTMLImageElement>('img[data-still]')];
+
     button?.addEventListener('click', () => {
       const paused = strip.toggleAttribute('data-paused');
       if (label) label.textContent = paused ? 'Play' : 'Pause';
+      for (const image of images) {
+        if (paused) {
+          image.dataset.moving = image.src;
+          image.src = image.dataset.still!;
+        } else if (image.dataset.moving) {
+          image.src = image.dataset.moving;
+        }
+      }
+    });
+
+    // Focus scrolls the hidden overflow to show a card; once it leaves, the row goes back to its place.
+    strip.addEventListener('focusout', (event) => {
+      if (viewport && !strip.contains(event.relatedTarget as Node | null)) viewport.scrollLeft = 0;
     });
   }
 </script>
@@ -163,20 +191,25 @@ const offset = (index: number) => (count - 1 - index) / count;
   a {
     position: relative;
     display: block;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--sl-color-white) 14%, transparent);
     border-radius: 1.75rem;
+    background: var(--sl-color-gray-6);
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.55);
     outline-offset: 3px;
   }
 
   img {
     display: block;
-    width: var(--card-width);
+    width: 100%;
     height: auto;
     aspect-ratio: 402 / 874;
     object-fit: cover;
-    border: 1px solid color-mix(in srgb, var(--sl-color-white) 14%, transparent);
-    border-radius: 1.75rem;
-    background: var(--sl-color-gray-6);
-    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.55);
+  }
+
+  /* A social card holds the phone 580 px tall in 630: this fills the card with it. */
+  [data-paused] img {
+    scale: 1.0862;
   }
 
   .ios {
@@ -206,12 +239,12 @@ const offset = (index: number) => (count - 1 - index) / count;
       animation-delay: calc(var(--duration) * var(--offset) * -1);
     }
 
-    img {
+    a {
       transition: transform 0.25s ease;
     }
 
-    a:hover img,
-    a:focus-visible img {
+    a:hover,
+    a:focus-visible {
       transform: translateY(-4px) scale(1.02);
     }
 
@@ -219,6 +252,10 @@ const offset = (index: number) => (count - 1 - index) / count;
     .prompt-strip:focus-within li,
     .prompt-strip[data-paused] li {
       animation-play-state: paused;
+    }
+
+    .prompt-strip:focus-within .viewport {
+      mask-image: none;
     }
   }
 
@@ -255,6 +292,10 @@ const offset = (index: number) => (count - 1 - index) / count;
     li {
       position: static;
       scroll-snap-align: start;
+    }
+
+    img {
+      scale: 1.0862;
     }
   }
 
