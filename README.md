@@ -208,7 +208,7 @@ Node 24 or later and Xcode 27.2 or later. The scripts have no dependencies.
 ```sh
 make catalog         # rewrite the generated files after changing a component
 make check           # fail if a component breaks a rule or a generated file is stale
-make test            # the tests of the catalog tooling
+make test            # the tests of the catalog tooling and of the skill build
 make record          # record the preview of a component in the simulator
 make docs            # build the site into docs/dist
 make showcase-test   # run the Swift Testing suite in the simulator

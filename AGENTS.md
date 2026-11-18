@@ -20,7 +20,7 @@ easy to copy matters as much as the code itself.
 | `scripts/` | Validates the components and generates the files below |
 | `catalog.json`, `llms.txt`, `components.tsv`, `llms-full.txt`, `catalog/` | Generated: the indexes for agents and tools, and a page per category with every preview |
 | `skills/swiftui-blocks/` | The skill people install so their agent finds and copies a component. Written by hand: keep its steps in line with `llms.txt` |
-| `skill-distribution/` | The plugin manifests and README of magnoscg/swiftui-blocks-skill, the small repository agents install the skill from. `make publish-skill` sends them with the skill from each release branch |
+| `skill-distribution/` | The plugin manifests, icon and README of magnoscg/swiftui-blocks-skill, the small repository agents install the skill from. `make publish-skill` sends them with the skill from each release branch |
 | `README.md` | Written by hand, except the index between the `catalog` markers |
 | `docs/` | The site, built with Astro Starlight. See [The site](#the-site) |
 | `.github/` | Issue and pull request templates, CI, the Pages deploy and Dependabot. `readme/` has the logo and the button of the README, two animated SVG files |
@@ -52,7 +52,7 @@ separate download: `xcodebuild -downloadComponent MetalToolchain`.
 ```sh
 make catalog                   # rewrite the generated files after changing a component
 make check                     # fail if a component breaks a rule or a generated file is stale
-make test                      # the tests of the catalog tooling
+make test                      # the tests of the catalog tooling and of the skill build
 make record                    # record the previews of one component or all of them
 make preview                   # turn a recording into a component's preview and social card
 make cards                     # remake the social cards of one component or all of them

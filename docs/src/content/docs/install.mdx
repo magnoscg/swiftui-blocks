@@ -11,8 +11,8 @@ agent reads it only when you ask for a piece of SwiftUI.
 
 ## Skills CLI
 
-Works with Claude Code, Codex, Cursor, Gemini CLI and other agents that read
-skills. It needs Node.
+Works with Claude Code, Codex, Copilot CLI, Cursor, Gemini CLI and other agents
+that read skills. It needs Node.
 
 ```sh title="Recommended"
 npx skills add magnoscg/swiftui-blocks-skill
@@ -23,16 +23,51 @@ all of them. To answer up front, add `-g` for every project and `-a` with an
 agent, like `-a claude-code` or `-a codex`. Run `npx skills update` to update
 it.
 
-## Claude Code plugin
+## Your agent's own plugin
 
-```sh
-claude plugin marketplace add magnoscg/swiftui-blocks-skill
-claude plugin install swiftui-blocks@swiftuiblocks
-```
+Claude Code, Codex, Copilot CLI and Gemini CLI can also install it with their
+own commands, which keep it up to date too. Pick one way on each computer: the
+skills CLI, your agent's plugin or a copy by hand. The skills CLI and the copy
+by hand share one folder among agents, so with a plugin as well some agents
+find two copies and warn about a conflict.
 
-`claude plugin list` then shows `swiftui-blocks@swiftuiblocks` as enabled. To
-update it, run `claude plugin marketplace update swiftuiblocks` and then
-`claude plugin update swiftui-blocks@swiftuiblocks`.
+<Tabs syncKey="agent">
+  <TabItem label="Claude Code">
+    ```sh
+    claude plugin marketplace add magnoscg/swiftui-blocks-skill
+    claude plugin install swiftui-blocks@swiftuiblocks
+    ```
+
+    `claude plugin list` then shows `swiftui-blocks@swiftuiblocks` as enabled.
+    To update it, run `claude plugin marketplace update swiftuiblocks` and then
+    `claude plugin update swiftui-blocks@swiftuiblocks`.
+  </TabItem>
+  <TabItem label="Codex">
+    ```sh
+    codex plugin marketplace add magnoscg/swiftui-blocks-skill
+    codex plugin add swiftui-blocks@swiftuiblocks
+    ```
+
+    To update it, run `codex plugin marketplace upgrade swiftuiblocks`.
+  </TabItem>
+  <TabItem label="Copilot CLI">
+    ```sh
+    copilot plugin marketplace add magnoscg/swiftui-blocks-skill
+    copilot plugin install swiftui-blocks@swiftuiblocks
+    ```
+
+    `copilot skill list` then shows `swiftui-blocks`. To update it, run
+    `copilot plugin update swiftui-blocks`.
+  </TabItem>
+  <TabItem label="Gemini CLI">
+    ```sh
+    gemini extensions install https://github.com/magnoscg/swiftui-blocks-skill
+    ```
+
+    `gemini extensions list` then shows `swiftui-blocks`. To update it, run
+    `gemini extensions update swiftui-blocks`.
+  </TabItem>
+</Tabs>
 
 ## By hand
 
@@ -44,7 +79,7 @@ Without Node, copy the file into the folder your agent reads skills from.
     mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
     ```
   </TabItem>
-  <TabItem label="Codex, Cursor and Gemini CLI">
+  <TabItem label="Codex, Copilot CLI, Cursor and Gemini CLI">
     ```sh
     mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
     ```

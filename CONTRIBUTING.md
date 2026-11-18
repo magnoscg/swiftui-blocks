@@ -76,6 +76,8 @@ and tags are `X.Y.Z` without a `v`.
    the small repository agents install it from, with version X.Y.Z. It comes
    before `main`, so the site never shows a command the skill repository
    cannot answer yet. A change to the skill after this needs a new version.
+   Before merging, run from GitHub any install command that the release adds
+   or changes on `/install/`, such as the Gemini CLI extension.
 4. Merge the pull request without fast-forward, then tag the merge on `main`
    with an annotated `X.Y.Z` tag. The merge publishes the site.
 5. Merge `main` back into `develop`.
