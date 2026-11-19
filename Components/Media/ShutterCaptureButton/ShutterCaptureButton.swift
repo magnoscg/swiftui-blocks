@@ -8,6 +8,14 @@ enum ShutterCaptureButtonMode: String, CaseIterable, Identifiable, Sendable {
     case video = "Video"
 
     var id: Self { self }
+
+    /// The name of the mode, as its toggle shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .photo: "Photo"
+        case .video: "Video"
+        }
+    }
 }
 
 /// A camera shutter with a photo and video toggle.
@@ -45,7 +53,7 @@ struct ShutterCaptureButton: View {
                     } label: {
                         // A word is too small to hit. The padding widens what answers to a
                         // touch, and the same padding taken back keeps the layout as it was.
-                        Text(option.rawValue)
+                        Text(option.title)
                             .padding(13)
                             .contentShape(.rect)
                             .padding(-13)

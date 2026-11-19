@@ -7,6 +7,14 @@ enum CoinFlipViewSide: String, CaseIterable, Hashable {
     case heads = "Heads"
     case tails = "Tails"
 
+    /// The name of the side, as VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .heads: "Heads"
+        case .tails: "Tails"
+        }
+    }
+
     var symbolName: String {
         switch self {
         case .heads: "crown.fill"
@@ -82,7 +90,7 @@ struct CoinFlipView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Flip coin")
-        .accessibilityValue(side.rawValue)
+        .accessibilityValue(Text(side.title))
         .sensoryFeedback(.impact(weight: .medium), trigger: landedCount)
         .onChange(of: side) { _, newSide in
             guard !isFlipping, CoinFlipViewMath.visibleSide(at: angle) != newSide else { return }
@@ -179,7 +187,7 @@ struct CoinFlipViewDemo: View {
                 .padding(.top, 180)
 
                 VStack(spacing: 4) {
-                    Text(flips == 0 ? "Ready" : side.rawValue)
+                    Text(flips == 0 ? "Ready" : side.title)
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
 
                     Text("Flips: \(flips)")

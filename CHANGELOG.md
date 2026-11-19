@@ -12,6 +12,11 @@ on `main`.
 - Voice Orb gives VoiceOver its state as a text the app can translate, and its
   demo shows the states the same way. Before, both used the English name of
   the state.
+- Billing Period Toggle, Breathing Guide Circle, Coin Flip View, Polygon Morph
+  Shape, Shutter Capture Button, Spring Study Playground, Surface 3D Chart and
+  Symbol Effect Gallery show the names of their options, and give them to
+  VoiceOver, as text the app can translate. Before, they used the English name
+  of each option.
 
 ## 0.15.0 - 2026-11-19
 
