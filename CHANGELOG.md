@@ -22,6 +22,12 @@ on `main`.
   Model Availability Gate, Navigation Path Router, Tabs Picker Pages and Voice
   Orb show text the app can translate too. Before, it stayed in English
   whatever the language.
+- The texts a caller passes to Sliding Segmented Picker (the title of each
+  segment), Search Scopes And Suggestions (the title of each scope) and
+  Structured Output Form (the failure message) are `LocalizedStringResource`,
+  so a literal lands in the app's String Catalog instead of showing
+  untranslated. A `String` that is not a literal is passed as `"\(value)"`,
+  also from the two closures: `{ "\($0.rawValue)" }`.
 
 ## 0.15.0 - 2026-11-19
 

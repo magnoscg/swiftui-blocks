@@ -56,7 +56,7 @@ struct StructuredOutputForm: View {
     /// Plays instead of an error when the model is unavailable or fails.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
     /// The text shown under the form when the model is unavailable or fails and there is no `fallbackStream`.
-    var failureMessage = "The on-device model couldn't fill in the form right now. Please try again later."
+    var failureMessage: LocalizedStringResource = "The on-device model couldn't fill in the form right now. Please try again later."
 
     @State private var fillTask: Task<Void, Never>?
     @State private var isFilling = false

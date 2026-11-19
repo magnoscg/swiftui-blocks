@@ -14,7 +14,7 @@ struct SlidingSegmentedPicker<Option: Hashable>: View {
     /// The color of the pill, under white text.
     var tint: Color = .indigo
     /// The text of the segment for each option. It shrinks to 70% before truncating.
-    let title: (Option) -> String
+    let title: (Option) -> LocalizedStringResource
 
     @Namespace private var namespace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -62,6 +62,15 @@ struct SlidingSegmentedPickerDemo: View {
         case month = "Month"
         case year = "Year"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .day: "Day"
+            case .week: "Week"
+            case .month: "Month"
+            case .year: "Year"
+            }
+        }
+
         var steps: Int {
             switch self {
             case .day: 8_240
@@ -87,7 +96,7 @@ struct SlidingSegmentedPickerDemo: View {
             }
             .accessibilityElement(children: .combine)
 
-            SlidingSegmentedPicker(selection: $period, options: Period.allCases) { $0.rawValue }
+            SlidingSegmentedPicker(selection: $period, options: Period.allCases) { $0.title }
         }
         .animation(reduceMotion ? nil : .snappy, value: period)
         .padding(24)
