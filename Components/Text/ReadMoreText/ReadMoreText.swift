@@ -8,10 +8,14 @@ import SwiftUI
 /// The button only appears when the text does not fit. With Reduce Motion on, the
 /// paragraph changes height at once. VoiceOver always reads the whole paragraph.
 struct ReadMoreText: View {
+    /// The paragraph to show, truncated until it is expanded.
     let text: String
+    /// How many lines show while collapsed, at least 1.
     var collapsedLines = 3
-    var moreLabel = "Read more"
-    var lessLabel = "Show less"
+    /// The text of the button that expands the paragraph.
+    var moreLabel: LocalizedStringResource = "Read more"
+    /// The text of the button that collapses it again.
+    var lessLabel: LocalizedStringResource = "Show less"
 
     @State private var isExpanded = false
     @State private var fullHeight: CGFloat = 0

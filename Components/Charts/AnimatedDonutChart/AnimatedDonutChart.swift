@@ -15,7 +15,11 @@ struct AnimatedDonutChartSegment: Identifiable, Hashable {
 /// Tap a segment or its legend row to select it. With Reduce Motion on, the whole donut
 /// appears at once.
 struct AnimatedDonutChart: View {
+    /// The slices, clockwise from the top. Each id is also its name in the legend and the center.
+    /// Negative values count as zero.
     let segments: [AnimatedDonutChartSegment]
+    /// The id of the lifted segment, or nil to show the total. A tap on a segment or its legend row
+    /// writes it, and a second tap clears it.
     @Binding var selection: String?
 
     @State private var revealedCount = 0

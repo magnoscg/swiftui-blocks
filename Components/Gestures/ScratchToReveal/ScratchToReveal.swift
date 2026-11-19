@@ -56,10 +56,15 @@ struct ScratchToRevealCoverage: Equatable {
 /// The rest falls away once `revealThreshold` of the cover is gone. To start over, change the
 /// view's `id`. VoiceOver users double tap to reveal, and Reduce Motion removes the final fade.
 struct ScratchToReveal<Content: View, Cover: View>: View {
+    /// The width of the line a finger scratches, in points. Values below 1 count as 1.
     var brushWidth: CGFloat = 44
+    /// The fraction of the cover, from 0.01 to 1, that must be scratched off before the rest falls away.
     var revealThreshold: Double = 0.6
+    /// Runs once, when the content is revealed by scratching or by VoiceOver.
     var onReveal: (() -> Void)? = nil
+    /// The view under the cover. It sets the size of the card, and VoiceOver skips it until it is revealed.
     @ViewBuilder var content: () -> Content
+    /// The view scratched away, stretched over the content.
     @ViewBuilder var cover: () -> Cover
 
     @State private var strokes: [[CGPoint]] = []

@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, it shows a still gradient.
 struct AuroraMeshBackground: View {
+    /// The color of the corners and most of the mesh.
     var first: Color = .indigo
+    /// The color of the center and of two edges.
     var second: Color = .purple
+    /// The accent color at the left edge and the bottom-right corner.
     var third: Color = .teal
+    /// How fast the mesh points sway, as a multiplier of time. Zero holds it still.
     var speed: Double = 0.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

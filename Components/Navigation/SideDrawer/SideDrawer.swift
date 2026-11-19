@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the menu opens and closes without sliding.
 struct SideDrawer<MenuContent: View, Content: View>: View {
+    /// Whether the menu is open. The drawer writes it when a drag ends past half the menu width and when the content is tapped.
     @Binding var isOpen: Bool
+    /// The width of the menu in points, which is also how far the content moves aside.
     var menuWidth: CGFloat = 280
+    /// The menu, on the leading edge.
     @ViewBuilder var menu: MenuContent
+    /// The main content, pushed aside while the menu is open.
     @ViewBuilder var content: Content
 
     @State private var dragTranslation: CGFloat = 0

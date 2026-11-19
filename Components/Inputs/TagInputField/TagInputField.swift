@@ -68,7 +68,9 @@ nonisolated enum TagInputFieldLogic {
 /// left out. VoiceOver reads each tag with a Remove action. Keyboard options such as
 /// `autocorrectionDisabled` reach the field when set on this view.
 struct TagInputField: View {
+    /// The tags, in the order added. The field writes it as tags are added or removed, trimmed and without repeats regardless of case.
     @Binding var tags: [String]
+    /// The placeholder shown while nothing is typed, and the name VoiceOver reads for the field.
     var prompt = "Add a tag"
 
     private let cornerRadius: CGFloat = 14

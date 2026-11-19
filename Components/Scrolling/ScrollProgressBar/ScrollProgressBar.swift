@@ -56,6 +56,14 @@ struct ScrollProgressBar: ViewModifier {
 }
 
 extension View {
+    /// Pins a bar to the top of this scroll view that fills as the content is scrolled to its end.
+    ///
+    /// Apply it to the `ScrollView`. The bar follows the scroll position directly, so it has
+    /// no animation of its own.
+    ///
+    /// - Parameters:
+    ///   - tint: The fill of the progressed part of the bar.
+    ///   - height: The thickness of the bar, in points.
     func scrollProgressBar(
         tint: LinearGradient = LinearGradient(colors: [.pink, .orange], startPoint: .leading, endPoint: .trailing),
         height: CGFloat = 5

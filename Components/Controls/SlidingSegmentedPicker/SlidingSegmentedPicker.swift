@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the pill moves without animating.
 struct SlidingSegmentedPicker<Option: Hashable>: View {
+    /// The option under the pill. The picker writes it on each tap.
     @Binding var selection: Option
+    /// The segments, in order, sharing the width equally.
     let options: [Option]
+    /// The color of the pill, under white text.
     var tint: Color = .indigo
+    /// The text of the segment for each option. It shrinks to 70% before truncating.
     let title: (Option) -> String
 
     @Namespace private var namespace

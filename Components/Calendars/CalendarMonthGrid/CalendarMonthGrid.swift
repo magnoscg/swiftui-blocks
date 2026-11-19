@@ -38,10 +38,13 @@ enum CalendarMonthGridMath {
 ///
 /// With Reduce Motion on, the arrows change the month without sliding.
 struct CalendarMonthGrid: View {
+    /// The day picked, or nil before any tap. The grid writes the tapped day.
     @Binding var selection: Date?
+    /// A day in the month the grid opens on. Paging counts months from it.
     var anchor: Date = .now
     /// How many months can be reached in each direction.
     var monthRange = 24
+    /// The color of the selected day's circle, of today's number and of the arrows.
     var tint: Color = .indigo
 
     var body: some View {

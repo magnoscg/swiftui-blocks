@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the field holds still.
 struct ParticleFieldBackground: View {
+    /// The color of the points and of the lines between them.
     var color: Color = .white
+    /// How many points drift in the field.
     var count: Int = 70
+    /// How close two points must be, in points, to be joined by a line. Closer pairs draw a stronger line.
     var linkDistance: Double = 105
+    /// How fast the points drift, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -8,10 +8,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the button stays in place and only dims while pressed.
 struct ElasticDragButton: View {
+    /// The SF Symbol drawn in the middle of the circle.
     let systemImage: String
+    /// The name VoiceOver reads for the button.
     let label: LocalizedStringResource
+    /// The fill of the circle and its shadow. The symbol takes white or black from it.
     var tint: Color = .indigo
+    /// The farthest the button follows the finger, in points. The pull eases off as it nears this distance.
     var reach: Double = 80
+    /// Runs on a tap, or on a press that travels less than 12 points before release.
     let action: () -> Void
 
     @State private var pull = CGSize.zero

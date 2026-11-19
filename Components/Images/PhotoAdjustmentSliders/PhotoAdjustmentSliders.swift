@@ -23,8 +23,11 @@ extension View {
 ///
 /// The whole view scrolls, so every slider stays reachable at the largest text sizes.
 struct PhotoAdjustmentSliders: View {
+    /// The photo the adjustments are previewed on.
     let image: Image
+    /// The brightness, contrast, saturation and hue. The sliders write them as they move, and Reset sets them back to their defaults. Apply them elsewhere with `adjusted(by:)`.
     @Binding var values: PhotoAdjustmentSlidersValues
+    /// The tallest the photo is drawn, in points. It fits inside that height, keeping its proportions.
     var maxImageHeight: CGFloat = 340
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -18,6 +18,16 @@ struct CalendarRangeSelector: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.locale) private var locale
 
+    /// Creates a range calendar.
+    ///
+    /// - Parameters:
+    ///   - start: The first day of the range, or nil before any tap. The calendar writes it,
+    ///     at the start of the day.
+    ///   - end: The last day of the range, or nil while only the start is picked. The
+    ///     calendar writes it, at the start of the day.
+    ///   - month: A day in the month shown first. The arrows move from it.
+    ///   - calendar: The calendar for the weeks, the first weekday and the time zone.
+    ///   - tint: The color of the endpoint circles and, faded, of the band between them.
     init(
         start: Binding<Date?>,
         end: Binding<Date?>,

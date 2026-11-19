@@ -76,12 +76,19 @@ nonisolated enum MaskedTextFieldFormatter {
 /// check what a mask cannot, like a month over 12. With Reduce Motion on, it appears without
 /// animating.
 struct MaskedTextField: View {
+    /// The label above the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The formatted text. The field writes it, rewriting each change to fit `mask`.
     @Binding var text: String
+    /// The pattern of the text: `#` takes a digit, `A` a letter, and any other character is written as is, like `##/##`.
     let mask: String
+    /// The placeholder. `nil` shows the mask itself.
     var prompt: LocalizedStringResource? = nil
+    /// The SF Symbol before the text, or none.
     var systemImage: String? = nil
+    /// The keyboard shown while typing. Use one with letters when the mask has `A`.
     var keyboard: UIKeyboardType = .numberPad
+    /// Checks what the mask cannot, like a month over 12. The checkmark shows only when the mask is full and it returns `true`.
     var isValid: (String) -> Bool = { _ in true }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

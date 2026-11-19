@@ -33,9 +33,13 @@ struct EmojiPickerCategory: Identifiable, Hashable, Sendable {
 ///
 /// With Reduce Motion on, tabs jump to their section without animating.
 struct EmojiPicker: View {
+    /// The emoji used last, newest first, shown in a row above the tabs when not empty. The picker writes it on each pick.
     @Binding var recents: [String]
+    /// The sections of the grid, one tab each, in order.
     var categories: [EmojiPickerCategory] = EmojiPickerCategory.standard
+    /// The most emoji `recents` keeps. The oldest drop off.
     var recentLimit = 12
+    /// Called with the emoji when one is tapped, in the grid or in the recent row.
     let onSelect: (String) -> Void
 
     @State private var visibleIDs: [String] = []

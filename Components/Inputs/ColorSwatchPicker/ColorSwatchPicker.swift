@@ -14,7 +14,9 @@ struct ColorSwatchPickerOption: Hashable, Identifiable {
 ///
 /// With Reduce Motion on, the ring fades in without growing.
 struct ColorSwatchPicker: View {
+    /// The swatches, in order. VoiceOver reads the name of each.
     let options: [ColorSwatchPickerOption]
+    /// The swatch with the ring. The picker writes it on each tap.
     @Binding var selection: ColorSwatchPickerOption
 
     @ScaledMetric(relativeTo: .title) private var swatchSize = 48.0

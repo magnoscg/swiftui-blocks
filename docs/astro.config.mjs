@@ -1,6 +1,10 @@
 import starlight from '@astrojs/starlight';
 import { defineConfig } from 'astro/config';
 
+const SITE_CARD = 'https://swiftuiblocks.dev/social-card.jpg';
+const SITE_CARD_ALT =
+  'SwiftUI Blocks: SwiftUI components your agent can add. The command npx skills add magnoscg/swiftui-blocks-skill, next to Holographic Card, Glass Tool Strip and Activity Rings on iPhone.';
+
 export default defineConfig({
   site: 'https://swiftuiblocks.dev',
   // Pages that moved keep their old address working, since links to them are out there.
@@ -11,24 +15,30 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'SwiftUI Blocks',
-      description: 'Copy-paste SwiftUI components, animations and transitions for iOS 18 through iOS 27.',
+      description:
+        'Free SwiftUI components, animations and transitions for iOS 18 to 27. Your AI coding agent finds one and adds its Swift file to your app.',
       // The card shown when a page of the site is shared. A component page swaps it for its own in src/routeData.ts.
       routeMiddleware: './src/routeData.ts',
       head: [
-        { tag: 'meta', attrs: { property: 'og:image', content: 'https://swiftuiblocks.dev/social-card.png' } },
-        { tag: 'meta', attrs: { property: 'og:image:alt', content: 'Six components of the catalog running on iPhone.' } },
+        { tag: 'meta', attrs: { property: 'og:image', content: SITE_CARD } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1200' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '630' } },
+        { tag: 'meta', attrs: { property: 'og:image:type', content: 'image/jpeg' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: SITE_CARD_ALT } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
-        { tag: 'meta', attrs: { name: 'twitter:image', content: 'https://swiftuiblocks.dev/social-card.png' } },
+        { tag: 'meta', attrs: { name: 'twitter:image', content: SITE_CARD } },
+        { tag: 'meta', attrs: { name: 'twitter:image:alt', content: SITE_CARD_ALT } },
       ],
       customCss: ['@fontsource-variable/outfit', './src/styles/custom.css'],
       components: {
+        Hero: './src/components/Hero.astro',
         Header: './src/components/Header.astro',
         Sidebar: './src/components/Sidebar.astro',
         PageTitle: './src/components/PageTitle.astro',
       },
       sidebar: [
         { label: 'Get started', items: ['introduction', 'install', 'prompts', 'by-hand'] },
-        { label: 'Reference', items: ['rules', 'accessibility', 'files-for-agents'] },
+        { label: 'Reference', items: ['anatomy', 'rules', 'accessibility', 'files-for-agents'] },
         { label: 'Project', items: ['contributing', 'changelog'] },
         // 288 names do not fit in a sidebar: each category opens on demand.
         { label: 'Catalog', items: [{ autogenerate: { directory: 'catalog', collapsed: true } }] },

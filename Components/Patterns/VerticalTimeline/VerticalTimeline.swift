@@ -31,8 +31,11 @@ enum VerticalTimelineStatus: Equatable {
 ///
 /// With Reduce Motion on, the current step does not pulse and changes are not animated.
 struct VerticalTimeline: View {
+    /// The steps, from top to bottom.
     let steps: [VerticalTimelineStep]
+    /// The index of the step in progress. Steps before it are done and the rest upcoming. Past the end, all are done, and below zero none has started.
     let currentIndex: Int
+    /// The color of the done and current markers and of the line between done steps.
     var tint: Color = .indigo
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -18,8 +18,11 @@ struct PricingTierCardsTier: Identifiable, Hashable {
 /// It opens centered on the recommended plan. Place it in a vertical `ScrollView`
 /// so tall cards stay reachable at the largest text sizes.
 struct PricingTierCards: View {
+    /// The plans, from the leading edge. The recommended one is filled with `tint` and drawn larger.
     let tiers: [PricingTierCardsTier]
+    /// The name of the chosen plan, or nil. A card's button writes it.
     @Binding var selection: PricingTierCardsTier.ID?
+    /// The fill of the recommended card and of the other cards' buttons.
     var tint: Color = .indigo
 
     @State private var centeredID: PricingTierCardsTier.ID?

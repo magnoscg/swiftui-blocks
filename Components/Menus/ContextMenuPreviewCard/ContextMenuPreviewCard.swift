@@ -8,9 +8,13 @@ import SwiftUI
 /// The system animates the lift and simplifies it for Reduce Motion. VoiceOver
 /// users find the menu items in the actions rotor. Give the preview a fixed size.
 struct ContextMenuPreviewCard<Card: View, Preview: View, MenuItems: View>: View {
+    /// The corner radius, in points, of the card and of the shape the system lifts with it.
     var cornerRadius: CGFloat = 22
+    /// The content shown in place, clipped to the rounded shape.
     @ViewBuilder var card: () -> Card
+    /// The richer view lifted above the menu on a long press. Give it a fixed size.
     @ViewBuilder var preview: () -> Preview
+    /// The buttons of the menu shown under the preview.
     @ViewBuilder var menuItems: () -> MenuItems
 
     var body: some View {

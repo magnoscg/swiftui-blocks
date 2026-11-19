@@ -9,10 +9,15 @@ import SwiftUI
 /// VoiceOver reads the title, the value and the change as one element. With Reduce Motion
 /// on, new values appear without animating the line.
 struct SparklineStatTile: View {
+    /// The name of the figure, above the value.
     let title: LocalizedStringResource
+    /// The figure, already formatted, like `"$12.4k"`.
     let value: String
+    /// The history drawn as the line, oldest first. The change shows from its first value to its last.
     let trend: [Double]
+    /// The SF Symbol next to the title.
     var systemImage: String = "chart.line.uptrend.xyaxis"
+    /// The color of the trend line and the fill under it.
     var tint: Color = .indigo
     /// Set it to false for a figure that is good news when it falls, like churn. A fall is then green.
     var higherIsBetter = true

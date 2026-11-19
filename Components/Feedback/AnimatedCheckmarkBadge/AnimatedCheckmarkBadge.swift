@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the badge fades in and the checkmark does not draw.
 struct AnimatedCheckmarkBadge: View {
+    /// Whether the badge shows. Turning it on springs the circle in, draws the checkmark and plays a success haptic.
     var isComplete: Bool
+    /// The fill of the circle. The checkmark is always white.
     var tint: Color = .green
+    /// The side of the badge in points, before it scales with Dynamic Type.
     var size: CGFloat = 96
+    /// What VoiceOver reads while the badge shows.
     var completeLabel = "Complete"
+    /// What VoiceOver reads while the badge is hidden.
     var pendingLabel = "Pending"
 
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0

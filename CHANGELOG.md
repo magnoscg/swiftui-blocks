@@ -7,6 +7,55 @@ on `main`.
 
 ## Unreleased
 
+## 0.15.0 - 2026-11-19
+
+### Added
+
+- The landing page also comes in Spanish, at /es/, with its own title,
+  description and social card, so search engines find the site in both
+  languages. The two versions point to each other; the rest of the site stays
+  in English.
+- The skill installs with the plugin commands of Codex and Copilot CLI, and as
+  a Gemini CLI extension, from the same repository as the Claude Code plugin,
+  so each agent can also update it on its own.
+- The Claude Code plugin has an icon.
+- The Introduction page shows an agent adding a component with the skill,
+  next to the component running: its search of the index, its check of the
+  minimum iOS and the file it adds, or its question when the component needs
+  a newer iOS than the app. Every line is worked out from `components.tsv` and
+  the Swift file when the site is built.
+- Anatomy of a file, a page under Reference that walks through a component
+  file part by part, the shader included.
+
+### Changed
+
+- The landing page opens with the install command and what an agent does with
+  the catalog: a box with one tab per agent, whose choice /install/ keeps, and
+  a strip of prompts that work, each with the component it adds and a button to
+  pause it. The big logo, the carousel and the three sections that repeated the
+  install make way for them.
+- Search results and shared links now speak of agents: a new title and
+  description, and a social card in JPEG, light enough for WhatsApp, with the
+  two extra rows Slack shows under a link to the landing page.
+- Every row of the API reference of a component page now says what the
+  property or parameter does, with its range, units and edge cases, and Quick
+  Help in Xcode shows the same text.
+- On a wide window the docs sit in one centered block: the bar, the sidebar,
+  the page and its outline line up, and the page is wider. The lines between
+  them and under the title are gone, and headings are a size smaller.
+
+### Fixed
+
+- The texts a caller passes to Read More Text, Globe 3D Wireframe, Voice Orb,
+  Drop Zone Highlight, Long Press Radial Menu, What's New Sheet and
+  Completion Swipe Row are `LocalizedStringResource`, so a literal lands in
+  the app's String Catalog instead of showing untranslated.
+- Split Flap Counter keeps its digits in order in a right-to-left layout,
+  where it showed 1321 as 12310.
+- With Reduce Motion on, the previews of the site's catalog and component
+  pages stand still on their middle frame instead of playing, and the preview
+  on the page of a component has a button to pause it.
+
 ## 0.14.0 - 2026-11-17
 
 ### Added

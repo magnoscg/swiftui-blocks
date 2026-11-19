@@ -36,7 +36,9 @@ enum DisclosureTreeViewRows {
 
 /// A nested tree of rows that expand and collapse, indenting each level.
 struct DisclosureTreeView: View {
+    /// The top-level nodes, with their children nested inside them.
     let nodes: [DisclosureTreeViewNode]
+    /// The IDs of the open nodes. A tap on a node with children writes it. A node shows only while every ancestor is open.
     @Binding var expandedIDs: Set<String>
 
     @ScaledMetric(relativeTo: .body) private var indent = 20.0

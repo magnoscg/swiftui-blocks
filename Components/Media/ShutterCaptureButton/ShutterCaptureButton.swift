@@ -15,8 +15,11 @@ enum ShutterCaptureButtonMode: String, CaseIterable, Identifiable, Sendable {
 /// In photo mode a tap calls `onCapture` and flashes a ring. In video mode a tap
 /// toggles `isRecording`. With Reduce Motion on, the shape changes without moving.
 struct ShutterCaptureButton: View {
+    /// Whether the shutter takes photos or records video. The component writes it from the Photo and Video toggle, which is disabled while recording.
     @Binding var mode: ShutterCaptureButtonMode
+    /// Whether a video is recording. The component toggles it on a tap in video mode, and the inner circle turns into a square while it is on.
     @Binding var isRecording: Bool
+    /// Runs on a tap in photo mode.
     var onCapture: () -> Void = {}
 
     @State private var captureCount = 0

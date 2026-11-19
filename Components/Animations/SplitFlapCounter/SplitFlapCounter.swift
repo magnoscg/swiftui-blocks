@@ -20,7 +20,9 @@ enum SplitFlapCounterMath {
 ///
 /// With Reduce Motion on, digits change without flipping.
 struct SplitFlapCounter: View {
+    /// The number shown. A change flips only the digits that differ, and a negative number shows a leading minus.
     let value: Int
+    /// The fewest digits shown, padded with zeros on the left. Capped at 20.
     var minimumDigits = 1
 
     var body: some View {
@@ -42,6 +44,8 @@ struct SplitFlapCounter: View {
                 SplitFlapCounterCell(text: cells[cells.count - 1 - place])
             }
         }
+        // Digits read left to right in right-to-left languages too.
+        .environment(\.layoutDirection, .leftToRight)
     }
 }
 

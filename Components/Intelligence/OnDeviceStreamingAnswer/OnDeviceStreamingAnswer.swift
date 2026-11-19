@@ -16,8 +16,11 @@ struct OnDeviceStreamingAnswer: View {
 
     private struct ModelUnavailable: Error {}
 
+    /// The question sent to the model, trimmed of surrounding spaces. Changing it starts a new answer; an empty one shows `placeholder`.
     let prompt: String
+    /// What the model is told before every prompt, like the tone and length of the answer.
     var instructions = "Answer in two short, friendly sentences."
+    /// The text shown, in the secondary style, while `prompt` is empty.
     var placeholder = "Ask something to see the answer here."
     /// Replaces the model with your own text stream, for previews and for tests.
     /// Each element is the whole text so far.
@@ -25,6 +28,7 @@ struct OnDeviceStreamingAnswer: View {
     /// Plays instead of an error when the model is unavailable or fails.
     /// Each element is the whole text so far.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
+    /// The text shown when the model is unavailable or fails and there is no `fallbackStream`.
     var failureMessage = "The on-device model couldn't answer right now. Please try again later."
 
     @State private var text = ""

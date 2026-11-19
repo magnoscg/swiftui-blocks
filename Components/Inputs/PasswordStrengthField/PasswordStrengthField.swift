@@ -31,8 +31,11 @@ enum PasswordStrengthFieldMeter {
 
 /// A password field with a strength meter and a checklist of rules that tick off as they are met.
 struct PasswordStrengthField: View {
+    /// The placeholder of the field and the name VoiceOver reads for it.
     let title: LocalizedStringResource
+    /// The password typed. The field writes it.
     @Binding var password: String
+    /// The requirements listed under the meter. The share met sets the level, from Weak to Strong.
     var rules = PasswordStrengthFieldRule.defaults
 
     @State private var isRevealed = false

@@ -8,9 +8,11 @@ import SwiftUI
 /// The styles draw their own press response, which the system adapts to Reduce Motion.
 @available(iOS 26, *)
 struct GlassButtonGallery: View {
+    /// The colors of the Tints row, each shown as a glass and a prominent icon button. The name starts their VoiceOver labels.
     var tints: [(name: String, color: Color)] = [
         ("Blue", .blue), ("Pink", .pink), ("Orange", .orange), ("Green", .green),
     ]
+    /// Called with the VoiceOver label of the pressed button, like `Small glass` or `Blue prominent`.
     var onPress: (String) -> Void = { _ in }
 
     private let sizes: [(name: String, size: ControlSize)] = [

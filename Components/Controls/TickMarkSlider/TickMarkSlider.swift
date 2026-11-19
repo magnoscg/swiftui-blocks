@@ -23,13 +23,19 @@ nonisolated enum TickMarkSliderMath {
 /// such as a balance or an offset. It is a system `Slider`, so VoiceOver and Dynamic Type are the system's.
 @available(iOS 26, *)
 struct TickMarkSlider: View {
+    /// The value of the slider. The slider writes it while dragged, and moves it to the nearest mark when let go.
     @Binding var value: Double
+    /// The values at the two ends of the track.
     var range: ClosedRange<Double> = 0...1
+    /// The values that get a mark. Those outside `range` are left out, and repeats are drawn once.
     let ticks: [Double]
+    /// Where the tinted part of the track starts. `nil` leaves it to the system.
     var neutralValue: Double?
+    /// The name of the slider, which VoiceOver reads.
     var label = "Value"
     /// Whether the slider moves to the nearest mark when it is let go.
     var snapsToTicks = true
+    /// Turns a value into the text of its mark and of the current value, read by assistive technologies.
     var tickLabel: (Double) -> String = { $0.formatted() }
 
     var body: some View {

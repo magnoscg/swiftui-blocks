@@ -38,11 +38,15 @@ struct DoubleTapSeekOverlayTally: Equatable {
 /// left inside `video` would do both. VoiceOver users get the same skips as named actions.
 /// With Reduce Motion on, the ripple is left out.
 struct DoubleTapSeekOverlay<Video: View, Controls: View>: View {
+    /// The seconds each double tap skips. Repeated double taps on one side add up in the label. At zero or below, nothing seeks.
     var interval = 10.0
+    /// Called with the seconds to move on each skip, negative when going back.
     let onSeek: (Double) -> Void
     /// Skips without a touch, for demos. Each new value is one skip.
     var programmaticSeek: DoubleTapSeekOverlayRequest? = nil
+    /// The player. A double tap on its left half skips back and on its right half skips forward, also in right-to-left layouts.
     @ViewBuilder var video: () -> Video
+    /// Buttons drawn above the video and the seek gesture, so a double tap on one does not seek.
     @ViewBuilder var controls: () -> Controls
 
     @State private var tally = DoubleTapSeekOverlayTally()
@@ -135,6 +139,13 @@ struct DoubleTapSeekOverlay<Video: View, Controls: View>: View {
 }
 
 extension DoubleTapSeekOverlay where Controls == EmptyView {
+    /// Creates the overlay without controls of its own.
+    ///
+    /// - Parameters:
+    ///   - interval: The seconds each double tap skips. At zero or below, nothing seeks.
+    ///   - onSeek: Called with the seconds to move on each skip, negative when going back.
+    ///   - programmaticSeek: Skips without a touch, for demos. Each new value is one skip.
+    ///   - video: The player. A double tap on its left half skips back and on its right half skips forward.
     init(interval: Double = 10.0, onSeek: @escaping (Double) -> Void, programmaticSeek: DoubleTapSeekOverlayRequest? = nil, @ViewBuilder video: @escaping () -> Video) {
         self.init(interval: interval, onSeek: onSeek, programmaticSeek: programmaticSeek, video: video, controls: { EmptyView() })
     }

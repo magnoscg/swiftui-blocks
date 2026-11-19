@@ -14,6 +14,7 @@ enum AnimatedGradientBackgroundMath {
 ///
 /// With Reduce Motion on, it shows a still gradient.
 struct AnimatedGradientBackground: View {
+    /// The palette the gradient cycles through, in order and wrapping around. A single color gives a flat fill.
     var colors: [Color] = [.indigo, .purple, .pink, .orange]
     /// How many color steps pass each second.
     var speed: Double = 0.2

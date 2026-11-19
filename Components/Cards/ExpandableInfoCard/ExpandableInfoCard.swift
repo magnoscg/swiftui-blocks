@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the details fade in place.
 struct ExpandableInfoCard<Details: View>: View {
+    /// The headline of the card, always visible.
     let title: LocalizedStringResource
+    /// A line under the title, or nil for none. VoiceOver reads it as the hint.
     var subtitle: LocalizedStringResource?
+    /// The SF Symbol in the rounded square at the leading edge.
     var systemImage = "info.circle.fill"
+    /// The fill of the icon's square. The symbol takes white or black from it.
     var tint: Color = .blue
+    /// The content revealed under the header when the card is expanded.
     @ViewBuilder var details: () -> Details
 
     @State private var isExpanded = false

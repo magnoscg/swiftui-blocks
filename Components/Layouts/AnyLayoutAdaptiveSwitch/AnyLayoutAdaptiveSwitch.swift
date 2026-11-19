@@ -6,8 +6,11 @@ import SwiftUI
 /// A group that lays out its content in a row when there is room, and animates to a
 /// column when the width drops below `threshold` or the text gets very large.
 struct AnyLayoutAdaptiveSwitch<Content: View>: View {
+    /// The width, in points, below which the content stacks in a column. At accessibility text sizes it stacks whatever the width.
     var threshold: CGFloat = 340
+    /// The gap between the views, in the row and in the column, in points.
     var spacing: CGFloat = 12
+    /// The views to lay out, as you would write them inside an `HStack`.
     @ViewBuilder let content: () -> Content
 
     @State private var availableWidth = CGFloat.infinity

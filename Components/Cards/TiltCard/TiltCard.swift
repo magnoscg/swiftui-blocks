@@ -8,9 +8,13 @@ import SwiftUI
 /// `restingPoint` is where the card leans while nobody touches it. `nil` keeps it flat.
 /// With Reduce Motion on, the card stays flat and only the highlight moves.
 struct TiltCard<Content: View>: View {
+    /// The degrees the card leans when the finger is at an edge.
     var maxAngle: Double = 14
+    /// The radius of the card's corners, in points.
     var cornerRadius: CGFloat = 28
+    /// Where the card leans and the highlight sits while nobody touches it, or nil to keep it flat.
     var restingPoint: UnitPoint?
+    /// The face of the card. Its size is the card's size.
     @ViewBuilder var content: () -> Content
 
     @GestureState private var touchPoint: UnitPoint?

@@ -12,7 +12,9 @@ struct BreadcrumbTrailItem: Identifiable, Hashable {
 ///
 /// If even the shortest form does not fit, as at the largest text sizes, the row scrolls.
 struct BreadcrumbTrail: View {
+    /// The crumbs from the root to the current page. The last one is the current page, shown in bold and not tappable.
     let items: [BreadcrumbTrailItem]
+    /// Called with a crumb when it is tapped, in the row or in the menu of hidden crumbs.
     let onSelect: (BreadcrumbTrailItem) -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -1,0 +1,424 @@
+---
+// An agent adding a component with the skill, next to the component running.
+// Every line comes from scripts/agent-demo.mjs, which replays the exchange on
+// components.tsv and the Swift file, so a changed catalog changes the demo.
+import { resolve } from 'node:path';
+import { iosName, loadAgentDemo } from '../../../scripts/agent-demo.mjs';
+import { cardURL, components, pageURL, previewURL } from '../lib/catalog';
+
+const MAX_ROWS = 4;
+const byPath = new Map(components.map((component) => [`${component.category}/${component.name}`, component]));
+
+const runs = loadAgentDemo(resolve(process.cwd(), '..')).map((run) => {
+  const component = byPath.get(run.pick.path);
+  if (!component) throw new Error(`Agent demo: ${run.pick.path} is not in catalog.json`);
+  const sameIOS = run.matches.filter((row) => row.minIOS === run.pick.minIOS).length;
+  const count = `${run.matches.length} ${run.matches.length === 1 ? 'match' : 'matches'}, ${
+    sameIOS === run.matches.length ? 'all' : `${sameIOS} of them`
+  } for iOS ${iosName(run.pick.minIOS)}`;
+  return {
+    ...run,
+    count,
+    showRows: run.matches.length <= MAX_ROWS,
+    page: pageURL(component),
+    preview: previewURL(component),
+    still: cardURL(component),
+  };
+});
+---
+
+<figure class="agent-demo not-content" aria-label="What your agent does with the skill">
+  <div class="ad-picks" role="group" aria-label="Examples" hidden>
+    {
+      runs.map((run, index) => (
+        <button class="ad-pick-button" type="button" aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`agent-demo-${run.id}`}>
+          {run.label}
+          {!run.fits && <small>iOS {iosName(run.pick.minIOS)}</small>}
+        </button>
+      ))
+    }
+  </div>
+  {
+    runs.map((run, index) => {
+      let step = 0;
+      return (
+        <div class="ad-run" id={`agent-demo-${run.id}`} data-run hidden={index > 0}>
+          <div class="ad-stage">
+            <div class="ad-window">
+              <div class="ad-bar" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+                <span>In your agent</span>
+              </div>
+              <div class="ad-log">
+                <p class="ad-you ad-step" style={`--i: ${step++}`}>{run.prompt}</p>
+                <div class="ad-step" style={`--i: ${step++}`}>
+                  <p class="ad-head">Searching SwiftUI Blocks for “{run.word}”</p>
+                  {run.showRows && (
+                    <ul class="ad-rows">
+                      {run.matches.map((row) => (
+                        <li class:list={{ 'ad-pick': row.path === run.pick.path }}>
+                          <span>{row.path}</span>
+                          <span>{row.minIOS}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <p class:list={['ad-dim', 'ad-count', { 'ad-count-only': !run.showRows }]}>{run.count}</p>
+                </div>
+                <div class="ad-step" style={`--i: ${step++}`}>
+                  <p class="ad-head">{run.pick.title}{run.fits ? ' fits' : ''}</p>
+                  <p class="ad-dim">{run.pick.summary}</p>
+                  {run.fits && (
+                    <p class="ad-dim">
+                      It needs iOS {iosName(run.pick.minIOS)}; MyApp targets iOS {iosName(run.target)}.
+                    </p>
+                  )}
+                </div>
+                {run.fits && run.file ? (
+                  <>
+                    <div class="ad-step" style={`--i: ${step++}`}>
+                      <p class="ad-head">Adding the file</p>
+                      <p class="ad-dim">curl -fsS -o {run.file.name} …</p>
+                      <p class="ad-dim">
+                        <span class="ad-ok" aria-hidden="true">✓</span> MIT header
+                        <span class="ad-check"><span class="ad-ok" aria-hidden="true">✓</span> #Preview at the end</span>
+                      </p>
+                    </div>
+                    <p class="ad-head ad-step" style={`--i: ${step++}`}>
+                      Added {run.file.name} ({run.file.lines} lines).
+                    </p>
+                  </>
+                ) : (
+                  <p class="ad-head ad-ask ad-step" style={`--i: ${step++}`}>
+                    It needs iOS {iosName(run.pick.minIOS)}, and MyApp targets iOS {iosName(run.target)}. Add it behind
+                    if #available(iOS {iosName(run.pick.minIOS)}, *), or look for one that runs on iOS {iosName(run.target)}?
+                  </p>
+                )}
+              </div>
+            </div>
+            <div class="ad-phone">
+              <picture>
+                <source media="(prefers-reduced-motion: reduce)" srcset={run.still} />
+                <img
+                  src={run.preview}
+                  data-still={run.still}
+                  alt={run.fits ? `${run.pick.title}, running in the app` : `${run.pick.title}, running on iOS ${iosName(run.pick.minIOS)}`}
+                  width="320"
+                  height="696"
+                  loading={index > 0 ? 'lazy' : undefined}
+                  decoding="async"
+                />
+              </picture>
+            </div>
+          </div>
+          <div class="ad-foot">
+            <p class="ad-cap">
+              <a href={run.page}>{run.pick.title}</a> · {run.pick.category} · iOS {iosName(run.pick.minIOS)} ·{' '}
+              {run.fits ? 'the file your agent added, running' : `not added yet: it needs iOS ${iosName(run.pick.minIOS)}`}
+            </p>
+            <button class="ad-pause" type="button" hidden>Pause</button>
+          </div>
+        </div>
+      );
+    })
+  }
+</figure>
+<noscript><style is:inline>.agent-demo .ad-run[hidden] { display: block; margin-top: 2rem; }</style></noscript>
+
+<script>
+  import { showStill, trackStill } from '../lib/still';
+
+  const PLAY = '(prefers-reduced-motion: no-preference)';
+
+  function play(demo: HTMLElement) {
+    if (!matchMedia(PLAY).matches) return;
+    demo.classList.remove('ad-play');
+    void demo.offsetWidth;
+    demo.classList.add('ad-play');
+  }
+
+  for (const demo of document.querySelectorAll<HTMLElement>('.agent-demo')) {
+    const buttons = [...demo.querySelectorAll<HTMLButtonElement>('.ad-pick-button')];
+    demo.querySelector<HTMLElement>('.ad-picks')?.removeAttribute('hidden');
+
+    for (const run of demo.querySelectorAll<HTMLElement>('[data-run]')) {
+      const image = run.querySelector<HTMLImageElement>('.ad-phone img');
+      const pause = run.querySelector<HTMLButtonElement>('.ad-pause');
+      if (!image || !pause) continue;
+      trackStill(image);
+      if (!matchMedia(PLAY).matches) continue;
+      pause.hidden = false;
+      pause.addEventListener('click', () => {
+        const paused = run.toggleAttribute('data-paused');
+        pause.textContent = paused ? 'Play' : 'Pause';
+        showStill(image, paused);
+      });
+    }
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        for (const other of buttons) {
+          const selected = other === button;
+          other.setAttribute('aria-pressed', String(selected));
+          const panel = document.getElementById(other.getAttribute('aria-controls') ?? '');
+          if (panel) panel.hidden = !selected;
+        }
+        play(demo);
+      });
+    }
+
+    play(demo);
+  }
+</script>
+
+<style>
+  .agent-demo {
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .ad-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 11rem;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .ad-window {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.875rem;
+    background: var(--sl-color-black);
+    overflow: hidden;
+  }
+
+  .ad-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .ad-bar i {
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 999px;
+    background: var(--sl-color-gray-5);
+  }
+
+  .ad-bar span {
+    flex: 1;
+    margin-right: 2.75rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .ad-log {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1rem 1.125rem 1.125rem;
+    font: 0.78rem/1.7 var(--__sl-font-mono, ui-monospace, 'SF Mono', Menlo, monospace);
+    color: var(--sl-color-gray-2);
+    overflow-wrap: anywhere;
+  }
+
+  .ad-log p,
+  .ad-log ul {
+    margin: 0;
+  }
+
+  .ad-you {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5625rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+    font-family: var(--sl-font);
+    font-size: 0.875rem;
+  }
+
+  .ad-head {
+    color: var(--sl-color-white);
+  }
+
+  .ad-head::before {
+    content: '● ';
+    color: var(--brand-2);
+  }
+
+  .ad-step > :not(.ad-head),
+  .ad-ask {
+    padding-left: 1.2em;
+  }
+
+  .ad-ask::before {
+    margin-left: -1.2em;
+  }
+
+  .ad-dim {
+    color: var(--sl-color-gray-3);
+  }
+
+  .ad-ok {
+    color: var(--sl-color-white);
+  }
+
+  .ad-check {
+    margin-left: 1em;
+  }
+
+  .ad-rows {
+    padding: 0;
+    list-style: none;
+  }
+
+  .ad-rows li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 26rem;
+    padding: 0 0.35rem;
+    border-radius: 0.25rem;
+  }
+
+  .ad-rows .ad-pick {
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+  }
+
+  .ad-count:not(.ad-count-only) {
+    display: none;
+  }
+
+  .ad-phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 402 / 874;
+    border-radius: 1.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-gray-6);
+    object-fit: cover;
+  }
+
+  .ad-phone img.still {
+    scale: 1.0862;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ad-phone img {
+      scale: 1.0862;
+    }
+  }
+
+  .ad-phone picture {
+    display: block;
+    border-radius: 1.75rem;
+    overflow: hidden;
+  }
+
+  .ad-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .ad-cap {
+    margin: 0;
+  }
+
+  .ad-foot a {
+    color: var(--sl-color-white);
+    font-weight: 500;
+  }
+
+  .ad-pause,
+  .ad-pick-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.125rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--sl-color-gray-2);
+    font: 500 0.8125rem var(--sl-font);
+    cursor: pointer;
+  }
+
+  .ad-pause {
+    flex: none;
+  }
+
+  .ad-pause[hidden] {
+    display: none;
+  }
+
+  .ad-pick-button[aria-pressed='true'] {
+    border-color: var(--sl-color-gray-4);
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-white);
+  }
+
+  .ad-pick-button small {
+    font-size: 0.6875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .ad-picks:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (pointer: coarse) {
+    .ad-pause,
+    .ad-pick-button {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .ad-stage {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+    }
+
+    .ad-window {
+      width: 100%;
+    }
+
+    .ad-phone {
+      width: 9.5rem;
+    }
+
+    .ad-rows {
+      display: none;
+    }
+
+    .ad-count:not(.ad-count-only) {
+      display: block;
+    }
+  }
+
+  @keyframes ad-in {
+    from {
+      opacity: 0;
+      translate: 0 0.25rem;
+    }
+  }
+
+  .ad-play [data-run]:not([hidden]) .ad-step {
+    animation: ad-in 0.45s both;
+    animation-delay: calc(var(--i) * 0.9s);
+  }
+</style>

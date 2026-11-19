@@ -53,9 +53,13 @@ struct TabNavigationStatePreserveItem<TabID: Hashable>: Identifiable {
 /// Switching away and back restores the screen you left. Tapping the current tab pops
 /// it to the root, on the iOS versions where `TabView` reports a repeated selection.
 struct TabNavigationStatePreserve<TabID: Hashable, Route: Hashable, Root: View, Screen: View>: View {
+    /// Holds the selected tab and the path of each tab. Change its paths to reset or restore a tab.
     let store: TabNavigationStatePreserveStore<TabID>
+    /// The tabs, in order, each with a title, an SF Symbol and its identifier.
     let tabs: [TabNavigationStatePreserveItem<TabID>]
+    /// Builds the root screen of a tab.
     @ViewBuilder let root: (TabID) -> Root
+    /// Builds the screen pushed for a route, in any tab.
     @ViewBuilder let screen: (Route) -> Screen
 
     var body: some View {

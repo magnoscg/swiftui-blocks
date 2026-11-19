@@ -13,6 +13,7 @@ import SwiftUI
 struct ModelAvailabilityGate<Content: View>: View {
     /// Leave it `nil` to read the real model. Pass a value to force a state.
     var availability: SystemLanguageModel.Availability? = nil
+    /// The feature that uses the model, shown only while it is available.
     @ViewBuilder var content: () -> Content
 
     @State private var liveAvailability = SystemLanguageModel.default.availability

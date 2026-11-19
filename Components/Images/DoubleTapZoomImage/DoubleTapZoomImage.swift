@@ -25,8 +25,11 @@ enum DoubleTapZoomImageMath {
 /// While zoomed, a drag pans the image. At rest it leaves drags to the scroll view around it.
 /// With Reduce Motion on, the zoom changes without animating.
 struct DoubleTapZoomImage: View {
+    /// The image, filling the space it is given and cropped to it.
     let image: Image
+    /// What VoiceOver reads for the image.
     let label: LocalizedStringResource
+    /// How much a double tap magnifies the image. Values below 1 act as 1.
     var zoom: CGFloat = 2.5
     /// Zooms in on this point without a touch, for demos. `nil` returns to fit.
     var programmaticZoom: UnitPoint? = nil

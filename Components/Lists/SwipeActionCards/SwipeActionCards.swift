@@ -26,8 +26,11 @@ nonisolated enum SwipeActionCardsLogic {
 /// gesture, haptics and VoiceOver actions.
 @available(iOS 27, *)
 struct SwipeActionCards<Item: Identifiable, Card: View, Actions: View>: View {
+    /// The items, one card each, in order.
     let items: [Item]
+    /// The vertical gap between cards, in points.
     var spacing: CGFloat = 12
+    /// Draws the card for an item.
     @ViewBuilder var card: (Item) -> Card
     /// The buttons a card shows when it is swiped from its trailing edge, the first one outermost.
     @ViewBuilder var actions: (Item) -> Actions

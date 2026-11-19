@@ -9,8 +9,11 @@ import SwiftUI
 /// appearance. With Reduce Motion on, the symbol fades.
 @available(iOS 26, *)
 struct SymbolDrawOn: View {
+    /// The SF Symbol to draw.
     let systemName: String
+    /// Whether the symbol shows. Turning it true draws it on, and false draws it off.
     var isDrawn: Bool
+    /// What VoiceOver reads for the symbol, or nil to hide it from VoiceOver.
     var label: LocalizedStringKey?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -13,7 +13,9 @@ struct CoverFlowCarouselItem: Identifiable {
 ///
 /// With Reduce Motion on, items stay flat and only fade.
 struct CoverFlowCarousel: View {
+    /// The cards, in order, each with an image and a title drawn over it.
     let items: [CoverFlowCarouselItem]
+    /// The `id` of the centered card. The carousel writes it as it scrolls, and setting it scrolls there.
     @Binding var selection: String?
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -32,11 +32,17 @@ enum CountdownRingMath {
 ///
 /// With Reduce Motion on, the ring moves once per second instead of continuously.
 struct CountdownRing: View {
+    /// The moment the countdown reaches zero. Changing it starts a new countdown.
     var endDate: Date
+    /// The length of a full ring, in seconds. Time left beyond it is capped, so the ring never overfills.
     var duration: TimeInterval
+    /// The gradient of the ring, from top to bottom.
     var colors: [Color] = [.orange, .pink]
+    /// The thickness of the ring, in points.
     var lineWidth: CGFloat = 18
+    /// The font of the number in the middle, which shrinks to fit when space runs short.
     var font: Font = .system(.largeTitle, design: .rounded, weight: .bold)
+    /// Runs once when `endDate` is reached, or right away if it has already passed.
     var onFinish: (() -> Void)? = nil
 
     @State private var isFinished = false

@@ -7,7 +7,9 @@ import SwiftUI
 ///
 /// Animate `progress` from 0 to 1 with `withAnimation`. With Reduce Motion on, the text is shown in full.
 struct TextBlurReveal: View {
+    /// The text to reveal, one line after another.
     let text: String
+    /// How far the reveal has gone, from 0 for hidden to 1 for fully shown. Lines start in turn and overlap.
     var progress: Double = 1
 
     @ScaledMetric(relativeTo: .title) private var blurRadius = 12.0

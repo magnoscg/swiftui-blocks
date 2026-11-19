@@ -13,8 +13,11 @@ struct StickySectionHeadersGroup<Element: Identifiable>: Identifiable {
 
 /// A scrolling list whose section headers pin to the top until the next one pushes them off.
 struct StickySectionHeaders<Element: Identifiable, Row: View>: View {
+    /// The sections, in order, each with the title of its header and its elements. Keep the titles unique.
     let groups: [StickySectionHeadersGroup<Element>]
+    /// The color of the header text.
     var tint: Color = .accentColor
+    /// Draws the row for an element. Rows sit with no spacing between them.
     @ViewBuilder var row: (Element) -> Row
 
     var body: some View {

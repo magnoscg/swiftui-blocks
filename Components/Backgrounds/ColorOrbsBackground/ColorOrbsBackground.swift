@@ -9,7 +9,9 @@ import SwiftUI
 struct ColorOrbsBackground: View {
     /// One orb per color.
     var colors: [Color] = [.pink, .purple, .blue, .teal, .orange]
+    /// The fill under the orbs, which blend over it in screen mode.
     var base: Color = Color(red: 0.05, green: 0.04, blue: 0.13)
+    /// How fast the orbs drift, as a multiplier of time. Zero holds them still.
     var speed: Double = 0.4
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

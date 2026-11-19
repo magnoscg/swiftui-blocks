@@ -15,11 +15,17 @@ struct LongPressRadialMenuItem: Identifiable {
 /// VoiceOver offers the same actions in its Actions list. With Reduce Motion on,
 /// the ring fades in place.
 struct LongPressRadialMenu<Label: View>: View {
+    /// The actions, spaced evenly around the ring clockwise from the top.
     let items: [LongPressRadialMenuItem]
+    /// The distance from the center of the label to each action, in points. The finger must travel 45% of it before an action is chosen.
     var radius: CGFloat = 104
+    /// How long the press lasts before the ring opens, in seconds.
     var minimumDuration = 0.35
+    /// The color of the icons, and the fill of the action under the finger.
     var tint: Color = .indigo
-    var accessibilityTitle = "Actions"
+    /// The name VoiceOver reads for the label, which offers the actions in its Actions list.
+    var accessibilityTitle: LocalizedStringResource = "Actions"
+    /// The view to long-press. It shrinks a little while pressed, and the ring opens around its center.
     @ViewBuilder var label: () -> Label
 
     private enum Press: Equatable {
@@ -52,7 +58,7 @@ struct LongPressRadialMenu<Label: View>: View {
             .sensoryFeedback(.impact(weight: .medium), trigger: isOpen) { _, nowOpen in nowOpen }
             .sensoryFeedback(.selection, trigger: hoveredIndex)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(accessibilityTitle)
+            .accessibilityLabel(Text(accessibilityTitle))
             .accessibilityActions {
                 ForEach(items) { item in
                     Button(item.title, action: item.action)

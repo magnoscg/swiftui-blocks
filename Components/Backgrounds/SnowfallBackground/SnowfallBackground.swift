@@ -7,9 +7,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the flakes hold still.
 struct SnowfallBackground: View {
+    /// The color of the flakes, fainter in the far depths.
     var color: Color = .white
     /// Multiplies the number of flakes in every depth.
     var density: Double = 1
+    /// How fast the flakes fall and sway, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

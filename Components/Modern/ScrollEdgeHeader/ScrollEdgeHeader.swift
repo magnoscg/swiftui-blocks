@@ -8,8 +8,11 @@ import SwiftUI
 /// The header sits in a safe area bar, which is what lets the scroll edge effect reach it.
 @available(iOS 26, *)
 struct ScrollEdgeHeader<Header: View, Content: View>: View {
+    /// The system's edge effect where the content meets the header, like `.soft` or `.hard`.
     var style: ScrollEdgeEffectStyle = .soft
+    /// The view pinned at the top, over the scrolling content.
     @ViewBuilder let header: () -> Header
+    /// What scrolls under the header.
     @ViewBuilder let content: () -> Content
 
     var body: some View {

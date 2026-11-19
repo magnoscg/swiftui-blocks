@@ -8,9 +8,13 @@ import SwiftUI
 /// With Reduce Motion on, the thumb jumps to the new segment.
 @available(iOS 26, *)
 struct GlassSegmentedControl<Segment: Hashable>: View {
+    /// The options, from leading to trailing, each given the same width.
     let segments: [Segment]
+    /// The selected segment. The control writes it on a tap, or as a finger drags along it.
     @Binding var selection: Segment
+    /// A tint for the glass thumb, or nil for plain glass.
     var tint: Color?
+    /// Returns the text shown for a segment, kept to one line.
     let title: (Segment) -> String
 
     @ScaledMetric(relativeTo: .subheadline) private var height = 44.0

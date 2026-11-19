@@ -31,10 +31,15 @@ enum SwipeableCardStackLogic {
 ///
 /// With Reduce Motion on, a swiped card fades out instead of flying away.
 struct SwipeableCardStack<Item, Card: View>: View {
+    /// The cards of the deck, from the top down.
     let items: [Item]
+    /// Whether the deck starts over after the last card. Otherwise it ends empty.
     var loops = false
+    /// The fraction of the deck's width, from 0 to 1, a release must be heading for to swipe the card away.
     var threshold: CGFloat = 0.35
+    /// Called with the item and its direction on screen when a card is swiped away.
     var onSwipe: (Item, SwipeableCardStackDirection) -> Void = { _, _ in }
+    /// The view of each card. Up to three show, stacked behind the top one.
     @ViewBuilder var card: (Item) -> Card
 
     @State private var top = 0

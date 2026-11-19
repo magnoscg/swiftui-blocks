@@ -47,6 +47,14 @@ struct CoinFlipView: View {
 
     private let flipDuration = 1.5
 
+    /// Creates a coin that shows the side you bind.
+    ///
+    /// - Parameters:
+    ///   - side: The side facing up. The coin writes the result here when a flip
+    ///     lands, and setting it from outside turns the coin over without a flip.
+    ///   - size: The diameter of the coin, in points.
+    ///   - turns: The full turns of each flip before it lands, from 1 to 100.
+    ///   - onLanded: Called with the side the coin landed on, after each flip.
     init(
         side: Binding<CoinFlipViewSide>,
         size: CGFloat = 180,

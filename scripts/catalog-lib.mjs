@@ -387,6 +387,16 @@ function validateSource(meta, source, relative, name, errors) {
   for (const number of repeatedNumbers(source)) {
     fail(`${number} is written ${REPEATED_NUMBER_LIMIT} or more times outside the demo: give it a name`);
   }
+
+  for (const table of componentDocs(source, name).api) {
+    for (const row of table.rows.filter((row) => !row.description)) {
+      fail(
+        table.title?.includes('(')
+          ? `the API reference has no description for "${row.name}" in ${table.title}: add it to the - Parameters: of its comment`
+          : `the API reference has no description for "${row.name}": add a /// comment above it`,
+      );
+    }
+  }
 }
 
 // A number written many times in a component is one value kept in several

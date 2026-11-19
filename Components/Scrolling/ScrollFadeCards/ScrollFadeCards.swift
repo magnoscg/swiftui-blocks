@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the cards fade without scaling.
 struct ScrollFadeCards<Item: Identifiable, Card: View>: View {
+    /// The cards, from the top.
     let items: [Item]
+    /// The space between the cards, in points.
     var spacing: CGFloat = 16
+    /// The scale a card shrinks to at the edge of the scroll view, from 0 to 1. With Reduce Motion on, cards keep their size.
     var minimumScale: Double = 0.84
+    /// The opacity a card fades to at the edge of the scroll view, from 0 to 1.
     var minimumOpacity: Double = 0.2
+    /// Builds a card.
     @ViewBuilder var card: (Item) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

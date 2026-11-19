@@ -32,6 +32,12 @@ struct AsyncActionButton<Label: View>: View {
     @State private var run = AsyncActionButtonRun()
     @State private var runID: UUID?
 
+    /// Creates a button with a label of your own.
+    ///
+    /// - Parameters:
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
+    ///   - label: The view the spinner replaces while the action runs.
     init(action: @escaping @MainActor () async -> Void, @ViewBuilder label: () -> Label) {
         self.action = action
         self.label = label()
@@ -81,12 +87,25 @@ private struct AsyncActionButtonSpinner: View {
 }
 
 extension AsyncActionButton where Label == Text {
+    /// Creates a button with a text label.
+    ///
+    /// - Parameters:
+    ///   - title: The text of the button.
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
     init(_ title: LocalizedStringResource, action: @escaping @MainActor () async -> Void) {
         self.init(action: action) { Text(title) }
     }
 }
 
 extension AsyncActionButton where Label == SwiftUI.Label<Text, Image> {
+    /// Creates a button with a text and an icon.
+    ///
+    /// - Parameters:
+    ///   - title: The text of the button.
+    ///   - systemImage: The SF Symbol shown before the text.
+    ///   - action: The work to run on a tap. The spinner shows until it returns,
+    ///     and leaving the screen cancels it.
     init(_ title: LocalizedStringResource, systemImage: String, action: @escaping @MainActor () async -> Void) {
         self.init(action: action) { SwiftUI.Label { Text(title) } icon: { Image(systemName: systemImage) } }
     }

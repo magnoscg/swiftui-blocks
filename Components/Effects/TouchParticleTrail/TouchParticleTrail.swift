@@ -8,8 +8,11 @@ import SwiftUI
 /// The content keeps receiving its own touches. With Reduce Motion on, the
 /// particles stay where they were left and only fade.
 struct TouchParticleTrail<Content: View>: View {
+    /// The colors each particle picks from at random. They add up where particles overlap. Empty draws white.
     var colors: [Color] = [.cyan, .purple, .pink]
+    /// How long each particle lasts before it has faded out, in seconds, at least 0.05.
     var lifetime = 0.9
+    /// The view the finger drags over. It keeps its own touches, and the trail is drawn over it.
     @ViewBuilder var content: () -> Content
 
     @State private var emitter = TouchParticleTrailEmitter()

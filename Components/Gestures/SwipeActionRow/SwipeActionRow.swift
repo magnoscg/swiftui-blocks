@@ -38,8 +38,11 @@ enum SwipeActionRowPhysics {
 /// Vertical drags are left to the scroll view around it. VoiceOver reaches the same buttons as
 /// custom actions, and with Reduce Motion on the row settles without animating.
 struct SwipeActionRow<Content: View>: View {
+    /// The buttons revealed on the trailing side, in order. Each closes the row before running its handler.
     let actions: [SwipeActionRowAction]
+    /// The width of each button, in points. The row opens by this times the number of actions.
     var buttonWidth: CGFloat = 80
+    /// The row itself, drawn on the secondary grouped background.
     @ViewBuilder var content: () -> Content
 
     @State private var id = UUID()

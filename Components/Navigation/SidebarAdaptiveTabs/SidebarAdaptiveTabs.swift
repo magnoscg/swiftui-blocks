@@ -13,8 +13,11 @@ struct SidebarAdaptiveTabsItem<Value: Hashable>: Identifiable {
 
 /// The same tabs as a bottom tab bar on iPhone and as a sidebar people can show on iPad.
 struct SidebarAdaptiveTabs<Value: Hashable, Content: View>: View {
+    /// The value of the selected tab. The tab bar or the sidebar writes it.
     @Binding var selection: Value
+    /// The tabs, in order, each with a title, an SF Symbol and a value.
     let tabs: [SidebarAdaptiveTabsItem<Value>]
+    /// Builds the screen of a tab.
     @ViewBuilder let content: (SidebarAdaptiveTabsItem<Value>) -> Content
 
     var body: some View {

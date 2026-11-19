@@ -47,7 +47,18 @@ struct SearchFieldWithSuggestions: ViewModifier {
 }
 
 extension View {
+    /// Adds a search field that lists the suggestions matching what the person types.
+    ///
     /// Needs a navigation container, such as `NavigationStack`, to show the field.
+    ///
+    /// - Parameters:
+    ///   - text: The text in the search field. The modifier writes it as the person types,
+    ///     and choosing a suggestion fills it.
+    ///   - suggestions: Every candidate. The list shows those that contain the text, ignoring
+    ///     case and accents, with prefix matches first, and hides once the text is a full suggestion.
+    ///   - placement: Where the search field goes, as in `searchable`.
+    ///   - prompt: The placeholder of the empty field.
+    ///   - limit: The most suggestions listed at once.
     func searchFieldWithSuggestions(
         text: Binding<String>,
         suggestions: [String],

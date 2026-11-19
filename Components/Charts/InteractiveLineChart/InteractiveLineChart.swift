@@ -15,8 +15,11 @@ struct InteractiveLineChartPoint: Identifiable, Hashable {
 ///
 /// The tooltip only exists during the touch, and nothing animates on its own.
 struct InteractiveLineChart: View {
+    /// The values to plot, by date. A touch reads the point nearest the finger.
     let points: [InteractiveLineChartPoint]
+    /// The color of the line, of the fill under it and of the touched point.
     var tint: Color = .indigo
+    /// Turns a value into the text of the tooltip and of VoiceOver.
     var format: (Double) -> String = { $0.formatted() }
 
     @State private var touchedDate: Date?

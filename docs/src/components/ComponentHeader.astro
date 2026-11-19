@@ -3,7 +3,7 @@
 // and the three ways to take it. Copying the code reads it from the block
 // titled with the name of the Swift file, below, so the page holds one copy
 // of the source.
-import { categoryURL, components, pageURL, previewURL, REPOSITORY, SITE_BASE } from '../lib/catalog';
+import { cardURL, categoryURL, components, pageURL, previewURL, REPOSITORY, SITE_BASE } from '../lib/catalog';
 
 interface Props {
   id: string;
@@ -72,8 +72,30 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
 <section class="component-header not-content">
   <p class="summary">{summary}</p>
 
-  <div class="stage">
-    <img src={previewURL(component)} alt={`${title}, playing`} width="320" height="696" decoding="async" />
+  <div class="stage" data-stage>
+    <span class="screen">
+      <picture>
+        <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
+        <img
+          src={previewURL(component)}
+          alt={`Preview of ${title}`}
+          width="320"
+          height="696"
+          decoding="async"
+          data-still={cardURL(component)}
+        />
+      </picture>
+    </span>
+    <button type="button" class="pause" data-stage-pause>
+      <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+        <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+        <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+      </svg>
+      <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+        <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z"></path>
+      </svg>
+      <span data-stage-label>Pause</span>
+    </button>
   </div>
 
   <div class="details">
@@ -138,6 +160,20 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
 <script>
   import '../lib/copy';
   import '../lib/code-scroll';
+  import { showStill, trackStill } from '../lib/still';
+
+  for (const stage of document.querySelectorAll<HTMLElement>('[data-stage]')) {
+    const image = stage.querySelector<HTMLImageElement>('img[data-still]');
+    const button = stage.querySelector<HTMLButtonElement>('[data-stage-pause]');
+    const label = stage.querySelector<HTMLElement>('[data-stage-label]');
+    if (!image) continue;
+    trackStill(image);
+    button?.addEventListener('click', () => {
+      const paused = stage.toggleAttribute('data-paused');
+      if (label) label.textContent = paused ? 'Play' : 'Pause';
+      showStill(image, paused);
+    });
+  }
 </script>
 
 <style>
@@ -158,6 +194,7 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
   .stage {
     display: grid;
     place-items: center;
+    gap: 1rem;
     padding: clamp(1.5rem, 5vw, 3rem);
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 1.25rem;
@@ -167,12 +204,65 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
       var(--sl-color-gray-6);
   }
 
-  .stage img {
+  .screen {
+    display: block;
     width: min(100%, 13rem);
-    height: auto;
+    overflow: hidden;
     border-radius: 2rem;
     border: 1px solid var(--sl-color-gray-5);
     box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
+  }
+
+  .screen img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 320 / 696;
+    object-fit: cover;
+  }
+
+  /* A social card holds the phone 580 px tall in 630: this fills the screen with it. */
+  .screen img.still {
+    scale: 1.0862;
+  }
+
+  .pause {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 0.9rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.7rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-1);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .pause:hover {
+    border-color: var(--sl-color-gray-3);
+  }
+
+  .play-icon,
+  [data-paused] .pause-icon {
+    display: none;
+  }
+
+  [data-paused] .play-icon {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pause {
+      display: none;
+    }
+
+    .screen img {
+      scale: 1.0862;
+    }
   }
 
   .details {
@@ -306,7 +396,7 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
       grid-column: 1 / -1;
     }
 
-    .stage img {
+    .screen {
       width: min(100%, 17rem);
     }
   }

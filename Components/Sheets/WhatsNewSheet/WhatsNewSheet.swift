@@ -42,9 +42,13 @@ struct WhatsNewSheetFeature: Identifiable {
 /// Show it yourself in a sheet, or let `whatsNewSheet(version:features:)` show it once per version.
 /// The rows come in one after another. With Reduce Motion on, they fade in together.
 struct WhatsNewSheet: View {
+    /// The heading at the top of the page.
     var title: LocalizedStringResource = "What’s New"
+    /// The rows, in order, each with a symbol, a title, a line of text and a tint for the symbol.
     let features: [WhatsNewSheetFeature]
-    var buttonTitle = "Continue"
+    /// The text of the button pinned to the bottom.
+    var buttonTitle: LocalizedStringResource = "Continue"
+    /// Runs when the button is tapped. Dismiss the sheet here.
     var onContinue: () -> Void
 
     private let margin: CGFloat = 32
@@ -153,6 +157,13 @@ struct WhatsNewSheetModifier: ViewModifier {
 extension View {
     /// Shows `WhatsNewSheet` the first time the app runs a `version` newer than the last one it
     /// was shown for, and remembers it in `UserDefaults` when the sheet closes.
+    ///
+    /// - Parameters:
+    ///   - version: The version of the app now running, like `2.10`, compared number by
+    ///     number with the last one shown.
+    ///   - title: The heading at the top of the sheet.
+    ///   - features: The rows of the sheet, in order.
+    ///   - storageKey: The `UserDefaults` key that keeps the last version shown.
     func whatsNewSheet(version: String, title: LocalizedStringResource = "What’s New", features: [WhatsNewSheetFeature], storageKey: String = "WhatsNewSheet.seenVersion") -> some View {
         modifier(WhatsNewSheetModifier(version: version, title: title, features: features, storageKey: storageKey))
     }

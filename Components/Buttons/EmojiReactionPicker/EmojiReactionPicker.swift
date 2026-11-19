@@ -38,8 +38,11 @@ struct EmojiReactionPicker: View {
         case active(location: CGPoint?)
     }
 
+    /// The chosen reaction, or nil for none. The picker writes it on a tap or a pick.
     @Binding var selection: EmojiReactionPickerOption?
+    /// The reactions in the row, in order. A tap toggles the first one.
     var options = EmojiReactionPickerOption.defaults
+    /// Called with the new reaction, or nil when a tap clears it, each time the person changes it.
     var onSelect: (EmojiReactionPickerOption?) -> Void = { _ in }
 
     @GestureState private var press = Press.idle

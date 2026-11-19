@@ -63,9 +63,13 @@ nonisolated enum DayScheduleTimelineMath {
 ///
 /// A tap on an event sets `selection`. The column starts scrolled to its first event.
 struct DayScheduleTimeline: View {
+    /// The events drawn over the column. Overlapping ones share its width.
     let events: [DayScheduleTimelineEvent]
+    /// The id of the highlighted event, or nil. A tap writes it, and a second tap clears it.
     @Binding var selection: DayScheduleTimelineEvent.ID?
+    /// The hours of the day the column spans, from 0 to 24. The last one is where the column ends.
     var hours: ClosedRange<Int> = 7...21
+    /// Whether a red line marks the time it is now, when it falls inside `hours`.
     var showsCurrentTime = true
 
     @ScaledMetric(relativeTo: .body) private var hourHeight = 88.0

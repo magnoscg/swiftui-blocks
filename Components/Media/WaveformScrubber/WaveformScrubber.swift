@@ -34,11 +34,17 @@ enum WaveformScrubberMath {
 ///
 /// `samples` are loudness values from 0 to 1. With Reduce Motion on, the bars don't grow during a drag.
 struct WaveformScrubber: View {
+    /// The loudness of the audio over time, each from 0 to 1. They are averaged into as many bars as fit the width.
     let samples: [Double]
+    /// The playback position, from 0 to 1. The component writes it while dragging, and VoiceOver moves it in steps of 0.05.
     @Binding var progress: Double
+    /// The color of the bars already played. The rest are drawn in a faint secondary color.
     var tint: Color = .accentColor
+    /// The width of each bar in points, also the height of the shortest one.
     var barWidth: CGFloat = 3
+    /// The gap between bars in points.
     var spacing: CGFloat = 2
+    /// Called with `true` when a drag starts and `false` when it ends.
     var onScrubbingChanged: (Bool) -> Void = { _ in }
 
     @GestureState private var isDragging = false

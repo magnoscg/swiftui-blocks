@@ -11,9 +11,13 @@ enum DownloadPillProgressState: Equatable {
 
 /// A capsule button that shrinks into a progress ring while downloading, then shows a checkmark.
 struct DownloadPillProgress: View {
+    /// The text of the pill before the download starts, and the name VoiceOver reads.
     var title: LocalizedStringResource = "Download"
+    /// Whether the pill shows the title, a progress ring at a fraction from 0 to 1, or a checkmark.
     let state: DownloadPillProgressState
+    /// The fill of the pill and the color of the ring. The title takes white or black from it.
     var tint: Color = .blue
+    /// Runs when the pill is tapped, in any state.
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .headline) private var height: CGFloat = 46

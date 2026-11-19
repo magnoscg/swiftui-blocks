@@ -70,6 +70,12 @@ struct RippleTapEffect: ViewModifier {
 
 extension View {
     /// Spawns a ripple at every tap on this view.
+    ///
+    /// - Parameters:
+    ///   - color: The color of the two rings of each ripple and their faint fill.
+    ///   - maxRadius: How far the outer ring grows before it fades out, in points.
+    ///   - cornerRadius: The corner radius of the area that takes taps and clips the
+    ///     ripples, in points. Match it to the view's shape.
     func rippleTapEffect(color: Color = .white, maxRadius: Double = 170, cornerRadius: Double = 0) -> some View {
         modifier(RippleTapEffect(color: color, maxRadius: maxRadius, cornerRadius: cornerRadius))
     }

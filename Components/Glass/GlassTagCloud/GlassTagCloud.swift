@@ -17,9 +17,13 @@ struct GlassTagCloudTag: Identifiable {
 /// selecting a tag changes it without animating.
 @available(iOS 26, *)
 struct GlassTagCloud: View {
+    /// The tags, flowing from leading to trailing and wrapping onto new rows.
     let tags: [GlassTagCloudTag]
+    /// The titles of the selected tags. The cloud adds or removes one on each tap.
     @Binding var selection: Set<String>
+    /// The gap between tags, across and down, in points.
     var spacing: CGFloat = 16
+    /// The gap, in points, below which neighbouring tags blend into one piece of glass. Above `spacing`, every neighbour melts together.
     var mergeDistance: CGFloat = 10
 
     @ScaledMetric(relativeTo: .subheadline) private var horizontalPadding = 16.0

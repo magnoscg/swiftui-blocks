@@ -44,8 +44,11 @@ final class LoadMoreFooterPager<Element> {
 
 /// The last row of an infinite list. It asks for the next page as soon as it appears.
 struct LoadMoreFooter: View {
+    /// The state of the next page: a spinner while idle or loading, a retry button when it failed, and `finishedText` when there is nothing left.
     let phase: LoadMoreFooterPhase
+    /// The text shown once every page has loaded.
     var finishedText = "You're all caught up"
+    /// Runs when the footer appears while `phase` is idle, and when the retry button is tapped.
     let onLoad: () -> Void
 
     var body: some View {

@@ -8,8 +8,11 @@ import SwiftUI
 ///
 /// With Reduce Motion on, jumps and the highlight happen without animation.
 struct ScrollSpyHeader<Element: Identifiable, Content: View>: View where Element.ID: Sendable {
+    /// The sections, in the order they scroll and their chips appear.
     let sections: [Element]
+    /// Returns the text of the chip for a section.
     let title: (Element) -> String
+    /// Builds the content of a section in the scroll view.
     @ViewBuilder let content: (Element) -> Content
 
     @State private var activeID: Element.ID?

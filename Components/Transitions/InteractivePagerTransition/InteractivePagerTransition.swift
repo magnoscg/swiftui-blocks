@@ -43,8 +43,11 @@ enum InteractivePagerTransitionMath {
 /// VoiceOver can change page with a three-finger swipe or by adjusting the page dots. With
 /// Reduce Motion on, pages slide plainly under the finger and settle at once.
 struct InteractivePagerTransition<Page: Identifiable, PageContent: View>: View {
+    /// The items, one per page, in order. Only the current page and its neighbours are built.
     let pages: [Page]
+    /// The position of the current page in `pages`. The pager writes it when a swipe completes, and an index out of range shows the nearest page.
     @Binding var index: Int
+    /// The view for a page, drawn at the full width of the pager.
     @ViewBuilder var content: (Page) -> PageContent
 
     @GestureState private var dragTranslation: CGFloat = 0

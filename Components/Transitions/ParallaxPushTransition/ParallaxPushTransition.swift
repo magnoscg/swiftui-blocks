@@ -19,8 +19,11 @@ enum ParallaxPushTransitionMath {
 /// A `Transition` cannot read the environment, so pass Reduce Motion in: with it on, the
 /// pages crossfade. Give the page on top the higher `zIndex`.
 struct ParallaxPushTransition: Transition {
+    /// Whether the move goes forward, with the new page sliding in over the old one. When false, the old page slides away to uncover the new one.
     var isForward = true
+    /// Pass the environment's `accessibilityReduceMotion` here. When true, the pages crossfade instead of moving.
     var reduceMotion = false
+    /// How far the page underneath moves, as a fraction of the page width. At 1 it keeps pace with the page on top.
     var parallax: CGFloat = 0.3
 
     func body(content: Content, phase: TransitionPhase) -> some View {

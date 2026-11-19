@@ -8,10 +8,15 @@ import SwiftUI
 /// Tiles are square, and a tap toggles one. Starting on a selected tile deselects
 /// instead. Keep it out of a `ScrollView`, or the scroll will take the drag.
 struct DragSelectGrid<Item: Identifiable, Tile: View>: View {
+    /// The items, one square tile each, laid out row by row.
     let items: [Item]
+    /// The IDs of the selected items. Taps and drags write it.
     @Binding var selection: Set<Item.ID>
+    /// The number of columns, kept between 1 and 24.
     var columns = 4
+    /// The gap between tiles, across and down, in points. A negative value counts as zero.
     var spacing: CGFloat = 4
+    /// Draws a tile from its item and whether it is selected. It fills a square.
     @ViewBuilder var tile: (Item, Bool) -> Tile
 
     private struct Stroke {

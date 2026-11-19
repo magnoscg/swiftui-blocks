@@ -31,7 +31,9 @@ nonisolated enum FlowTagsLayoutMath {
 
 /// A layout that wraps its views onto as many lines as they need.
 struct FlowTagsLayout: Layout {
+    /// The gap between views on the same line, in points.
     var spacing: CGFloat = 8
+    /// The gap between lines, in points.
     var lineSpacing: CGFloat = 8
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {

@@ -72,7 +72,9 @@ nonisolated enum CircularRangeSliderMath {
 /// `start` and `end` go from 0 up to `total`, which is one full turn. Set the color with `tint`.
 /// VoiceOver reads each handle as an adjustable value, described by `valueText`.
 struct CircularRangeSlider<Center: View>: View {
+    /// Where the range begins, from 0 up to `total`. The slider writes it as the start handle or the band moves.
     @Binding var start: Double
+    /// Where the range ends, from 0 up to `total`, clockwise from `start`. The slider writes it as the end handle or the band moves.
     @Binding var end: Double
     /// The value of a full turn.
     var total = 24.0
@@ -80,12 +82,19 @@ struct CircularRangeSlider<Center: View>: View {
     var step = 0.25
     /// The shortest range, which is also the shortest gap left outside it.
     var minimumSpan = 0.0
+    /// The thickness of the ring in points. The handles are 8 points smaller, and the center view sits 12 points inside the ring.
     var lineWidth: CGFloat = 40
+    /// The SF Symbol drawn on the start handle, or none.
     var startSymbol: String?
+    /// The SF Symbol drawn on the end handle, or none.
     var endSymbol: String?
+    /// The name VoiceOver reads for the start handle.
     var startLabel = "Start"
+    /// The name VoiceOver reads for the end handle.
     var endLabel = "End"
+    /// Turns a handle's value into the text VoiceOver reads, like `23:00`.
     var valueText: (Double) -> String = { $0.formatted() }
+    /// The view inside the ring, like the length of the range.
     @ViewBuilder var center: () -> Center
 
     private let handleInset: CGFloat = 4

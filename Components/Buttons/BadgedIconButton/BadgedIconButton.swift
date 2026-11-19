@@ -17,11 +17,17 @@ enum BadgedIconButtonBadge {
 ///
 /// With Reduce Motion on, the badge fades and the icon stays still.
 struct BadgedIconButton: View {
+    /// The name VoiceOver reads for the button, like "Notifications".
     let title: LocalizedStringResource
+    /// The SF Symbol drawn as the icon.
     let systemImage: String
+    /// The number in the badge. At zero or below, the badge hides.
     let count: Int
+    /// The highest number the badge shows. Past it, the badge reads the limit and a plus, like `99+`.
     var limit = 99
+    /// The fill of the badge. Its number takes white or black from it.
     var badgeColor: Color = .red
+    /// Runs when the button is tapped.
     let action: () -> Void
 
     @State private var bounces = 0

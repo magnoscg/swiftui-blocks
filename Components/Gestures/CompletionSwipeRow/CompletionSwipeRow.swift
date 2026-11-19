@@ -9,11 +9,17 @@ import SwiftUI
 /// `onComplete` runs once, after the row has collapsed, and is where the caller
 /// should remove the row. With Reduce Motion on, the row completes at once.
 struct CompletionSwipeRow<Content: View>: View {
+    /// The color revealed behind the row as it slides. The checkmark takes white or black from it.
     var tint: Color = .green
+    /// The fill behind the content, which slides with it.
     var rowBackground: Color = Color(.secondarySystemGroupedBackground)
+    /// The rounding of the row's corners, in points.
     var cornerRadius: CGFloat = 16
-    var actionName = "Complete"
+    /// The name of the accessibility action that completes the row without a swipe.
+    var actionName: LocalizedStringResource = "Complete"
+    /// Runs once, after the row has collapsed. Remove the row here.
     var onComplete: () -> Void
+    /// The row itself. A forward swipe of 40% of its width, or 140 points at most, completes it.
     @ViewBuilder var content: () -> Content
 
     private enum Phase {
@@ -60,7 +66,7 @@ struct CompletionSwipeRow<Content: View>: View {
             .simultaneousGesture(swipe)
             .sensoryFeedback(.impact(weight: .medium), trigger: isPastThreshold) { _, isNowPast in isNowPast }
             .accessibilityElement(children: .combine)
-            .accessibilityAction(named: actionName) { complete() }
+            .accessibilityAction(named: Text(actionName)) { complete() }
     }
 
     private var swipe: some Gesture {

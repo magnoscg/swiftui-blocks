@@ -76,12 +76,19 @@ nonisolated private struct NotificationStackLayout: Layout {
 /// Give the cards a similar height: a card taller than the first shows over it while the pile
 /// is closed. With Reduce Motion on, the pile opens and closes without moving.
 struct NotificationStack<Item: Identifiable, Card: View>: View {
+    /// The notifications, newest first. The first one sits on top of the closed pile, and two more show their edge under it.
     let items: [Item]
+    /// Whether the pile is open into a column. The component sets it to `true` on a tap on the pile and to `false` from its Show less button.
     @Binding var isExpanded: Bool
+    /// The heading shown over the open column, next to the Show less button.
     var title: LocalizedStringResource = "Notifications"
+    /// The gap in points between the cards of the open column, and under its heading.
     var spacing: CGFloat = 10
+    /// How far in points each card behind the first shows below the one before it while the pile is closed.
     var peek: CGFloat = 10
+    /// Called with the item when its card is swiped towards the leading edge, or cleared with VoiceOver, while the pile is open. Remove it from `items` there. Without it, the cards cannot be swiped.
     var onDismiss: ((Item) -> Void)?
+    /// Builds the card of an item. Give the cards a similar height.
     @ViewBuilder var card: (Item) -> Card
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

@@ -12,10 +12,15 @@ private enum MorphingSubmitButtonPhase {
 ///
 /// With Reduce Motion on, the button keeps its shape and only its content crossfades.
 struct MorphingSubmitButton: View {
+    /// The text of the button while idle.
     let title: LocalizedStringResource
+    /// The fill while idle and loading. The text and the spinner take white or black from it.
     var tint: Color = .blue
+    /// The fill while the checkmark shows.
     var successColor: Color = .green
+    /// The seconds the checkmark stays before the button returns to its title.
     var successDuration: Double = 1.2
+    /// The work to run on a tap. The spinner shows until it returns, and taps meanwhile are ignored.
     let action: @MainActor () async -> Void
 
     @State private var phase = MorphingSubmitButtonPhase.idle

@@ -10,14 +10,21 @@ import SwiftUI
 struct ExpandingMiniPlayer<Content: View, Artwork: View>: View {
     private enum MorphID: Hashable { case background, artwork }
 
+    /// The track name, on the mini bar and the full player.
     let title: String
+    /// The line under the title, like the artist.
     let subtitle: String
+    /// Whether the track plays. The component toggles it from its play buttons.
     @Binding var isPlaying: Bool
     /// From 0 to 1.
     var progress = 0.0
+    /// Runs when the previous button of the full player is tapped.
     var onPrevious: () -> Void = {}
+    /// Runs when the next button of the full player is tapped.
     var onNext: () -> Void = {}
+    /// The screen under the player. It gets bottom padding so the mini bar does not cover it.
     @ViewBuilder var content: () -> Content
+    /// The cover, which morphs from a small square on the mini bar to a large one in the full player.
     @ViewBuilder var artwork: () -> Artwork
 
     @State private var isExpanded = false

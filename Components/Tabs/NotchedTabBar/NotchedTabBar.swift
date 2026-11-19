@@ -68,8 +68,11 @@ nonisolated struct NotchedTabBarShape: Shape {
 ///
 /// With Reduce Motion on, the notch moves to the new tab without sliding.
 struct NotchedTabBar: View {
+    /// The tabs, in order, each with a title and an SF Symbol.
     let items: [NotchedTabBarItem]
+    /// The `id` of the selected tab. The bar writes it when a tab is tapped.
     @Binding var selection: String
+    /// The color of the bubble behind the selected icon and of the selected title.
     var tint: Color = .indigo
 
     var body: some View {

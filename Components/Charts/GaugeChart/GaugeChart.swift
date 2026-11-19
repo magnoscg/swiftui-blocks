@@ -49,10 +49,15 @@ nonisolated enum GaugeChartMath {
 /// VoiceOver reads the value and the name of its zone, so the reading does not depend on the
 /// color. With Reduce Motion on, the needle goes to its place without swinging.
 struct GaugeChart: View {
+    /// The reading the needle points at. Values outside `range` stop at its ends.
     var value: Double
+    /// The values at the start and the end of the dial.
     var range: ClosedRange<Double> = 0...100
+    /// The colored stretches of the dial, in any order. VoiceOver reads the name of the one `value` falls in.
     let zones: [GaugeChartZone]
+    /// What VoiceOver calls the gauge.
     var label = "Gauge"
+    /// Turns `value` into the text VoiceOver reads. Whole numbers by default.
     var valueText: (Double) -> String = { $0.formatted(.number.precision(.fractionLength(0))) }
 
     private let lineWidth: CGFloat = 26

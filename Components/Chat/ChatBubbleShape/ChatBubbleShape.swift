@@ -23,6 +23,15 @@ nonisolated struct ChatBubbleShape: Shape {
 
     private let tailWidth: CGFloat = 7
 
+    /// Creates the outline of one message.
+    ///
+    /// - Parameters:
+    ///   - side: The bottom corner that carries the tail: `trailing` for messages sent, `leading`
+    ///     for messages received.
+    ///   - position: Where the message sits in its run. Only `single` and `last` get a tail, and the
+    ///     corners that face a neighbor tighten.
+    ///   - radius: The radius of the round corners, in points.
+    ///   - tightRadius: The radius of the corners next to a grouped message, in points.
     init(
         side: ChatBubbleShapeSide = .trailing,
         position: ChatBubbleShapePosition = .single,

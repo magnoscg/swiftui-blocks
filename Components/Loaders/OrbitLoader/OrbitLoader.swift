@@ -7,9 +7,13 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the dots stay still, evenly spaced around the center.
 struct OrbitLoader: View {
+    /// The color of the center, the dots and the faint orbit track.
     var color: Color = .indigo
+    /// How many dots circle the center.
     var dotCount: Int = 3
+    /// The width and height of the loader, in points. The dots and the center scale with it.
     var size: CGFloat = 64
+    /// Seconds for a dot to complete one orbit.
     var period: TimeInterval = 1.6
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

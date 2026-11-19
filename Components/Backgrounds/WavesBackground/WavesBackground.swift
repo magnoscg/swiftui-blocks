@@ -9,6 +9,7 @@ import SwiftUI
 struct WavesBackground: View {
     /// One wave per color, from back to front.
     var colors: [Color] = [.teal, .cyan, .blue, .indigo]
+    /// The height of the back wave's swell above and below its baseline, in points. Each wave in front is a little lower.
     var amplitude: Double = 26
     /// Seconds for the slowest wave to complete one cycle.
     var period: Double = 7

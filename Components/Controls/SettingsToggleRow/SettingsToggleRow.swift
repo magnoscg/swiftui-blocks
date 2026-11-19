@@ -9,10 +9,15 @@ import SwiftUI
 ///
 /// The symbol bounces when the switch turns on, except with Reduce Motion on.
 struct SettingsToggleRow: View {
+    /// The main text of the row.
     let title: LocalizedStringResource
+    /// A smaller, secondary line under the title, or none.
     var subtitle: LocalizedStringResource?
+    /// The SF Symbol on the colored square.
     let systemImage: String
+    /// The fill of the square behind the symbol. The symbol takes white or black from it.
     var iconColor: Color = .blue
+    /// Whether the switch is on. The row writes it on each tap.
     @Binding var isOn: Bool
 
     @State private var bounces = 0

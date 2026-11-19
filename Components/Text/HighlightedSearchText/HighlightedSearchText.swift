@@ -5,9 +5,13 @@ import SwiftUI
 
 /// Text with every match of a search query highlighted, ignoring case and accents.
 struct HighlightedSearchText: View {
+    /// The text to show and search.
     let text: String
+    /// The text to find, trimmed of surrounding spaces. An empty query highlights nothing.
     let query: String
+    /// The background behind each match.
     var highlightColor: Color = .yellow
+    /// The color of the letters inside each match, chosen to read on `highlightColor`.
     var highlightedTextColor: Color = .black
 
     var body: some View {

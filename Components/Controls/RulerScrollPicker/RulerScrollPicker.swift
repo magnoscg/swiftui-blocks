@@ -47,12 +47,19 @@ struct RulerScrollPickerScale: Equatable {
 /// Dragging writes the value, and changing the value from outside scrolls the ruler.
 /// With Reduce Motion on, outside changes jump instead of gliding.
 struct RulerScrollPicker: View {
+    /// The name VoiceOver reads for the ruler. It is not drawn.
     let title: LocalizedStringResource
+    /// The value under the center indicator. The picker writes it while the ruler is dragged, and scrolls when it changes from outside.
     @Binding var value: Double
+    /// The values at the two ends of the ruler. It draws at most 20,000 ticks.
     var range: ClosedRange<Double> = 0...100
+    /// The value between two ticks. Zero or less counts as 1.
     var step: Double = 1
+    /// How many ticks apart the tall, labeled ticks are. Halfway between them, a medium tick. Less than 1 counts as 1.
     var majorEvery: Int = 10
+    /// The distance between two ticks, in points. At least 4.
     var tickSpacing: CGFloat = 12
+    /// The color of the center indicator.
     var tint: Color = .indigo
 
     @State private var position = ScrollPosition(x: 0)

@@ -12,12 +12,18 @@ struct Globe3DWireframePin {
 ///
 /// With Reduce Motion on, it stops spinning by itself and only moves with the finger.
 struct Globe3DWireframe: View {
+    /// How many lines run from pole to pole, up to 90.
     var meridians = 12
+    /// How many lines circle the globe between the poles, up to 90.
     var parallels = 7
+    /// The color of the lines, the outline and the shading of the sphere.
     var color: Color = .cyan
+    /// The places marked with a white dot, in degrees of latitude and longitude. A pin on the far side hides.
     var pins: [Globe3DWireframePin] = []
+    /// Whether the globe spins by itself. A drag still turns it either way.
     var autoRotates = true
-    var label = "Globe"
+    /// The name VoiceOver reads for the globe.
+    var label: LocalizedStringResource = "Globe"
 
     @State private var yaw = 0.0
     @State private var pitch = 0.35
@@ -98,7 +104,7 @@ struct Globe3DWireframe: View {
                 }
         )
         .accessibilityElement()
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(label))
         .accessibilityValue("Rotated \(Globe3DWireframeMath.degrees(yaw)) degrees")
         .accessibilityAdjustableAction { direction in
             switch direction {

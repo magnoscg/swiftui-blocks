@@ -35,9 +35,13 @@ private struct FloatingReactionsEmitterReaction: Identifiable {
 ///
 /// With Reduce Motion on, the emoji stays where it was tapped and fades out.
 struct FloatingReactionsEmitter<Content: View>: View {
+    /// The emoji a tap picks from at random. Empty sends nothing.
     var emojis: [String] = ["❤️", "🔥", "👏", "😂", "🎉"]
+    /// How long each emoji floats before it fades out, in seconds. Zero or less counts as one second.
     var lifetime: Double = 1.8
+    /// How far each emoji climbs from where it was tapped, in points.
     var rise: CGFloat = 320
+    /// The view that takes the taps. It fills the space the emitter is given.
     @ViewBuilder var content: () -> Content
 
     @State private var reactions: [FloatingReactionsEmitterReaction] = []

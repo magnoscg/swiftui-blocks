@@ -14,9 +14,13 @@ struct PhotoMultiSelectGridPhoto: Identifiable {
 /// In that mode a tap toggles a photo. Out of it, a tap calls `onOpen`. Photos that disappear
 /// also leave the selection. With Reduce Motion on, photos change state without animating.
 struct PhotoMultiSelectGrid: View {
+    /// The photos, laid out in square cells at least 110 points wide.
     let photos: [PhotoMultiSelectGridPhoto]
+    /// The ids of the chosen photos. The component writes it as photos are toggled, and drops ids that leave `photos`.
     @Binding var selection: Set<String>
+    /// Whether the grid is in multi-select mode. The component turns it on with a long press; turn it off yourself, and clear `selection` if you want.
     @Binding var isSelecting: Bool
+    /// Called with the photo tapped while the grid is not selecting.
     var onOpen: (PhotoMultiSelectGridPhoto) -> Void = { _ in }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

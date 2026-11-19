@@ -114,6 +114,13 @@ struct IntelligenceGlowBorder: ViewModifier {
 
 extension View {
     /// Draws a moving glow around this view's edge while `isActive` is true. Match `cornerRadius` to the view's shape.
+    ///
+    /// - Parameters:
+    ///   - isActive: Whether the glow shows. It fades in and out, or switches at once
+    ///     with Reduce Motion on.
+    ///   - cornerRadius: The corner radius of the border, in points.
+    ///   - lineWidth: The thickness of the crisp line at the edge, in points. The
+    ///     softer light spreads inward to about seven times this.
     func intelligenceGlowBorder(isActive: Bool = true, cornerRadius: CGFloat = 28, lineWidth: CGFloat = 3) -> some View {
         modifier(IntelligenceGlowBorder(isActive: isActive, cornerRadius: cornerRadius, lineWidth: lineWidth))
     }

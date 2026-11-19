@@ -14,7 +14,9 @@ enum ContentSwapTransitionStyle {
 ///
 /// With Reduce Motion on, numbers fade instead of rolling.
 struct ContentSwapTransition: View {
+    /// The text shown. A change inside an animation plays the transition.
     let text: String
+    /// How the old text turns into the new: rolling digits toward a number, a morph between the shapes, or a fade.
     var style: ContentSwapTransitionStyle = .opacity
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

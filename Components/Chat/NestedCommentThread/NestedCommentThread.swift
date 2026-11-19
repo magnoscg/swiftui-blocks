@@ -16,7 +16,9 @@ struct NestedCommentThreadComment: Identifiable, Hashable {
 /// Put it in a `ScrollView`. Indentation stops growing past a few levels, sooner with
 /// accessibility text sizes, so deep threads keep room for their text.
 struct NestedCommentThread: View {
+    /// The top-level comments, each with its replies nested inside.
     let comments: [NestedCommentThreadComment]
+    /// The color of the avatars and of the buttons that show or hide replies.
     var tint: Color = .indigo
 
     @State private var collapsed: Set<String> = []

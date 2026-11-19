@@ -44,6 +44,13 @@ struct KanbanBoard: View {
 
     private let cardCornerRadius: CGFloat = 12
 
+    /// Creates a board from its columns.
+    ///
+    /// - Parameters:
+    ///   - columns: The columns and their cards, in order. The board writes it when a card
+    ///     moves, appending the card to the end of its new column.
+    ///   - columnWidth: The width of each column, in points at the default text size. It
+    ///     grows with Dynamic Type and never drops below 120.
     init(columns: Binding<[KanbanBoardColumn]>, columnWidth: CGFloat = 220) {
         _columns = columns
         _columnWidth = ScaledMetric(wrappedValue: columnWidth, relativeTo: .body)

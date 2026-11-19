@@ -65,6 +65,10 @@ struct NoiseGrainOverlay: ViewModifier {
 
 extension View {
     /// Adds a subtle animated film grain on top of this view.
+    ///
+    /// - Parameters:
+    ///   - intensity: The opacity of each speck, from 0, invisible, to 1.
+    ///   - grainSize: The side of each speck, in points.
     func noiseGrainOverlay(intensity: Double = 0.16, grainSize: Double = 1.25) -> some View {
         modifier(NoiseGrainOverlay(intensity: intensity, grainSize: grainSize))
     }

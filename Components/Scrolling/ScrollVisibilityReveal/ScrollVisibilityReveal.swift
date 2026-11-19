@@ -31,7 +31,14 @@ struct ScrollVisibilityReveal: ViewModifier {
 }
 
 extension View {
+    /// Fades and slides this view into place the first time it becomes visible in a scroll view.
+    ///
     /// A low threshold means a section taller than the screen still gets revealed.
+    ///
+    /// - Parameters:
+    ///   - threshold: The fraction of the view, from 0 to 1, that must be on screen to reveal it.
+    ///   - distance: How far below its place, in points, the view starts. With Reduce Motion on,
+    ///     it does not slide.
     func scrollVisibilityReveal(threshold: Double = 0.15, distance: CGFloat = 36) -> some View {
         modifier(ScrollVisibilityReveal(threshold: threshold, distance: distance))
     }

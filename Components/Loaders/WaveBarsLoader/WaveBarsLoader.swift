@@ -7,10 +7,15 @@ import SwiftUI
 ///
 /// With Reduce Motion on, the bars hold one uneven, still shape.
 struct WaveBarsLoader: View {
+    /// The gradient of every bar, from bottom to top.
     var colors: [Color] = [.blue, .cyan, .mint]
+    /// How many bars rise and fall.
     var barCount: Int = 5
+    /// The width of each bar, in points, which is also its shortest height. The spacing scales with it.
     var barWidth: CGFloat = 8
+    /// The height of the loader, in points. The bars reach between about a tenth and all of it.
     var height: CGFloat = 44
+    /// How fast the bars move, as a multiplier of time. Zero holds them still.
     var speed: Double = 1
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
