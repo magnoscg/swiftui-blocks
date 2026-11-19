@@ -8,6 +8,16 @@ nonisolated enum VoiceOrbState: String, CaseIterable, Sendable {
     case listening = "Listening"
     case thinking = "Thinking"
     case speaking = "Speaking"
+
+    /// The name of the state, as VoiceOver reads it and a picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .idle: "Idle"
+        case .listening: "Listening"
+        case .thinking: "Thinking"
+        case .speaking: "Speaking"
+        }
+    }
 }
 
 nonisolated enum VoiceOrbMath {
@@ -68,7 +78,7 @@ struct VoiceOrb: View {
             .animation(.easeInOut(duration: 0.5), value: state)
             .accessibilityElement()
             .accessibilityLabel(Text(label))
-            .accessibilityValue(state.rawValue)
+            .accessibilityValue(Text(state.title))
     }
 }
 
@@ -141,7 +151,7 @@ struct VoiceOrbDemo: View {
 
             Picker("State", selection: $state) {
                 ForEach(VoiceOrbState.allCases, id: \.self) { state in
-                    Text(state.rawValue)
+                    Text(state.title)
                 }
             }
             .pickerStyle(.segmented)
