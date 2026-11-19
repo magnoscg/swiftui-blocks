@@ -6,6 +6,14 @@ import SwiftUI
 enum BillingPeriodToggleOption: String, CaseIterable, Hashable {
     case monthly = "Monthly"
     case yearly = "Yearly"
+
+    /// The name of the period, as its segment shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .monthly: "Monthly"
+        case .yearly: "Yearly"
+        }
+    }
 }
 
 enum BillingPeriodTogglePricing {
@@ -71,7 +79,7 @@ struct BillingPeriodToggle: View {
                 Button {
                     period = option
                 } label: {
-                    Text(option.rawValue)
+                    Text(option.title)
                         .font(.headline)
                         .foregroundStyle(isSelected ? Color.white : Color.primary)
                         .frame(maxWidth: .infinity)

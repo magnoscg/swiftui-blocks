@@ -14,6 +14,16 @@ enum Surface3DChartPreset: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    /// The name of the angle, as its button shows it and VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .angled: "Angled"
+        case .front: "Front"
+        case .top: "Top"
+        case .side: "Side"
+        }
+    }
+
     var pose: Chart3DPose {
         switch self {
         case .angled: Chart3DPose(azimuth: .degrees(35), inclination: .degrees(25))
@@ -66,7 +76,7 @@ struct Surface3DChart: View {
             // is wider than the view, which cuts the corners and the axis labels.
             .aspectRatio(1, contentMode: .fit)
             .accessibilityLabel("3D surface plot")
-            .accessibilityValue(currentPreset.map { "\($0.rawValue) view" } ?? "Custom view")
+            .accessibilityValue(currentPreset.map { Text("\(Text($0.title)) view") } ?? Text("Custom view"))
             .accessibilityHint("Use the view buttons to change the angle")
 
             ViewThatFits(in: .horizontal) {
@@ -82,7 +92,7 @@ struct Surface3DChart: View {
                 Button {
                     withAnimation(reduceMotion ? nil : .smooth(duration: 0.6)) { pose = preset.pose }
                 } label: {
-                    Text(preset.rawValue)
+                    Text(preset.title)
                         .font(.subheadline.weight(.semibold))
                         .padding(.horizontal, 16)
                         .frame(minHeight: 44)

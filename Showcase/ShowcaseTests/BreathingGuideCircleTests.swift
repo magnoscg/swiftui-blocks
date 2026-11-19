@@ -60,4 +60,8 @@ struct BreathingGuideCircleTests {
     @Test func invalidTimeRestsAtTheStart() {
         #expect(state(at: .nan).expansion == 0)
     }
+
+    @Test func everyPhaseHasALocalizableTitleInsteadOfItsRawValue() {
+        #expect([BreathingGuideCirclePhase.inhale, .hold, .exhale].map(\.title.key) == ["Breathe In", "Hold", "Breathe Out"])
+    }
 }

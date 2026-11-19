@@ -27,4 +27,8 @@ struct CoinFlipViewTests {
     @Test func hugeTurnCountsAreCapped() {
         #expect(CoinFlipViewMath.targetAngle(from: 0, landing: .heads, turns: .max) == 36_000)
     }
+
+    @Test func everySideHasALocalizableTitleInsteadOfItsRawValue() {
+        #expect(CoinFlipViewSide.allCases.map(\.title.key) == ["Heads", "Tails"])
+    }
 }
