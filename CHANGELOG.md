@@ -7,6 +7,12 @@ on `main`.
 
 ## Unreleased
 
+### Fixed
+
+- Voice Orb gives VoiceOver its state as a text the app can translate, and its
+  demo shows the states the same way. Before, both used the English name of
+  the state.
+
 ## 0.15.0 - 2026-11-19
 
 ### Added
