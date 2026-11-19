@@ -16,7 +16,7 @@ struct SearchScopesAndSuggestions<Scope: Hashable>: ViewModifier {
     /// The scopes the bar offers, in order. The bar shows while the search is active.
     let scopes: [Scope]
     /// Returns the text of the button for a scope.
-    let scopeTitle: (Scope) -> String
+    let scopeTitle: (Scope) -> LocalizedStringResource
     /// The texts to suggest. The field shows up to five that contain what is typed, ignoring case, and leaves out repeats and the typed text itself.
     let suggestions: [String]
     /// The placeholder of the empty field.
@@ -59,6 +59,14 @@ private enum SearchScopesAndSuggestionsDemoScope: String, CaseIterable {
     case all = "All"
     case fruit = "Fruit"
     case vegetable = "Vegetables"
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .all: "All"
+        case .fruit: "Fruit"
+        case .vegetable: "Vegetables"
+        }
+    }
 }
 
 private struct SearchScopesAndSuggestionsDemoProduce: Identifiable {
@@ -107,7 +115,7 @@ struct SearchScopesAndSuggestionsDemo: View {
                     isPresented: $isSearching,
                     scope: $scope,
                     scopes: SearchScopesAndSuggestionsDemoScope.allCases,
-                    scopeTitle: \.rawValue,
+                    scopeTitle: { $0.title },
                     suggestions: produce.map(\.name)
                 )
             )
