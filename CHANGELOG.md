@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.15.0 - 2026-11-19
+
 ### Added
 
 - The landing page also comes in Spanish, at /es/, with its own title,
