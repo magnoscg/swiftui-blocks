@@ -72,6 +72,14 @@ struct TabsPickerPagesDemo: View {
         case activity = "Activity"
         case files = "Files"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .overview: "Overview"
+            case .activity: "Activity"
+            case .files: "Files"
+            }
+        }
+
         var symbol: String {
             switch self {
             case .overview: "square.grid.2x2"
@@ -97,7 +105,7 @@ struct TabsPickerPagesDemo: View {
                 .font(.largeTitle.bold())
 
             TabsPickerPages(options: Section.allCases, selection: $section) { section in
-                SwiftUI.Label(section.rawValue, systemImage: section.symbol)
+                SwiftUI.Label(section.title, systemImage: section.symbol)
             } page: { section in
                 VStack(spacing: 10) {
                     ForEach(section.rows, id: \.self) { row in

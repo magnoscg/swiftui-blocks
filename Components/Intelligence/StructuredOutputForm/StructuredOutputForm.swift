@@ -10,6 +10,16 @@ enum StructuredOutputFormCategory: String, CaseIterable, Identifiable {
     case food, travel, shopping, other
 
     var id: Self { self }
+
+    /// The name of the category, as the picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .food: "Food"
+        case .travel: "Travel"
+        case .shopping: "Shopping"
+        case .other: "Other"
+        }
+    }
 }
 
 /// What the model must produce. `@Guide` tells it what each field means.
@@ -93,7 +103,7 @@ struct StructuredOutputForm: View {
                         .keyboardType(.decimalPad)
                 }
                 Picker("Category", selection: $draft.category) {
-                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.rawValue.capitalized).tag($0) }
+                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.title).tag($0) }
                 }
                 LabeledContent("Purpose") {
                     TextField("Purpose", text: $draft.purpose).multilineTextAlignment(.trailing)

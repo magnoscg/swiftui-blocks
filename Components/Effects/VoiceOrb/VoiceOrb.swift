@@ -173,7 +173,7 @@ struct VoiceOrbDemo: View {
         }
     }
 
-    private var caption: String {
+    private var caption: LocalizedStringResource {
         switch state {
         case .idle: "Tap a state to try it"
         case .listening: "I’m listening…"
