@@ -37,7 +37,7 @@ struct ShutterCaptureButton: View {
     private var size: CGFloat { min(scaledSize, 120) }
     private var animation: Animation? { reduceMotion ? nil : .snappy(duration: 0.25) }
 
-    private var label: String {
+    private var label: LocalizedStringResource {
         switch mode {
         case .photo: "Take photo"
         case .video: isRecording ? "Stop recording" : "Start recording"
@@ -78,7 +78,7 @@ struct ShutterCaptureButton: View {
                 .contentShape(.circle)
             }
             .buttonStyle(ShutterCaptureButtonStyle(mode: mode, isRecording: isRecording, size: size, reduceMotion: reduceMotion))
-            .accessibilityLabel(label)
+            .accessibilityLabel(Text(label))
             .sensoryFeedback(.impact(flexibility: .rigid), trigger: captureCount)
             .sensoryFeedback(.selection, trigger: isRecording)
         }

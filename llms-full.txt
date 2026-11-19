@@ -18707,7 +18707,7 @@ struct VoiceOrbDemo: View {
         }
     }
 
-    private var caption: String {
+    private var caption: LocalizedStringResource {
         switch state {
         case .idle: "Tap a state to try it"
         case .listening: "I’m listening…"
@@ -27612,6 +27612,15 @@ struct ModelAvailabilityGateDemo: View {
 
         var id: Self { self }
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .ready: "Ready"
+            case .device: "Device"
+            case .off: "Off"
+            case .preparing: "Preparing"
+            }
+        }
+
         var availability: SystemLanguageModel.Availability {
             switch self {
             case .ready: .available
@@ -27661,7 +27670,7 @@ struct ModelAvailabilityGateDemo: View {
             }
 
             Picker("Availability", selection: pickerSelection) {
-                ForEach(Sample.allCases) { Text($0.rawValue).tag($0) }
+                ForEach(Sample.allCases) { Text($0.title).tag($0) }
             }
             .pickerStyle(.segmented)
         }
@@ -27917,6 +27926,16 @@ enum StructuredOutputFormCategory: String, CaseIterable, Identifiable {
     case food, travel, shopping, other
 
     var id: Self { self }
+
+    /// The name of the category, as the picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .food: "Food"
+        case .travel: "Travel"
+        case .shopping: "Shopping"
+        case .other: "Other"
+        }
+    }
 }
 
 /// What the model must produce. `@Guide` tells it what each field means.
@@ -28000,7 +28019,7 @@ struct StructuredOutputForm: View {
                         .keyboardType(.decimalPad)
                 }
                 Picker("Category", selection: $draft.category) {
-                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.rawValue.capitalized).tag($0) }
+                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.title).tag($0) }
                 }
                 LabeledContent("Purpose") {
                     TextField("Purpose", text: $draft.purpose).multilineTextAlignment(.trailing)
@@ -28195,6 +28214,13 @@ struct AdaptiveColumnsGridDemo: View {
         case narrow = "Narrow", medium = "Medium", wide = "Wide"
 
         var id: Self { self }
+        var title: LocalizedStringResource {
+            switch self {
+            case .narrow: "Narrow"
+            case .medium: "Medium"
+            case .wide: "Wide"
+            }
+        }
         var width: CGFloat {
             switch self {
             case .narrow: 170
@@ -28220,7 +28246,7 @@ struct AdaptiveColumnsGridDemo: View {
         ScrollView {
             VStack(spacing: 20) {
                 Picker("Width", selection: selection) {
-                    ForEach(Size.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Size.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
 
@@ -32901,7 +32927,7 @@ struct ShutterCaptureButton: View {
     private var size: CGFloat { min(scaledSize, 120) }
     private var animation: Animation? { reduceMotion ? nil : .snappy(duration: 0.25) }
 
-    private var label: String {
+    private var label: LocalizedStringResource {
         switch mode {
         case .photo: "Take photo"
         case .video: isRecording ? "Stop recording" : "Start recording"
@@ -32942,7 +32968,7 @@ struct ShutterCaptureButton: View {
                 .contentShape(.circle)
             }
             .buttonStyle(ShutterCaptureButtonStyle(mode: mode, isRecording: isRecording, size: size, reduceMotion: reduceMotion))
-            .accessibilityLabel(label)
+            .accessibilityLabel(Text(label))
             .sensoryFeedback(.impact(flexibility: .rigid), trigger: captureCount)
             .sensoryFeedback(.selection, trigger: isRecording)
         }
@@ -36632,6 +36658,14 @@ private enum NavigationPathRouterDemoRoute: String, Hashable, CaseIterable {
     case settings = "Settings"
     case about = "About"
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .profile: "Profile"
+        case .settings: "Settings"
+        case .about: "About"
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .profile: "person.crop.circle.fill"
@@ -36666,7 +36700,7 @@ private struct NavigationPathRouterDemoScreen: View {
                     .padding(.bottom, 10)
 
                 ForEach(NavigationPathRouterDemoRoute.allCases.filter { $0 != current }, id: \.self) { route in
-                    Button(route.rawValue, systemImage: route.systemImage) { router.push(route) }
+                    Button(route.title, systemImage: route.systemImage) { router.push(route) }
                         .frame(maxWidth: .infinity)
                 }
 
@@ -36679,7 +36713,7 @@ private struct NavigationPathRouterDemoScreen: View {
             .foregroundStyle(.white)
             .padding(32)
         }
-        .navigationTitle(current?.rawValue ?? "Router")
+        .navigationTitle(Text(current?.title ?? "Router"))
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }
@@ -45787,6 +45821,14 @@ struct TabsPickerPagesDemo: View {
         case activity = "Activity"
         case files = "Files"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .overview: "Overview"
+            case .activity: "Activity"
+            case .files: "Files"
+            }
+        }
+
         var symbol: String {
             switch self {
             case .overview: "square.grid.2x2"
@@ -45812,7 +45854,7 @@ struct TabsPickerPagesDemo: View {
                 .font(.largeTitle.bold())
 
             TabsPickerPages(options: Section.allCases, selection: $section) { section in
-                SwiftUI.Label(section.rawValue, systemImage: section.symbol)
+                SwiftUI.Label(section.title, systemImage: section.symbol)
             } page: { section in
                 VStack(spacing: 10) {
                     ForEach(section.rows, id: \.self) { row in

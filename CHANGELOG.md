@@ -17,6 +17,11 @@ on `main`.
   Symbol Effect Gallery show the names of their options, and give them to
   VoiceOver, as text the app can translate. Before, they used the English name
   of each option.
+- The category picker of Structured Output Form, the label VoiceOver reads for
+  the shutter of Shutter Capture Button, and the demos of Adaptive Columns Grid,
+  Model Availability Gate, Navigation Path Router, Tabs Picker Pages and Voice
+  Orb show text the app can translate too. Before, it stayed in English
+  whatever the language.
 
 ## 0.15.0 - 2026-11-19
 
