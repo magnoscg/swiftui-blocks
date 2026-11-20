@@ -9,6 +9,9 @@ on `main`.
 
 ### Fixed
 
+- Video Player Chrome gives VoiceOver the names of its transport buttons (Back
+  10 seconds, Play, Pause and Forward 10 seconds) as text the app can
+  translate. Before, they stayed in English whatever the language.
 - Voice Orb gives VoiceOver its state as a text the app can translate, and its
   demo shows the states the same way. Before, both used the English name of
   the state.
