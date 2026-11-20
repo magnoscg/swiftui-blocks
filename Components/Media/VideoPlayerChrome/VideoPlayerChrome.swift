@@ -123,7 +123,7 @@ struct VideoPlayerChrome<Video: View>: View {
 
     private func transportButton(
         _ systemImage: String,
-        label: String,
+        label: LocalizedStringResource,
         font: Font = .title2,
         action: @escaping () -> Void
     ) -> some View {
