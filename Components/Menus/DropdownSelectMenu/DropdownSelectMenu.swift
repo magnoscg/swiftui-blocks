@@ -15,9 +15,9 @@ struct DropdownSelectMenu<Option: Hashable>: View {
     /// The chosen option, or nil for none. The menu writes it when the person picks one.
     @Binding var selection: Option?
     /// The text the field shows while `selection` is nil.
-    var placeholder = "Choose"
+    var placeholder: LocalizedStringResource = "Choose"
     /// Returns the text shown for an option, in the field and in the list.
-    let label: (Option) -> String
+    let label: (Option) -> LocalizedStringResource
 
     @State private var isOpen = false
     @State private var fieldHeight: CGFloat = 0
@@ -88,7 +88,7 @@ struct DropdownSelectMenu<Option: Hashable>: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)
-        .accessibilityValue(selection.map(label) ?? placeholder)
+        .accessibilityValue(Text(selection.map(label) ?? placeholder))
         .accessibilityHint(isOpen ? "Closes the list" : "Opens the list")
     }
 
@@ -147,10 +147,23 @@ struct DropdownSelectMenu<Option: Hashable>: View {
 
 // MARK: - Demo
 
+private enum DropdownSelectMenuDemoShipping: CaseIterable {
+    case standard, express, overnight, pickup
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .standard: "Standard"
+        case .express: "Express"
+        case .overnight: "Overnight"
+        case .pickup: "Pickup"
+        }
+    }
+}
+
 struct DropdownSelectMenuDemo: View {
-    @State private var shipping: String? = "Standard"
+    @State private var shipping: DropdownSelectMenuDemoShipping? = .standard
     @State private var country: String?
-    @State private var notes = "Tap a field to open it"
+    @State private var notes: LocalizedStringResource = "Tap a field to open it"
 
     var body: some View {
         ZStack {
@@ -162,9 +175,9 @@ struct DropdownSelectMenuDemo: View {
 
                 DropdownSelectMenu(
                     title: "Shipping",
-                    options: ["Standard", "Express", "Overnight", "Pickup"],
+                    options: DropdownSelectMenuDemoShipping.allCases,
                     selection: $shipping,
-                    label: { $0 }
+                    label: { $0.title }
                 )
 
                 DropdownSelectMenu(
@@ -172,7 +185,7 @@ struct DropdownSelectMenuDemo: View {
                     options: ["France", "Italy", "Portugal", "Spain"],
                     selection: $country,
                     placeholder: "Select a country",
-                    label: { $0 }
+                    label: { "\($0)" }
                 )
 
                 Text(notes)
@@ -183,7 +196,7 @@ struct DropdownSelectMenuDemo: View {
             }
             .padding(20)
         }
-        .onChange(of: shipping) { _, new in notes = "Delivery: \(new ?? "none")" }
+        .onChange(of: shipping) { _, new in notes = "Delivery: \(new?.title ?? "none")" }
     }
 }
 

@@ -15,7 +15,7 @@ struct GlassSegmentedControl<Segment: Hashable>: View {
     /// A tint for the glass thumb, or nil for plain glass.
     var tint: Color?
     /// Returns the text shown for a segment, kept to one line.
-    let title: (Segment) -> String
+    let title: (Segment) -> LocalizedStringResource
 
     @ScaledMetric(relativeTo: .subheadline) private var height = 44.0
     @State private var width: CGFloat = 0
@@ -84,10 +84,30 @@ struct GlassSegmentedControl<Segment: Hashable>: View {
 
 @available(iOS 26, *)
 struct GlassSegmentedControlDemo: View {
-    @State private var period = "Week"
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private enum Period: CaseIterable {
+        case day, week, month, year
 
-    private let steps = ["Day": 8_214, "Week": 61_730, "Month": 248_902, "Year": 2_904_117]
+        var title: LocalizedStringResource {
+            switch self {
+            case .day: "Day"
+            case .week: "Week"
+            case .month: "Month"
+            case .year: "Year"
+            }
+        }
+
+        var steps: Int {
+            switch self {
+            case .day: 8_214
+            case .week: 61_730
+            case .month: 248_902
+            case .year: 2_904_117
+            }
+        }
+    }
+
+    @State private var period = Period.week
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -100,14 +120,14 @@ struct GlassSegmentedControlDemo: View {
                         .font(.headline)
                         .foregroundStyle(.white.opacity(0.8))
 
-                    Text(steps[period, default: 0], format: .number)
+                    Text(period.steps, format: .number)
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
                         .contentTransition(.numericText())
                         .foregroundStyle(.white)
                         .animation(reduceMotion ? nil : .snappy, value: period)
                 }
 
-                GlassSegmentedControl(segments: ["Day", "Week", "Month", "Year"], selection: $period) { $0 }
+                GlassSegmentedControl(segments: Period.allCases, selection: $period) { $0.title }
                     .padding(.horizontal, 24)
             }
         }

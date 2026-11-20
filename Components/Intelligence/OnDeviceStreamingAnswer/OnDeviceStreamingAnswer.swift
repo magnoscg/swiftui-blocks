@@ -21,7 +21,7 @@ struct OnDeviceStreamingAnswer: View {
     /// What the model is told before every prompt, like the tone and length of the answer.
     var instructions = "Answer in two short, friendly sentences."
     /// The text shown, in the secondary style, while `prompt` is empty.
-    var placeholder = "Ask something to see the answer here."
+    var placeholder: LocalizedStringResource = "Ask something to see the answer here."
     /// Replaces the model with your own text stream, for previews and for tests.
     /// Each element is the whole text so far.
     var sampleStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
@@ -29,7 +29,7 @@ struct OnDeviceStreamingAnswer: View {
     /// Each element is the whole text so far.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
     /// The text shown when the model is unavailable or fails and there is no `fallbackStream`.
-    var failureMessage = "The on-device model couldn't answer right now. Please try again later."
+    var failureMessage: LocalizedStringResource = "The on-device model couldn't answer right now. Please try again later."
 
     @State private var text = ""
     @State private var phase = Phase.idle
@@ -83,12 +83,12 @@ struct OnDeviceStreamingAnswer: View {
         }
     }
 
-    private var accessibilityValue: String {
+    private var accessibilityValue: Text {
         switch phase {
-        case .idle: placeholder
-        case .streaming: "Writing"
-        case .finished: text
-        case .failed: failureMessage
+        case .idle: Text(placeholder)
+        case .streaming: Text("Writing")
+        case .finished: Text(text)
+        case .failed: Text(failureMessage)
         }
     }
 

@@ -28,6 +28,11 @@ on `main`.
   so a literal lands in the app's String Catalog instead of showing
   untranslated. A `String` that is not a literal is passed as `"\(value)"`,
   also from the two closures: `{ "\($0.rawValue)" }`.
+- The texts a caller passes to On Device Streaming Answer (the placeholder and
+  the failure message), Glass Segmented Control (the title of each segment) and
+  Dropdown Select Menu (the placeholder and the label of each option) are
+  `LocalizedStringResource` too. The "Writing" that On Device Streaming Answer
+  gives VoiceOver while it writes can be translated as well.
 
 ## 0.15.0 - 2026-11-19
 
