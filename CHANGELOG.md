@@ -9,6 +9,8 @@ on `main`.
 
 ### Fixed
 
+- The line down each group of the site's sidebar runs unbroken past the
+  categories. Before, it was cut above each one.
 - Video Player Chrome gives VoiceOver the names of its transport buttons (Back
   10 seconds, Play, Pause and Forward 10 seconds) as text the app can
   translate. Before, they stayed in English whatever the language.
