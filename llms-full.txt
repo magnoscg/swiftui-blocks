@@ -4108,9 +4108,9 @@ struct HamburgerMenuButton: View {
     /// The stroke of the bars and of the cross.
     var color: Color = .primary
     /// The name VoiceOver reads while `isOpen` is false.
-    var openLabel = "Open menu"
+    var openLabel: LocalizedStringResource = "Open menu"
     /// The name VoiceOver reads while `isOpen` is true.
-    var closeLabel = "Close menu"
+    var closeLabel: LocalizedStringResource = "Close menu"
 
     @ScaledMetric(relativeTo: .title2) private var size = 24.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -8188,7 +8188,7 @@ struct GaugeChart: View {
     /// The colored stretches of the dial, in any order. VoiceOver reads the name of the one `value` falls in.
     let zones: [GaugeChartZone]
     /// What VoiceOver calls the gauge.
-    var label = "Gauge"
+    var label: LocalizedStringResource = "Gauge"
     /// Turns `value` into the text VoiceOver reads. Whole numbers by default.
     var valueText: (Double) -> String = { $0.formatted(.number.precision(.fractionLength(0))) }
 
@@ -10068,7 +10068,7 @@ struct NestedCommentThread: View {
     private func toggle(for comment: NestedCommentThreadComment) -> some View {
         let isCollapsed = collapsed.contains(comment.id)
         let count = NestedCommentThreadLogic.replyCount(of: comment)
-        let title = "\(isCollapsed ? "Show" : "Hide") \(count) \(count == 1 ? "reply" : "replies")"
+        let title = isCollapsed ? Text("Show ^[\(count) reply](inflect: true)") : Text("Hide ^[\(count) reply](inflect: true)")
 
         return Button {
             withAnimation(reduceMotion ? nil : .snappy) {
@@ -10079,7 +10079,7 @@ struct NestedCommentThread: View {
                 }
             }
         } label: {
-            Text(title)
+            title
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(tint)
                 .frame(minHeight: 28)
@@ -10090,7 +10090,7 @@ struct NestedCommentThread: View {
                 .padding(.vertical, -8)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(title) to \(comment.author)")
+        .accessibilityLabel(Text("\(title) to \(comment.author)"))
     }
 }
 
@@ -12046,9 +12046,9 @@ struct CircularRangeSlider<Center: View>: View {
     /// The SF Symbol drawn on the end handle, or none.
     var endSymbol: String?
     /// The name VoiceOver reads for the start handle.
-    var startLabel = "Start"
+    var startLabel: LocalizedStringResource = "Start"
     /// The name VoiceOver reads for the end handle.
-    var endLabel = "End"
+    var endLabel: LocalizedStringResource = "End"
     /// Turns a handle's value into the text VoiceOver reads, like `23:00`.
     var valueText: (Double) -> String = { $0.formatted() }
     /// The view inside the ring, like the length of the range.
@@ -12117,7 +12117,7 @@ struct CircularRangeSlider<Center: View>: View {
         )
     }
 
-    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: String, value: Double, in size: CGSize) -> some View {
+    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: LocalizedStringResource, value: Double, in size: CGSize) -> some View {
         Circle()
             .fill(.white)
             .shadow(color: .black.opacity(0.2), radius: 3, y: 1)
@@ -12931,9 +12931,9 @@ struct RangeSlider: View {
     /// The shortest distance the thumbs keep between them.
     var minimumSpan = 0.0
     /// The name VoiceOver reads for the lower thumb.
-    var lowerLabel = "Minimum"
+    var lowerLabel: LocalizedStringResource = "Minimum"
     /// The name VoiceOver reads for the upper thumb.
-    var upperLabel = "Maximum"
+    var upperLabel: LocalizedStringResource = "Maximum"
     /// Turns a thumb's value into the text VoiceOver reads, like a price.
     var valueText: (Double) -> String = { $0.formatted() }
 
@@ -14153,7 +14153,7 @@ struct TickMarkSlider: View {
     /// Where the tinted part of the track starts. `nil` leaves it to the system.
     var neutralValue: Double?
     /// The name of the slider, which VoiceOver reads.
-    var label = "Value"
+    var label: LocalizedStringResource = "Value"
     /// Whether the slider moves to the nearest mark when it is let go.
     var snapsToTicks = true
     /// Turns a value into the text of its mark and of the current value, read by assistive technologies.
@@ -18754,7 +18754,7 @@ struct AnimatedBadgeCount: View {
     /// The fill of the capsule. Its number takes white or black from it.
     var tint: Color = .red
     /// The word VoiceOver reads after the number, like "3 new".
-    var unit = "new"
+    var unit: LocalizedStringResource = "new"
 
     @ScaledMetric(relativeTo: .caption) private var height = 22.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -18775,7 +18775,7 @@ struct AnimatedBadgeCount: View {
                     .frame(minWidth: height, minHeight: height)
                     .background(tint, in: .capsule)
                     .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
-                    .accessibilityLabel("\(text) \(unit)")
+                    .accessibilityLabel(Text("\(text) \(Text(unit))"))
             }
         }
         .animation(reduceMotion ? nil : .spring(duration: 0.4, bounce: 0.45), value: text)
@@ -18876,9 +18876,9 @@ struct AnimatedCheckmarkBadge: View {
     /// The side of the badge in points, before it scales with Dynamic Type.
     var size: CGFloat = 96
     /// What VoiceOver reads while the badge shows.
-    var completeLabel = "Complete"
+    var completeLabel: LocalizedStringResource = "Complete"
     /// What VoiceOver reads while the badge is hidden.
-    var pendingLabel = "Pending"
+    var pendingLabel: LocalizedStringResource = "Pending"
 
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -23348,9 +23348,9 @@ struct BeforeAfterSlider: View {
     /// Where the handle sits, from 0 at the leading edge to 1 at the trailing edge. The component writes it while dragging, and VoiceOver moves it in steps of 0.1.
     @Binding var position: Double
     /// The tag in the top leading corner, also read by VoiceOver. It fades as the handle nears the leading edge.
-    var beforeTitle = "Before"
+    var beforeTitle: LocalizedStringResource = "Before"
     /// The tag in the top trailing corner, also read by VoiceOver. It fades as the handle nears the trailing edge.
-    var afterTitle = "After"
+    var afterTitle: LocalizedStringResource = "After"
 
     @ScaledMetric(relativeTo: .body) private var knobSize = 44.0
     @Environment(\.layoutDirection) private var layoutDirection
@@ -23385,8 +23385,8 @@ struct BeforeAfterSlider: View {
         }
         .clipped()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(beforeTitle) and \(afterTitle) comparison")
-        .accessibilityValue("\(Int(clamped * 100)) percent \(beforeTitle)")
+        .accessibilityLabel(Text("\(Text(beforeTitle)) and \(Text(afterTitle)) comparison"))
+        .accessibilityValue(Text("\(Int(clamped * 100)) percent \(Text(beforeTitle))"))
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: position = min(clamped + 0.1, 1)
@@ -23419,7 +23419,7 @@ struct BeforeAfterSlider: View {
         }
     }
 
-    private func tag(_ title: String) -> some View {
+    private func tag(_ title: LocalizedStringResource) -> some View {
         Text(title)
             .font(.caption.weight(.semibold))
             .foregroundStyle(.white)
@@ -26184,7 +26184,7 @@ struct MultiStepForm: View {
     /// The pages of the form, in order, one segment of the progress bar each.
     let steps: [MultiStepFormStep]
     /// The text of the main button on the last step, in place of "Continue".
-    var finishTitle = "Finish"
+    var finishTitle: LocalizedStringResource = "Finish"
     /// Runs once when the last step is valid and its button is tapped. Going back lets it run again.
     var onFinish: () -> Void = {}
 
@@ -26531,7 +26531,7 @@ nonisolated enum PasscodeKeypadLogic {
 /// never shown or read aloud. With Reduce Motion on, the dots turn red without shaking.
 struct PasscodeKeypad: View {
     /// The text above the dots, which VoiceOver also reads for them.
-    var title = "Enter Passcode"
+    var title: LocalizedStringResource = "Enter Passcode"
     /// How many digits the passcode has, one dot each.
     var length = 6
     /// Called with the code when its last digit is entered. Returns `false` to reject it, which shakes and empties the dots.
@@ -27098,7 +27098,7 @@ struct SearchFieldWithSuggestions: ViewModifier {
     @Binding var text: String
     let suggestions: [String]
     var placement: SearchFieldPlacement = .automatic
-    var prompt = "Search"
+    var prompt: LocalizedStringResource = "Search"
     var limit = 6
 
     func body(content: Content) -> some View {
@@ -27130,7 +27130,7 @@ extension View {
         text: Binding<String>,
         suggestions: [String],
         placement: SearchFieldPlacement = .automatic,
-        prompt: String = "Search",
+        prompt: LocalizedStringResource = "Search",
         limit: Int = 6
     ) -> some View {
         modifier(SearchFieldWithSuggestions(text: text, suggestions: suggestions, placement: placement, prompt: prompt, limit: limit))
@@ -27260,7 +27260,7 @@ struct TagInputField: View {
     /// The tags, in the order added. The field writes it as tags are added or removed, trimmed and without repeats regardless of case.
     @Binding var tags: [String]
     /// The placeholder shown while nothing is typed, and the name VoiceOver reads for the field.
-    var prompt = "Add a tag"
+    var prompt: LocalizedStringResource = "Add a tag"
 
     private let cornerRadius: CGFloat = 14
 
@@ -30044,7 +30044,7 @@ struct LoadMoreFooter: View {
     /// The state of the next page: a spinner while idle or loading, a retry button when it failed, and `finishedText` when there is nothing left.
     let phase: LoadMoreFooterPhase
     /// The text shown once every page has loaded.
-    var finishedText = "You're all caught up"
+    var finishedText: LocalizedStringResource = "You're all caught up"
     /// Runs when the footer appears while `phase` is idle, and when the retry button is tapped.
     let onLoad: () -> Void
 
@@ -31843,9 +31843,9 @@ struct MapRouteTracker: View {
     /// The color of the route, of the marker's symbol and ring and of the destination flag.
     var color = Color.blue
     /// The name of the moving marker, which VoiceOver reads with the share of the route done.
-    var markerTitle = "Courier"
+    var markerTitle: LocalizedStringResource = "Courier"
     /// The name of the destination flag.
-    var destinationTitle = "Destination"
+    var destinationTitle: LocalizedStringResource = "Destination"
     /// Whether the camera travels with the marker. Otherwise it shows the whole route.
     var followsMarker = true
     /// How far above the marker the camera stays while it follows it, in meters.
@@ -31869,11 +31869,13 @@ struct MapRouteTracker: View {
                     .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
             }
             if let destination = route.last {
-                Marker(destinationTitle, systemImage: "flag.checkered", coordinate: destination.coordinate)
-                    .tint(color)
+                Marker(coordinate: destination.coordinate) {
+                    Label(destinationTitle, systemImage: "flag.checkered")
+                }
+                .tint(color)
             }
             if let current = parts.done.last {
-                Annotation(markerTitle, coordinate: current.coordinate) {
+                Annotation(coordinate: current.coordinate) {
                     Image(systemName: symbol)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(color)
@@ -31884,6 +31886,8 @@ struct MapRouteTracker: View {
                         .accessibilityElement()
                         .accessibilityLabel(markerTitle)
                         .accessibilityValue(min(max(progress, 0), 1).formatted(.percent.precision(.fractionLength(0))))
+                } label: {
+                    Text(markerTitle)
                 }
                 .annotationTitles(.hidden)
             }
@@ -33150,7 +33154,7 @@ struct SpinningVinylArt<Artwork: View>: View {
     /// Revolutions per minute. A 33 rpm record is slow enough to read the label.
     var rpm = 33.0
     /// What VoiceOver reads for the disc.
-    var accessibilityName = "Album art"
+    var accessibilityName: LocalizedStringResource = "Album art"
     /// The cover, clipped to a circle in the middle 60% of the disc.
     @ViewBuilder var artwork: () -> Artwork
 
@@ -45823,7 +45827,7 @@ struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
     /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
     /// The name of the picker, which VoiceOver reads.
-    var title = "Section"
+    var title: LocalizedStringResource = "Section"
     /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
     /// Builds the page of an option, aligned to the top of the space below the tabs.

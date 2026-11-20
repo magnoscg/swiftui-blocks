@@ -81,4 +81,10 @@ private struct LoadMoreFooterTestError: Error {}
         #expect(pager.elements == [0])
         #expect(pager.phase == .finished)
     }
+
+    @Test func theDefaultFinishedTextIsALocalizableTextInsteadOfAString() {
+        let footer = LoadMoreFooter(phase: .finished, onLoad: {})
+
+        #expect(footer.finishedText.key == "You're all caught up")
+    }
 }

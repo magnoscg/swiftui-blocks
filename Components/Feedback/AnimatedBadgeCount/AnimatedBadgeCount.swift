@@ -14,7 +14,7 @@ struct AnimatedBadgeCount: View {
     /// The fill of the capsule. Its number takes white or black from it.
     var tint: Color = .red
     /// The word VoiceOver reads after the number, like "3 new".
-    var unit = "new"
+    var unit: LocalizedStringResource = "new"
 
     @ScaledMetric(relativeTo: .caption) private var height = 22.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -35,7 +35,7 @@ struct AnimatedBadgeCount: View {
                     .frame(minWidth: height, minHeight: height)
                     .background(tint, in: .capsule)
                     .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
-                    .accessibilityLabel("\(text) \(unit)")
+                    .accessibilityLabel(Text("\(text) \(Text(unit))"))
             }
         }
         .animation(reduceMotion ? nil : .spring(duration: 0.4, bounce: 0.45), value: text)

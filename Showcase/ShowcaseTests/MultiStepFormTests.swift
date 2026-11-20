@@ -62,4 +62,11 @@ struct MultiStepFormTests {
 
         #expect(progress.index == expected)
     }
+
+    @MainActor
+    @Test func theDefaultFinishTitleIsALocalizableTextInsteadOfAString() {
+        let form = MultiStepForm(steps: [])
+
+        #expect(form.finishTitle.key == "Finish")
+    }
 }

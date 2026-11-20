@@ -71,4 +71,12 @@ struct RangeSliderTests {
         #expect(RangeSliderMath.thumb(nearest: 1, lower: 1, upper: 1) == .lower)
         #expect(RangeSliderMath.thumb(nearest: 0, lower: 0, upper: 0) == .upper)
     }
+
+    @MainActor
+    @Test func theDefaultThumbLabelsAreLocalizableTextsInsteadOfStrings() {
+        let slider = RangeSlider(range: .constant(0...1))
+
+        #expect(slider.lowerLabel.key == "Minimum")
+        #expect(slider.upperLabel.key == "Maximum")
+    }
 }

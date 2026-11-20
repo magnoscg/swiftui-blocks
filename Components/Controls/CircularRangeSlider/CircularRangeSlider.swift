@@ -89,9 +89,9 @@ struct CircularRangeSlider<Center: View>: View {
     /// The SF Symbol drawn on the end handle, or none.
     var endSymbol: String?
     /// The name VoiceOver reads for the start handle.
-    var startLabel = "Start"
+    var startLabel: LocalizedStringResource = "Start"
     /// The name VoiceOver reads for the end handle.
-    var endLabel = "End"
+    var endLabel: LocalizedStringResource = "End"
     /// Turns a handle's value into the text VoiceOver reads, like `23:00`.
     var valueText: (Double) -> String = { $0.formatted() }
     /// The view inside the ring, like the length of the range.
@@ -160,7 +160,7 @@ struct CircularRangeSlider<Center: View>: View {
         )
     }
 
-    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: String, value: Double, in size: CGSize) -> some View {
+    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: LocalizedStringResource, value: Double, in size: CGSize) -> some View {
         Circle()
             .fill(.white)
             .shadow(color: .black.opacity(0.2), radius: 3, y: 1)

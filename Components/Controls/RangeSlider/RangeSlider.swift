@@ -63,9 +63,9 @@ struct RangeSlider: View {
     /// The shortest distance the thumbs keep between them.
     var minimumSpan = 0.0
     /// The name VoiceOver reads for the lower thumb.
-    var lowerLabel = "Minimum"
+    var lowerLabel: LocalizedStringResource = "Minimum"
     /// The name VoiceOver reads for the upper thumb.
-    var upperLabel = "Maximum"
+    var upperLabel: LocalizedStringResource = "Maximum"
     /// Turns a thumb's value into the text VoiceOver reads, like a price.
     var valueText: (Double) -> String = { $0.formatted() }
 

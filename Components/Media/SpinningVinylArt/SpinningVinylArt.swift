@@ -49,7 +49,7 @@ struct SpinningVinylArt<Artwork: View>: View {
     /// Revolutions per minute. A 33 rpm record is slow enough to read the label.
     var rpm = 33.0
     /// What VoiceOver reads for the disc.
-    var accessibilityName = "Album art"
+    var accessibilityName: LocalizedStringResource = "Album art"
     /// The cover, clipped to a circle in the middle 60% of the disc.
     @ViewBuilder var artwork: () -> Artwork
 

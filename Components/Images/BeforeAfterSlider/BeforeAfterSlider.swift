@@ -14,9 +14,9 @@ struct BeforeAfterSlider: View {
     /// Where the handle sits, from 0 at the leading edge to 1 at the trailing edge. The component writes it while dragging, and VoiceOver moves it in steps of 0.1.
     @Binding var position: Double
     /// The tag in the top leading corner, also read by VoiceOver. It fades as the handle nears the leading edge.
-    var beforeTitle = "Before"
+    var beforeTitle: LocalizedStringResource = "Before"
     /// The tag in the top trailing corner, also read by VoiceOver. It fades as the handle nears the trailing edge.
-    var afterTitle = "After"
+    var afterTitle: LocalizedStringResource = "After"
 
     @ScaledMetric(relativeTo: .body) private var knobSize = 44.0
     @Environment(\.layoutDirection) private var layoutDirection
@@ -51,8 +51,8 @@ struct BeforeAfterSlider: View {
         }
         .clipped()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(beforeTitle) and \(afterTitle) comparison")
-        .accessibilityValue("\(Int(clamped * 100)) percent \(beforeTitle)")
+        .accessibilityLabel(Text("\(Text(beforeTitle)) and \(Text(afterTitle)) comparison"))
+        .accessibilityValue(Text("\(Int(clamped * 100)) percent \(Text(beforeTitle))"))
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: position = min(clamped + 0.1, 1)
@@ -85,7 +85,7 @@ struct BeforeAfterSlider: View {
         }
     }
 
-    private func tag(_ title: String) -> some View {
+    private func tag(_ title: LocalizedStringResource) -> some View {
         Text(title)
             .font(.caption.weight(.semibold))
             .foregroundStyle(.white)

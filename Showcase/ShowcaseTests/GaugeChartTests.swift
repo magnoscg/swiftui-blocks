@@ -66,4 +66,11 @@ struct GaugeChartTests {
 
         #expect(spans.map(\.end) == [0.5, 1])
     }
+
+    @MainActor
+    @Test func theDefaultLabelIsALocalizableTextInsteadOfAString() {
+        let gauge = GaugeChart(value: 0, zones: [])
+
+        #expect(gauge.label.key == "Gauge")
+    }
 }

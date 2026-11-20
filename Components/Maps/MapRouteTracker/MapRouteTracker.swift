@@ -75,9 +75,9 @@ struct MapRouteTracker: View {
     /// The color of the route, of the marker's symbol and ring and of the destination flag.
     var color = Color.blue
     /// The name of the moving marker, which VoiceOver reads with the share of the route done.
-    var markerTitle = "Courier"
+    var markerTitle: LocalizedStringResource = "Courier"
     /// The name of the destination flag.
-    var destinationTitle = "Destination"
+    var destinationTitle: LocalizedStringResource = "Destination"
     /// Whether the camera travels with the marker. Otherwise it shows the whole route.
     var followsMarker = true
     /// How far above the marker the camera stays while it follows it, in meters.
@@ -101,11 +101,13 @@ struct MapRouteTracker: View {
                     .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
             }
             if let destination = route.last {
-                Marker(destinationTitle, systemImage: "flag.checkered", coordinate: destination.coordinate)
-                    .tint(color)
+                Marker(coordinate: destination.coordinate) {
+                    Label(destinationTitle, systemImage: "flag.checkered")
+                }
+                .tint(color)
             }
             if let current = parts.done.last {
-                Annotation(markerTitle, coordinate: current.coordinate) {
+                Annotation(coordinate: current.coordinate) {
                     Image(systemName: symbol)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(color)
@@ -116,6 +118,8 @@ struct MapRouteTracker: View {
                         .accessibilityElement()
                         .accessibilityLabel(markerTitle)
                         .accessibilityValue(min(max(progress, 0), 1).formatted(.percent.precision(.fractionLength(0))))
+                } label: {
+                    Text(markerTitle)
                 }
                 .annotationTitles(.hidden)
             }
