@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
 
 import Foundation
+import SwiftUI
 import Testing
 @testable import Showcase
 
@@ -68,5 +69,12 @@ import Testing
         spin.setSpeed(100, at: start)
 
         #expect(spin.angle(at: start.addingTimeInterval(-5)) == 0)
+    }
+
+    @MainActor
+    @Test func theDefaultAccessibilityNameIsALocalizableTextInsteadOfAString() {
+        let art = SpinningVinylArt(isPlaying: false, artwork: { EmptyView() })
+
+        #expect(art.accessibilityName.key == "Album art")
     }
 }

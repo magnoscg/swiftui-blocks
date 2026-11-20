@@ -33,6 +33,14 @@ on `main`.
   Dropdown Select Menu (the placeholder and the label of each option) are
   `LocalizedStringResource` too. The "Writing" that On Device Streaming Answer
   gives VoiceOver while it writes can be translated as well.
+- The texts with a default in Animated Badge Count, Animated Checkmark Badge,
+  Before After Slider, Circular Range Slider, Gauge Chart, Hamburger Menu
+  Button, Load More Footer, Map Route Tracker, Multi Step Form, Passcode Keypad,
+  Range Slider, Search Field With Suggestions, Spinning Vinyl Art, Tabs Picker
+  Pages, Tag Input Field and Tick Mark Slider are `LocalizedStringResource` too,
+  so the default and a literal a caller passes land in the app's String
+  Catalog. Before, they stayed in English whatever the language. Nested Comment
+  Thread shows "Show 3 replies" as text the app can translate, with its plural.
 
 ## 0.15.0 - 2026-11-19
 

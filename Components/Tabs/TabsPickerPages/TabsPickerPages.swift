@@ -24,7 +24,7 @@ struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
     /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
     /// The name of the picker, which VoiceOver reads.
-    var title = "Section"
+    var title: LocalizedStringResource = "Section"
     /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
     /// Builds the page of an option, aligned to the top of the space below the tabs.

@@ -45,4 +45,12 @@ struct HamburgerMenuButtonTests {
 
         #expect(firstSlope * lastSlope < 0)
     }
+
+    @MainActor
+    @Test func theDefaultLabelsAreLocalizableTextsInsteadOfStrings() {
+        let button = HamburgerMenuButton(isOpen: .constant(false))
+
+        #expect(button.openLabel.key == "Open menu")
+        #expect(button.closeLabel.key == "Close menu")
+    }
 }

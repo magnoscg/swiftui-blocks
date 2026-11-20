@@ -31,7 +31,7 @@ struct SearchFieldWithSuggestions: ViewModifier {
     @Binding var text: String
     let suggestions: [String]
     var placement: SearchFieldPlacement = .automatic
-    var prompt = "Search"
+    var prompt: LocalizedStringResource = "Search"
     var limit = 6
 
     func body(content: Content) -> some View {
@@ -63,7 +63,7 @@ extension View {
         text: Binding<String>,
         suggestions: [String],
         placement: SearchFieldPlacement = .automatic,
-        prompt: String = "Search",
+        prompt: LocalizedStringResource = "Search",
         limit: Int = 6
     ) -> some View {
         modifier(SearchFieldWithSuggestions(text: text, suggestions: suggestions, placement: placement, prompt: prompt, limit: limit))

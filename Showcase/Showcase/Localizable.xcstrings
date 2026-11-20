@@ -67,6 +67,30 @@
         }
       }
     },
+    "Hide ^[%lld reply](inflect: true)": {
+      "comment": "English on purpose. Only the demo of Onboarding Pager is translated, and this keeps the plural of a demo that is not, where the app runs in Spanish.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Hide %lld reply"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Hide %lld replies"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Page": {
       "extractionState": "manual",
       "localizations": {
@@ -74,6 +98,30 @@
           "stringUnit": {
             "state": "translated",
             "value": "Página"
+          }
+        }
+      }
+    },
+    "Show ^[%lld reply](inflect: true)": {
+      "comment": "English on purpose. Only the demo of Onboarding Pager is translated, and this keeps the plural of a demo that is not, where the app runs in Spanish.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Show %lld reply"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Show %lld replies"
+                }
+              }
+            }
           }
         }
       }

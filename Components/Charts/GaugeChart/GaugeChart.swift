@@ -56,7 +56,7 @@ struct GaugeChart: View {
     /// The colored stretches of the dial, in any order. VoiceOver reads the name of the one `value` falls in.
     let zones: [GaugeChartZone]
     /// What VoiceOver calls the gauge.
-    var label = "Gauge"
+    var label: LocalizedStringResource = "Gauge"
     /// Turns `value` into the text VoiceOver reads. Whole numbers by default.
     var valueText: (Double) -> String = { $0.formatted(.number.precision(.fractionLength(0))) }
 

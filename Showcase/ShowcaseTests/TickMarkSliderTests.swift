@@ -27,4 +27,12 @@ struct TickMarkSliderTests {
         #expect(TickMarkSliderMath.ticks([1, 0.5, 1, 0], in: 0...1) == [0, 0.5, 1])
         #expect(TickMarkSliderMath.ticks([.nan, 0.5], in: 0...1) == [0.5])
     }
+
+    @available(iOS 26, *)
+    @MainActor
+    @Test func theDefaultLabelIsALocalizableTextInsteadOfAString() {
+        let slider = TickMarkSlider(value: .constant(0), ticks: [])
+
+        #expect(slider.label.key == "Value")
+    }
 }

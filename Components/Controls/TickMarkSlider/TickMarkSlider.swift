@@ -32,7 +32,7 @@ struct TickMarkSlider: View {
     /// Where the tinted part of the track starts. `nil` leaves it to the system.
     var neutralValue: Double?
     /// The name of the slider, which VoiceOver reads.
-    var label = "Value"
+    var label: LocalizedStringResource = "Value"
     /// Whether the slider moves to the nearest mark when it is let go.
     var snapsToTicks = true
     /// Turns a value into the text of its mark and of the current value, read by assistive technologies.

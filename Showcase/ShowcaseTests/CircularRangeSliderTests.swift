@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
 
 import CoreGraphics
+import SwiftUI
 import Testing
 @testable import Showcase
 
@@ -86,5 +87,13 @@ struct CircularRangeSliderTests {
         let shared = CircularRangeSliderMath.point(atTurn: 0.4, in: size, lineWidth: 40)
 
         #expect(CircularRangeSliderMath.part(at: shared, in: size, startTurn: 0.4, endTurn: 0.4, lineWidth: 40) == .end)
+    }
+
+    @MainActor
+    @Test func theDefaultHandleLabelsAreLocalizableTextsInsteadOfStrings() {
+        let slider = CircularRangeSlider(start: .constant(0), end: .constant(1), center: { EmptyView() })
+
+        #expect(slider.startLabel.key == "Start")
+        #expect(slider.endLabel.key == "End")
     }
 }

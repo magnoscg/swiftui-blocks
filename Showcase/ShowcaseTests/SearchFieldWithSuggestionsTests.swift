@@ -34,4 +34,11 @@ struct SearchFieldWithSuggestionsTests {
     @Test func duplicatesAreDropped() {
         #expect(SearchFieldWithSuggestionsFilter.matches(for: "par", in: ["Paris", "paris"]) == ["Paris"])
     }
+
+    @MainActor
+    @Test func theDefaultPromptIsALocalizableTextInsteadOfAString() {
+        let modifier = SearchFieldWithSuggestions(text: .constant(""), suggestions: [])
+
+        #expect(modifier.prompt.key == "Search")
+    }
 }

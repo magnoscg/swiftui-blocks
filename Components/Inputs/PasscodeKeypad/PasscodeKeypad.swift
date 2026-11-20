@@ -27,7 +27,7 @@ nonisolated enum PasscodeKeypadLogic {
 /// never shown or read aloud. With Reduce Motion on, the dots turn red without shaking.
 struct PasscodeKeypad: View {
     /// The text above the dots, which VoiceOver also reads for them.
-    var title = "Enter Passcode"
+    var title: LocalizedStringResource = "Enter Passcode"
     /// How many digits the passcode has, one dot each.
     var length = 6
     /// Called with the code when its last digit is entered. Returns `false` to reject it, which shakes and empties the dots.

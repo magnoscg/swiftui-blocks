@@ -105,7 +105,7 @@ struct NestedCommentThread: View {
     private func toggle(for comment: NestedCommentThreadComment) -> some View {
         let isCollapsed = collapsed.contains(comment.id)
         let count = NestedCommentThreadLogic.replyCount(of: comment)
-        let title = "\(isCollapsed ? "Show" : "Hide") \(count) \(count == 1 ? "reply" : "replies")"
+        let title = isCollapsed ? Text("Show ^[\(count) reply](inflect: true)") : Text("Hide ^[\(count) reply](inflect: true)")
 
         return Button {
             withAnimation(reduceMotion ? nil : .snappy) {
@@ -116,7 +116,7 @@ struct NestedCommentThread: View {
                 }
             }
         } label: {
-            Text(title)
+            title
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(tint)
                 .frame(minHeight: 28)
@@ -127,7 +127,7 @@ struct NestedCommentThread: View {
                 .padding(.vertical, -8)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(title) to \(comment.author)")
+        .accessibilityLabel(Text("\(title) to \(comment.author)"))
     }
 }
 

@@ -23,4 +23,11 @@ struct AnimatedBadgeCountTests {
     func aNonsenseMaximumFallsBackToOne(maximum: Int) {
         #expect(AnimatedBadgeCountFormat.text(count: 3, maximum: maximum) == "1+")
     }
+
+    @MainActor
+    @Test func theDefaultUnitIsALocalizableTextInsteadOfAString() {
+        let badge = AnimatedBadgeCount(count: 3)
+
+        #expect(badge.unit.key == "new")
+    }
 }

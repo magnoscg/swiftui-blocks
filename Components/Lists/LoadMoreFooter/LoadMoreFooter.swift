@@ -47,7 +47,7 @@ struct LoadMoreFooter: View {
     /// The state of the next page: a spinner while idle or loading, a retry button when it failed, and `finishedText` when there is nothing left.
     let phase: LoadMoreFooterPhase
     /// The text shown once every page has loaded.
-    var finishedText = "You're all caught up"
+    var finishedText: LocalizedStringResource = "You're all caught up"
     /// Runs when the footer appears while `phase` is idle, and when the retry button is tapped.
     let onLoad: () -> Void
 
