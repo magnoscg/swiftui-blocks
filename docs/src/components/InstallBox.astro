@@ -107,6 +107,7 @@ const split = (command: string) => {
     padding: 0.375rem;
     border: 0;
     overflow-x: auto;
+    overflow-y: hidden;
     scrollbar-width: none;
     scroll-padding-inline: var(--fade-size);
   }
@@ -162,10 +163,11 @@ const split = (command: string) => {
     background: var(--sl-color-gray-5);
   }
 
+  /* It ends where the tab bar does: any lower and the bar would clip it and scroll down to it. */
   .install-box :global([role='tab'][aria-selected='true'])::after {
     content: '';
     position: absolute;
-    inset: auto 0.75rem -0.4375rem;
+    inset: auto 0.75rem -0.375rem;
     height: 2px;
     border-radius: 2px;
     background: var(--brand-gradient);
