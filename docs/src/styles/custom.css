@@ -249,3 +249,52 @@ h4 {
 .main-pane:has(.catalog-gallery) {
   --sl-content-width: 90rem;
 }
+
+/* The Introduction lists what every component keeps in two columns where they fit. */
+.sl-markdown-content .built-in ul {
+  columns: 2 18rem;
+  column-gap: 2rem;
+}
+
+.sl-markdown-content .built-in li {
+  break-inside: avoid;
+}
+
+.sl-markdown-content .built-in li::marker {
+  color: var(--brand-2);
+}
+
+/* Requirements: a name beside each value, one above the other on a phone. */
+.requirements {
+  display: grid;
+  margin: 1rem 0 0;
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+
+.requirements > div {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.requirements dt {
+  font-weight: 600;
+  color: var(--sl-color-white);
+}
+
+.requirements dd {
+  margin: 0;
+  color: var(--sl-color-gray-2);
+}
+
+.requirements a {
+  color: var(--sl-color-white);
+}
+
+@media (max-width: 40rem) {
+  .requirements > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

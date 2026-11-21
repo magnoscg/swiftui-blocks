@@ -1,0 +1,140 @@
+---
+// The two ways to add a component, on the Introduction: the skill, with its command to copy, and the catalog by hand.
+import { count, SITE_BASE } from '../lib/catalog';
+import { installWays } from '../lib/install';
+
+const [command] = installWays[0].commands;
+---
+
+<div class="two-ways not-content">
+  <div class="ways">
+    <section class="way">
+      <p class="tag recommended">Recommended</p>
+      <h3>With your coding agent</h3>
+      <p>
+        Install the skill once and ask in plain words. Your agent finds the component, checks it against your deployment
+        target and adds the file.
+      </p>
+      <p class="command">
+        <code>{command}</code>
+        <button type="button" data-copy={command} data-done="Copied" aria-label="Copy the command">Copy</button>
+      </p>
+      <a href={`${SITE_BASE}/install/`}>Other agents and options <span aria-hidden="true">→</span></a>
+    </section>
+    <section class="way">
+      <p class="tag">No setup</p>
+      <h3>By hand</h3>
+      <p>Find a component in the catalog, then use Copy code or Download .swift and add the file to your app target.</p>
+      <a href={`${SITE_BASE}/catalog/`}>Browse {count} components <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+  <p class="sr-only" role="status" data-copy-status></p>
+</div>
+
+<script>
+  import '../lib/copy';
+</script>
+
+<style>
+  .two-ways {
+    container-type: inline-size;
+    margin-top: 1rem;
+  }
+
+  .ways {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18.75rem, 100%), 1fr));
+    gap: 1rem;
+  }
+
+  @container (min-width: 40rem) {
+    .ways {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    }
+  }
+
+  .way {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: var(--sl-text-h4);
+    color: var(--sl-color-white);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-2);
+  }
+
+  .tag {
+    align-self: start;
+    padding: 0 0.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+  }
+
+  .tag.recommended {
+    border-color: transparent;
+    background:
+      linear-gradient(var(--sl-color-bg), var(--sl-color-bg)) padding-box,
+      var(--brand-gradient) border-box;
+    color: var(--sl-color-white);
+  }
+
+  .command {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.6rem;
+    background: var(--sl-color-gray-6);
+  }
+
+  .command code {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-white);
+    overflow-wrap: anywhere;
+  }
+
+  .command button {
+    flex: none;
+    min-height: 2.75rem;
+    padding: 0 0.875rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: var(--sl-color-white);
+    color: var(--sl-color-black);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .way > a {
+    margin-top: auto;
+    align-self: start;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    color: var(--sl-color-white);
+    text-decoration: underline;
+    text-decoration-color: var(--brand-2);
+    text-underline-offset: 0.2em;
+  }
+</style>

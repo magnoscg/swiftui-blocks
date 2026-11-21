@@ -21,6 +21,10 @@ on `main`.
   gathers the ways to add it under Add it: Copy full prompt for any agent, or
   the files by hand. It says how long its file is, and its preview says it was
   recorded in the iOS Simulator.
+- The Introduction shows the two ways to add a component side by side, with the
+  command that installs the skill, then what every component keeps and what it
+  needs, with its figures read from the catalog. On a phone, the API reference
+  of a component shows each parameter as a block of its own.
 
 ## 0.16.0 - 2026-11-21
 
