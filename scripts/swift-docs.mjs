@@ -33,11 +33,25 @@ export function componentDocs(source, name) {
   const viewTables = showsThroughModifier
     ? typeTables(declarations, type, name).map((table) => ({ ...table, title: table.title ?? name }))
     : [];
+  const usage = demoStart === -1 ? null : usageOf(lines, demoStart);
   return {
     overview: doc?.length ? overviewOf(doc) : null,
-    usage: demoStart === -1 ? null : usageOf(lines, demoStart),
+    usage,
+    call: usage ? callLine(usage, name, modifiers) : null,
     api: isModifier ? [...modifiers.map(functionTable), ...viewTables] : typeTables(declarations, type, name),
   };
+}
+
+// The line of the usage, counted from 1, that builds the component or applies
+// its modifier. A demo that reaches it another way, like `.buttonStyle(.glow)`,
+// gets no line rather than a wrong one.
+function callLine(usage, name, modifiers) {
+  const calls = [
+    new RegExp(`\\b${name}\\s*[({<]`),
+    ...modifiers.map((modifier) => new RegExp(`\\.${modifier.name}\\s*[({]`)),
+  ];
+  const index = usage.split('\n').findIndex((line) => calls.some((call) => call.test(line)));
+  return index === -1 ? null : index + 1;
 }
 
 // MARK: - Comments

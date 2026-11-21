@@ -98,6 +98,54 @@ describe('the overview of a component', () => {
   });
 });
 
+describe('the line of the usage that calls the component', () => {
+  function withDemo(declarations, demo, name) {
+    return `${HEADER}${declarations}\n// MARK: - Demo\n\nstruct ${name}Demo: View {\n${demo}\n}\n\n#Preview {\n    ${name}Demo()\n}\n`;
+  }
+
+  it('marks the line that builds the view, past the declaration of its demo', () => {
+    const docs = componentDocs(file('struct GlowButton: View {\n    var body: some View { EmptyView() }\n}'), 'GlowButton');
+
+    assert.equal(docs.call, 2);
+  });
+
+  it('marks a view built with a trailing closure or a generic parameter', () => {
+    const closure = withDemo(
+      'struct FlowLayout: Layout {}',
+      '    var body: some View {\n        FlowLayout {\n            Text("A")\n        }\n    }',
+      'FlowLayout',
+    );
+    const generic = withDemo(
+      'struct TagList<Tag: Hashable>: View {}',
+      '    var body: some View {\n        TagList<String>(tags: [])\n    }',
+      'TagList',
+    );
+
+    assert.equal(componentDocs(closure, 'FlowLayout').call, 3);
+    assert.equal(componentDocs(generic, 'TagList').call, 3);
+  });
+
+  it('marks the line that applies the modifier of a component', () => {
+    const source = withDemo(
+      'struct ShimmerModifier: ViewModifier {}\n\nextension View {\n    func shimmer() -> some View { modifier(ShimmerModifier()) }\n}',
+      '    var body: some View {\n        Text("Hi")\n            .shimmer()\n    }',
+      'ShimmerModifier',
+    );
+
+    assert.equal(componentDocs(source, 'ShimmerModifier').call, 4);
+  });
+
+  it('marks no line when the demo reaches the component another way', () => {
+    const source = withDemo(
+      'struct GlowStyle: ButtonStyle {}',
+      '    var body: some View {\n        Button("Hi") {}\n            .buttonStyle(.glow)\n    }',
+      'GlowStyle',
+    );
+
+    assert.equal(componentDocs(source, 'GlowStyle').call, null);
+  });
+});
+
 describe('the usage of a component', () => {
   it('is its demo section, with the helpers it declares and without the preview', () => {
     const source = `${HEADER}struct Stack: View {}\n\n// MARK: - Demo\n\nprivate struct DemoPlace {\n    let name: String\n}\n\nstruct StackDemo: View {\n    var body: some View { Stack() }\n}\n\n#Preview {\n    StackDemo()\n}\n`;

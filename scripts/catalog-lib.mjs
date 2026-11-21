@@ -38,6 +38,12 @@ const DOCS_PUBLIC = 'docs/public';
 export const DOCS_CATALOG = 'docs/src/content/docs/catalog';
 const BASELINE_IOS = 18;
 const SHORTEST_FENCE = 5;
+// Past these many lines, the usage and the files of a component open folded on
+// its page, with a button that shows the rest.
+const USAGE_SHOWN = 20;
+const CODE_SHOWN = 16;
+// A fold that would hide fewer lines than this costs more than it saves.
+const FOLD_HIDES_AT_LEAST = 5;
 const MAX_PREVIEW_BYTES = 2 * 1024 * 1024;
 // The image a page of the site shows when it is shared, in the size social networks expect.
 const CARD_WIDTH = 1200;
@@ -721,7 +727,9 @@ function renderDocsPage(component) {
   const major = Number(component.minIOS.split('.')[0]);
   // The sidebar marks what does not run on the baseline.
   const badge = major > BASELINE_IOS ? ['sidebar:', '  badge:', `    text: iOS ${major}`] : [];
-  const { overview, usage, api } = componentDocs(component.source, component.name);
+  const { overview, usage, call, api } = componentDocs(component.source, component.name);
+  const description = withoutSummary(overview);
+  const lines = component.source.trimEnd().split('\n').length;
   const components = '../../../../components';
   return [
     '---',
@@ -731,15 +739,25 @@ function renderDocsPage(component) {
     '---',
     '',
     `import ComponentHeader from '${components}/ComponentHeader.astro';`,
-    ...(overview ? [`import ComponentOverview from '${components}/ComponentOverview.astro';`] : []),
+    ...(description.length ? [`import ComponentOverview from '${components}/ComponentOverview.astro';`] : []),
     ...(api.length ? [`import ComponentApi from '${components}/ComponentApi.astro';`] : []),
     '',
-    `<ComponentHeader id="${component.id}" />`,
+    `<ComponentHeader id="${component.id}" lines={${lines}} />`,
     '',
-    ...(overview ? ['## Description', '', `<ComponentOverview blocks={${JSON.stringify(overview)}} />`, ''] : []),
+    ...(description.length
+      ? ['## Description', '', `<ComponentOverview blocks={${JSON.stringify(description)}} />`, '']
+      : []),
     // An empty title keeps Expressive Code from taking one from a comment such as
     // `// GlowButton.swift`, which Copy code would then take for the file.
-    ...(usage ? ['## Usage', '', `${sourceFence(usage)}swift title=""`, usage, sourceFence(usage), ''] : []),
+    // A usage folds below the line it marks, so the mark shows before unfolding.
+    ...(usage
+      ? [
+          '## Usage',
+          '',
+          ...sourceBlock(usage, `swift title=""${call ? ` mark={${call}}` : ''}`, Math.max(USAGE_SHOWN, (call ?? 0) + 2)),
+          '',
+        ]
+      : []),
     ...(api.length ? ['## API reference', '', `<ComponentApi tables={${JSON.stringify(api)}} />`, ''] : []),
     '## Code',
     '',
@@ -755,9 +773,28 @@ function sourceFence(source) {
   return '`'.repeat(Math.max(SHORTEST_FENCE, longest + 1));
 }
 
+// The comment of a component without its first sentence, the summary that the
+// header of its page already shows. What follows it in the same paragraph stays.
+function withoutSummary(overview) {
+  if (!overview?.length) return [];
+  const [first, ...rest] = overview;
+  if (first.type !== 'paragraph') return overview;
+  const after = first.text.split(/(?<=[.!?])\s+(?=[A-Z`"“'‘])/).slice(1).join(' ');
+  return after ? [{ ...first, text: after }, ...rest] : rest;
+}
+
+// A source in its fence, folded on the page past `shown` lines. Only numbers
+// reach the markup around it.
+function sourceBlock(source, meta, shown) {
+  const fence = sourceFence(source);
+  const block = [`${fence}${meta}`, source.trimEnd(), fence];
+  const count = source.trimEnd().split('\n').length;
+  if (count - shown < FOLD_HIDES_AT_LEAST) return block;
+  return [`<div class="code-fold" data-lines="${count}" data-shown="${shown}">`, '', ...block, '', '</div>'];
+}
+
 function renderDocsSource(component) {
-  const swiftFence = sourceFence(component.source);
-  const swift = [`${swiftFence}swift title="${component.name}.swift"`, component.source.trimEnd(), swiftFence, ''];
+  const swift = [...sourceBlock(component.source, `swift title="${component.name}.swift"`, CODE_SHOWN), ''];
   if (!component.shader) {
     return [`Copy this code into your project, or [download the file](${RAW_BASE}/${component.path}).`, '', ...swift];
   }
@@ -766,9 +803,7 @@ function renderDocsSource(component) {
     '',
     ...swift,
     // The site has no grammar for Metal, which is C++.
-    `${sourceFence(component.shaderSource)}cpp title="${component.name}.metal"`,
-    component.shaderSource.trimEnd(),
-    sourceFence(component.shaderSource),
+    ...sourceBlock(component.shaderSource, `cpp title="${component.name}.metal"`, CODE_SHOWN),
     '',
   ];
 }
