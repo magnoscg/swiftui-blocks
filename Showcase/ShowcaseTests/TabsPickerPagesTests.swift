@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
 
+import SwiftUI
 import Testing
 @testable import Showcase
 
@@ -25,5 +26,13 @@ struct TabsPickerPagesTests {
         #expect(!TabsPickerPagesLogic.movesForward(from: "Files", to: "Unknown", in: options))
         #expect(TabsPickerPagesLogic.movesForward(from: "Unknown", to: "Files", in: options))
         #expect(TabsPickerPagesLogic.movesForward(from: "A", to: "B", in: [String]()))
+    }
+
+    @available(iOS 27, *)
+    @MainActor
+    @Test func theDefaultTitleIsALocalizableTextInsteadOfAString() {
+        let pages = TabsPickerPages(options: [1], selection: .constant(1), label: { Text(verbatim: "\($0)") }, page: { _ in EmptyView() })
+
+        #expect(pages.title.key == "Section")
     }
 }

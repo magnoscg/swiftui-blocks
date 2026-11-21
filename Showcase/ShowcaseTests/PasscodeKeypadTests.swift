@@ -52,4 +52,11 @@ struct PasscodeKeypadTests {
 
         #expect(early > late)
     }
+
+    @MainActor
+    @Test func theDefaultTitleIsALocalizableTextInsteadOfAString() {
+        let keypad = PasscodeKeypad(onComplete: { _ in true })
+
+        #expect(keypad.title.key == "Enter Passcode")
+    }
 }

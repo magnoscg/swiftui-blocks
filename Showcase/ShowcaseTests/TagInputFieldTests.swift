@@ -105,4 +105,11 @@ struct TagInputFieldTests {
 
         #expect(frames == [CGRect(x: 0, y: 0, width: 300, height: 32)])
     }
+
+    @MainActor
+    @Test func theDefaultPromptIsALocalizableTextInsteadOfAString() {
+        let field = TagInputField(tags: .constant([]))
+
+        #expect(field.prompt.key == "Add a tag")
+    }
 }

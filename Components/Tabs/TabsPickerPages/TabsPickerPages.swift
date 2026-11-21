@@ -24,7 +24,7 @@ struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
     /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
     /// The name of the picker, which VoiceOver reads.
-    var title = "Section"
+    var title: LocalizedStringResource = "Section"
     /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
     /// Builds the page of an option, aligned to the top of the space below the tabs.
@@ -72,6 +72,14 @@ struct TabsPickerPagesDemo: View {
         case activity = "Activity"
         case files = "Files"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .overview: "Overview"
+            case .activity: "Activity"
+            case .files: "Files"
+            }
+        }
+
         var symbol: String {
             switch self {
             case .overview: "square.grid.2x2"
@@ -97,7 +105,7 @@ struct TabsPickerPagesDemo: View {
                 .font(.largeTitle.bold())
 
             TabsPickerPages(options: Section.allCases, selection: $section) { section in
-                SwiftUI.Label(section.rawValue, systemImage: section.symbol)
+                SwiftUI.Label(section.title, systemImage: section.symbol)
             } page: { section in
                 VStack(spacing: 10) {
                     ForEach(section.rows, id: \.self) { row in

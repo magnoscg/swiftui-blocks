@@ -51,7 +51,7 @@ struct MultiStepForm: View {
     /// The pages of the form, in order, one segment of the progress bar each.
     let steps: [MultiStepFormStep]
     /// The text of the main button on the last step, in place of "Continue".
-    var finishTitle = "Finish"
+    var finishTitle: LocalizedStringResource = "Finish"
     /// Runs once when the last step is valid and its button is tapped. Going back lets it run again.
     var onFinish: () -> Void = {}
 

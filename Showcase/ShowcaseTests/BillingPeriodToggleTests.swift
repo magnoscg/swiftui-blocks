@@ -26,4 +26,8 @@ struct BillingPeriodToggleTests {
         #expect(BillingPeriodTogglePricing.savingsPercent(monthly: .nan, yearly: 10) == nil)
         #expect(BillingPeriodTogglePricing.savingsPercent(monthly: 12, yearly: .nan) == nil)
     }
+
+    @Test func everyPeriodHasALocalizableTitleInsteadOfItsRawValue() {
+        #expect(BillingPeriodToggleOption.allCases.map(\.title.key) == ["Monthly", "Yearly"])
+    }
 }

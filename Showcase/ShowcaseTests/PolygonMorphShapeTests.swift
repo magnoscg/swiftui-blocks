@@ -46,4 +46,8 @@ struct PolygonMorphShapeTests {
     @Test func anEmptyRectangleHasAnEmptyPath() {
         #expect(PolygonMorphShape(form: .star).path(in: .zero).isEmpty)
     }
+
+    @Test func everyFormHasALocalizableTitleInsteadOfItsRawValue() {
+        #expect(PolygonMorphShapeForm.allCases.map(\.title.key) == ["Square", "Circle", "Star"])
+    }
 }

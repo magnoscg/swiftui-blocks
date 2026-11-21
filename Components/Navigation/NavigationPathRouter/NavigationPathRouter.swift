@@ -55,6 +55,14 @@ private enum NavigationPathRouterDemoRoute: String, Hashable, CaseIterable {
     case settings = "Settings"
     case about = "About"
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .profile: "Profile"
+        case .settings: "Settings"
+        case .about: "About"
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .profile: "person.crop.circle.fill"
@@ -89,7 +97,7 @@ private struct NavigationPathRouterDemoScreen: View {
                     .padding(.bottom, 10)
 
                 ForEach(NavigationPathRouterDemoRoute.allCases.filter { $0 != current }, id: \.self) { route in
-                    Button(route.rawValue, systemImage: route.systemImage) { router.push(route) }
+                    Button(route.title, systemImage: route.systemImage) { router.push(route) }
                         .frame(maxWidth: .infinity)
                 }
 
@@ -102,7 +110,7 @@ private struct NavigationPathRouterDemoScreen: View {
             .foregroundStyle(.white)
             .padding(32)
         }
-        .navigationTitle(current?.rawValue ?? "Router")
+        .navigationTitle(Text(current?.title ?? "Router"))
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }

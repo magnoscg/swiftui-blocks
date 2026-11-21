@@ -18,6 +18,15 @@ enum BreathingGuideCirclePhase: String {
     case inhale = "Breathe In"
     case hold = "Hold"
     case exhale = "Breathe Out"
+
+    /// What the circle asks you to do, as it shows it and VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .inhale: "Breathe In"
+        case .hold: "Hold"
+        case .exhale: "Breathe Out"
+        }
+    }
 }
 
 struct BreathingGuideCircleState: Equatable {
@@ -96,7 +105,7 @@ struct BreathingGuideCircle: View {
                 circle(expansion: reduceMotion ? 0.6 : state.expansion)
 
                 VStack(spacing: 6) {
-                    Text(state.phase.rawValue)
+                    Text(state.phase.title)
                         .font(.system(.title, design: .rounded, weight: .semibold))
                         .multilineTextAlignment(.center)
                     Text(state.secondsLeft, format: .number)
@@ -106,7 +115,7 @@ struct BreathingGuideCircle: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Breathing guide")
-            .accessibilityValue(state.phase.rawValue)
+            .accessibilityValue(Text(state.phase.title))
         }
     }
 
@@ -649,6 +658,14 @@ struct SpringStudyPlayground: View {
 
         var id: Self { self }
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .smooth: "Smooth"
+            case .bouncy: "Bouncy"
+            case .stiff: "Stiff"
+            }
+        }
+
         var values: (response: Double, damping: Double) {
             switch self {
             case .smooth: (0.8, 1)
@@ -762,7 +779,7 @@ struct SpringStudyPlayground: View {
                 play()
             } label: {
                 // In a narrow row a name shrinks a little before it would break in two.
-                Text(preset.rawValue)
+                Text(preset.title)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .frame(maxWidth: .infinity)
@@ -818,6 +835,17 @@ private enum SymbolEffectGalleryEffect: String, CaseIterable, Identifiable {
     case breathe = "Breathe"
 
     var id: Self { self }
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .bounce: "Bounce"
+        case .pulse: "Pulse"
+        case .variableColor: "Variable Color"
+        case .wiggle: "Wiggle"
+        case .rotate: "Rotate"
+        case .breathe: "Breathe"
+        }
+    }
 
     var symbol: String {
         switch self {
@@ -878,7 +906,7 @@ private struct SymbolEffectGalleryTile: View {
                     .foregroundStyle(effect.color)
                     .frame(height: height)
 
-                Text(effect.rawValue)
+                Text(effect.title)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
@@ -889,7 +917,7 @@ private struct SymbolEffectGalleryTile: View {
             .background(effect.color.opacity(0.12), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(effect.rawValue)
+        .accessibilityLabel(Text(effect.title))
         .accessibilityHint("Plays the effect")
     }
 
@@ -4080,9 +4108,9 @@ struct HamburgerMenuButton: View {
     /// The stroke of the bars and of the cross.
     var color: Color = .primary
     /// The name VoiceOver reads while `isOpen` is false.
-    var openLabel = "Open menu"
+    var openLabel: LocalizedStringResource = "Open menu"
     /// The name VoiceOver reads while `isOpen` is true.
-    var closeLabel = "Close menu"
+    var closeLabel: LocalizedStringResource = "Close menu"
 
     @ScaledMetric(relativeTo: .title2) private var size = 24.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -8160,7 +8188,7 @@ struct GaugeChart: View {
     /// The colored stretches of the dial, in any order. VoiceOver reads the name of the one `value` falls in.
     let zones: [GaugeChartZone]
     /// What VoiceOver calls the gauge.
-    var label = "Gauge"
+    var label: LocalizedStringResource = "Gauge"
     /// Turns `value` into the text VoiceOver reads. Whole numbers by default.
     var valueText: (Double) -> String = { $0.formatted(.number.precision(.fractionLength(0))) }
 
@@ -9247,6 +9275,16 @@ enum Surface3DChartPreset: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    /// The name of the angle, as its button shows it and VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .angled: "Angled"
+        case .front: "Front"
+        case .top: "Top"
+        case .side: "Side"
+        }
+    }
+
     var pose: Chart3DPose {
         switch self {
         case .angled: Chart3DPose(azimuth: .degrees(35), inclination: .degrees(25))
@@ -9299,7 +9337,7 @@ struct Surface3DChart: View {
             // is wider than the view, which cuts the corners and the axis labels.
             .aspectRatio(1, contentMode: .fit)
             .accessibilityLabel("3D surface plot")
-            .accessibilityValue(currentPreset.map { "\($0.rawValue) view" } ?? "Custom view")
+            .accessibilityValue(currentPreset.map { Text("\(Text($0.title)) view") } ?? Text("Custom view"))
             .accessibilityHint("Use the view buttons to change the angle")
 
             ViewThatFits(in: .horizontal) {
@@ -9315,7 +9353,7 @@ struct Surface3DChart: View {
                 Button {
                     withAnimation(reduceMotion ? nil : .smooth(duration: 0.6)) { pose = preset.pose }
                 } label: {
-                    Text(preset.rawValue)
+                    Text(preset.title)
                         .font(.subheadline.weight(.semibold))
                         .padding(.horizontal, 16)
                         .frame(minHeight: 44)
@@ -10030,7 +10068,7 @@ struct NestedCommentThread: View {
     private func toggle(for comment: NestedCommentThreadComment) -> some View {
         let isCollapsed = collapsed.contains(comment.id)
         let count = NestedCommentThreadLogic.replyCount(of: comment)
-        let title = "\(isCollapsed ? "Show" : "Hide") \(count) \(count == 1 ? "reply" : "replies")"
+        let title = isCollapsed ? Text("Show ^[\(count) reply](inflect: true)") : Text("Hide ^[\(count) reply](inflect: true)")
 
         return Button {
             withAnimation(reduceMotion ? nil : .snappy) {
@@ -10041,7 +10079,7 @@ struct NestedCommentThread: View {
                 }
             }
         } label: {
-            Text(title)
+            title
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(tint)
                 .frame(minHeight: 28)
@@ -10052,7 +10090,7 @@ struct NestedCommentThread: View {
                 .padding(.vertical, -8)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("\(title) to \(comment.author)")
+        .accessibilityLabel(Text("\(title) to \(comment.author)"))
     }
 }
 
@@ -10968,6 +11006,14 @@ import SwiftUI
 enum BillingPeriodToggleOption: String, CaseIterable, Hashable {
     case monthly = "Monthly"
     case yearly = "Yearly"
+
+    /// The name of the period, as its segment shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .monthly: "Monthly"
+        case .yearly: "Yearly"
+        }
+    }
 }
 
 enum BillingPeriodTogglePricing {
@@ -11033,7 +11079,7 @@ struct BillingPeriodToggle: View {
                 Button {
                     period = option
                 } label: {
-                    Text(option.rawValue)
+                    Text(option.title)
                         .font(.headline)
                         .foregroundStyle(isSelected ? Color.white : Color.primary)
                         .frame(maxWidth: .infinity)
@@ -12000,9 +12046,9 @@ struct CircularRangeSlider<Center: View>: View {
     /// The SF Symbol drawn on the end handle, or none.
     var endSymbol: String?
     /// The name VoiceOver reads for the start handle.
-    var startLabel = "Start"
+    var startLabel: LocalizedStringResource = "Start"
     /// The name VoiceOver reads for the end handle.
-    var endLabel = "End"
+    var endLabel: LocalizedStringResource = "End"
     /// Turns a handle's value into the text VoiceOver reads, like `23:00`.
     var valueText: (Double) -> String = { $0.formatted() }
     /// The view inside the ring, like the length of the range.
@@ -12071,7 +12117,7 @@ struct CircularRangeSlider<Center: View>: View {
         )
     }
 
-    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: String, value: Double, in size: CGSize) -> some View {
+    private func handle(_ part: CircularRangeSliderPart, symbol: String?, label: LocalizedStringResource, value: Double, in size: CGSize) -> some View {
         Circle()
             .fill(.white)
             .shadow(color: .black.opacity(0.2), radius: 3, y: 1)
@@ -12885,9 +12931,9 @@ struct RangeSlider: View {
     /// The shortest distance the thumbs keep between them.
     var minimumSpan = 0.0
     /// The name VoiceOver reads for the lower thumb.
-    var lowerLabel = "Minimum"
+    var lowerLabel: LocalizedStringResource = "Minimum"
     /// The name VoiceOver reads for the upper thumb.
-    var upperLabel = "Maximum"
+    var upperLabel: LocalizedStringResource = "Maximum"
     /// Turns a thumb's value into the text VoiceOver reads, like a price.
     var valueText: (Double) -> String = { $0.formatted() }
 
@@ -13681,7 +13727,7 @@ struct SlidingSegmentedPicker<Option: Hashable>: View {
     /// The color of the pill, under white text.
     var tint: Color = .indigo
     /// The text of the segment for each option. It shrinks to 70% before truncating.
-    let title: (Option) -> String
+    let title: (Option) -> LocalizedStringResource
 
     @Namespace private var namespace
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -13729,6 +13775,15 @@ struct SlidingSegmentedPickerDemo: View {
         case month = "Month"
         case year = "Year"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .day: "Day"
+            case .week: "Week"
+            case .month: "Month"
+            case .year: "Year"
+            }
+        }
+
         var steps: Int {
             switch self {
             case .day: 8_240
@@ -13754,7 +13809,7 @@ struct SlidingSegmentedPickerDemo: View {
             }
             .accessibilityElement(children: .combine)
 
-            SlidingSegmentedPicker(selection: $period, options: Period.allCases) { $0.rawValue }
+            SlidingSegmentedPicker(selection: $period, options: Period.allCases) { $0.title }
         }
         .animation(reduceMotion ? nil : .snappy, value: period)
         .padding(24)
@@ -14098,7 +14153,7 @@ struct TickMarkSlider: View {
     /// Where the tinted part of the track starts. `nil` leaves it to the system.
     var neutralValue: Double?
     /// The name of the slider, which VoiceOver reads.
-    var label = "Value"
+    var label: LocalizedStringResource = "Value"
     /// Whether the slider moves to the nearest mark when it is let go.
     var snapsToTicks = true
     /// Turns a value into the text of its mark and of the current value, read by assistive technologies.
@@ -14852,6 +14907,15 @@ nonisolated enum PolygonMorphShapeForm: String, CaseIterable, Hashable {
     case circle = "Circle"
     case star = "Star"
 
+    /// The name of the form, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .square: "Square"
+        case .circle: "Circle"
+        case .star: "Star"
+        }
+    }
+
     /// One sample per degree, so square corners and star tips land exactly on a sample.
     static let sampleCount = 360
 
@@ -14985,7 +15049,7 @@ struct PolygonMorphShapeDemo: View {
                 .shadow(color: .pink.opacity(0.4), radius: 24, y: 12)
                 .frame(maxWidth: 280, maxHeight: 280)
                 .accessibilityElement()
-                .accessibilityLabel(form.rawValue)
+                .accessibilityLabel(Text(form.title))
 
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 10) { buttons }
@@ -15009,7 +15073,7 @@ struct PolygonMorphShapeDemo: View {
 
     private var buttons: some View {
         ForEach(PolygonMorphShapeForm.allCases, id: \.self) { option in
-            Button(option.rawValue) {
+            Button(option.title) {
                 isAutoPlaying = false
                 form = option
             }
@@ -15558,6 +15622,14 @@ enum CoinFlipViewSide: String, CaseIterable, Hashable {
     case heads = "Heads"
     case tails = "Tails"
 
+    /// The name of the side, as VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .heads: "Heads"
+        case .tails: "Tails"
+        }
+    }
+
     var symbolName: String {
         switch self {
         case .heads: "crown.fill"
@@ -15633,7 +15705,7 @@ struct CoinFlipView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Flip coin")
-        .accessibilityValue(side.rawValue)
+        .accessibilityValue(Text(side.title))
         .sensoryFeedback(.impact(weight: .medium), trigger: landedCount)
         .onChange(of: side) { _, newSide in
             guard !isFlipping, CoinFlipViewMath.visibleSide(at: angle) != newSide else { return }
@@ -15730,7 +15802,7 @@ struct CoinFlipViewDemo: View {
                 .padding(.top, 180)
 
                 VStack(spacing: 4) {
-                    Text(flips == 0 ? "Ready" : side.rawValue)
+                    Text(flips == 0 ? "Ready" : side.title)
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
 
                     Text("Flips: \(flips)")
@@ -18479,6 +18551,16 @@ nonisolated enum VoiceOrbState: String, CaseIterable, Sendable {
     case listening = "Listening"
     case thinking = "Thinking"
     case speaking = "Speaking"
+
+    /// The name of the state, as VoiceOver reads it and a picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .idle: "Idle"
+        case .listening: "Listening"
+        case .thinking: "Thinking"
+        case .speaking: "Speaking"
+        }
+    }
 }
 
 nonisolated enum VoiceOrbMath {
@@ -18539,7 +18621,7 @@ struct VoiceOrb: View {
             .animation(.easeInOut(duration: 0.5), value: state)
             .accessibilityElement()
             .accessibilityLabel(Text(label))
-            .accessibilityValue(state.rawValue)
+            .accessibilityValue(Text(state.title))
     }
 }
 
@@ -18612,7 +18694,7 @@ struct VoiceOrbDemo: View {
 
             Picker("State", selection: $state) {
                 ForEach(VoiceOrbState.allCases, id: \.self) { state in
-                    Text(state.rawValue)
+                    Text(state.title)
                 }
             }
             .pickerStyle(.segmented)
@@ -18634,7 +18716,7 @@ struct VoiceOrbDemo: View {
         }
     }
 
-    private var caption: String {
+    private var caption: LocalizedStringResource {
         switch state {
         case .idle: "Tap a state to try it"
         case .listening: "I’m listening…"
@@ -18672,7 +18754,7 @@ struct AnimatedBadgeCount: View {
     /// The fill of the capsule. Its number takes white or black from it.
     var tint: Color = .red
     /// The word VoiceOver reads after the number, like "3 new".
-    var unit = "new"
+    var unit: LocalizedStringResource = "new"
 
     @ScaledMetric(relativeTo: .caption) private var height = 22.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -18693,7 +18775,7 @@ struct AnimatedBadgeCount: View {
                     .frame(minWidth: height, minHeight: height)
                     .background(tint, in: .capsule)
                     .transition(reduceMotion ? .opacity : .scale.combined(with: .opacity))
-                    .accessibilityLabel("\(text) \(unit)")
+                    .accessibilityLabel(Text("\(text) \(Text(unit))"))
             }
         }
         .animation(reduceMotion ? nil : .spring(duration: 0.4, bounce: 0.45), value: text)
@@ -18794,9 +18876,9 @@ struct AnimatedCheckmarkBadge: View {
     /// The side of the badge in points, before it scales with Dynamic Type.
     var size: CGFloat = 96
     /// What VoiceOver reads while the badge shows.
-    var completeLabel = "Complete"
+    var completeLabel: LocalizedStringResource = "Complete"
     /// What VoiceOver reads while the badge is hidden.
-    var pendingLabel = "Pending"
+    var pendingLabel: LocalizedStringResource = "Pending"
 
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -22673,7 +22755,7 @@ struct GlassSegmentedControl<Segment: Hashable>: View {
     /// A tint for the glass thumb, or nil for plain glass.
     var tint: Color?
     /// Returns the text shown for a segment, kept to one line.
-    let title: (Segment) -> String
+    let title: (Segment) -> LocalizedStringResource
 
     @ScaledMetric(relativeTo: .subheadline) private var height = 44.0
     @State private var width: CGFloat = 0
@@ -22742,10 +22824,30 @@ struct GlassSegmentedControl<Segment: Hashable>: View {
 
 @available(iOS 26, *)
 struct GlassSegmentedControlDemo: View {
-    @State private var period = "Week"
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    private enum Period: CaseIterable {
+        case day, week, month, year
 
-    private let steps = ["Day": 8_214, "Week": 61_730, "Month": 248_902, "Year": 2_904_117]
+        var title: LocalizedStringResource {
+            switch self {
+            case .day: "Day"
+            case .week: "Week"
+            case .month: "Month"
+            case .year: "Year"
+            }
+        }
+
+        var steps: Int {
+            switch self {
+            case .day: 8_214
+            case .week: 61_730
+            case .month: 248_902
+            case .year: 2_904_117
+            }
+        }
+    }
+
+    @State private var period = Period.week
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         ZStack {
@@ -22758,14 +22860,14 @@ struct GlassSegmentedControlDemo: View {
                         .font(.headline)
                         .foregroundStyle(.white.opacity(0.8))
 
-                    Text(steps[period, default: 0], format: .number)
+                    Text(period.steps, format: .number)
                         .font(.system(.largeTitle, design: .rounded, weight: .bold))
                         .contentTransition(.numericText())
                         .foregroundStyle(.white)
                         .animation(reduceMotion ? nil : .snappy, value: period)
                 }
 
-                GlassSegmentedControl(segments: ["Day", "Week", "Month", "Year"], selection: $period) { $0 }
+                GlassSegmentedControl(segments: Period.allCases, selection: $period) { $0.title }
                     .padding(.horizontal, 24)
             }
         }
@@ -23246,9 +23348,9 @@ struct BeforeAfterSlider: View {
     /// Where the handle sits, from 0 at the leading edge to 1 at the trailing edge. The component writes it while dragging, and VoiceOver moves it in steps of 0.1.
     @Binding var position: Double
     /// The tag in the top leading corner, also read by VoiceOver. It fades as the handle nears the leading edge.
-    var beforeTitle = "Before"
+    var beforeTitle: LocalizedStringResource = "Before"
     /// The tag in the top trailing corner, also read by VoiceOver. It fades as the handle nears the trailing edge.
-    var afterTitle = "After"
+    var afterTitle: LocalizedStringResource = "After"
 
     @ScaledMetric(relativeTo: .body) private var knobSize = 44.0
     @Environment(\.layoutDirection) private var layoutDirection
@@ -23283,8 +23385,8 @@ struct BeforeAfterSlider: View {
         }
         .clipped()
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(beforeTitle) and \(afterTitle) comparison")
-        .accessibilityValue("\(Int(clamped * 100)) percent \(beforeTitle)")
+        .accessibilityLabel(Text("\(Text(beforeTitle)) and \(Text(afterTitle)) comparison"))
+        .accessibilityValue(Text("\(Int(clamped * 100)) percent \(Text(beforeTitle))"))
         .accessibilityAdjustableAction { direction in
             switch direction {
             case .increment: position = min(clamped + 0.1, 1)
@@ -23317,7 +23419,7 @@ struct BeforeAfterSlider: View {
         }
     }
 
-    private func tag(_ title: String) -> some View {
+    private func tag(_ title: LocalizedStringResource) -> some View {
         Text(title)
             .font(.caption.weight(.semibold))
             .foregroundStyle(.white)
@@ -26082,7 +26184,7 @@ struct MultiStepForm: View {
     /// The pages of the form, in order, one segment of the progress bar each.
     let steps: [MultiStepFormStep]
     /// The text of the main button on the last step, in place of "Continue".
-    var finishTitle = "Finish"
+    var finishTitle: LocalizedStringResource = "Finish"
     /// Runs once when the last step is valid and its button is tapped. Going back lets it run again.
     var onFinish: () -> Void = {}
 
@@ -26429,7 +26531,7 @@ nonisolated enum PasscodeKeypadLogic {
 /// never shown or read aloud. With Reduce Motion on, the dots turn red without shaking.
 struct PasscodeKeypad: View {
     /// The text above the dots, which VoiceOver also reads for them.
-    var title = "Enter Passcode"
+    var title: LocalizedStringResource = "Enter Passcode"
     /// How many digits the passcode has, one dot each.
     var length = 6
     /// Called with the code when its last digit is entered. Returns `false` to reject it, which shakes and empties the dots.
@@ -26996,7 +27098,7 @@ struct SearchFieldWithSuggestions: ViewModifier {
     @Binding var text: String
     let suggestions: [String]
     var placement: SearchFieldPlacement = .automatic
-    var prompt = "Search"
+    var prompt: LocalizedStringResource = "Search"
     var limit = 6
 
     func body(content: Content) -> some View {
@@ -27028,7 +27130,7 @@ extension View {
         text: Binding<String>,
         suggestions: [String],
         placement: SearchFieldPlacement = .automatic,
-        prompt: String = "Search",
+        prompt: LocalizedStringResource = "Search",
         limit: Int = 6
     ) -> some View {
         modifier(SearchFieldWithSuggestions(text: text, suggestions: suggestions, placement: placement, prompt: prompt, limit: limit))
@@ -27158,7 +27260,7 @@ struct TagInputField: View {
     /// The tags, in the order added. The field writes it as tags are added or removed, trimmed and without repeats regardless of case.
     @Binding var tags: [String]
     /// The placeholder shown while nothing is typed, and the name VoiceOver reads for the field.
-    var prompt = "Add a tag"
+    var prompt: LocalizedStringResource = "Add a tag"
 
     private let cornerRadius: CGFloat = 14
 
@@ -27539,6 +27641,15 @@ struct ModelAvailabilityGateDemo: View {
 
         var id: Self { self }
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .ready: "Ready"
+            case .device: "Device"
+            case .off: "Off"
+            case .preparing: "Preparing"
+            }
+        }
+
         var availability: SystemLanguageModel.Availability {
             switch self {
             case .ready: .available
@@ -27588,7 +27699,7 @@ struct ModelAvailabilityGateDemo: View {
             }
 
             Picker("Availability", selection: pickerSelection) {
-                ForEach(Sample.allCases) { Text($0.rawValue).tag($0) }
+                ForEach(Sample.allCases) { Text($0.title).tag($0) }
             }
             .pickerStyle(.segmented)
         }
@@ -27643,7 +27754,7 @@ struct OnDeviceStreamingAnswer: View {
     /// What the model is told before every prompt, like the tone and length of the answer.
     var instructions = "Answer in two short, friendly sentences."
     /// The text shown, in the secondary style, while `prompt` is empty.
-    var placeholder = "Ask something to see the answer here."
+    var placeholder: LocalizedStringResource = "Ask something to see the answer here."
     /// Replaces the model with your own text stream, for previews and for tests.
     /// Each element is the whole text so far.
     var sampleStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
@@ -27651,7 +27762,7 @@ struct OnDeviceStreamingAnswer: View {
     /// Each element is the whole text so far.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<String, Error>)? = nil
     /// The text shown when the model is unavailable or fails and there is no `fallbackStream`.
-    var failureMessage = "The on-device model couldn't answer right now. Please try again later."
+    var failureMessage: LocalizedStringResource = "The on-device model couldn't answer right now. Please try again later."
 
     @State private var text = ""
     @State private var phase = Phase.idle
@@ -27705,12 +27816,12 @@ struct OnDeviceStreamingAnswer: View {
         }
     }
 
-    private var accessibilityValue: String {
+    private var accessibilityValue: Text {
         switch phase {
-        case .idle: placeholder
-        case .streaming: "Writing"
-        case .finished: text
-        case .failed: failureMessage
+        case .idle: Text(placeholder)
+        case .streaming: Text("Writing")
+        case .finished: Text(text)
+        case .failed: Text(failureMessage)
         }
     }
 
@@ -27844,6 +27955,16 @@ enum StructuredOutputFormCategory: String, CaseIterable, Identifiable {
     case food, travel, shopping, other
 
     var id: Self { self }
+
+    /// The name of the category, as the picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .food: "Food"
+        case .travel: "Travel"
+        case .shopping: "Shopping"
+        case .other: "Other"
+        }
+    }
 }
 
 /// What the model must produce. `@Guide` tells it what each field means.
@@ -27880,7 +28001,7 @@ struct StructuredOutputForm: View {
     /// Plays instead of an error when the model is unavailable or fails.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
     /// The text shown under the form when the model is unavailable or fails and there is no `fallbackStream`.
-    var failureMessage = "The on-device model couldn't fill in the form right now. Please try again later."
+    var failureMessage: LocalizedStringResource = "The on-device model couldn't fill in the form right now. Please try again later."
 
     @State private var fillTask: Task<Void, Never>?
     @State private var isFilling = false
@@ -27927,7 +28048,7 @@ struct StructuredOutputForm: View {
                         .keyboardType(.decimalPad)
                 }
                 Picker("Category", selection: $draft.category) {
-                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.rawValue.capitalized).tag($0) }
+                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.title).tag($0) }
                 }
                 LabeledContent("Purpose") {
                     TextField("Purpose", text: $draft.purpose).multilineTextAlignment(.trailing)
@@ -28122,6 +28243,13 @@ struct AdaptiveColumnsGridDemo: View {
         case narrow = "Narrow", medium = "Medium", wide = "Wide"
 
         var id: Self { self }
+        var title: LocalizedStringResource {
+            switch self {
+            case .narrow: "Narrow"
+            case .medium: "Medium"
+            case .wide: "Wide"
+            }
+        }
         var width: CGFloat {
             switch self {
             case .narrow: 170
@@ -28147,7 +28275,7 @@ struct AdaptiveColumnsGridDemo: View {
         ScrollView {
             VStack(spacing: 20) {
                 Picker("Width", selection: selection) {
-                    ForEach(Size.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Size.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
 
@@ -29916,7 +30044,7 @@ struct LoadMoreFooter: View {
     /// The state of the next page: a spinner while idle or loading, a retry button when it failed, and `finishedText` when there is nothing left.
     let phase: LoadMoreFooterPhase
     /// The text shown once every page has loaded.
-    var finishedText = "You're all caught up"
+    var finishedText: LocalizedStringResource = "You're all caught up"
     /// Runs when the footer appears while `phase` is idle, and when the retry button is tapped.
     let onLoad: () -> Void
 
@@ -31715,9 +31843,9 @@ struct MapRouteTracker: View {
     /// The color of the route, of the marker's symbol and ring and of the destination flag.
     var color = Color.blue
     /// The name of the moving marker, which VoiceOver reads with the share of the route done.
-    var markerTitle = "Courier"
+    var markerTitle: LocalizedStringResource = "Courier"
     /// The name of the destination flag.
-    var destinationTitle = "Destination"
+    var destinationTitle: LocalizedStringResource = "Destination"
     /// Whether the camera travels with the marker. Otherwise it shows the whole route.
     var followsMarker = true
     /// How far above the marker the camera stays while it follows it, in meters.
@@ -31741,11 +31869,13 @@ struct MapRouteTracker: View {
                     .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
             }
             if let destination = route.last {
-                Marker(destinationTitle, systemImage: "flag.checkered", coordinate: destination.coordinate)
-                    .tint(color)
+                Marker(coordinate: destination.coordinate) {
+                    Label(destinationTitle, systemImage: "flag.checkered")
+                }
+                .tint(color)
             }
             if let current = parts.done.last {
-                Annotation(markerTitle, coordinate: current.coordinate) {
+                Annotation(coordinate: current.coordinate) {
                     Image(systemName: symbol)
                         .font(.body.weight(.semibold))
                         .foregroundStyle(color)
@@ -31756,6 +31886,8 @@ struct MapRouteTracker: View {
                         .accessibilityElement()
                         .accessibilityLabel(markerTitle)
                         .accessibilityValue(min(max(progress, 0), 1).formatted(.percent.precision(.fractionLength(0))))
+                } label: {
+                    Text(markerTitle)
                 }
                 .annotationTitles(.hidden)
             }
@@ -32799,6 +32931,14 @@ enum ShutterCaptureButtonMode: String, CaseIterable, Identifiable, Sendable {
     case video = "Video"
 
     var id: Self { self }
+
+    /// The name of the mode, as its toggle shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .photo: "Photo"
+        case .video: "Video"
+        }
+    }
 }
 
 /// A camera shutter with a photo and video toggle.
@@ -32820,7 +32960,7 @@ struct ShutterCaptureButton: View {
     private var size: CGFloat { min(scaledSize, 120) }
     private var animation: Animation? { reduceMotion ? nil : .snappy(duration: 0.25) }
 
-    private var label: String {
+    private var label: LocalizedStringResource {
         switch mode {
         case .photo: "Take photo"
         case .video: isRecording ? "Stop recording" : "Start recording"
@@ -32836,7 +32976,7 @@ struct ShutterCaptureButton: View {
                     } label: {
                         // A word is too small to hit. The padding widens what answers to a
                         // touch, and the same padding taken back keeps the layout as it was.
-                        Text(option.rawValue)
+                        Text(option.title)
                             .padding(13)
                             .contentShape(.rect)
                             .padding(-13)
@@ -32861,7 +33001,7 @@ struct ShutterCaptureButton: View {
                 .contentShape(.circle)
             }
             .buttonStyle(ShutterCaptureButtonStyle(mode: mode, isRecording: isRecording, size: size, reduceMotion: reduceMotion))
-            .accessibilityLabel(label)
+            .accessibilityLabel(Text(label))
             .sensoryFeedback(.impact(flexibility: .rigid), trigger: captureCount)
             .sensoryFeedback(.selection, trigger: isRecording)
         }
@@ -33014,7 +33154,7 @@ struct SpinningVinylArt<Artwork: View>: View {
     /// Revolutions per minute. A 33 rpm record is slow enough to read the label.
     var rpm = 33.0
     /// What VoiceOver reads for the disc.
-    var accessibilityName = "Album art"
+    var accessibilityName: LocalizedStringResource = "Album art"
     /// The cover, clipped to a circle in the middle 60% of the disc.
     @ViewBuilder var artwork: () -> Artwork
 
@@ -33263,7 +33403,7 @@ struct VideoPlayerChrome<Video: View>: View {
 
     private func transportButton(
         _ systemImage: String,
-        label: String,
+        label: LocalizedStringResource,
         font: Font = .title2,
         action: @escaping () -> Void
     ) -> some View {
@@ -34323,9 +34463,9 @@ struct DropdownSelectMenu<Option: Hashable>: View {
     /// The chosen option, or nil for none. The menu writes it when the person picks one.
     @Binding var selection: Option?
     /// The text the field shows while `selection` is nil.
-    var placeholder = "Choose"
+    var placeholder: LocalizedStringResource = "Choose"
     /// Returns the text shown for an option, in the field and in the list.
-    let label: (Option) -> String
+    let label: (Option) -> LocalizedStringResource
 
     @State private var isOpen = false
     @State private var fieldHeight: CGFloat = 0
@@ -34396,7 +34536,7 @@ struct DropdownSelectMenu<Option: Hashable>: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)
-        .accessibilityValue(selection.map(label) ?? placeholder)
+        .accessibilityValue(Text(selection.map(label) ?? placeholder))
         .accessibilityHint(isOpen ? "Closes the list" : "Opens the list")
     }
 
@@ -34455,10 +34595,23 @@ struct DropdownSelectMenu<Option: Hashable>: View {
 
 // MARK: - Demo
 
+private enum DropdownSelectMenuDemoShipping: CaseIterable {
+    case standard, express, overnight, pickup
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .standard: "Standard"
+        case .express: "Express"
+        case .overnight: "Overnight"
+        case .pickup: "Pickup"
+        }
+    }
+}
+
 struct DropdownSelectMenuDemo: View {
-    @State private var shipping: String? = "Standard"
+    @State private var shipping: DropdownSelectMenuDemoShipping? = .standard
     @State private var country: String?
-    @State private var notes = "Tap a field to open it"
+    @State private var notes: LocalizedStringResource = "Tap a field to open it"
 
     var body: some View {
         ZStack {
@@ -34470,9 +34623,9 @@ struct DropdownSelectMenuDemo: View {
 
                 DropdownSelectMenu(
                     title: "Shipping",
-                    options: ["Standard", "Express", "Overnight", "Pickup"],
+                    options: DropdownSelectMenuDemoShipping.allCases,
                     selection: $shipping,
-                    label: { $0 }
+                    label: { $0.title }
                 )
 
                 DropdownSelectMenu(
@@ -34480,7 +34633,7 @@ struct DropdownSelectMenuDemo: View {
                     options: ["France", "Italy", "Portugal", "Spain"],
                     selection: $country,
                     placeholder: "Select a country",
-                    label: { $0 }
+                    label: { "\($0)" }
                 )
 
                 Text(notes)
@@ -34491,7 +34644,7 @@ struct DropdownSelectMenuDemo: View {
             }
             .padding(20)
         }
-        .onChange(of: shipping) { _, new in notes = "Delivery: \(new ?? "none")" }
+        .onChange(of: shipping) { _, new in notes = "Delivery: \(new?.title ?? "none")" }
     }
 }
 
@@ -36551,6 +36704,14 @@ private enum NavigationPathRouterDemoRoute: String, Hashable, CaseIterable {
     case settings = "Settings"
     case about = "About"
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .profile: "Profile"
+        case .settings: "Settings"
+        case .about: "About"
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .profile: "person.crop.circle.fill"
@@ -36585,7 +36746,7 @@ private struct NavigationPathRouterDemoScreen: View {
                     .padding(.bottom, 10)
 
                 ForEach(NavigationPathRouterDemoRoute.allCases.filter { $0 != current }, id: \.self) { route in
-                    Button(route.rawValue, systemImage: route.systemImage) { router.push(route) }
+                    Button(route.title, systemImage: route.systemImage) { router.push(route) }
                         .frame(maxWidth: .infinity)
                 }
 
@@ -36598,7 +36759,7 @@ private struct NavigationPathRouterDemoScreen: View {
             .foregroundStyle(.white)
             .padding(32)
         }
-        .navigationTitle(current?.rawValue ?? "Router")
+        .navigationTitle(Text(current?.title ?? "Router"))
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }
@@ -37070,7 +37231,7 @@ struct SearchScopesAndSuggestions<Scope: Hashable>: ViewModifier {
     /// The scopes the bar offers, in order. The bar shows while the search is active.
     let scopes: [Scope]
     /// Returns the text of the button for a scope.
-    let scopeTitle: (Scope) -> String
+    let scopeTitle: (Scope) -> LocalizedStringResource
     /// The texts to suggest. The field shows up to five that contain what is typed, ignoring case, and leaves out repeats and the typed text itself.
     let suggestions: [String]
     /// The placeholder of the empty field.
@@ -37113,6 +37274,14 @@ private enum SearchScopesAndSuggestionsDemoScope: String, CaseIterable {
     case all = "All"
     case fruit = "Fruit"
     case vegetable = "Vegetables"
+
+    var title: LocalizedStringResource {
+        switch self {
+        case .all: "All"
+        case .fruit: "Fruit"
+        case .vegetable: "Vegetables"
+        }
+    }
 }
 
 private struct SearchScopesAndSuggestionsDemoProduce: Identifiable {
@@ -37161,7 +37330,7 @@ struct SearchScopesAndSuggestionsDemo: View {
                     isPresented: $isSearching,
                     scope: $scope,
                     scopes: SearchScopesAndSuggestionsDemoScope.allCases,
-                    scopeTitle: \.rawValue,
+                    scopeTitle: { $0.title },
                     suggestions: produce.map(\.name)
                 )
             )
@@ -45658,7 +45827,7 @@ struct TabsPickerPages<Option: Hashable, Label: View, Page: View>: View {
     /// The selected option, whose page shows. The picker writes it.
     @Binding var selection: Option
     /// The name of the picker, which VoiceOver reads.
-    var title = "Section"
+    var title: LocalizedStringResource = "Section"
     /// Builds the label of a tab. On an iPhone the system shows its text.
     @ViewBuilder var label: (Option) -> Label
     /// Builds the page of an option, aligned to the top of the space below the tabs.
@@ -45706,6 +45875,14 @@ struct TabsPickerPagesDemo: View {
         case activity = "Activity"
         case files = "Files"
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .overview: "Overview"
+            case .activity: "Activity"
+            case .files: "Files"
+            }
+        }
+
         var symbol: String {
             switch self {
             case .overview: "square.grid.2x2"
@@ -45731,7 +45908,7 @@ struct TabsPickerPagesDemo: View {
                 .font(.largeTitle.bold())
 
             TabsPickerPages(options: Section.allCases, selection: $section) { section in
-                SwiftUI.Label(section.rawValue, systemImage: section.symbol)
+                SwiftUI.Label(section.title, systemImage: section.symbol)
             } page: { section in
                 VStack(spacing: 10) {
                     ForEach(section.rows, id: \.self) { row in

@@ -67,6 +67,13 @@ struct AdaptiveColumnsGridDemo: View {
         case narrow = "Narrow", medium = "Medium", wide = "Wide"
 
         var id: Self { self }
+        var title: LocalizedStringResource {
+            switch self {
+            case .narrow: "Narrow"
+            case .medium: "Medium"
+            case .wide: "Wide"
+            }
+        }
         var width: CGFloat {
             switch self {
             case .narrow: 170
@@ -92,7 +99,7 @@ struct AdaptiveColumnsGridDemo: View {
         ScrollView {
             VStack(spacing: 20) {
                 Picker("Width", selection: selection) {
-                    ForEach(Size.allCases) { Text($0.rawValue).tag($0) }
+                    ForEach(Size.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
 

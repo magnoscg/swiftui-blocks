@@ -14,9 +14,9 @@ struct AnimatedCheckmarkBadge: View {
     /// The side of the badge in points, before it scales with Dynamic Type.
     var size: CGFloat = 96
     /// What VoiceOver reads while the badge shows.
-    var completeLabel = "Complete"
+    var completeLabel: LocalizedStringResource = "Complete"
     /// What VoiceOver reads while the badge is hidden.
-    var pendingLabel = "Pending"
+    var pendingLabel: LocalizedStringResource = "Pending"
 
     @ScaledMetric(relativeTo: .largeTitle) private var scale = 1.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

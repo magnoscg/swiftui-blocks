@@ -89,6 +89,15 @@ struct ModelAvailabilityGateDemo: View {
 
         var id: Self { self }
 
+        var title: LocalizedStringResource {
+            switch self {
+            case .ready: "Ready"
+            case .device: "Device"
+            case .off: "Off"
+            case .preparing: "Preparing"
+            }
+        }
+
         var availability: SystemLanguageModel.Availability {
             switch self {
             case .ready: .available
@@ -138,7 +147,7 @@ struct ModelAvailabilityGateDemo: View {
             }
 
             Picker("Availability", selection: pickerSelection) {
-                ForEach(Sample.allCases) { Text($0.rawValue).tag($0) }
+                ForEach(Sample.allCases) { Text($0.title).tag($0) }
             }
             .pickerStyle(.segmented)
         }

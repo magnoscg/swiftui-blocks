@@ -7,6 +7,58 @@ on `main`.
 
 ## Unreleased
 
+## 0.16.0 - 2026-11-21
+
+### Changed
+
+- The icon of the Claude Code plugin fills its whole square, so a directory
+  that rounds its corners or crops it to a circle shows the gradient to the
+  edge. Before, it was the rounded tile of the logo inside a transparent
+  margin, which a circular crop turned into a circle with four flat sides.
+
+### Fixed
+
+- The line down each group of the site's sidebar runs unbroken past the
+  categories. Before, it was cut above each one.
+- The agent tabs on the landing page scroll only sideways, and the line under
+  the open tab shows whole. Before, they also scrolled a pixel up and down, and
+  half of that line was hidden.
+- Video Player Chrome gives VoiceOver the names of its transport buttons (Back
+  10 seconds, Play, Pause and Forward 10 seconds) as text the app can
+  translate. Before, they stayed in English whatever the language.
+- Voice Orb gives VoiceOver its state as a text the app can translate, and its
+  demo shows the states the same way. Before, both used the English name of
+  the state.
+- Billing Period Toggle, Breathing Guide Circle, Coin Flip View, Polygon Morph
+  Shape, Shutter Capture Button, Spring Study Playground, Surface 3D Chart and
+  Symbol Effect Gallery show the names of their options, and give them to
+  VoiceOver, as text the app can translate. Before, they used the English name
+  of each option.
+- The category picker of Structured Output Form, the label VoiceOver reads for
+  the shutter of Shutter Capture Button, and the demos of Adaptive Columns Grid,
+  Model Availability Gate, Navigation Path Router, Tabs Picker Pages and Voice
+  Orb show text the app can translate too. Before, it stayed in English
+  whatever the language.
+- The texts a caller passes to Sliding Segmented Picker (the title of each
+  segment), Search Scopes And Suggestions (the title of each scope) and
+  Structured Output Form (the failure message) are `LocalizedStringResource`,
+  so a literal lands in the app's String Catalog instead of showing
+  untranslated. A `String` that is not a literal is passed as `"\(value)"`,
+  also from the two closures: `{ "\($0.rawValue)" }`.
+- The texts a caller passes to On Device Streaming Answer (the placeholder and
+  the failure message), Glass Segmented Control (the title of each segment) and
+  Dropdown Select Menu (the placeholder and the label of each option) are
+  `LocalizedStringResource` too. The "Writing" that On Device Streaming Answer
+  gives VoiceOver while it writes can be translated as well.
+- The texts with a default in Animated Badge Count, Animated Checkmark Badge,
+  Before After Slider, Circular Range Slider, Gauge Chart, Hamburger Menu
+  Button, Load More Footer, Map Route Tracker, Multi Step Form, Passcode Keypad,
+  Range Slider, Search Field With Suggestions, Spinning Vinyl Art, Tabs Picker
+  Pages, Tag Input Field and Tick Mark Slider are `LocalizedStringResource` too,
+  so the default and a literal a caller passes land in the app's String
+  Catalog. Before, they stayed in English whatever the language. Nested Comment
+  Thread shows "Show 3 replies" as text the app can translate, with its plural.
+
 ## 0.15.0 - 2026-11-19
 
 ### Added

@@ -13,6 +13,17 @@ private enum SymbolEffectGalleryEffect: String, CaseIterable, Identifiable {
 
     var id: Self { self }
 
+    var title: LocalizedStringResource {
+        switch self {
+        case .bounce: "Bounce"
+        case .pulse: "Pulse"
+        case .variableColor: "Variable Color"
+        case .wiggle: "Wiggle"
+        case .rotate: "Rotate"
+        case .breathe: "Breathe"
+        }
+    }
+
     var symbol: String {
         switch self {
         case .bounce: "arrow.down.circle.fill"
@@ -72,7 +83,7 @@ private struct SymbolEffectGalleryTile: View {
                     .foregroundStyle(effect.color)
                     .frame(height: height)
 
-                Text(effect.rawValue)
+                Text(effect.title)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
@@ -83,7 +94,7 @@ private struct SymbolEffectGalleryTile: View {
             .background(effect.color.opacity(0.12), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(effect.rawValue)
+        .accessibilityLabel(Text(effect.title))
         .accessibilityHint("Plays the effect")
     }
 

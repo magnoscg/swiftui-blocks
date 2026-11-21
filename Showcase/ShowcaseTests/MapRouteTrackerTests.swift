@@ -90,4 +90,12 @@ struct MapRouteTrackerTests {
         #expect(MapRouteTrackerMath.point(at: 0, on: route) == route[0])
         #expect(MapRouteTrackerMath.point(at: 1, on: route) == route[2])
     }
+
+    @MainActor
+    @Test func theDefaultTitlesAreLocalizableTextsInsteadOfStrings() {
+        let tracker = MapRouteTracker(route: [], progress: 0)
+
+        #expect(tracker.markerTitle.key == "Courier")
+        #expect(tracker.destinationTitle.key == "Destination")
+    }
 }

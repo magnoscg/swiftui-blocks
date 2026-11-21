@@ -8,6 +8,15 @@ nonisolated enum PolygonMorphShapeForm: String, CaseIterable, Hashable {
     case circle = "Circle"
     case star = "Star"
 
+    /// The name of the form, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .square: "Square"
+        case .circle: "Circle"
+        case .star: "Star"
+        }
+    }
+
     /// One sample per degree, so square corners and star tips land exactly on a sample.
     static let sampleCount = 360
 
@@ -141,7 +150,7 @@ struct PolygonMorphShapeDemo: View {
                 .shadow(color: .pink.opacity(0.4), radius: 24, y: 12)
                 .frame(maxWidth: 280, maxHeight: 280)
                 .accessibilityElement()
-                .accessibilityLabel(form.rawValue)
+                .accessibilityLabel(Text(form.title))
 
             ViewThatFits(in: .horizontal) {
                 HStack(spacing: 10) { buttons }
@@ -165,7 +174,7 @@ struct PolygonMorphShapeDemo: View {
 
     private var buttons: some View {
         ForEach(PolygonMorphShapeForm.allCases, id: \.self) { option in
-            Button(option.rawValue) {
+            Button(option.title) {
                 isAutoPlaying = false
                 form = option
             }

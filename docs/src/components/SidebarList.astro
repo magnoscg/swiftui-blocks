@@ -116,8 +116,9 @@ const pageOf = (group: Group) =>
     border-inline-start: 1px solid var(--sl-color-hairline);
   }
 
-  ul ul > li.category + li.category {
-    margin-top: 0.125rem;
+  /* Padding, not margin: a margin between two categories cuts the line. */
+  ul ul > li.category:has(+ li.category) {
+    padding-bottom: 0.125rem;
   }
 
   /* The mark of the open page sits on the rail. Changing page, it slides

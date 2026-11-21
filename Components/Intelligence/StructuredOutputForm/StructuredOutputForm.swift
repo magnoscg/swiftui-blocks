@@ -10,6 +10,16 @@ enum StructuredOutputFormCategory: String, CaseIterable, Identifiable {
     case food, travel, shopping, other
 
     var id: Self { self }
+
+    /// The name of the category, as the picker shows it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .food: "Food"
+        case .travel: "Travel"
+        case .shopping: "Shopping"
+        case .other: "Other"
+        }
+    }
 }
 
 /// What the model must produce. `@Guide` tells it what each field means.
@@ -46,7 +56,7 @@ struct StructuredOutputForm: View {
     /// Plays instead of an error when the model is unavailable or fails.
     var fallbackStream: (@MainActor (String) -> AsyncThrowingStream<StructuredOutputFormDraft, Error>)? = nil
     /// The text shown under the form when the model is unavailable or fails and there is no `fallbackStream`.
-    var failureMessage = "The on-device model couldn't fill in the form right now. Please try again later."
+    var failureMessage: LocalizedStringResource = "The on-device model couldn't fill in the form right now. Please try again later."
 
     @State private var fillTask: Task<Void, Never>?
     @State private var isFilling = false
@@ -93,7 +103,7 @@ struct StructuredOutputForm: View {
                         .keyboardType(.decimalPad)
                 }
                 Picker("Category", selection: $draft.category) {
-                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.rawValue.capitalized).tag($0) }
+                    ForEach(StructuredOutputFormCategory.allCases) { Text($0.title).tag($0) }
                 }
                 LabeledContent("Purpose") {
                     TextField("Purpose", text: $draft.purpose).multilineTextAlignment(.trailing)

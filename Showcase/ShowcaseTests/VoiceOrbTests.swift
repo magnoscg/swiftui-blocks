@@ -59,6 +59,10 @@ struct VoiceOrbTests {
         #expect(first.x > 0)
     }
 
+    @Test func everyStateHasALocalizableTitleInsteadOfItsRawValue() {
+        #expect(VoiceOrbState.allCases.map(\.title.key) == ["Idle", "Listening", "Thinking", "Speaking"])
+    }
+
     @Test func noBlobsStillGivesAPoint() {
         let center = VoiceOrbMath.blobCenter(index: 0, count: 0, time: 3, energy: 0.5)
 

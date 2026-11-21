@@ -7,6 +7,15 @@ enum BreathingGuideCirclePhase: String {
     case inhale = "Breathe In"
     case hold = "Hold"
     case exhale = "Breathe Out"
+
+    /// What the circle asks you to do, as it shows it and VoiceOver reads it, in the language of the app.
+    var title: LocalizedStringResource {
+        switch self {
+        case .inhale: "Breathe In"
+        case .hold: "Hold"
+        case .exhale: "Breathe Out"
+        }
+    }
 }
 
 struct BreathingGuideCircleState: Equatable {
@@ -85,7 +94,7 @@ struct BreathingGuideCircle: View {
                 circle(expansion: reduceMotion ? 0.6 : state.expansion)
 
                 VStack(spacing: 6) {
-                    Text(state.phase.rawValue)
+                    Text(state.phase.title)
                         .font(.system(.title, design: .rounded, weight: .semibold))
                         .multilineTextAlignment(.center)
                     Text(state.secondsLeft, format: .number)
@@ -95,7 +104,7 @@ struct BreathingGuideCircle: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Breathing guide")
-            .accessibilityValue(state.phase.rawValue)
+            .accessibilityValue(Text(state.phase.title))
         }
     }
 

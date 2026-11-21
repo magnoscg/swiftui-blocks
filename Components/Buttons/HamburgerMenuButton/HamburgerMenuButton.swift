@@ -64,9 +64,9 @@ struct HamburgerMenuButton: View {
     /// The stroke of the bars and of the cross.
     var color: Color = .primary
     /// The name VoiceOver reads while `isOpen` is false.
-    var openLabel = "Open menu"
+    var openLabel: LocalizedStringResource = "Open menu"
     /// The name VoiceOver reads while `isOpen` is true.
-    var closeLabel = "Close menu"
+    var closeLabel: LocalizedStringResource = "Close menu"
 
     @ScaledMetric(relativeTo: .title2) private var size = 24.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
