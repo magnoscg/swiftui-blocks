@@ -7,6 +7,14 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- Install for your agent opens with a tab per agent: Any agent, Claude Code,
+  Codex, Copilot CLI, Gemini CLI and Cursor, each with the same four steps to
+  run, start a new session, ask and keep it up to date. A link like
+  /install/#codex opens its tab, the agent picked there is the one the landing
+  page opens with, and long commands wrap instead of scrolling.
+
 ## 0.16.0 - 2026-11-21
 
 ### Changed
