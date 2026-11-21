@@ -7,6 +7,13 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- The icon of the Claude Code plugin fills its whole square, so a directory
+  that rounds its corners or crops it to a circle shows the gradient to the
+  edge. Before, it was the rounded tile of the logo inside a transparent
+  margin, which a circular crop turned into a circle with four flat sides.
+
 ### Fixed
 
 - The line down each group of the site's sidebar runs unbroken past the
