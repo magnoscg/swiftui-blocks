@@ -799,13 +799,19 @@ function sourceBlock(source, meta, shown) {
   return [`<div class="code-fold" data-lines="${count}" data-shown="${shown}">`, '', ...block, '', '</div>'];
 }
 
+// A link that saves a file of a component from the site, which serves it.
+// Markdown has no way to say `download`, so the page holds the element.
+function downloadLink(path, text) {
+  return `<a href="${SITE_BASE}/${path}" download="${path.split('/').pop()}">${text}</a>`;
+}
+
 function renderDocsSource(component) {
   const swift = [...sourceBlock(component.source, `swift title="${component.name}.swift"`, CODE_SHOWN), ''];
   if (!component.shader) {
-    return [`Copy this code into your project, or [download the file](${RAW_BASE}/${component.path}).`, '', ...swift];
+    return [`Copy this code into your project, or ${downloadLink(component.path, 'download the file')}.`, '', ...swift];
   }
   return [
-    `Copy both files into your project: the Swift file and the Metal shader it draws with. Or download [${component.name}.swift](${RAW_BASE}/${component.path}) and [${component.name}.metal](${RAW_BASE}/${component.shader}).`,
+    `Copy both files into your project: the Swift file and the Metal shader it draws with. Or download ${downloadLink(component.path, `${component.name}.swift`)} and ${downloadLink(component.shader, `${component.name}.metal`)}.`,
     '',
     ...swift,
     // The site has no grammar for Metal, which is C++.

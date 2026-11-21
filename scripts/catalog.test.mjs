@@ -990,7 +990,7 @@ describe('the documentation site', () => {
   it('offers one file to copy when there is no shader', () => {
     const page = docsFor().pages.get(PAGE);
 
-    assert.match(page, /Copy this code into your project, or \[download the file\]\(/);
+    assert.match(page, /Copy this code into your project, or <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.swift" download="GlowButton\.swift">download the file<\/a>\./);
     assert.equal(page.match(/^`````\w+ title="\w/gm).length, 1);
   });
 
@@ -1154,7 +1154,10 @@ describe('the documentation site', () => {
     const page = renderDocsPages(loadCatalog(root).components).get(PAGE);
 
     assert.match(page, /Copy both files into your project/);
-    assert.match(page, /\[GlowButton\.swift\]\([^)]+\/GlowButton\.swift\) and \[GlowButton\.metal\]\([^)]+\/GlowButton\.metal\)/);
+    assert.match(
+      page,
+      /download <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.swift" download="GlowButton\.swift">GlowButton\.swift<\/a> and <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.metal" download="GlowButton\.metal">GlowButton\.metal<\/a>\./,
+    );
     assert.match(page, /`````swift title="GlowButton\.swift"\n\/\/ SPDX-License-Identifier: MIT/);
     assert.match(page, /`````cpp title="GlowButton\.metal"\n\/\/ SPDX-License-Identifier: MIT\n#include/);
     assert.ok(page.indexOf('title="GlowButton.swift"') < page.indexOf('title="GlowButton.metal"'));
