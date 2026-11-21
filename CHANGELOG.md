@@ -25,6 +25,9 @@ on `main`.
   command that installs the skill, then what every component keeps and what it
   needs, with its figures read from the catalog. On a phone, the API reference
   of a component shows each parameter as a block of its own.
+- The sidebar shows how many components the catalog and each category hold,
+  and on a touch screen its links, the outline, the theme picker and the tabs
+  answer in 44 points.
 
 ## 0.16.0 - 2026-11-21
 

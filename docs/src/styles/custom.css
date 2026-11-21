@@ -298,3 +298,17 @@ h4 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* On a touch screen the outline and the theme picker answer in 44 points too. */
+@media (pointer: coarse) {
+  starlight-toc a,
+  mobile-starlight-toc a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  starlight-theme-select select {
+    min-height: 2.75rem;
+  }
+}

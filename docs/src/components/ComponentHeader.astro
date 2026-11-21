@@ -520,6 +520,12 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     color: var(--sl-color-gray-3);
   }
 
+  @media (pointer: coarse) {
+    .add-it :global([role='tab']) {
+      min-height: 2.75rem;
+    }
+  }
+
   @media (forced-colors: active) {
     .add-it :global([role='tab'][aria-selected='true'])::after {
       background: none;
