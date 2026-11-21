@@ -5,8 +5,9 @@
 const LABEL = 'Code';
 
 function reachable(pre: HTMLElement) {
-  if (pre.closest('[data-folded]')) return;
-  const overflows = pre.scrollHeight > pre.clientHeight || pre.scrollWidth > pre.clientWidth;
+  // A folded block scrolls only across, so only that lets the keyboard in.
+  const folded = pre.closest('[data-folded]') !== null;
+  const overflows = pre.scrollWidth > pre.clientWidth || (!folded && pre.scrollHeight > pre.clientHeight);
   if (!overflows || pre.getAttribute('tabindex') === '0') return;
   pre.setAttribute('tabindex', '0');
   pre.setAttribute('role', 'region');

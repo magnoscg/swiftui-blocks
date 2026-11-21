@@ -8,7 +8,7 @@ for (const fold of document.querySelectorAll<HTMLElement>('.code-fold')) {
   const pre = fold.querySelector<HTMLElement>('pre');
   const cut = pre?.querySelectorAll<HTMLElement>('.ec-line')[Number(fold.dataset.shown)];
   if (!pre || !cut) continue;
-  // Marked first, so lib/code-scroll.ts leaves a folded block out of the tab order.
+  // Marked first, so lib/code-scroll.ts lets the keyboard into a folded block only to scroll it across.
   fold.toggleAttribute('data-folded', true);
   pre.style.maxHeight = `${cut.getBoundingClientRect().top - pre.getBoundingClientRect().top}px`;
   const button = document.createElement('button');
