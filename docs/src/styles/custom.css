@@ -89,6 +89,32 @@ h4 {
   overflow: auto;
 }
 
+/* A long usage or file opens folded, fading out above the button that shows
+   the rest (lib/code-fold.ts). */
+.sl-markdown-content .code-fold[data-folded] .expressive-code pre {
+  overflow: hidden;
+  mask-image: linear-gradient(black calc(100% - 3rem), transparent);
+}
+
+.sl-markdown-content .code-fold-toggle {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sl-markdown-content .code-fold-toggle:hover {
+  border-color: var(--sl-color-gray-3);
+}
+
 /* Changing page, only the mark of the open page in the sidebar moves: it
    slides to its new place. Browsers that cannot do it change page as before. */
 @media (prefers-reduced-motion: no-preference) {

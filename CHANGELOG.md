@@ -14,6 +14,9 @@ on `main`.
   run, start a new session, ask and keep it up to date. A link like
   /install/#codex opens its tab, the agent picked there is the one the landing
   page opens with, and long commands wrap instead of scrolling.
+- The page of a component opens its usage and its files folded, with a button
+  that shows all their lines, and marks the line of the usage that uses the
+  component. Its Description no longer repeats the summary at the top.
 
 ## 0.16.0 - 2026-11-21
 

@@ -968,7 +968,7 @@ describe('the documentation site', () => {
 
     assert.match(page, /^---\ntitle: "Glow Button"\ndescription: "A button that glows\."\n---/);
     assert.match(page, /import ComponentHeader from '\.\.\/\.\.\/\.\.\/\.\.\/components\/ComponentHeader\.astro';/);
-    assert.match(page, /\n<ComponentHeader id="glow-button" \/>\n/);
+    assert.match(page, /\n<ComponentHeader id="glow-button" lines=\{8\} \/>\n/);
     assert.match(page, /`````swift title="GlowButton\.swift"\n\/\/ SPDX-License-Identifier: MIT/);
   });
 
@@ -1033,11 +1033,54 @@ describe('the documentation site', () => {
     assert.doesNotMatch(page, /ComponentOverview|ComponentApi/);
   });
 
+  const LONG = swift(
+    'GlowButton',
+    [
+      '/// A button that glows.',
+      'struct GlowButton: View {}',
+      '',
+      '// MARK: - Demo',
+      '',
+      'private let sample = GlowButton()',
+      ...Array.from({ length: 24 }, (_, index) => `// Step ${index + 1}.`),
+    ].join('\n'),
+  );
+
+  it('leaves Description out when the comment holds only the summary, which the header shows', () => {
+    const page = docsFor(meta(), LONG).pages.get(PAGE);
+
+    assert.deepEqual(page.match(/^## .+$/gm), ['## Usage', '## Code']);
+    assert.doesNotMatch(page, /ComponentOverview/);
+  });
+
+  it('tells the header how many lines the Swift file has', () => {
+    const page = docsFor(meta(), LONG).pages.get(PAGE);
+
+    assert.match(page, new RegExp(`\\n<ComponentHeader id="glow-button" lines=\\{${LONG.trimEnd().split('\n').length}\\} />\\n`));
+  });
+
+  it('marks the line of the usage that calls the component', () => {
+    const page = docsFor(meta(), LONG).pages.get(PAGE);
+
+    assert.match(page, /\n`````swift title="" mark=\{1\}\nprivate let sample = GlowButton\(\)\n/);
+  });
+
+  it('folds a usage past 20 lines and a file past 16, saying how long each is', () => {
+    const page = docsFor(meta(), LONG).pages.get(PAGE);
+    const fileLines = LONG.trimEnd().split('\n').length;
+
+    assert.match(page, /## Usage\n\n<div class="code-fold" data-lines="26" data-shown="20">\n\n`````swift title=""/);
+    assert.match(
+      page,
+      new RegExp(`<div class="code-fold" data-lines="${fileLines}" data-shown="16">\\n\\n\`\`\`\`\`swift title="GlowButton\\.swift"`),
+    );
+    assert.doesNotMatch(docsFor().pages.get(PAGE), /code-fold/);
+  });
+
   it('passes the text read from the Swift file as data, where MDX cannot run it', () => {
     const page = docsFor(meta(), DOCUMENTED).pages.get(PAGE);
 
     assert.deepEqual(propsOf(page, 'ComponentOverview', 'blocks'), [
-      { type: 'paragraph', text: 'A button that glows.' },
       { type: 'aside', variant: 'caution', title: 'Important', text: 'Keep `{braces}` and <Tag> as text.' },
     ]);
     assert.deepEqual(propsOf(page, 'ComponentApi', 'tables'), [

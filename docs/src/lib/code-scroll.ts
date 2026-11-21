@@ -5,6 +5,7 @@
 const LABEL = 'Code';
 
 function reachable(pre: HTMLElement) {
+  if (pre.closest('[data-folded]')) return;
   const overflows = pre.scrollHeight > pre.clientHeight || pre.scrollWidth > pre.clientWidth;
   if (!overflows || pre.getAttribute('tabindex') === '0') return;
   pre.setAttribute('tabindex', '0');
