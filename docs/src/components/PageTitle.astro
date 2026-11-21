@@ -3,12 +3,24 @@
 // the sidebar, so going through a category does not need the foot of each
 // page. The page of a category also says what it holds under its title.
 import { Icon } from '@astrojs/starlight/components';
+import { categoryURL, components, pageURL, SITE_BASE } from '../lib/catalog';
 
 const { entry, pagination } = Astro.locals.starlightRoute;
 const { prev, next } = pagination;
 const isCategory = Boolean(entry.data.sidebar.attrs?.['data-category-page']);
+// The page of a component leads back to its category, which its header no longer names.
+const component = components.find((candidate) => pageURL(candidate) === Astro.url.pathname);
 ---
 
+{
+  component && (
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href={`${SITE_BASE}/catalog/`}>Catalog</a>
+      <span aria-hidden="true">/</span>
+      <a href={categoryURL(component.category)}>{component.category}</a>
+    </nav>
+  )
+}
 <div class="page-title">
   <h1 id="_top">{entry.data.title}</h1>
   {
@@ -84,6 +96,28 @@ const isCategory = Boolean(entry.data.sidebar.attrs?.['data-category-page']);
 </script>
 
 <style>
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+
+  .crumbs a {
+    color: var(--sl-color-gray-2);
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--sl-color-white);
+  }
+
+  .crumbs + .page-title {
+    margin-top: 0.25rem;
+  }
+
   .page-title {
     display: flex;
     align-items: flex-start;

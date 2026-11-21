@@ -1,8 +1,9 @@
 ---
 // The top of the page of a component: its preview on a stage, what it needs,
-// and the three ways to take it. Copying the code reads it from the block
-// titled with the name of the Swift file, below, so the page holds one copy
-// of the source.
+// and the ways to add it. Copying the code reads it from the block titled
+// with the name of the Swift file, below, so the page holds one copy of the
+// source.
+import { TabItem, Tabs } from '@astrojs/starlight/components';
 import { cardURL, categoryURL, components, pageURL, previewURL, REPOSITORY, SITE_BASE } from '../lib/catalog';
 
 interface Props {
@@ -17,6 +18,8 @@ const { name, title, summary, category, minIOS, difficulty, apis, origin, rawURL
 const keywords = [...component.keywords.en, ...component.keywords.es];
 // The address of an origin comes from the metadata as written. Only a web address becomes a link.
 const originURL = 'url' in origin && /^https?:\/\//.test(origin.url) ? origin.url : undefined;
+const originLabel = { original: 'Original work', inspired: 'Inspired', adapted: 'Adapted' }[origin.kind];
+const ask = `Add the ${title} from SwiftUI Blocks`;
 
 // What a coding agent needs to add the component without opening this page.
 const prompt = [
@@ -73,87 +76,114 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
 <section class="component-header not-content">
   <p class="summary">{summary}</p>
 
-  <div class="stage" data-stage>
-    <span class="screen">
-      <picture>
-        <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
-        <img
-          src={previewURL(component)}
-          alt={`Preview of ${title}`}
-          width="320"
-          height="696"
-          decoding="async"
-          data-still={cardURL(component)}
-        />
-      </picture>
-    </span>
-    <button type="button" class="pause" data-stage-pause>
-      <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
-        <rect x="6" y="5" width="4" height="14" rx="1"></rect>
-        <rect x="14" y="5" width="4" height="14" rx="1"></rect>
-      </svg>
-      <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
-        <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z"></path>
-      </svg>
-      <span data-stage-label>Pause</span>
-    </button>
-  </div>
+  <ul class="facts">
+    <li>iOS {minIOS.replace(/\.0$/, '')}+</li>
+    <li class="level">{difficulty}</li>
+    <li>{originLabel}</li>
+  </ul>
 
-  <div class="details">
-    <ul class="facts">
-      <li>
-        <a href={categoryURL(category)}>{category}</a>
-      </li>
-      <li>iOS {minIOS}+</li>
-      <li class="level">{difficulty}</li>
-      {component.shader && <li>Metal shader</li>}
-    </ul>
+  <div class="columns">
+    <figure class="preview">
+      <div class="stage" data-stage>
+        <span class="screen">
+          <picture>
+            <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
+            <img
+              src={previewURL(component)}
+              alt={`Preview of ${title}`}
+              width="320"
+              height="696"
+              decoding="async"
+              data-still={cardURL(component)}
+            />
+          </picture>
+        </span>
+        <button type="button" class="pause" data-stage-pause>
+          <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+            <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+            <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+          </svg>
+          <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
+            <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z"></path>
+          </svg>
+          <span data-stage-label>Pause</span>
+        </button>
+      </div>
+      <figcaption>Recorded in the iOS Simulator</figcaption>
+    </figure>
 
-    <div class="actions">
-      <button type="button" class="primary" data-copy-code={`${name}.swift`} data-done="Copied">Copy code</button>
-      <a href={rawURL} download={`${name}.swift`}>Download .swift</a>
-      {shaderRawURL && <a href={shaderRawURL} download={`${name}.metal`}>Download .metal</a>}
-      <button type="button" data-copy={prompt} data-done="Copied">Copy prompt for your agent</button>
+    <div class="add-it">
+      <h2>Add it</h2>
+      <Tabs syncKey="add-it">
+        <TabItem label="With your agent">
+          <p>Paste it into any coding agent. It carries the download link and the checks, so no skill is needed.</p>
+          <div class="actions">
+            <button type="button" class="primary" data-copy={prompt} data-done="Copied">Copy full prompt</button>
+          </div>
+          <p class="ask-label">Skill installed? Just ask:</p>
+          <p class="ask">
+            <span>“{ask}”</span>
+            <button type="button" data-copy={ask} data-done="Copied" aria-label="Copy the request">
+              <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="9" y="9" width="12" height="12" rx="2"></rect>
+                <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+              </svg>
+            </button>
+          </p>
+        </TabItem>
+        <TabItem label="By hand">
+          <div class="actions">
+            <button type="button" class="primary" data-copy-code={`${name}.swift`} data-done="Copied">Copy code</button>
+            <a href={rawURL} download={`${name}.swift`}>Download .swift</a>
+            {shaderRawURL && <a href={shaderRawURL} download={`${name}.metal`}>Download .metal</a>}
+          </div>
+          <p>{shaderRawURL ? 'Two files: add both to the same target.' : 'Add the file to your app target in Xcode.'}</p>
+        </TabItem>
+      </Tabs>
+
+      <dl>
+        <div>
+          <dt>File</dt>
+          <dd>{shaderRawURL ? 'Two files · .swift + .metal' : `One file · ${Astro.props.lines} lines`}</dd>
+        </div>
+        <div>
+          <dt>Uses</dt>
+          <dd class="apis">
+            {
+              apis.map((api) => (
+                <a href={`${SITE_BASE}/catalog/?api=${encodeURIComponent(api)}`}>
+                  <code>{api}</code>
+                </a>
+              ))
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Origin</dt>
+          <dd>
+            {origin.kind === 'original' && 'Original work'}
+            {
+              origin.kind === 'inspired' && (
+                <>
+                  Inspired by {originURL ? <a href={originURL}>{origin.credit}</a> : origin.credit}, written from scratch
+                </>
+              )
+            }
+            {
+              origin.kind === 'adapted' && (
+                <>
+                  Adapted from {originURL ? <a href={originURL}>its source</a> : 'its source'}, {origin.license}
+                </>
+              )
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Found by</dt>
+          <dd class="keywords">{keywords.join(' · ')}</dd>
+        </div>
+      </dl>
     </div>
-
-    <dl>
-      <div>
-        <dt>Uses</dt>
-        <dd class="apis">
-          {
-            apis.map((api) => (
-              <a href={`${SITE_BASE}/catalog/?api=${encodeURIComponent(api)}`}>
-                <code>{api}</code>
-              </a>
-            ))
-          }
-        </dd>
-      </div>
-      <div>
-        <dt>Origin</dt>
-        <dd>
-          {origin.kind === 'original' && 'Original work'}
-          {
-            origin.kind === 'inspired' && (
-              <>
-                Inspired by {originURL ? <a href={originURL}>{origin.credit}</a> : origin.credit}, written from scratch
-              </>
-            )
-          }
-          {
-            origin.kind === 'adapted' && (
-              <>
-                Adapted from {originURL ? <a href={originURL}>its source</a> : 'its source'}, {origin.license}
-              </>
-            )
-          }
-        </dd>
-      </div>
-      <div>
-        <dt>Found by</dt>
-        <dd class="keywords">{keywords.join(' · ')}</dd>
-      </div>
-    </dl>
   </div>
   <p class="sr-only" role="status" data-copy-status></p>
 </section>
@@ -180,8 +210,9 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
 
 <style>
   .component-header {
+    container-type: inline-size;
     display: grid;
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin-bottom: 2.5rem;
   }
 
@@ -192,12 +223,64 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     color: var(--sl-color-gray-2);
   }
 
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .facts li {
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-1);
+  }
+
+  .facts .level {
+    text-transform: capitalize;
+  }
+
+  .columns {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  /* With room, the stage stands beside the ways to add the component. */
+  @container (min-width: 36rem) {
+    .columns {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  @container (min-width: 46rem) {
+    .columns {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    }
+  }
+
+  .preview {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+  }
+
+  figcaption {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    text-align: center;
+  }
+
   /* The preview stands on a field of dots, lit from above, like a thing on a table. */
   .stage {
     display: grid;
     place-items: center;
     gap: 1rem;
-    padding: clamp(1.5rem, 5vw, 3rem);
+    padding: clamp(1.25rem, 5cqi, 2.5rem);
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 1.25rem;
     background:
@@ -267,13 +350,49 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     }
   }
 
-  .details {
+  .add-it {
     display: grid;
-    gap: 1.25rem;
+    gap: 1rem;
     align-content: start;
+    padding: 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1.25rem;
   }
 
-  .facts,
+  .add-it h2 {
+    margin: 0;
+    font-size: var(--sl-text-h4);
+    color: var(--sl-color-white);
+  }
+
+  .add-it p {
+    margin: 0.75rem 0 0;
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+    color: var(--sl-color-gray-2);
+  }
+
+  .add-it :global([role='tab']) {
+    position: relative;
+    padding-inline: 0.75rem;
+    box-shadow: none;
+    font-size: var(--sl-text-sm);
+    font-weight: 500;
+  }
+
+  .add-it :global([role='tab'][aria-selected='true']) {
+    font-weight: 500;
+  }
+
+  .add-it :global([role='tab'][aria-selected='true'])::after {
+    content: '';
+    position: absolute;
+    inset: auto 0.75rem 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--brand-gradient);
+  }
+
   .actions,
   .apis {
     display: flex;
@@ -281,31 +400,8 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     gap: 0.5rem;
   }
 
-  .facts {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .facts li {
-    padding: 0.2rem 0.7rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 999px;
-    font-size: var(--sl-text-sm);
-    color: var(--sl-color-gray-1);
-  }
-
-  .facts .level {
-    text-transform: capitalize;
-  }
-
-  .facts a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .facts li:has(a):hover {
-    border-color: var(--sl-color-gray-3);
+  .actions {
+    margin-top: 0.75rem;
   }
 
   .actions > * {
@@ -337,14 +433,50 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     background: var(--sl-color-white);
   }
 
-  .actions [data-copied] {
+  .actions [data-copied],
+  .ask [data-copied] {
     border-color: var(--brand-2);
+  }
+
+  .add-it .ask-label {
+    margin-top: 1rem;
+  }
+
+  .add-it .ask {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.25rem 0.25rem 0.9rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.7rem;
+    color: var(--sl-color-white);
+  }
+
+  .ask button {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    background: none;
+    color: var(--sl-color-gray-2);
+    cursor: pointer;
+  }
+
+  .ask button:hover {
+    color: var(--sl-color-white);
   }
 
   dl {
     display: grid;
     gap: 0.9rem;
     margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--sl-color-gray-5);
   }
 
   dt {
@@ -360,6 +492,7 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     margin: 0;
     font-size: var(--sl-text-sm);
     color: var(--sl-color-gray-2);
+    overflow-wrap: anywhere;
   }
 
   dd a {
@@ -387,19 +520,10 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
     color: var(--sl-color-gray-3);
   }
 
-  /* With room, the stage stands beside the details. */
-  @media (min-width: 60rem) {
-    .component-header {
-      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-      column-gap: 2rem;
-    }
-
-    .summary {
-      grid-column: 1 / -1;
-    }
-
-    .screen {
-      width: min(100%, 17rem);
+  @media (forced-colors: active) {
+    .add-it :global([role='tab'][aria-selected='true'])::after {
+      background: none;
+      border-block-end: 2px solid CanvasText;
     }
   }
 </style>

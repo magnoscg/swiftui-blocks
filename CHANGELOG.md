@@ -17,6 +17,10 @@ on `main`.
 - The page of a component opens its usage and its files folded, with a button
   that shows all their lines, and marks the line of the usage that uses the
   component. Its Description no longer repeats the summary at the top.
+- The page of a component leads back to its category above its title and
+  gathers the ways to add it under Add it: Copy full prompt for any agent, or
+  the files by hand. It says how long its file is, and its preview says it was
+  recorded in the iOS Simulator.
 
 ## 0.16.0 - 2026-11-21
 
