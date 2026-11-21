@@ -877,7 +877,7 @@ describe('the documentation site', () => {
     addComponent(root, { metadata, source });
     const { components, errors } = loadCatalog(root);
     assert.deepEqual(errors, []);
-    return { pages: renderDocsPages(components), assets: docsAssets() };
+    return { pages: renderDocsPages(components), assets: docsAssets(components) };
   }
 
   it('says so when the catalog is empty', () => {
@@ -1168,6 +1168,15 @@ describe('the documentation site', () => {
     assert.equal(assets.get('components.tsv'), 'docs/public/components.tsv');
     assert.equal(assets.has('Components/Buttons/GlowButton/GlowButton.webp'), false);
   });
+
+  it('serves the files of each component from the site, where a link saves them instead of opening them', () => {
+    const root = makeRoot();
+    addComponent(root, { source: swiftWithShader(), shader: metal() });
+    const assets = docsAssets(loadCatalog(root).components);
+
+    assert.equal(assets.get('Components/Buttons/GlowButton/GlowButton.swift'), 'docs/public/Components/Buttons/GlowButton/GlowButton.swift');
+    assert.equal(assets.get('Components/Buttons/GlowButton/GlowButton.metal'), 'docs/public/Components/Buttons/GlowButton/GlowButton.metal');
+  });
 });
 
 describe('the short index for agents', () => {
@@ -1274,6 +1283,24 @@ describe('built component pages', () => {
 
   it('rejects a page with two images', () => {
     assert.match(builtPageErrors(page(card) + page(card), component).join('\n'), /exactly one og:image/);
+  });
+
+  it('rejects a download link to another site, which a browser opens instead of saving', () => {
+    const link = `<a href="https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>`;
+
+    assert.match(builtPageErrors(page(card) + link, component).join('\n'), /download link/);
+  });
+
+  it('accepts a download link to a file of the site', () => {
+    const link = '<a href="/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>';
+
+    assert.deepEqual(builtPageErrors(page(card) + link, component), []);
+  });
+
+  it('leaves alone a link whose address only holds the word download', () => {
+    const link = '<a href="https://swiftuiblocks.dev/catalog/progress/download-pill-progress/" title="A download button">Download Pill Progress</a>';
+
+    assert.deepEqual(builtPageErrors(page(card) + link, component), []);
   });
 });
 

@@ -243,6 +243,12 @@ export function builtPageErrors(html, component) {
     if (contents.length !== 1) errors.push(`${component.name}: the page needs exactly one ${key}, found ${contents.length}`);
     else if (contents[0] !== card) errors.push(`${component.name}: its ${key} is ${contents[0]}, not ${card}`);
   }
+  for (const [tag] of html.matchAll(/<a\s[^>]*>/g)) {
+    const attributes = Object.fromEntries([...tag.matchAll(/\s([\w:-]+)(?:="([^"]*)")?/g)].map(([, key, value]) => [key, value]));
+    if ('download' in attributes && !/^\/(?!\/)/.test(attributes.href ?? '')) {
+      errors.push(`${component.name}: its download link to ${attributes.href} opens the file instead of saving it, because it points to another site`);
+    }
+  }
   return errors;
 }
 
@@ -819,9 +825,12 @@ function docsPage(component) {
 }
 
 // Returns the files the site serves as they are: from the repository root to
-// their place in docs/public.
-export function docsAssets() {
-  return new Map(['catalog.json', 'llms.txt', SEARCH_INDEX, 'llms-full.txt'].map((file) => [file, `${DOCS_PUBLIC}/${file}`]));
+// their place in docs/public. The files of a component keep their path, so the
+// page of the component can link to them on its own site, where `download`
+// saves a file: a browser ignores it on a link to another site.
+export function docsAssets(components) {
+  const sources = components.flatMap(({ path, shader }) => (shader ? [path, shader] : [path]));
+  return new Map(['catalog.json', 'llms.txt', SEARCH_INDEX, 'llms-full.txt', ...sources].map((file) => [file, `${DOCS_PUBLIC}/${file}`]));
 }
 
 // Returns the generated files whose content on disk is missing or out of date.

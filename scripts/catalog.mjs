@@ -2,7 +2,8 @@
 // `generate` rewrites the files derived from the metadata. `check` changes
 // nothing and fails if a component breaks a rule or a generated file is stale.
 // `docs` writes the uncommitted files the documentation site is built from.
-// `site` reads the built site and fails if a component page lost its own card.
+// `site` reads the built site and fails if a component page lost its own card,
+// or links a download to another site, where it would open instead of saving.
 // `prune <major>` is for CI runners with an older SDK: it deletes the components
 // that need a newer iOS, so its result must never be committed.
 import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -64,7 +65,7 @@ if (command === 'generate') {
     for (const problem of problems) console.error(`- ${problem}`);
     process.exit(1);
   }
-  console.log(`Every one of the ${components.length} component pages shares its own card.`);
+  console.log(`Every one of the ${components.length} component pages shares its own card and downloads from the site.`);
 } else if (command === 'prune') {
   const removed = componentsNewerThan(components, pruneMajor);
   for (const component of removed) {
@@ -78,8 +79,9 @@ if (command === 'generate') {
   // Starting clean keeps a removed component from surviving in the site.
   rmSync(join(root, DOCS_CATALOG), { recursive: true, force: true });
   rmSync(join(root, 'docs/public/previews'), { recursive: true, force: true });
+  rmSync(join(root, 'docs/public/Components'), { recursive: true, force: true });
   for (const [path, content] of renderDocsPages(components)) write(path, content);
-  for (const [source, destination] of docsAssets()) {
+  for (const [source, destination] of docsAssets(components)) {
     mkdirSync(dirname(join(root, destination)), { recursive: true });
     copyFileSync(join(root, source), join(root, destination));
   }

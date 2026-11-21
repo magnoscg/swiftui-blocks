@@ -4,7 +4,7 @@
 // with the name of the Swift file, below, so the page holds one copy of the
 // source.
 import { TabItem, Tabs } from '@astrojs/starlight/components';
-import { cardURL, categoryURL, components, pageURL, previewURL, REPOSITORY, SITE_BASE } from '../lib/catalog';
+import { cardURL, categoryURL, components, fileURL, pageURL, previewURL, REPOSITORY, SITE_BASE } from '../lib/catalog';
 
 interface Props {
   id: string;
@@ -14,7 +14,7 @@ interface Props {
 const component = components.find((candidate) => candidate.id === Astro.props.id);
 if (!component) throw new Error(`No component with the id "${Astro.props.id}" in catalog.json.`);
 
-const { name, title, summary, category, minIOS, difficulty, apis, origin, rawURL, shaderRawURL } = component;
+const { name, title, summary, category, minIOS, difficulty, apis, origin, path, shader, rawURL, shaderRawURL } = component;
 const keywords = [...component.keywords.en, ...component.keywords.es];
 // The address of an origin comes from the metadata as written. Only a web address becomes a link.
 const originURL = 'url' in origin && /^https?:\/\//.test(origin.url) ? origin.url : undefined;
@@ -135,8 +135,8 @@ const structuredDataJSON = JSON.stringify(structuredData).replaceAll('<', '\\u00
         <TabItem label="By hand">
           <div class="actions">
             <button type="button" class="primary" data-copy-code={`${name}.swift`} data-done="Copied">Copy code</button>
-            <a href={rawURL} download={`${name}.swift`}>Download .swift</a>
-            {shaderRawURL && <a href={shaderRawURL} download={`${name}.metal`}>Download .metal</a>}
+            <a href={fileURL(path)} download={`${name}.swift`}>Download .swift</a>
+            {shader && <a href={fileURL(shader)} download={`${name}.metal`}>Download .metal</a>}
           </div>
           <p>{shaderRawURL ? 'Two files: add both to the same target.' : 'Add the file to your app target in Xcode.'}</p>
         </TabItem>
