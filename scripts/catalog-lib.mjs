@@ -42,6 +42,8 @@ const SHORTEST_FENCE = 5;
 // its page, with a button that shows the rest.
 const USAGE_SHOWN = 20;
 const CODE_SHOWN = 16;
+// A fold that would hide fewer lines than this costs more than it saves.
+const FOLD_HIDES_AT_LEAST = 5;
 const MAX_PREVIEW_BYTES = 2 * 1024 * 1024;
 // The image a page of the site shows when it is shared, in the size social networks expect.
 const CARD_WIDTH = 1200;
@@ -777,7 +779,7 @@ function withoutSummary(overview) {
   if (!overview?.length) return [];
   const [first, ...rest] = overview;
   if (first.type !== 'paragraph') return overview;
-  const after = first.text.split(/(?<=[.!?])\s+(?=[A-Z])/).slice(1).join(' ');
+  const after = first.text.split(/(?<=[.!?])\s+(?=[A-Z`"“'‘])/).slice(1).join(' ');
   return after ? [{ ...first, text: after }, ...rest] : rest;
 }
 
@@ -787,7 +789,7 @@ function sourceBlock(source, meta, shown) {
   const fence = sourceFence(source);
   const block = [`${fence}${meta}`, source.trimEnd(), fence];
   const count = source.trimEnd().split('\n').length;
-  if (count <= shown) return block;
+  if (count - shown < FOLD_HIDES_AT_LEAST) return block;
   return [`<div class="code-fold" data-lines="${count}" data-shown="${shown}">`, '', ...block, '', '</div>'];
 }
 

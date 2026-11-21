@@ -94,6 +94,8 @@ h4 {
 .sl-markdown-content .code-fold[data-folded] .expressive-code pre {
   overflow-x: auto;
   overflow-y: hidden;
+  /* Its bar would sit under the fade: it scrolls sideways by touch, trackpad and keyboard. */
+  scrollbar-width: none;
   mask-image: linear-gradient(black calc(100% - 3rem), transparent);
 }
 

@@ -1062,6 +1062,20 @@ describe('the documentation site', () => {
     ]);
   });
 
+  it('keeps a sentence after the summary that opens with code or a quote', () => {
+    const source = LONG.replace('/// A button that glows.', '/// A button that glows. `onFinish` runs once.');
+    const page = docsFor(meta(), source).pages.get(PAGE);
+
+    assert.deepEqual(propsOf(page, 'ComponentOverview', 'blocks'), [{ type: 'paragraph', text: '`onFinish` runs once.' }]);
+  });
+
+  it('leaves a block whole when folding it would hide fewer than five lines', () => {
+    const source = LONG.replace(/\/\/ Step 2[2-4]\.\n/g, '');
+    const page = docsFor(meta(), source).pages.get(PAGE);
+
+    assert.match(page, /## Usage\n\n`````swift title="" mark=\{1\}\n/);
+  });
+
   it('folds the usage below the line it marks, so the mark shows before unfolding', () => {
     const source = LONG.replace('private let sample = GlowButton()\n', '').replace('// Step 23.', 'private let sample = GlowButton()');
     const page = docsFor(meta(), source).pages.get(PAGE);
