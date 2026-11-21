@@ -7,6 +7,28 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- Install for your agent opens with a tab per agent: Any agent, Claude Code,
+  Codex, Copilot CLI, Gemini CLI and Cursor, each with the same four steps to
+  run, start a new session, ask and keep it up to date. A link like
+  /install/#codex opens its tab, the agent picked there is the one the landing
+  page opens with, and long commands wrap instead of scrolling.
+- The page of a component opens its usage and its files folded, with a button
+  that shows all their lines, and marks the line of the usage that uses the
+  component. Its Description no longer repeats the summary at the top.
+- The page of a component leads back to its category above its title and
+  gathers the ways to add it under Add it: Copy full prompt for any agent, or
+  the files by hand. It says how long its file is, and its preview says it was
+  recorded in the iOS Simulator.
+- The Introduction shows the two ways to add a component side by side, with the
+  command that installs the skill, then what every component keeps and what it
+  needs, with its figures read from the catalog. On a phone, the API reference
+  of a component shows each parameter as a block of its own.
+- The sidebar shows how many components the catalog and each category hold,
+  and on a touch screen its links, the outline, the theme picker and the tabs
+  answer in 44 points.
+
 ## 0.16.0 - 2026-11-21
 
 ### Changed

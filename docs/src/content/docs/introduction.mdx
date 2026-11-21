@@ -4,32 +4,74 @@ description: What SwiftUI Blocks is and how you use a component.
 ---
 
 import AgentDemo from '../../components/AgentDemo.astro';
+import TwoWays from '../../components/TwoWays.astro';
+import { components, count } from '../../lib/catalog';
 
-SwiftUI Blocks is a catalog of copy-paste SwiftUI components, animations and
-transitions for iOS 18 through iOS 27. It is not a package: each component is
-one Swift file that you add to your project, and two when it draws with a
-Metal shader. From then on it is your code, with no version to track.
+export const newer = components.filter((component) => Number(component.minIOS) >= 26).length;
+export const latest = components.filter((component) => component.minIOS.startsWith('27.')).length;
+
+SwiftUI Blocks is a catalog of {count} copy-paste SwiftUI components,
+animations and transitions for iOS 18 through iOS 27. It is not a package:
+each component is one Swift file that you add to your project, and two when it
+draws with a Metal shader. From then on it is your code, with no version to
+track.
 
 <AgentDemo />
 
 ## Two ways to add a component
 
-- **With your coding agent.** [Install the skill](/install/) once and ask for
-  what you need. [Prompts that work](/prompts/) has examples.
-- **By hand.** Find it in the [catalog](/catalog/) and copy its file.
-  [Add a component by hand](/by-hand/) has the steps.
+<TwoWays />
+
+## One file, always built the same way
+
+Every file is made of the same parts, in the same order: the license, the
+documentation, the component, its demo and its preview. Once you know one, you
+know where to look in any of them. [Anatomy of a file](/anatomy/) goes through
+each part.
+
+## Built into every component
+
+<div class="built-in">
+
+- **Reduce Motion and Dynamic Type**, and a label on anything that is not text.
+- **Right-to-left** layouts, gestures included.
+- **A 44-point target** on anything you tap.
+- **Either isolation**: it compiles with or without the main actor as the
+  default.
+- **Localizable text**: what you pass to show or read aloud lands in your
+  String Catalog.
+- **No deprecated APIs**: warnings are errors where the catalog is built.
+
+</div>
 
 ## Requirements
 
-Components are written for Swift 6, with complete concurrency checking, and
-compile whether or not your project uses the main actor as its default
-isolation. iOS 18 is the baseline. A component that needs a newer iOS marks its types with
-`@available`, so you decide how to handle older versions in your app.
-
-## License
-
-The catalog is under the
-[MIT license](https://github.com/magnoscg/swiftui-blocks/blob/HEAD/LICENSE).
-Keep the copyright header at the top of a file when you copy it. Code adapted
-from other projects keeps its original license, which its header and its page
-in the catalog state.
+<dl class="requirements not-content">
+  <div>
+    <dt>Language</dt>
+    <dd>Swift 6 language mode, with complete concurrency checking.</dd>
+  </div>
+  <div>
+    <dt>Deployment target</dt>
+    <dd>
+      iOS 18 or later. {newer} of the {count} components need iOS 26 or 27: they mark their types with{' '}
+      <code>@available</code>, and their page says so.
+    </dd>
+  </div>
+  <div>
+    <dt>Xcode</dt>
+    <dd>Xcode 26 or later, and Xcode 27 for the {latest} components that need iOS 27.</dd>
+  </div>
+  <div>
+    <dt>Dependencies</dt>
+    <dd>None: only SwiftUI and Apple's frameworks.</dd>
+  </div>
+  <div>
+    <dt>License</dt>
+    <dd>
+      <a href="https://github.com/magnoscg/swiftui-blocks/blob/HEAD/LICENSE">MIT</a>. Keep the copyright header at the
+      top of a file when you copy it. Code adapted from other projects keeps its own license, which its header and its
+      page state.
+    </dd>
+  </div>
+</dl>

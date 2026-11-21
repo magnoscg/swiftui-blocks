@@ -89,6 +89,35 @@ h4 {
   overflow: auto;
 }
 
+/* A long usage or file opens folded, fading out above the button that shows
+   the rest (lib/code-fold.ts). */
+.sl-markdown-content .code-fold[data-folded] .expressive-code pre {
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Its bar would sit under the fade: it scrolls sideways by touch, trackpad and keyboard. */
+  scrollbar-width: none;
+  mask-image: linear-gradient(black calc(100% - 3rem), transparent);
+}
+
+.sl-markdown-content .code-fold-toggle {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sl-markdown-content .code-fold-toggle:hover {
+  border-color: var(--sl-color-gray-3);
+}
+
 /* Changing page, only the mark of the open page in the sidebar moves: it
    slides to its new place. Browsers that cannot do it change page as before. */
 @media (prefers-reduced-motion: no-preference) {
@@ -222,4 +251,73 @@ h4 {
 /* A page of previews has no outline, so its grid takes the room the outline leaves. */
 .main-pane:has(.catalog-gallery) {
   --sl-content-width: 90rem;
+}
+
+/* The Introduction lists what every component keeps in two columns where they fit. */
+.sl-markdown-content .built-in ul {
+  columns: 2 18rem;
+  column-gap: 2rem;
+}
+
+.sl-markdown-content .built-in li {
+  break-inside: avoid;
+}
+
+.sl-markdown-content .built-in li::marker {
+  color: var(--brand-2);
+}
+
+/* Requirements: a name beside each value, one above the other on a phone. */
+.requirements {
+  display: grid;
+  margin: 1rem 0 0;
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+
+.requirements > div {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 0.25rem 1.5rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.requirements dt {
+  font-weight: 600;
+  color: var(--sl-color-white);
+}
+
+.requirements dd {
+  margin: 0;
+  color: var(--sl-color-gray-2);
+}
+
+.requirements a {
+  color: var(--sl-color-white);
+}
+
+@media (max-width: 40rem) {
+  .requirements > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* On a touch screen the outline and the theme picker answer in 44 points too. */
+@media (pointer: coarse) {
+  starlight-toc a,
+  mobile-starlight-toc a {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  starlight-theme-select select {
+    min-height: 2.75rem;
+  }
+
+  .sl-markdown-content summary {
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    padding-block: 0.5rem;
+  }
 }

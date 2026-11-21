@@ -7,6 +7,7 @@
 import { Badge, Icon } from '@astrojs/starlight/components';
 import SidebarRestorePoint from '@astrojs/starlight/components/SidebarRestorePoint.astro';
 import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+import { components, count, SITE_BASE } from '../lib/catalog';
 
 type Entry = StarlightRouteData['sidebar'][number];
 type Group = Extract<Entry, { type: 'group' }>;
@@ -23,6 +24,9 @@ const hasCurrent = (group: Group): boolean =>
   group.entries.some((entry) => (entry.type === 'link' ? entry.isCurrent : hasCurrent(entry)));
 const pageOf = (group: Group) =>
   group.entries.find((entry): entry is Link => entry.type === 'link' && 'data-category-page' in entry.attrs);
+// How many components the catalog and each category hold, from catalog.json.
+const countOf = (category: string) => components.filter((component) => component.category === category).length;
+const catalogURL = `${SITE_BASE}/catalog/`;
 ---
 
 <ul class:list={{ 'top-level': !nested }}>
@@ -41,6 +45,13 @@ const pageOf = (group: Group) =>
               {entry.isCurrent && <span class="marker" aria-hidden="true" />}
               <span>{entry.label}</span>
               {entry.badge && <Badge variant={entry.badge.variant} class={entry.badge.class} text={entry.badge.text} />}
+              {entry.href === catalogURL && (
+                <span class="count">
+                  <span class="sr-only">, </span>
+                  {count}
+                  <span class="sr-only"> components</span>
+                </span>
+              )}
             </a>
           </li>
         );
@@ -75,6 +86,11 @@ const pageOf = (group: Group) =>
           >
             {page.isCurrent && <span class="marker" aria-hidden="true" />}
             <span>{entry.label}</span>
+            <span class="count">
+              <span class="sr-only">, </span>
+              {countOf(entry.label)}
+              <span class="sr-only"> components</span>
+            </span>
           </a>
           <details open={open}>
             <summary aria-label={`${entry.label} components`}>
@@ -197,6 +213,21 @@ const pageOf = (group: Group) =>
     font-weight: 500;
   }
 
+  /* The count of components sits at the end of its row, before the arrow. */
+  a:has(> .count) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .count {
+    margin-inline-start: auto;
+    font-family: var(--__sl-font-mono);
+    font-size: var(--sl-text-xs);
+    font-weight: 400;
+    color: var(--sl-color-gray-3);
+  }
+
   .category > details > summary {
     position: absolute;
     top: 0;
@@ -210,6 +241,7 @@ const pageOf = (group: Group) =>
   }
 
   @media (pointer: coarse) {
+    a,
     .category-link {
       display: flex;
       align-items: center;

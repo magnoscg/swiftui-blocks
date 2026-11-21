@@ -30,25 +30,25 @@ interface Props {
         {rows.length === 0 ? (
           <p>Takes no parameters.</p>
         ) : (
-          <table class="api-table">
-            <thead>
-              <tr>
-                <th scope="col">Parameter</th>
-                <th scope="col">Type</th>
-                <th scope="col">Default</th>
-                {described && <th scope="col">Description</th>}
+          <table class="api-table" role="table">
+            <thead role="rowgroup">
+              <tr role="row">
+                <th scope="col" role="columnheader">Parameter</th>
+                <th scope="col" role="columnheader">Type</th>
+                <th scope="col" role="columnheader">Default</th>
+                {described && <th scope="col" role="columnheader">Description</th>}
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {rows.map((row) => (
-                <tr>
-                  <th scope="row">
+                <tr role="row">
+                  <th scope="row" role="rowheader">
                     <code>{row.name}</code>
                   </th>
-                  <td>{row.type ? <code>{row.type}</code> : <span class="none">Not written</span>}</td>
-                  <td>{row.default === null ? <span class="none">Required</span> : <code>{row.default}</code>}</td>
+                  <td role="cell" data-label="Type">{row.type ? <code>{row.type}</code> : <span class="none">Not written</span>}</td>
+                  <td role="cell" data-label="Default">{row.default === null ? <span class="none">Required</span> : <code>{row.default}</code>}</td>
                   {described && (
-                    <td>
+                    <td role="cell" data-label="Description">
                       <InlineCode text={row.description} />
                     </td>
                   )}
@@ -79,5 +79,45 @@ interface Props {
 
   .none {
     color: var(--sl-color-gray-3);
+  }
+
+  /* On a phone each parameter is a block of its own, with each value named.
+     The roles keep it a table for a screen reader, which changing its display
+     can take away. */
+  @media (max-width: 40rem) {
+    .api-table,
+    .api-table tbody,
+    .api-table tr,
+    .api-table th[scope='row'],
+    .api-table td {
+      display: block;
+    }
+
+    .api-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .api-table tr {
+      padding-block: 0.75rem;
+      border-bottom: 1px solid var(--sl-color-gray-5);
+    }
+
+    .api-table th[scope='row'],
+    .api-table td {
+      padding: 0.15rem 0;
+      border: 0;
+    }
+
+    .api-table td::before {
+      content: attr(data-label) ' ' / '';
+      font-size: var(--sl-text-xs);
+      font-weight: 600;
+      color: var(--sl-color-gray-3);
+    }
   }
 </style>

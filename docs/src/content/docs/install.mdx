@@ -3,114 +3,99 @@ title: Install for your agent
 description: Give your coding agent the SwiftUI Blocks skill with one command.
 ---
 
-import { TabItem, Tabs } from '@astrojs/starlight/components';
+import InstallAgents from '../../components/InstallAgents.astro';
+import { count, pageURL } from '../../lib/catalog';
+import { promptGroups } from '../../lib/prompts';
 
-The skill teaches your agent to search the catalog, check the minimum iOS of
-a component and add its file to your project. It is one small file, and your
-agent reads it only when you ask for a piece of SwiftUI.
+export const examples = promptGroups.map((group) => group.prompts[0]);
+export const promptCount = promptGroups.flatMap((group) => group.prompts).length;
 
-## Skills CLI
+The skill is one small file. Your agent reads it only when you ask for a piece
+of SwiftUI: then it searches the {count} components, checks the minimum iOS of
+the one it picks and adds the file to your project.
 
-Works with Claude Code, Codex, Copilot CLI, Cursor, Gemini CLI and other agents
-that read skills. It needs Node.
+## Pick your agent
 
-```sh title="Recommended"
-npx skills add magnoscg/swiftui-blocks-skill
-```
+Pick one way on each computer: the skills CLI, your agent's plugin or a copy by
+hand.
 
-It asks which agents to install it for and whether for this project or for
-all of them. To answer up front, add `-g` for every project and `-a` with an
-agent, like `-a claude-code` or `-a codex`. Run `npx skills update` to update
-it.
+<InstallAgents />
 
-## Your agent's own plugin
+## Then just ask
 
-Claude Code, Codex, Copilot CLI and Gemini CLI can also install it with their
-own commands, which keep it up to date too. Pick one way on each computer: the
-skills CLI, your agent's plugin or a copy by hand.
+Say what you want to see, and your agent picks the component:
 
-<Tabs syncKey="agent">
-  <TabItem label="Claude Code">
-    ```sh
-    claude plugin marketplace add magnoscg/swiftui-blocks-skill
-    claude plugin install swiftui-blocks@swiftuiblocks
-    ```
+<ul>
+  {examples.map(({ prompt, component }) => (
+    <li>
+      “{prompt}” finds <a href={pageURL(component)}>{component.title}</a>.
+    </li>
+  ))}
+</ul>
 
-    `claude plugin list` then shows `swiftui-blocks@swiftuiblocks` as enabled.
-    To update it, run `claude plugin marketplace update swiftuiblocks` and then
-    `claude plugin update swiftui-blocks@swiftuiblocks`.
-  </TabItem>
-  <TabItem label="Codex">
-    ```sh
-    codex plugin marketplace add magnoscg/swiftui-blocks-skill
-    codex plugin add swiftui-blocks@swiftuiblocks
-    ```
-
-    To update it, run `codex plugin marketplace upgrade swiftuiblocks`.
-  </TabItem>
-  <TabItem label="Copilot CLI">
-    ```sh
-    copilot plugin marketplace add magnoscg/swiftui-blocks-skill
-    copilot plugin install swiftui-blocks@swiftuiblocks
-    ```
-
-    `copilot skill list` then shows `swiftui-blocks`. To update it, run
-    `copilot plugin update swiftui-blocks`.
-  </TabItem>
-  <TabItem label="Gemini CLI">
-    ```sh
-    gemini extensions install https://github.com/magnoscg/swiftui-blocks-skill
-    ```
-
-    `gemini extensions list` then shows `swiftui-blocks`. To update it, run
-    `gemini extensions update swiftui-blocks`.
-  </TabItem>
-</Tabs>
-
-## By hand
-
-Without Node, copy the file into the folder your agent reads skills from.
-
-<Tabs>
-  <TabItem label="Claude Code">
-    ```sh
-    mkdir -p ~/.claude/skills/swiftui-blocks && curl -fsS -o ~/.claude/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
-    ```
-  </TabItem>
-  <TabItem label="Codex, Copilot CLI, Cursor and Gemini CLI">
-    ```sh
-    mkdir -p ~/.agents/skills/swiftui-blocks && curl -fsS -o ~/.agents/skills/swiftui-blocks/SKILL.md https://raw.githubusercontent.com/magnoscg/swiftui-blocks-skill/HEAD/skills/swiftui-blocks/SKILL.md
-    ```
-  </TabItem>
-</Tabs>
-
-For one project only, use `.claude/skills/` or `.agents/skills/` inside the
-project instead.
-
-## Check that it works
-
-Start a new session, so your agent loads the skill, and ask:
-
-> Which SwiftUI Blocks loaders work on iOS 18?
-
-It should search the catalog and name loaders such as Orbit Loader, Dots Pulse
-Loader and Wave Bars Loader. Then try one of the [prompts that work](/prompts/).
+<p>
+  <a href="/prompts/">All {promptCount} prompts that work</a>
+</p>
 
 ## Without installing anything
 
-Every component page has **Copy prompt for your agent**: paste it into any
+Every component page has **Copy full prompt**: paste it into any
 agent and it adds that component. The [files for agents](/files-for-agents/)
 explain what an agent reads.
 
+## Where it goes
+
+- **The skills CLI** puts the skill in the skills folder of each agent you
+  pick, for this project or, with `-g`, for every project. `npx skills update`
+  updates it.
+- **A plugin or an extension** stays with your agent, which updates it with the
+  commands in its tab above.
+- **A copy by hand** goes in `~/.claude/skills/swiftui-blocks/` for Claude Code,
+  or in `~/.agents/skills/swiftui-blocks/` for Codex, Copilot CLI, Cursor and
+  Gemini CLI. Download it again to update it.
+
+## Troubleshooting
+
+<details>
+<summary>My agent answers from memory</summary>
+
+Skills load when a session starts. Start a new one, then name the catalog:
+“With SwiftUI Blocks, add …”.
+
+</details>
+
+<details>
+<summary>It picked a component my app cannot run</summary>
+
+The skill compares the minimum iOS of a component with the deployment target of
+your project, and tells you before it adds one that needs a newer iOS. Ask for
+one that fits: “… that works on iOS 18”.
+
+</details>
+
 ## Questions
 
-**What is a coding agent?** An assistant that reads and edits your project
-from a chat, such as Claude Code, Codex or Cursor. You do not need one: every
-component page has **Copy code** and **Download .swift**.
+<details>
+<summary>What is a coding agent?</summary>
 
-**Does it cost anything?** No. The catalog and the skill are free and MIT
-licensed. Finding a component takes your agent a few thousand tokens.
+An assistant that reads and edits your project from a chat, such as Claude
+Code, Codex or Cursor. You do not need one: every component page has **Copy
+code** and **Download .swift**.
 
-**Where does the file go?** Into your Xcode project, as a new Swift file in
-your app target. A component marked Metal brings a second file, which goes in
-the same target.
+</details>
+
+<details>
+<summary>Does it cost anything?</summary>
+
+No. The catalog and the skill are free and MIT licensed. Finding a component
+takes your agent a few thousand tokens.
+
+</details>
+
+<details>
+<summary>Where does the file go?</summary>
+
+Into your Xcode project, as a new Swift file in your app target. A component
+marked Metal brings a second file, which goes in the same target.
+
+</details>
