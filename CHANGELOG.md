@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.17.0 - 2026-11-21
+
 ### Changed
 
 - Install for your agent opens with a tab per agent: Any agent, Claude Code,
