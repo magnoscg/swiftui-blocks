@@ -10,6 +10,7 @@ import {
   categoryCollisions,
   componentsNewerThan,
   docsAssets,
+  downloadLinkErrors,
   findStale,
   loadCatalog,
   newestSimulator,
@@ -1288,22 +1289,38 @@ describe('built component pages', () => {
     assert.match(builtPageErrors(page(card) + page(card), component).join('\n'), /exactly one og:image/);
   });
 
-  it('rejects a download link to another site, which a browser opens instead of saving', () => {
-    const link = `<a href="https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>`;
+});
 
-    assert.match(builtPageErrors(page(card) + link, component).join('\n'), /download link/);
-  });
+describe('download links of the built site', () => {
+  const files = new Set(['Components/Buttons/GlowButton/GlowButton.swift', 'catalog/buttons/glow-button/index.html']);
+  const errors = (link) => downloadLinkErrors(`<p>${link}</p>`, 'catalog/buttons/glow-button/index.html', files);
 
   it('accepts a download link to a file of the site', () => {
-    const link = '<a href="/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>';
+    assert.deepEqual(errors('<a href="/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>'), []);
+  });
 
-    assert.deepEqual(builtPageErrors(page(card) + link, component), []);
+  it('rejects a download link to another site, which a browser opens instead of saving', () => {
+    const link = '<a href="https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>';
+
+    assert.match(errors(link).join('\n'), /catalog\/buttons\/glow-button\/index\.html: its download link to https:\/\/raw\.githubusercontent\.com/);
+  });
+
+  it('rejects a path the site does not serve with that case, which Pages answers with a 404 and a Mac does not notice', () => {
+    assert.equal(errors('<a href="/components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>').length, 1);
+  });
+
+  it('rejects a path that a browser reads as another site', () => {
+    assert.equal(errors('<a href="//evil.example/GlowButton.swift" download>x</a>').length, 1);
+    assert.equal(errors('<a href="/\\evil.example/GlowButton.swift" download>x</a>').length, 1);
+  });
+
+  it('reads a tag in capitals and one with a > inside a value', () => {
+    assert.equal(errors('<A HREF="https://evil.example/GlowButton.swift" DOWNLOAD>x</A>').length, 1);
+    assert.equal(errors('<a title="a > b" href="https://evil.example/GlowButton.swift" download>x</a>').length, 1);
   });
 
   it('leaves alone a link whose address only holds the word download', () => {
-    const link = '<a href="https://swiftuiblocks.dev/catalog/progress/download-pill-progress/" title="A download button">Download Pill Progress</a>';
-
-    assert.deepEqual(builtPageErrors(page(card) + link, component), []);
+    assert.deepEqual(errors('<a href="https://swiftuiblocks.dev/catalog/progress/download-pill-progress/" title="A download button">Download Pill Progress</a>'), []);
   });
 });
 

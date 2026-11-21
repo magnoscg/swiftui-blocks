@@ -3,10 +3,10 @@
 // nothing and fails if a component breaks a rule or a generated file is stale.
 // `docs` writes the uncommitted files the documentation site is built from.
 // `site` reads the built site and fails if a component page lost its own card,
-// or links a download to another site, where it would open instead of saving.
+// or a download link of any page does not point to a file the site serves.
 // `prune <major>` is for CI runners with an older SDK: it deletes the components
 // that need a newer iOS, so its result must never be committed.
-import { copyFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
@@ -15,6 +15,7 @@ import {
   builtPageErrors,
   componentsNewerThan,
   docsAssets,
+  downloadLinkErrors,
   findStale,
   loadCatalog,
   renderDocsPages,
@@ -56,16 +57,22 @@ if (command === 'generate') {
   }
   console.log(`The catalog is valid: ${components.length} component(s).`);
 } else if (command === 'site') {
-  const problems = components.flatMap((component) => {
-    const page = join(root, 'docs/dist/catalog', component.category.toLowerCase(), component.id, 'index.html');
-    return builtPageErrors(readFileSync(page, 'utf8'), component);
-  });
+  const dist = join(root, 'docs/dist');
+  const files = new Set(readdirSync(dist, { recursive: true }));
+  const pages = [...files].filter((file) => file.endsWith('.html'));
+  const problems = [
+    ...components.flatMap((component) => {
+      const page = join(dist, 'catalog', component.category.toLowerCase(), component.id, 'index.html');
+      return builtPageErrors(readFileSync(page, 'utf8'), component);
+    }),
+    ...pages.flatMap((page) => downloadLinkErrors(readFileSync(join(dist, page), 'utf8'), page, files)),
+  ];
   if (problems.length > 0) {
     console.error(`The built site has ${problems.length} problem(s):`);
     for (const problem of problems) console.error(`- ${problem}`);
     process.exit(1);
   }
-  console.log(`Every one of the ${components.length} component pages shares its own card and downloads from the site.`);
+  console.log(`Every one of the ${components.length} component pages shares its own card, and every download link of the ${pages.length} pages saves a file of the site.`);
 } else if (command === 'prune') {
   const removed = componentsNewerThan(components, pruneMajor);
   for (const component of removed) {

@@ -243,10 +243,21 @@ export function builtPageErrors(html, component) {
     if (contents.length !== 1) errors.push(`${component.name}: the page needs exactly one ${key}, found ${contents.length}`);
     else if (contents[0] !== card) errors.push(`${component.name}: its ${key} is ${contents[0]}, not ${card}`);
   }
-  for (const [tag] of html.matchAll(/<a\s[^>]*>/g)) {
-    const attributes = Object.fromEntries([...tag.matchAll(/\s([\w:-]+)(?:="([^"]*)")?/g)].map(([, key, value]) => [key, value]));
-    if ('download' in attributes && !/^\/(?!\/)/.test(attributes.href ?? '')) {
-      errors.push(`${component.name}: its download link to ${attributes.href} opens the file instead of saving it, because it points to another site`);
+  return errors;
+}
+
+// Returns the download links of a built page that would not save a file: a
+// browser ignores `download` on another site, and Pages answers 404 to a path
+// whose case differs, which a Mac does not notice. `files` holds the paths the
+// site serves, as written on disk.
+export function downloadLinkErrors(html, page, files) {
+  const errors = [];
+  for (const [tag] of html.matchAll(/<a\s(?:[^>"']|"[^"]*"|'[^']*')*>/gi)) {
+    const attributes = Object.fromEntries(
+      [...tag.matchAll(/\s([\w:-]+)(?:="([^"]*)"|='([^']*)')?/g)].map(([, key, double, single]) => [key.toLowerCase(), double ?? single ?? '']),
+    );
+    if ('download' in attributes && !files.has(attributes.href?.replace(/^\//, ''))) {
+      errors.push(`${page}: its download link to ${attributes.href} is not a file of the site, so it would not save`);
     }
   }
   return errors;
