@@ -15,6 +15,7 @@ interface Component {
   minIOS: string;
   apis: string[];
   origin: { kind: 'original' } | { kind: 'inspired'; credit: string; url: string } | { kind: 'adapted'; url: string; license: string };
+  path: string;
   shader?: string;
   rawURL: string;
   shaderRawURL?: string;
@@ -53,6 +54,11 @@ export function previewURL(component: Component) {
 /** The still image a page shows when it is shared, kept next to the preview it is made from. */
 export function cardURL(component: Component) {
   return `${RAW_BASE}/${component.preview.replace(/\.webp$/, '.jpg')}`;
+}
+
+/** A file of a component, copied into the site so a link with `download` saves it: from the repository, another site, it opens. */
+export function fileURL(path: string) {
+  return `${SITE_BASE}/${path}`;
 }
 
 export function pageURL(component: Component) {
