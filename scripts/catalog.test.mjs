@@ -1053,6 +1053,22 @@ describe('the documentation site', () => {
     assert.doesNotMatch(page, /ComponentOverview/);
   });
 
+  it('keeps what follows the summary in the first paragraph of the comment', () => {
+    const source = LONG.replace('/// A button that glows.', '/// A button that glows. A press that does not travel counts as a tap.');
+    const page = docsFor(meta(), source).pages.get(PAGE);
+
+    assert.deepEqual(propsOf(page, 'ComponentOverview', 'blocks'), [
+      { type: 'paragraph', text: 'A press that does not travel counts as a tap.' },
+    ]);
+  });
+
+  it('folds the usage below the line it marks, so the mark shows before unfolding', () => {
+    const source = LONG.replace('private let sample = GlowButton()\n', '').replace('// Step 23.', 'private let sample = GlowButton()');
+    const page = docsFor(meta(), source).pages.get(PAGE);
+
+    assert.match(page, /## Usage\n\n`````swift title="" mark=\{23\}\n/);
+  });
+
   it('tells the header how many lines the Swift file has', () => {
     const page = docsFor(meta(), LONG).pages.get(PAGE);
 

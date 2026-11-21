@@ -726,8 +726,7 @@ function renderDocsPage(component) {
   // The sidebar marks what does not run on the baseline.
   const badge = major > BASELINE_IOS ? ['sidebar:', '  badge:', `    text: iOS ${major}`] : [];
   const { overview, usage, call, api } = componentDocs(component.source, component.name);
-  // The header shows the summary, which the first paragraph of the comment repeats.
-  const description = overview?.slice(1) ?? [];
+  const description = withoutSummary(overview);
   const lines = component.source.trimEnd().split('\n').length;
   const components = '../../../../components';
   return [
@@ -748,8 +747,14 @@ function renderDocsPage(component) {
       : []),
     // An empty title keeps Expressive Code from taking one from a comment such as
     // `// GlowButton.swift`, which Copy code would then take for the file.
+    // A usage folds below the line it marks, so the mark shows before unfolding.
     ...(usage
-      ? ['## Usage', '', ...sourceBlock(usage, `swift title=""${call ? ` mark={${call}}` : ''}`, USAGE_SHOWN), '']
+      ? [
+          '## Usage',
+          '',
+          ...sourceBlock(usage, `swift title=""${call ? ` mark={${call}}` : ''}`, Math.max(USAGE_SHOWN, (call ?? 0) + 2)),
+          '',
+        ]
       : []),
     ...(api.length ? ['## API reference', '', `<ComponentApi tables={${JSON.stringify(api)}} />`, ''] : []),
     '## Code',
@@ -764,6 +769,16 @@ function renderDocsPage(component) {
 function sourceFence(source) {
   const longest = Math.max(0, ...(source.match(/`+/g) ?? []).map((run) => run.length));
   return '`'.repeat(Math.max(SHORTEST_FENCE, longest + 1));
+}
+
+// The comment of a component without its first sentence, the summary that the
+// header of its page already shows. What follows it in the same paragraph stays.
+function withoutSummary(overview) {
+  if (!overview?.length) return [];
+  const [first, ...rest] = overview;
+  if (first.type !== 'paragraph') return overview;
+  const after = first.text.split(/(?<=[.!?])\s+(?=[A-Z])/).slice(1).join(' ');
+  return after ? [{ ...first, text: after }, ...rest] : rest;
 }
 
 // A source in its fence, folded on the page past `shown` lines. Only numbers

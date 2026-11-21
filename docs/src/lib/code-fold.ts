@@ -28,4 +28,9 @@ document.fonts.ready.then(() => {
     });
     fold.append(button);
   }
+  // A folded block is shorter than the page first laid out, so a link to a part below it lands again.
+  const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (target && folds.some((fold) => fold.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+    target.scrollIntoView();
+  }
 });

@@ -114,6 +114,18 @@ const component = components.find((candidate) => pageURL(candidate) === Astro.ur
     color: var(--sl-color-white);
   }
 
+  @media (pointer: coarse) {
+    .crumbs {
+      align-items: center;
+    }
+
+    .crumbs a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+    }
+  }
+
   .crumbs + .page-title {
     margin-top: 0.25rem;
   }

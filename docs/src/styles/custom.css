@@ -92,7 +92,8 @@ h4 {
 /* A long usage or file opens folded, fading out above the button that shows
    the rest (lib/code-fold.ts). */
 .sl-markdown-content .code-fold[data-folded] .expressive-code pre {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   mask-image: linear-gradient(black calc(100% - 3rem), transparent);
 }
 
@@ -310,5 +311,11 @@ h4 {
 
   starlight-theme-select select {
     min-height: 2.75rem;
+  }
+
+  .sl-markdown-content summary {
+    box-sizing: border-box;
+    min-height: 2.75rem;
+    padding-block: 0.5rem;
   }
 }
