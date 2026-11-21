@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.16.0 - 2026-11-21
+
 ### Changed
 
 - The icon of the Claude Code plugin fills its whole square, so a directory
