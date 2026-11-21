@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.17.1 - 2026-11-21
+
 ### Fixed
 
 - Download .swift and Download .metal on the page of a component, and the
