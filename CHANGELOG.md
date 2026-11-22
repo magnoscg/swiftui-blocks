@@ -7,6 +7,16 @@ on `main`.
 
 ## Unreleased
 
+## 0.17.1 - 2026-11-21
+
+### Fixed
+
+- Download .swift and Download .metal on the page of a component, and the
+  download links above its code, save the file. Before, the browser opened it
+  as text, because they went to raw.githubusercontent.com, another site, where
+  browsers ignore `download`. The site now serves the files of every component
+  itself.
+
 ## 0.17.0 - 2026-11-21
 
 ### Changed

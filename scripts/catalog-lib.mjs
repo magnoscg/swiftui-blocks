@@ -246,6 +246,23 @@ export function builtPageErrors(html, component) {
   return errors;
 }
 
+// Returns the download links of a built page that would not save a file: a
+// browser ignores `download` on another site, and Pages answers 404 to a path
+// whose case differs, which a Mac does not notice. `files` holds the paths the
+// site serves, as written on disk.
+export function downloadLinkErrors(html, page, files) {
+  const errors = [];
+  for (const [tag] of html.matchAll(/<a\s(?:[^>"']|"[^"]*"|'[^']*')*>/gi)) {
+    const attributes = Object.fromEntries(
+      [...tag.matchAll(/\s([\w:-]+)(?:="([^"]*)"|='([^']*)')?/g)].map(([, key, double, single]) => [key.toLowerCase(), double ?? single ?? '']),
+    );
+    if ('download' in attributes && !files.has(attributes.href?.replace(/^\//, ''))) {
+      errors.push(`${page}: its download link to ${attributes.href} is not a file of the site, so it would not save`);
+    }
+  }
+  return errors;
+}
+
 function validateCard(root, relative, name, files, errors, requirePreview) {
   const cardFile = `${name}.jpg`;
   if (!files.includes(cardFile)) {
@@ -793,13 +810,19 @@ function sourceBlock(source, meta, shown) {
   return [`<div class="code-fold" data-lines="${count}" data-shown="${shown}">`, '', ...block, '', '</div>'];
 }
 
+// A link that saves a file of a component from the site, which serves it.
+// Markdown has no way to say `download`, so the page holds the element.
+function downloadLink(path, text) {
+  return `<a href="${SITE_BASE}/${path}" download="${path.split('/').pop()}">${text}</a>`;
+}
+
 function renderDocsSource(component) {
   const swift = [...sourceBlock(component.source, `swift title="${component.name}.swift"`, CODE_SHOWN), ''];
   if (!component.shader) {
-    return [`Copy this code into your project, or [download the file](${RAW_BASE}/${component.path}).`, '', ...swift];
+    return [`Copy this code into your project, or ${downloadLink(component.path, 'download the file')}.`, '', ...swift];
   }
   return [
-    `Copy both files into your project: the Swift file and the Metal shader it draws with. Or download [${component.name}.swift](${RAW_BASE}/${component.path}) and [${component.name}.metal](${RAW_BASE}/${component.shader}).`,
+    `Copy both files into your project: the Swift file and the Metal shader it draws with. Or download ${downloadLink(component.path, `${component.name}.swift`)} and ${downloadLink(component.shader, `${component.name}.metal`)}.`,
     '',
     ...swift,
     // The site has no grammar for Metal, which is C++.
@@ -819,9 +842,12 @@ function docsPage(component) {
 }
 
 // Returns the files the site serves as they are: from the repository root to
-// their place in docs/public.
-export function docsAssets() {
-  return new Map(['catalog.json', 'llms.txt', SEARCH_INDEX, 'llms-full.txt'].map((file) => [file, `${DOCS_PUBLIC}/${file}`]));
+// their place in docs/public. The files of a component keep their path, so the
+// page of the component can link to them on its own site, where `download`
+// saves a file: a browser ignores it on a link to another site.
+export function docsAssets(components) {
+  const sources = components.flatMap(({ path, shader }) => (shader ? [path, shader] : [path]));
+  return new Map(['catalog.json', 'llms.txt', SEARCH_INDEX, 'llms-full.txt', ...sources].map((file) => [file, `${DOCS_PUBLIC}/${file}`]));
 }
 
 // Returns the generated files whose content on disk is missing or out of date.

@@ -10,6 +10,7 @@ import {
   categoryCollisions,
   componentsNewerThan,
   docsAssets,
+  downloadLinkErrors,
   findStale,
   loadCatalog,
   newestSimulator,
@@ -877,7 +878,7 @@ describe('the documentation site', () => {
     addComponent(root, { metadata, source });
     const { components, errors } = loadCatalog(root);
     assert.deepEqual(errors, []);
-    return { pages: renderDocsPages(components), assets: docsAssets() };
+    return { pages: renderDocsPages(components), assets: docsAssets(components) };
   }
 
   it('says so when the catalog is empty', () => {
@@ -990,7 +991,7 @@ describe('the documentation site', () => {
   it('offers one file to copy when there is no shader', () => {
     const page = docsFor().pages.get(PAGE);
 
-    assert.match(page, /Copy this code into your project, or \[download the file\]\(/);
+    assert.match(page, /Copy this code into your project, or <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.swift" download="GlowButton\.swift">download the file<\/a>\./);
     assert.equal(page.match(/^`````\w+ title="\w/gm).length, 1);
   });
 
@@ -1154,7 +1155,10 @@ describe('the documentation site', () => {
     const page = renderDocsPages(loadCatalog(root).components).get(PAGE);
 
     assert.match(page, /Copy both files into your project/);
-    assert.match(page, /\[GlowButton\.swift\]\([^)]+\/GlowButton\.swift\) and \[GlowButton\.metal\]\([^)]+\/GlowButton\.metal\)/);
+    assert.match(
+      page,
+      /download <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.swift" download="GlowButton\.swift">GlowButton\.swift<\/a> and <a href="\/Components\/Buttons\/GlowButton\/GlowButton\.metal" download="GlowButton\.metal">GlowButton\.metal<\/a>\./,
+    );
     assert.match(page, /`````swift title="GlowButton\.swift"\n\/\/ SPDX-License-Identifier: MIT/);
     assert.match(page, /`````cpp title="GlowButton\.metal"\n\/\/ SPDX-License-Identifier: MIT\n#include/);
     assert.ok(page.indexOf('title="GlowButton.swift"') < page.indexOf('title="GlowButton.metal"'));
@@ -1167,6 +1171,15 @@ describe('the documentation site', () => {
     assert.equal(assets.get('catalog.json'), 'docs/public/catalog.json');
     assert.equal(assets.get('components.tsv'), 'docs/public/components.tsv');
     assert.equal(assets.has('Components/Buttons/GlowButton/GlowButton.webp'), false);
+  });
+
+  it('serves the files of each component from the site, where a link saves them instead of opening them', () => {
+    const root = makeRoot();
+    addComponent(root, { source: swiftWithShader(), shader: metal() });
+    const assets = docsAssets(loadCatalog(root).components);
+
+    assert.equal(assets.get('Components/Buttons/GlowButton/GlowButton.swift'), 'docs/public/Components/Buttons/GlowButton/GlowButton.swift');
+    assert.equal(assets.get('Components/Buttons/GlowButton/GlowButton.metal'), 'docs/public/Components/Buttons/GlowButton/GlowButton.metal');
   });
 });
 
@@ -1274,6 +1287,40 @@ describe('built component pages', () => {
 
   it('rejects a page with two images', () => {
     assert.match(builtPageErrors(page(card) + page(card), component).join('\n'), /exactly one og:image/);
+  });
+
+});
+
+describe('download links of the built site', () => {
+  const files = new Set(['Components/Buttons/GlowButton/GlowButton.swift', 'catalog/buttons/glow-button/index.html']);
+  const errors = (link) => downloadLinkErrors(`<p>${link}</p>`, 'catalog/buttons/glow-button/index.html', files);
+
+  it('accepts a download link to a file of the site', () => {
+    assert.deepEqual(errors('<a href="/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>'), []);
+  });
+
+  it('rejects a download link to another site, which a browser opens instead of saving', () => {
+    const link = '<a href="https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>';
+
+    assert.match(errors(link).join('\n'), /catalog\/buttons\/glow-button\/index\.html: its download link to https:\/\/raw\.githubusercontent\.com/);
+  });
+
+  it('rejects a path the site does not serve with that case, which Pages answers with a 404 and a Mac does not notice', () => {
+    assert.equal(errors('<a href="/components/Buttons/GlowButton/GlowButton.swift" download="GlowButton.swift">Download .swift</a>').length, 1);
+  });
+
+  it('rejects a path that a browser reads as another site', () => {
+    assert.equal(errors('<a href="//evil.example/GlowButton.swift" download>x</a>').length, 1);
+    assert.equal(errors('<a href="/\\evil.example/GlowButton.swift" download>x</a>').length, 1);
+  });
+
+  it('reads a tag in capitals and one with a > inside a value', () => {
+    assert.equal(errors('<A HREF="https://evil.example/GlowButton.swift" DOWNLOAD>x</A>').length, 1);
+    assert.equal(errors('<a title="a > b" href="https://evil.example/GlowButton.swift" download>x</a>').length, 1);
+  });
+
+  it('leaves alone a link whose address only holds the word download', () => {
+    assert.deepEqual(errors('<a href="https://swiftuiblocks.dev/catalog/progress/download-pill-progress/" title="A download button">Download Pill Progress</a>'), []);
   });
 });
 
