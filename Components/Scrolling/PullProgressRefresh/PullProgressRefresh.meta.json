@@ -6,7 +6,7 @@
   "summary": "A custom pull to refresh whose ring fills with the pull distance and starts a refresh when released past a threshold.",
   "keywords": {
     "en": ["pull to refresh", "refresh", "progress ring", "scroll", "reload", "custom indicator"],
-    "es": ["deslizar para actualizar", "actualizar", "anillo de progreso", "desplazamiento", "recargar", "indicador"]
+    "es": ["deslizar para actualizar", "actualizar", "anillo de progreso", "desplazamiento", "recargar", "indicador", "tirar para refrescar"]
   },
   "difficulty": "intermediate",
   "minIOS": "18.0",

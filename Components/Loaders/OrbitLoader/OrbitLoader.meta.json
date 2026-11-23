@@ -6,7 +6,7 @@
   "summary": "A loading indicator with dots that orbit a glowing center.",
   "keywords": {
     "en": ["loader", "orbit", "dots", "spinner", "loading", "activity indicator"],
-    "es": ["cargador", "órbita", "puntos", "carga", "spinner", "indicador de actividad"]
+    "es": ["cargador", "órbita", "puntos", "carga", "spinner", "indicador de actividad", "cargando"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

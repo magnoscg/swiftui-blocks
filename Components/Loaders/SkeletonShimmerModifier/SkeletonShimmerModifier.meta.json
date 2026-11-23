@@ -5,7 +5,7 @@
   "category": "Loaders",
   "summary": "A view modifier that turns any view into a shimmering redacted placeholder while it loads.",
   "keywords": {
-    "en": ["skeleton", "shimmer", "placeholder", "redacted", "loading", "list", "view modifier"],
+    "en": ["skeleton", "shimmer", "placeholder", "redacted", "loading", "list", "view modifier", "content placeholder"],
     "es": ["esqueleto", "brillo", "marcador de posición", "carga", "lista", "cargando", "modificador"]
   },
   "difficulty": "intermediate",

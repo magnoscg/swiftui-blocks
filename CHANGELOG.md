@@ -17,6 +17,11 @@ on `main`.
 - The search box on the landing page suggests one example in the language of
   the page, "button that shines" at `/` and "botón que brilla" at `/es/`, short
   enough to show whole on a phone.
+- The search on the landing page matches the start of words, so "rain" no
+  longer finds "grain", and knows more of the words people type, such as
+  "shiny", "cargando", "muro de pago" or "gráfico de tarta". Of 175 everyday
+  searches in English and Spanish, 172 now show what they ask for first, up
+  from 139.
 
 ## 0.18.1 - 2026-11-23
 

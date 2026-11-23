@@ -5,8 +5,8 @@
   "category": "Feedback",
   "summary": "A modifier that shakes a view with keyframes whenever a trigger value changes.",
   "keywords": {
-    "en": ["shake", "error", "validation", "form", "keyframes", "wiggle", "invalid input"],
-    "es": ["agitar", "sacudir", "error", "validación", "formulario", "fotogramas clave", "entrada no válida"]
+    "en": ["shake", "error", "validation", "form", "keyframes", "wiggle", "invalid input", "wrong password"],
+    "es": ["agitar", "sacudir", "error", "validación", "formulario", "fotogramas clave", "entrada no válida", "temblar", "contraseña incorrecta", "fallo"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

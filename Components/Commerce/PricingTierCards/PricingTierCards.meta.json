@@ -6,7 +6,7 @@
   "summary": "Snapping horizontal pricing cards with the recommended plan highlighted and enlarged.",
   "keywords": {
     "en": ["pricing", "plans", "tiers", "cards", "paywall", "subscription", "carousel"],
-    "es": ["precios", "planes", "tarifas", "tarjetas", "paywall", "suscripción", "carrusel"]
+    "es": ["precios", "planes", "tarifas", "tarjetas", "paywall", "suscripción", "carrusel", "muro de pago"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

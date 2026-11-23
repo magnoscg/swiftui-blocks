@@ -6,7 +6,7 @@
   "summary": "A soft gradient blob drawn in a canvas that keeps changing shape while content loads.",
   "keywords": {
     "en": ["loader", "blob", "morph", "canvas", "organic", "spinner", "loading"],
-    "es": ["cargador", "mancha", "transformación", "lienzo", "orgánico", "carga", "animación"]
+    "es": ["cargador", "mancha", "transformación", "lienzo", "orgánico", "carga", "animación", "cargando"]
   },
   "difficulty": "advanced",
   "minIOS": "18.0",

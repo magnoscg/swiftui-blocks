@@ -262,7 +262,7 @@ enum ComponentRegistry {
             title: "Like Burst Button",
             category: "Buttons",
             summary: "A heart button that pops and throws out a burst of small particles when liked.",
-            keywords: ["like", "heart", "favorite", "particles", "burst", "keyframes", "button", "me gusta", "corazón", "favorito", "partículas", "explosión", "botón"],
+            keywords: ["like", "heart", "favorite", "particles", "burst", "keyframes", "button", "me gusta", "corazón", "favorito", "partículas", "explosión", "botón", "animación de corazones"],
             minIOS: "18.0",
             demo: { AnyView(LikeBurstButtonDemo()) }
         ),
@@ -316,7 +316,7 @@ enum ComponentRegistry {
             title: "Shimmer Button",
             category: "Buttons",
             summary: "A gradient capsule button with a band of light that sweeps across it in a loop.",
-            keywords: ["shimmer", "shine", "button", "light sweep", "gradient", "call to action", "glossy", "brillo", "destello", "botón", "barrido de luz", "degradado", "llamada a la acción"],
+            keywords: ["shimmer", "shine", "button", "light sweep", "gradient", "call to action", "glossy", "shiny", "glow", "sparkle", "brillo", "destello", "botón", "barrido de luz", "degradado", "llamada a la acción", "brillante", "reluciente"],
             minIOS: "18.0",
             demo: { AnyView(ShimmerButtonDemo()) }
         ),
@@ -433,7 +433,7 @@ enum ComponentRegistry {
             title: "Animated Donut Chart",
             category: "Charts",
             summary: "A donut chart whose segments grow in one by one, and the selected segment lifts out.",
-            keywords: ["donut chart", "pie chart", "chart", "swift charts", "segments", "selection", "spending", "gráfico de donut", "gráfico circular", "gráfica", "sectores", "selección", "gastos"],
+            keywords: ["donut chart", "pie chart", "chart", "swift charts", "segments", "selection", "spending", "gráfico de donut", "gráfico circular", "gráfica", "sectores", "selección", "gastos", "gráfico de tarta", "gráfico de pastel"],
             minIOS: "18.0",
             demo: { AnyView(AnimatedDonutChartDemo()) }
         ),
@@ -616,7 +616,7 @@ enum ComponentRegistry {
             title: "Pricing Tier Cards",
             category: "Commerce",
             summary: "Snapping horizontal pricing cards with the recommended plan highlighted and enlarged.",
-            keywords: ["pricing", "plans", "tiers", "cards", "paywall", "subscription", "carousel", "precios", "planes", "tarifas", "tarjetas", "paywall", "suscripción", "carrusel"],
+            keywords: ["pricing", "plans", "tiers", "cards", "paywall", "subscription", "carousel", "precios", "planes", "tarifas", "tarjetas", "paywall", "suscripción", "carrusel", "muro de pago"],
             minIOS: "18.0",
             demo: { AnyView(PricingTierCardsDemo()) }
         ),
@@ -634,7 +634,7 @@ enum ComponentRegistry {
             title: "Trial Timeline Paywall",
             category: "Commerce",
             summary: "A paywall that shows what happens on each day of the free trial, with the plans and the button to start it.",
-            keywords: ["paywall", "free trial", "trial timeline", "subscription", "pricing", "upgrade", "in-app purchase", "paywall", "prueba gratis", "línea de tiempo", "suscripción", "precios", "mejorar plan", "compra dentro de la app"],
+            keywords: ["paywall", "free trial", "trial timeline", "subscription", "pricing", "upgrade", "in-app purchase", "paywall", "prueba gratis", "línea de tiempo", "suscripción", "precios", "mejorar plan", "compra dentro de la app", "muro de pago"],
             minIOS: "18.0",
             demo: { AnyView(TrialTimelinePaywallDemo()) }
         ),
@@ -1078,7 +1078,7 @@ enum ComponentRegistry {
             title: "Shake Error Modifier",
             category: "Feedback",
             summary: "A modifier that shakes a view with keyframes whenever a trigger value changes.",
-            keywords: ["shake", "error", "validation", "form", "keyframes", "wiggle", "invalid input", "agitar", "sacudir", "error", "validación", "formulario", "fotogramas clave", "entrada no válida"],
+            keywords: ["shake", "error", "validation", "form", "keyframes", "wiggle", "invalid input", "wrong password", "agitar", "sacudir", "error", "validación", "formulario", "fotogramas clave", "entrada no válida", "temblar", "contraseña incorrecta", "fallo"],
             minIOS: "18.0",
             demo: { AnyView(ShakeErrorModifierDemo()) }
         ),
@@ -1087,7 +1087,7 @@ enum ComponentRegistry {
             title: "Toast Banner",
             category: "Feedback",
             summary: "A toast modifier that slides a banner from the top, announces it to VoiceOver and dismisses by itself.",
-            keywords: ["toast", "banner", "notification", "alert", "message", "auto dismiss", "feedback", "toast", "aviso", "notificación", "alerta", "mensaje", "banner", "autodescartar"],
+            keywords: ["toast", "banner", "notification", "alert", "message", "auto dismiss", "feedback", "toast", "aviso", "notificación", "alerta", "mensaje", "banner", "autodescartar", "mensaje emergente"],
             minIOS: "18.0",
             demo: { AnyView(ToastBannerDemo()) }
         ),
@@ -1228,7 +1228,7 @@ enum ComponentRegistry {
             title: "Glass Button Gallery",
             category: "Glass",
             summary: "A reference gallery of the glass and prominent glass button styles in several sizes, shapes and tints.",
-            keywords: ["button", "button style", "glass", "glass prominent", "liquid glass", "gallery", "control size", "tint", "botón", "estilo de botón", "cristal", "cristal líquido", "galería", "tamaños", "tintes"],
+            keywords: ["button", "button style", "glass", "glass prominent", "liquid glass", "gallery", "control size", "tint", "glass effect", "botón", "estilo de botón", "cristal", "cristal líquido", "galería", "tamaños", "tintes", "efecto cristal"],
             minIOS: "26.0",
             demo: {
                 guard #available(iOS 26.0, *) else { return nil }
@@ -1459,7 +1459,7 @@ enum ComponentRegistry {
             title: "Password Strength Field",
             category: "Inputs",
             summary: "A password field with a strength meter and a checklist of rules that tick off as they are met.",
-            keywords: ["password", "secure field", "strength meter", "checklist", "validation", "sign up", "form", "contraseña", "campo seguro", "fortaleza", "lista de requisitos", "validación", "registro", "formulario"],
+            keywords: ["password", "secure field", "strength meter", "checklist", "validation", "sign up", "form", "contraseña", "campo seguro", "fortaleza", "lista de requisitos", "validación", "registro", "formulario", "fuerza de la contraseña"],
             minIOS: "18.0",
             demo: { AnyView(PasswordStrengthFieldDemo()) }
         ),
@@ -1726,7 +1726,7 @@ enum ComponentRegistry {
             title: "Arc Segments Loader",
             category: "Loaders",
             summary: "A spinner with gradient arc segments of different lengths turning in opposite directions.",
-            keywords: ["loader", "arc", "segments", "spinner", "ring", "rotating", "loading", "cargador", "arco", "segmentos", "anillo", "giratorio", "carga"],
+            keywords: ["loader", "arc", "segments", "spinner", "ring", "rotating", "loading", "cargador", "arco", "segmentos", "anillo", "giratorio", "carga", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(ArcSegmentsLoaderDemo()) }
         ),
@@ -1735,7 +1735,7 @@ enum ComponentRegistry {
             title: "Blob Morph Loader",
             category: "Loaders",
             summary: "A soft gradient blob drawn in a canvas that keeps changing shape while content loads.",
-            keywords: ["loader", "blob", "morph", "canvas", "organic", "spinner", "loading", "cargador", "mancha", "transformación", "lienzo", "orgánico", "carga", "animación"],
+            keywords: ["loader", "blob", "morph", "canvas", "organic", "spinner", "loading", "cargador", "mancha", "transformación", "lienzo", "orgánico", "carga", "animación", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(BlobMorphLoaderDemo()) }
         ),
@@ -1744,7 +1744,7 @@ enum ComponentRegistry {
             title: "Dots Pulse Loader",
             category: "Loaders",
             summary: "Three dots that pulse in sequence, as in a typing indicator.",
-            keywords: ["loader", "dots", "pulse", "typing indicator", "chat", "loading", "cargador", "puntos", "pulso", "escribiendo", "chat", "carga"],
+            keywords: ["loader", "dots", "pulse", "typing indicator", "chat", "loading", "cargador", "puntos", "pulso", "escribiendo", "chat", "carga", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(DotsPulseLoaderDemo()) }
         ),
@@ -1753,7 +1753,7 @@ enum ComponentRegistry {
             title: "Orbit Loader",
             category: "Loaders",
             summary: "A loading indicator with dots that orbit a glowing center.",
-            keywords: ["loader", "orbit", "dots", "spinner", "loading", "activity indicator", "cargador", "órbita", "puntos", "carga", "spinner", "indicador de actividad"],
+            keywords: ["loader", "orbit", "dots", "spinner", "loading", "activity indicator", "cargador", "órbita", "puntos", "carga", "spinner", "indicador de actividad", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(OrbitLoaderDemo()) }
         ),
@@ -1762,7 +1762,7 @@ enum ComponentRegistry {
             title: "Skeleton Shimmer Modifier",
             category: "Loaders",
             summary: "A view modifier that turns any view into a shimmering redacted placeholder while it loads.",
-            keywords: ["skeleton", "shimmer", "placeholder", "redacted", "loading", "list", "view modifier", "esqueleto", "brillo", "marcador de posición", "carga", "lista", "cargando", "modificador"],
+            keywords: ["skeleton", "shimmer", "placeholder", "redacted", "loading", "list", "view modifier", "content placeholder", "esqueleto", "brillo", "marcador de posición", "carga", "lista", "cargando", "modificador"],
             minIOS: "18.0",
             demo: { AnyView(SkeletonShimmerModifierDemo()) }
         ),
@@ -1771,7 +1771,7 @@ enum ComponentRegistry {
             title: "Symbol Breathe Loader",
             category: "Loaders",
             summary: "A loading indicator made of an SF Symbol that uses the breathe and rotate symbol effects.",
-            keywords: ["loader", "sf symbols", "symbol effect", "breathe", "rotate", "loading", "cargador", "símbolo", "efecto de símbolo", "respirar", "rotación", "carga"],
+            keywords: ["loader", "sf symbols", "symbol effect", "breathe", "rotate", "loading", "cargador", "símbolo", "efecto de símbolo", "respirar", "rotación", "carga", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(SymbolBreatheLoaderDemo()) }
         ),
@@ -1780,7 +1780,7 @@ enum ComponentRegistry {
             title: "Wave Bars Loader",
             category: "Loaders",
             summary: "A loading indicator with bars that rise and fall like an audio equalizer.",
-            keywords: ["loader", "bars", "equalizer", "audio", "wave", "loading", "cargador", "barras", "ecualizador", "audio", "onda", "carga"],
+            keywords: ["loader", "bars", "equalizer", "audio", "wave", "loading", "cargador", "barras", "ecualizador", "audio", "onda", "carga", "cargando"],
             minIOS: "18.0",
             demo: { AnyView(WaveBarsLoaderDemo()) }
         ),
@@ -2422,7 +2422,7 @@ enum ComponentRegistry {
             title: "Onboarding Pager",
             category: "Scrolling",
             summary: "A full-screen onboarding flow with swipeable pages, a progress indicator and a button that advances or finishes.",
-            keywords: ["onboarding", "welcome", "pager", "walkthrough", "intro", "first launch", "tutorial", "onboarding", "bienvenida", "paginador", "recorrido", "introducción", "primer inicio", "tutorial"],
+            keywords: ["onboarding", "welcome", "pager", "walkthrough", "intro", "first launch", "tutorial", "onboarding", "bienvenida", "paginador", "recorrido", "introducción", "primer inicio", "tutorial", "pantallas de bienvenida"],
             minIOS: "18.0",
             demo: { AnyView(OnboardingPagerDemo()) }
         ),
@@ -2458,7 +2458,7 @@ enum ComponentRegistry {
             title: "Pull Progress Refresh",
             category: "Scrolling",
             summary: "A custom pull to refresh whose ring fills with the pull distance and starts a refresh when released past a threshold.",
-            keywords: ["pull to refresh", "refresh", "progress ring", "scroll", "reload", "custom indicator", "deslizar para actualizar", "actualizar", "anillo de progreso", "desplazamiento", "recargar", "indicador"],
+            keywords: ["pull to refresh", "refresh", "progress ring", "scroll", "reload", "custom indicator", "deslizar para actualizar", "actualizar", "anillo de progreso", "desplazamiento", "recargar", "indicador", "tirar para refrescar"],
             minIOS: "18.0",
             demo: { AnyView(PullProgressRefreshDemo()) }
         ),
@@ -2653,7 +2653,7 @@ enum ComponentRegistry {
             title: "Marquee Text",
             category: "Text",
             summary: "A single line of text that scrolls horizontally only when it does not fit.",
-            keywords: ["marquee", "scrolling text", "ticker", "overflow", "long text", "now playing", "auto scroll", "marquesina", "texto desplazable", "desplazamiento", "texto largo", "reproduciendo", "desbordamiento"],
+            keywords: ["marquee", "scrolling text", "ticker", "overflow", "long text", "now playing", "auto scroll", "marquesina", "texto desplazable", "desplazamiento", "texto largo", "reproduciendo", "desbordamiento", "texto en movimiento"],
             minIOS: "18.0",
             demo: { AnyView(MarqueeTextDemo()) }
         ),
@@ -2716,7 +2716,7 @@ enum ComponentRegistry {
             title: "Typewriter Text",
             category: "Text",
             summary: "Text that types itself one character at a time, followed by a blinking cursor.",
-            keywords: ["typewriter", "typing", "cursor", "blinking", "text animation", "terminal", "characters", "máquina de escribir", "escribir", "cursor", "parpadeo", "animación de texto", "terminal", "letras"],
+            keywords: ["typewriter", "typing", "cursor", "blinking", "text animation", "terminal", "characters", "typewriter effect", "máquina de escribir", "escribir", "cursor", "parpadeo", "animación de texto", "terminal", "letras"],
             minIOS: "18.0",
             demo: { AnyView(TypewriterTextDemo()) }
         ),

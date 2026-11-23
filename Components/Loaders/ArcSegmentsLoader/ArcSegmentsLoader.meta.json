@@ -6,7 +6,7 @@
   "summary": "A spinner with gradient arc segments of different lengths turning in opposite directions.",
   "keywords": {
     "en": ["loader", "arc", "segments", "spinner", "ring", "rotating", "loading"],
-    "es": ["cargador", "arco", "segmentos", "anillo", "giratorio", "carga"]
+    "es": ["cargador", "arco", "segmentos", "anillo", "giratorio", "carga", "cargando"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",
