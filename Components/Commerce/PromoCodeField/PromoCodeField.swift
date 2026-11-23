@@ -116,8 +116,13 @@ struct PromoCodeField: View {
 
             Spacer(minLength: 0)
 
-            Button("Remove") {
+            Button {
                 appliedCode = nil
+            } label: {
+                Text("Remove")
+                    .padding(13)
+                    .contentShape(.rect)
+                    .padding(-13)
             }
             .font(.subheadline)
         }
