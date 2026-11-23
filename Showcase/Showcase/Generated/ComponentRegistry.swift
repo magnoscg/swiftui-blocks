@@ -558,6 +558,15 @@ enum ComponentRegistry {
             demo: { AnyView(NestedCommentThreadDemo()) }
         ),
         ShowcaseEntry(
+            id: "swipe-to-reply-bubble",
+            title: "Swipe To Reply Bubble",
+            category: "Chat",
+            summary: "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+            keywords: ["swipe to reply", "reply", "quote", "message", "chat bubble", "drag", "haptic", "messaging", "deslizar para responder", "responder", "citar", "mensaje", "burbuja de chat", "arrastrar", "háptica", "mensajería"],
+            minIOS: "18.0",
+            demo: { AnyView(SwipeToReplyBubbleDemo()) }
+        ),
+        ShowcaseEntry(
             id: "tapback-reaction-bubble",
             title: "Tapback Reaction Bubble",
             category: "Chat",

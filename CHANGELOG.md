@@ -18,6 +18,9 @@ on `main`.
 - Alphabet Indexed List, for iOS 26: a list in sections by the first letter of
   each name, ignoring accents, with the system's index of letters to jump
   between them and the names that start with a number or a symbol under #.
+- Swipe To Reply Bubble, a message bubble that slides toward the trailing edge
+  to reply, with a reply arrow behind it and a tap of the phone when the drag
+  passes the point of no return. VoiceOver offers it as a Reply action.
 
 ## 0.17.1 - 2026-11-21
 

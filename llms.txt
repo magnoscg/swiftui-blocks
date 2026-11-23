@@ -19,7 +19,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Calendars: CalendarMonthGrid, CalendarRangeSelector, DateStripPicker, DayScheduleTimeline
 - Cards: AvatarStack, ExpandableInfoCard, HolographicCard (Metal), SwipeableCardStack, TiltCard, WalletCardStack
 - Charts: AnimatedBarChart, AnimatedDonutChart, CandlestickChart, ContributionHeatmap, GaugeChart, InteractiveLineChart, LineChartDrawIn, RadarChart, ScrollableBarChart, SparklineStatTile, Surface3DChart (iOS 26.0+)
-- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, TapbackReactionBubble, TypingIndicatorBubble
+- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, SwipeToReplyBubble, TapbackReactionBubble, TypingIndicatorBubble
 - Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, TrialTimelinePaywall
 - Controls: AnimatedRadioButton, CheckmarkBoxToggleStyle, CircularRangeSlider, CounterStepper, DayNightToggle, FilterChipGroup, IconSwitchToggleStyle, RangeSlider, RulerScrollPicker, SelectAllChecklist, SettingsToggleRow, SlidingSegmentedPicker, SpringToggleStyle, SwipeToConfirmSlider, TickMarkSlider (iOS 26.0+), WeekdaySegmentedPicker
 - Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape

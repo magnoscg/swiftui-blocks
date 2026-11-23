@@ -1,5 +1,5 @@
 {
-  "count": 304,
+  "count": 305,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -2493,6 +2493,49 @@
       "path": "Components/Chat/NestedCommentThread/NestedCommentThread.swift",
       "preview": "Components/Chat/NestedCommentThread/NestedCommentThread.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/NestedCommentThread/NestedCommentThread.swift"
+    },
+    {
+      "id": "swipe-to-reply-bubble",
+      "name": "SwipeToReplyBubble",
+      "title": "Swipe To Reply Bubble",
+      "category": "Chat",
+      "summary": "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+      "keywords": {
+        "en": [
+          "swipe to reply",
+          "reply",
+          "quote",
+          "message",
+          "chat bubble",
+          "drag",
+          "haptic",
+          "messaging"
+        ],
+        "es": [
+          "deslizar para responder",
+          "responder",
+          "citar",
+          "mensaje",
+          "burbuja de chat",
+          "arrastrar",
+          "háptica",
+          "mensajería"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "DragGesture",
+        "GestureState",
+        "sensoryFeedback",
+        "accessibilityAction"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift",
+      "preview": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift"
     },
     {
       "id": "tapback-reaction-bubble",
