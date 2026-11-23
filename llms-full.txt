@@ -10257,7 +10257,8 @@ struct SwipeToReplyBubble<Content: View>: View {
     }
 
     private var swipe: some Gesture {
-        DragGesture(minimumDistance: 14)
+        // In global space the start of a drag stays put while the conversation scrolls under it.
+        DragGesture(minimumDistance: 14, coordinateSpace: .global)
             .updating($translation) { value, state, _ in
                 if engagedDrag == value.startLocation || SwipeToReplyBubblePhysics.engages(value.translation) {
                     state = value.translation.width * forward
