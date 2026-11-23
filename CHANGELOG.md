@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.18.1 - 2026-11-23
+
 ### Changed
 
 - The prompts on the landing page keep drifting under the pointer. Only focus
