@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.18.0 - 2026-11-23
+
 ### Added
 
 - Minimizing Navigation Bar, for iOS 27: a navigation stack whose bar gets out
