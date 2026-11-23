@@ -11,6 +11,8 @@ on `main`.
 
 - The prompts on the landing page keep drifting under the pointer. Only focus
   on a card holds them, so the card reached with the keyboard stays in place.
+- The cards of that strip no longer name the Swift file under each preview,
+  and its title reads "What you ask, and what your agent adds".
 
 ## 0.18.0 - 2026-11-23
 
