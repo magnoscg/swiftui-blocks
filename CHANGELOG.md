@@ -15,6 +15,9 @@ on `main`.
 - Multi Item Drag Grid, for iOS 27: a grid where tapping selects items and
   dragging one of them carries the whole selection to a drop target, as a
   single system drag.
+- Alphabet Indexed List, for iOS 26: a list in sections by the first letter of
+  each name, ignoring accents, with the system's index of letters to jump
+  between them and the names that start with a number or a symbol under #.
 
 ## 0.17.1 - 2026-11-21
 

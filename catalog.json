@@ -1,5 +1,5 @@
 {
-  "count": 303,
+  "count": 304,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -7132,6 +7132,49 @@
       "path": "Components/Lists/AccordionSection/AccordionSection.swift",
       "preview": "Components/Lists/AccordionSection/AccordionSection.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AccordionSection/AccordionSection.swift"
+    },
+    {
+      "id": "alphabet-indexed-list",
+      "name": "AlphabetIndexedList",
+      "title": "Alphabet Indexed List",
+      "category": "Lists",
+      "summary": "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+      "keywords": {
+        "en": [
+          "section index",
+          "alphabet",
+          "contacts",
+          "index bar",
+          "A to Z",
+          "jump to letter",
+          "sections",
+          "list"
+        ],
+        "es": [
+          "índice de secciones",
+          "alfabeto",
+          "contactos",
+          "barra de índice",
+          "de la A a la Z",
+          "saltar a una letra",
+          "secciones",
+          "lista"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "26.0",
+      "apis": [
+        "sectionIndexLabel",
+        "listSectionIndexVisibility",
+        "List",
+        "Section"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift",
+      "preview": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift"
     },
     {
       "id": "disclosure-tree-view",

@@ -1,0 +1,51 @@
+{
+  "id": "alphabet-indexed-list",
+  "name": "AlphabetIndexedList",
+  "title": "Alphabet Indexed List",
+  "category": "Lists",
+  "summary": "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+  "keywords": {
+    "en": [
+      "section index",
+      "alphabet",
+      "contacts",
+      "index bar",
+      "A to Z",
+      "jump to letter",
+      "sections",
+      "list"
+    ],
+    "es": [
+      "índice de secciones",
+      "alfabeto",
+      "contactos",
+      "barra de índice",
+      "de la A a la Z",
+      "saltar a una letra",
+      "secciones",
+      "lista"
+    ]
+  },
+  "difficulty": "beginner",
+  "minIOS": "26.0",
+  "apis": [
+    "sectionIndexLabel",
+    "listSectionIndexVisibility",
+    "List",
+    "Section"
+  ],
+  "origin": {
+    "kind": "original"
+  },
+  "previewSteps": [
+    "sleep 0.3",
+    "tap -x 394 -y 497",
+    "sleep 0.6",
+    "swipe --start-x 394 --start-y 373 --end-x 394 --end-y 635 --duration 1.4",
+    "sleep 0.4",
+    "tap -x 394 -y 677",
+    "sleep 0.6",
+    "tap -x 394 -y 332",
+    "sleep 0.3"
+  ]
+}

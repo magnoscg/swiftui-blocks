@@ -1611,6 +1611,18 @@ enum ComponentRegistry {
             demo: { AnyView(AccordionSectionDemo()) }
         ),
         ShowcaseEntry(
+            id: "alphabet-indexed-list",
+            title: "Alphabet Indexed List",
+            category: "Lists",
+            summary: "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+            keywords: ["section index", "alphabet", "contacts", "index bar", "A to Z", "jump to letter", "sections", "list", "índice de secciones", "alfabeto", "contactos", "barra de índice", "de la A a la Z", "saltar a una letra", "secciones", "lista"],
+            minIOS: "26.0",
+            demo: {
+                guard #available(iOS 26.0, *) else { return nil }
+                return AnyView(AlphabetIndexedListDemo())
+            }
+        ),
+        ShowcaseEntry(
             id: "disclosure-tree-view",
             title: "Disclosure Tree View",
             category: "Lists",
