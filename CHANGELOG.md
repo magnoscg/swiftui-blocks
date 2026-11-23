@@ -7,6 +7,12 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- Minimizing Navigation Bar, for iOS 27: a navigation stack whose bar gets out
+  of the way while the content scrolls down, and comes back on scrolling up or
+  only at the top.
+
 ## 0.17.1 - 2026-11-21
 
 ### Fixed

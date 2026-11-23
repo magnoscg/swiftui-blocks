@@ -2670,6 +2670,18 @@ enum ComponentRegistry {
             demo: { AnyView(FloatingDockBarDemo()) }
         ),
         ShowcaseEntry(
+            id: "minimizing-navigation-bar",
+            title: "Minimizing Navigation Bar",
+            category: "Toolbars",
+            summary: "A navigation stack whose navigation bar minimizes while the content scrolls down and returns on scrolling up or only at the top, using the system toolbar minimization.",
+            keywords: ["navigation bar", "toolbar", "minimize", "hide on scroll", "collapse", "scroll", "reader", "barra de navegación", "barra de herramientas", "minimizar", "ocultar al desplazar", "contraer", "desplazamiento", "lector"],
+            minIOS: "27.0",
+            demo: {
+                guard #available(iOS 27.0, *) else { return nil }
+                return AnyView(MinimizingNavigationBarDemo())
+            }
+        ),
+        ShowcaseEntry(
             id: "blur-fade-transition",
             title: "Blur Fade Transition",
             category: "Transitions",
