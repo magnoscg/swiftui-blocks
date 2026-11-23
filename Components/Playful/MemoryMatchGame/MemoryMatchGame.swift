@@ -20,6 +20,7 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
     /// The face of a card.
     @ViewBuilder let face: (Face) -> CardFace
 
+    @State private var missedPair: [Int] = []
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let spacing: CGFloat = 10
@@ -40,6 +41,16 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
         }
         .sensoryFeedback(.success, trigger: board.matchedPairs) { old, new in
             new > old
+        }
+        .task(id: missedPair) {
+            guard !missedPair.isEmpty else { return }
+            try? await Task.sleep(for: mismatchDelay)
+            guard !Task.isCancelled else { return }
+            withAnimation(.smooth(duration: 0.4)) { board.hide(missedPair) }
+            missedPair = []
+        }
+        .onChange(of: board.id) {
+            missedPair = []
         }
     }
 
@@ -73,10 +84,8 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
 
     private func turn(_ card: MemoryMatchGameBoard<Face>.Card) {
         let flip = withAnimation(.smooth(duration: 0.4)) { board.flip(card.id) }
-        guard case .mismatch(let ids) = flip else { return }
-        Task {
-            try? await Task.sleep(for: mismatchDelay)
-            withAnimation(.smooth(duration: 0.4)) { board.hide(ids) }
+        if case .mismatch(let ids) = flip {
+            missedPair = ids
         }
     }
 }
@@ -112,7 +121,7 @@ private struct MemoryMatchGameCardFlip<Front: View, Back: View>: View, Animatabl
 }
 
 /// The cards of a memory game and its rules, without any view.
-nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, Sendable {
+nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, Sendable, Identifiable {
     /// One card of the board.
     struct Card: Identifiable, Equatable, Sendable {
         let id: Int
@@ -136,6 +145,8 @@ nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, S
         case mismatch([Int])
     }
 
+    /// The game this board holds: every new board is a new game.
+    let id = UUID()
     /// The cards, in the order they are laid out.
     private(set) var cards: [Card] = []
     /// How many pairs have been turned over, found or not.

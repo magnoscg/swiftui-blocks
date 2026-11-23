@@ -82,6 +82,10 @@ struct MemoryMatchGameTests {
         #expect(board.cards.filter(\.isFaceUp).count == 2)
     }
 
+    @Test func everyNewBoardHasItsOwnIdentity() {
+        #expect(board(seed: 1).id != board(seed: 1).id)
+    }
+
     @Test func finishesWhenEveryPairIsFound() {
         var board = board()
 
