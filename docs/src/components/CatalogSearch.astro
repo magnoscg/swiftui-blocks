@@ -43,16 +43,26 @@ const text = landingText[Astro.props.lang ?? 'en'];
   const status = form?.querySelector<HTMLElement>('[data-status]');
 
   if (form && input && results && status) {
-    // "botón" and "boton" are the same word to someone typing.
+    // "botón" and "boton" are the same word to someone typing. Each word starts after a space, so a search
+    // matches the start of a word: "rain" finds "rain" but not "grain".
     const plain = (text: string) =>
-      text
+      ` ${text
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[̀-ͯ]/g, '');
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')}`;
+    const has = (text: string, word: string) => text.includes(` ${word}`);
+    // An ending is dropped so "brilla" finds "brillo", "dragging" finds "drag" and "cargando" finds "cargador".
+    const stem = (word: string) => {
+      if (word.length <= 4) return word;
+      if (/^.{4,}ing$/.test(word)) return word.slice(0, -3).replace(/([bdgmnpt])\1$/, '$1');
+      if (/^.{4,}(ando|iendo)$/.test(word)) return word.replace(/(ando|iendo)$/, '');
+      return word.replace(/(es|s|a|o|e)$/, '');
+    };
 
     const EMPTY_WORDS = new Set(['que', 'de', 'la', 'el', 'un', 'una', 'con', 'para', 'the', 'that', 'with', 'for', 'and', 'of']);
 
-    let entries: { entry: Entry; title: string; keywords: string; rest: string }[] | undefined;
+    let entries: { entry: Entry; title: string; keywords: string; primary: string; rest: string }[] | undefined;
     const load = async () => {
       if (entries) return entries;
       const response = await fetch(form.dataset.catalog!);
@@ -61,18 +71,24 @@ const text = landingText[Astro.props.lang ?? 'en'];
         entry,
         title: plain(entry.title),
         keywords: plain([...entry.keywords.en, ...entry.keywords.es].join(' ')),
-        rest: plain([entry.summary, entry.category, ...entry.apis].join(' ')),
+        primary: plain([entry.keywords.en[0], entry.keywords.es[0]].join(' ')),
+        // API names also go split at their capitals, so "animator" finds PhaseAnimator.
+        rest: plain(
+          [entry.summary, entry.category, ...entry.apis, ...entry.apis.map((api) => api.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))].join(' '),
+        ),
       }));
       return entries;
     };
 
     const search = async () => {
-      // Words that say nothing are left out, and an ending is dropped so "brilla" finds "brillo".
+      // Words that say nothing are left out.
       const words = plain(input.value)
         .split(/\s+/)
         .filter((word) => word.length > 1 && !EMPTY_WORDS.has(word))
-        .map((word) => (word.length > 4 ? word.replace(/(es|s|a|o|e)$/, '') : word));
-      if (words.length === 0) {
+        .map(stem);
+      // A box with nothing to look for yet, empty, a lone letter or "the", hides the list; symbols alone, like
+      // "!!!", say that nothing fits.
+      if (words.length === 0 && (input.value.trim() === '' || /[a-z0-9]/.test(plain(input.value)))) {
         results.hidden = true;
         status.textContent = '';
         return;
@@ -85,16 +101,19 @@ const text = landingText[Astro.props.lang ?? 'en'];
             let matched = 0;
             for (const word of words) {
               const points =
-                (candidate.title.includes(word) ? 3 : 0) +
-                (candidate.keywords.includes(word) ? 2 : 0) +
-                (candidate.rest.includes(word) ? 1 : 0);
+                (has(candidate.title, word) ? 3 : 0) +
+                (has(candidate.keywords, word) ? 2 : 0) +
+                (has(candidate.rest, word) ? 1 : 0);
               if (points > 0) matched += 1;
               score += points;
             }
+            // The first keyword in each language names the component, which settles most ties.
+            if (words.some((word) => has(candidate.primary, word))) score += 1;
             return { entry: candidate.entry, score, matched };
           })
           .filter((candidate) => candidate.matched > 0)
-          .sort((a, b) => b.matched - a.matched || b.score - a.score)
+          // Among equals, the shorter title is the more general component.
+          .sort((a, b) => b.matched - a.matched || b.score - a.score || a.entry.title.length - b.entry.title.length)
           .slice(0, 6);
       } catch {
         // The form still opens the catalog with these words.

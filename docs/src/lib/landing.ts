@@ -14,6 +14,7 @@ export const landingLang = (pathname: string) =>
 
 export const landingText = {
   en: {
+    languageName: 'English',
     anyAgent: 'Any agent',
     copy: 'Copy',
     copied: 'Copied',
@@ -26,7 +27,7 @@ export const landingText = {
     allOptions: 'All options',
     stripTitle: 'What you ask, and what your agent adds',
     searchLabel: 'Describe what you need',
-    searchPlaceholder: 'Try “wallet cards” or “botón que brilla”…',
+    searchPlaceholder: 'Try “button that shines”…',
     searchNothing: 'Nothing fits those words. Try others, or browse the catalog.',
     searchOne: '1 component',
     searchMany: 'components',
@@ -38,6 +39,7 @@ export const landingText = {
     slackAgents: 'Claude Code, Codex & more',
   },
   es: {
+    languageName: 'Español',
     anyAgent: 'Cualquier agente',
     copy: 'Copiar',
     copied: 'Copiado',
@@ -50,7 +52,7 @@ export const landingText = {
     allOptions: 'Todas las opciones',
     stripTitle: 'Lo que pides y lo que añade tu agente',
     searchLabel: 'Describe lo que necesitas',
-    searchPlaceholder: 'Prueba con «botón que brilla» o «wallet cards»…',
+    searchPlaceholder: 'Prueba «botón que brilla»…',
     searchNothing: 'Nada encaja con esas palabras. Prueba con otras o explora el catálogo.',
     searchOne: '1 componente',
     searchMany: 'componentes',

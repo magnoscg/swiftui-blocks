@@ -6,7 +6,7 @@
   "summary": "A loading indicator with bars that rise and fall like an audio equalizer.",
   "keywords": {
     "en": ["loader", "bars", "equalizer", "audio", "wave", "loading"],
-    "es": ["cargador", "barras", "ecualizador", "audio", "onda", "carga"]
+    "es": ["cargador", "barras", "ecualizador", "audio", "onda", "carga", "cargando"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

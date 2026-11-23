@@ -13,7 +13,8 @@
       "liquid glass",
       "gallery",
       "control size",
-      "tint"
+      "tint",
+      "glass effect"
     ],
     "es": [
       "botón",
@@ -22,7 +23,8 @@
       "cristal líquido",
       "galería",
       "tamaños",
-      "tintes"
+      "tintes",
+      "efecto cristal"
     ]
   },
   "difficulty": "beginner",

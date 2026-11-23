@@ -7,6 +7,25 @@ on `main`.
 
 ## Unreleased
 
+## 0.19.0 - 2026-11-23
+
+### Added
+
+- The landing page links to itself in the other language from the bar at the
+  top: Español at `/` and English at `/es/`.
+
+### Changed
+
+- The search box on the landing page suggests one example in the language of
+  the page, "button that shines" at `/` and "botón que brilla" at `/es/`, short
+  enough to show whole on a phone.
+- The search on the landing page matches the start of words, so "rain" no
+  longer finds "grain", splits API names, so "animator" finds PhaseAnimator,
+  and knows more of the words people type, such as "shiny", "dragging",
+  "cargando", "muro de pago" or "gráfico de tarta".
+- Every version since 0.7.0 has its GitHub release, which the README's badge
+  reads, and the steps for a release in CONTRIBUTING.md now publish it.
+
 ## 0.18.1 - 2026-11-23
 
 ### Changed

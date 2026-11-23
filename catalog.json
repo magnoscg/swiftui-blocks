@@ -1171,7 +1171,8 @@
           "favorito",
           "partículas",
           "explosión",
-          "botón"
+          "botón",
+          "animación de corazones"
         ]
       },
       "difficulty": "intermediate",
@@ -1398,7 +1399,10 @@
           "light sweep",
           "gradient",
           "call to action",
-          "glossy"
+          "glossy",
+          "shiny",
+          "glow",
+          "sparkle"
         ],
         "es": [
           "brillo",
@@ -1406,7 +1410,9 @@
           "botón",
           "barrido de luz",
           "degradado",
-          "llamada a la acción"
+          "llamada a la acción",
+          "brillante",
+          "reluciente"
         ]
       },
       "difficulty": "beginner",
@@ -1947,7 +1953,9 @@
           "gráfica",
           "sectores",
           "selección",
-          "gastos"
+          "gastos",
+          "gráfico de tarta",
+          "gráfico de pastel"
         ]
       },
       "difficulty": "intermediate",
@@ -2766,7 +2774,8 @@
           "tarjetas",
           "paywall",
           "suscripción",
-          "carrusel"
+          "carrusel",
+          "muro de pago"
         ]
       },
       "difficulty": "beginner",
@@ -2851,7 +2860,8 @@
           "suscripción",
           "precios",
           "mejorar plan",
-          "compra dentro de la app"
+          "compra dentro de la app",
+          "muro de pago"
         ]
       },
       "difficulty": "intermediate",
@@ -4889,7 +4899,8 @@
           "form",
           "keyframes",
           "wiggle",
-          "invalid input"
+          "invalid input",
+          "wrong password"
         ],
         "es": [
           "agitar",
@@ -4898,7 +4909,10 @@
           "validación",
           "formulario",
           "fotogramas clave",
-          "entrada no válida"
+          "entrada no válida",
+          "temblar",
+          "contraseña incorrecta",
+          "fallo"
         ]
       },
       "difficulty": "beginner",
@@ -4938,7 +4952,8 @@
           "alerta",
           "mensaje",
           "banner",
-          "autodescartar"
+          "autodescartar",
+          "mensaje emergente"
         ]
       },
       "difficulty": "beginner",
@@ -5544,7 +5559,8 @@
           "liquid glass",
           "gallery",
           "control size",
-          "tint"
+          "tint",
+          "glass effect"
         ],
         "es": [
           "botón",
@@ -5553,7 +5569,8 @@
           "cristal líquido",
           "galería",
           "tamaños",
-          "tintes"
+          "tintes",
+          "efecto cristal"
         ]
       },
       "difficulty": "beginner",
@@ -6525,7 +6542,8 @@
           "lista de requisitos",
           "validación",
           "registro",
-          "formulario"
+          "formulario",
+          "fuerza de la contraseña"
         ]
       },
       "difficulty": "intermediate",
@@ -7611,7 +7629,8 @@
           "segmentos",
           "anillo",
           "giratorio",
-          "carga"
+          "carga",
+          "cargando"
         ]
       },
       "difficulty": "beginner",
@@ -7652,7 +7671,8 @@
           "lienzo",
           "orgánico",
           "carga",
-          "animación"
+          "animación",
+          "cargando"
         ]
       },
       "difficulty": "advanced",
@@ -7691,7 +7711,8 @@
           "pulso",
           "escribiendo",
           "chat",
-          "carga"
+          "carga",
+          "cargando"
         ]
       },
       "difficulty": "beginner",
@@ -7729,7 +7750,8 @@
           "puntos",
           "carga",
           "spinner",
-          "indicador de actividad"
+          "indicador de actividad",
+          "cargando"
         ]
       },
       "difficulty": "beginner",
@@ -7760,7 +7782,8 @@
           "redacted",
           "loading",
           "list",
-          "view modifier"
+          "view modifier",
+          "content placeholder"
         ],
         "es": [
           "esqueleto",
@@ -7809,7 +7832,8 @@
           "efecto de símbolo",
           "respirar",
           "rotación",
-          "carga"
+          "carga",
+          "cargando"
         ]
       },
       "difficulty": "beginner",
@@ -7847,7 +7871,8 @@
           "ecualizador",
           "audio",
           "onda",
-          "carga"
+          "carga",
+          "cargando"
         ]
       },
       "difficulty": "beginner",
@@ -10659,7 +10684,8 @@
           "recorrido",
           "introducción",
           "primer inicio",
-          "tutorial"
+          "tutorial",
+          "pantallas de bienvenida"
         ]
       },
       "difficulty": "beginner",
@@ -10818,7 +10844,8 @@
           "anillo de progreso",
           "desplazamiento",
           "recargar",
-          "indicador"
+          "indicador",
+          "tirar para refrescar"
         ]
       },
       "difficulty": "intermediate",
@@ -11652,7 +11679,8 @@
           "desplazamiento",
           "texto largo",
           "reproduciendo",
-          "desbordamiento"
+          "desbordamiento",
+          "texto en movimiento"
         ]
       },
       "difficulty": "intermediate",
@@ -11920,7 +11948,8 @@
           "blinking",
           "text animation",
           "terminal",
-          "characters"
+          "characters",
+          "typewriter effect"
         ],
         "es": [
           "máquina de escribir",

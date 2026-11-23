@@ -6,7 +6,7 @@
   "summary": "Three dots that pulse in sequence, as in a typing indicator.",
   "keywords": {
     "en": ["loader", "dots", "pulse", "typing indicator", "chat", "loading"],
-    "es": ["cargador", "puntos", "pulso", "escribiendo", "chat", "carga"]
+    "es": ["cargador", "puntos", "pulso", "escribiendo", "chat", "carga", "cargando"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",
