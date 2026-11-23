@@ -12,7 +12,10 @@
       "light sweep",
       "gradient",
       "call to action",
-      "glossy"
+      "glossy",
+      "shiny",
+      "glow",
+      "sparkle"
     ],
     "es": [
       "brillo",
@@ -20,7 +23,9 @@
       "botón",
       "barrido de luz",
       "degradado",
-      "llamada a la acción"
+      "llamada a la acción",
+      "brillante",
+      "reluciente"
     ]
   },
   "difficulty": "beginner",

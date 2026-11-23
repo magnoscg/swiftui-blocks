@@ -6,7 +6,7 @@
   "summary": "A toast modifier that slides a banner from the top, announces it to VoiceOver and dismisses by itself.",
   "keywords": {
     "en": ["toast", "banner", "notification", "alert", "message", "auto dismiss", "feedback"],
-    "es": ["toast", "aviso", "notificación", "alerta", "mensaje", "banner", "autodescartar"]
+    "es": ["toast", "aviso", "notificación", "alerta", "mensaje", "banner", "autodescartar", "mensaje emergente"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

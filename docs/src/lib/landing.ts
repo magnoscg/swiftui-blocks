@@ -14,6 +14,7 @@ export const landingLang = (pathname: string) =>
 
 export const landingText = {
   en: {
+    languageName: 'English',
     anyAgent: 'Any agent',
     copy: 'Copy',
     copied: 'Copied',
@@ -38,6 +39,7 @@ export const landingText = {
     slackAgents: 'Claude Code, Codex & more',
   },
   es: {
+    languageName: 'Español',
     anyAgent: 'Cualquier agente',
     copy: 'Copiar',
     copied: 'Copiado',

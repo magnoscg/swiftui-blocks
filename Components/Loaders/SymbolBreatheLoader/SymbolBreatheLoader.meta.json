@@ -6,7 +6,7 @@
   "summary": "A loading indicator made of an SF Symbol that uses the breathe and rotate symbol effects.",
   "keywords": {
     "en": ["loader", "sf symbols", "symbol effect", "breathe", "rotate", "loading"],
-    "es": ["cargador", "símbolo", "efecto de símbolo", "respirar", "rotación", "carga"]
+    "es": ["cargador", "símbolo", "efecto de símbolo", "respirar", "rotación", "carga", "cargando"]
   },
   "difficulty": "beginner",
   "minIOS": "18.0",

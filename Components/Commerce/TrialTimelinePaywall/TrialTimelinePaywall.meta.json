@@ -6,7 +6,7 @@
   "summary": "A paywall that shows what happens on each day of the free trial, with the plans and the button to start it.",
   "keywords": {
     "en": ["paywall", "free trial", "trial timeline", "subscription", "pricing", "upgrade", "in-app purchase"],
-    "es": ["paywall", "prueba gratis", "línea de tiempo", "suscripción", "precios", "mejorar plan", "compra dentro de la app"]
+    "es": ["paywall", "prueba gratis", "línea de tiempo", "suscripción", "precios", "mejorar plan", "compra dentro de la app", "muro de pago"]
   },
   "difficulty": "intermediate",
   "minIOS": "18.0",
