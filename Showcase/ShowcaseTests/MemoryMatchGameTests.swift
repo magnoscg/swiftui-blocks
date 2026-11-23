@@ -82,8 +82,17 @@ struct MemoryMatchGameTests {
         #expect(board.cards.filter(\.isFaceUp).count == 2)
     }
 
-    @Test func everyNewBoardHasItsOwnIdentity() {
-        #expect(board(seed: 1).id != board(seed: 1).id)
+    @Test func theBoardKeepsAMissedPairUntilItTurnsBack() throws {
+        var board = board()
+        let moon = ids(of: "moon", in: board)[0]
+        let star = ids(of: "star", in: board)[0]
+
+        _ = board.flip(moon)
+        _ = board.flip(star)
+
+        #expect(Set(try #require(board.missedPair)) == [moon, star])
+        board.hide([moon, star])
+        #expect(board.missedPair == nil)
     }
 
     @Test func finishesWhenEveryPairIsFound() {

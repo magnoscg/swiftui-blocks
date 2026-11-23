@@ -41560,7 +41560,6 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
     /// The face of a card.
     @ViewBuilder let face: (Face) -> CardFace
 
-    @State private var missedPair: [Int] = []
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let spacing: CGFloat = 10
@@ -41582,15 +41581,12 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
         .sensoryFeedback(.success, trigger: board.matchedPairs) { old, new in
             new > old
         }
-        .task(id: missedPair) {
-            guard !missedPair.isEmpty else { return }
+        // Read from the board, so a view made again while a pair is missed still turns it back.
+        .task(id: board.missedPair) {
+            guard let pair = board.missedPair else { return }
             try? await Task.sleep(for: mismatchDelay)
-            guard !Task.isCancelled else { return }
-            withAnimation(.smooth(duration: 0.4)) { board.hide(missedPair) }
-            missedPair = []
-        }
-        .onChange(of: board.id) {
-            missedPair = []
+            guard !Task.isCancelled, board.missedPair == pair else { return }
+            withAnimation(.smooth(duration: 0.4)) { board.hide(pair) }
         }
     }
 
@@ -41623,10 +41619,7 @@ struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
     }
 
     private func turn(_ card: MemoryMatchGameBoard<Face>.Card) {
-        let flip = withAnimation(.smooth(duration: 0.4)) { board.flip(card.id) }
-        if case .mismatch(let ids) = flip {
-            missedPair = ids
-        }
+        withAnimation(.smooth(duration: 0.4)) { _ = board.flip(card.id) }
     }
 }
 
@@ -41661,7 +41654,7 @@ private struct MemoryMatchGameCardFlip<Front: View, Back: View>: View, Animatabl
 }
 
 /// The cards of a memory game and its rules, without any view.
-nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, Sendable, Identifiable {
+nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, Sendable {
     /// One card of the board.
     struct Card: Identifiable, Equatable, Sendable {
         let id: Int
@@ -41685,8 +41678,11 @@ nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, S
         case mismatch([Int])
     }
 
-    /// The game this board holds: every new board is a new game.
-    let id = UUID()
+    /// The two cards of a missed pair while they are face up, or `nil`.
+    var missedPair: [Int]? {
+        let open = cards.filter { $0.isFaceUp && !$0.isMatched }.map(\.id)
+        return open.count == 2 ? open : nil
+    }
     /// The cards, in the order they are laid out.
     private(set) var cards: [Card] = []
     /// How many pairs have been turned over, found or not.
