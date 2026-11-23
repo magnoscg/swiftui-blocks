@@ -19,6 +19,8 @@ struct SwipeToReplyBubble<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @GestureState private var translation: CGFloat = 0
+    /// Where the drag that moves the bubble began: the bubble keeps following it, and only it can reply.
+    @State private var engagedDrag: CGPoint?
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.layoutDirection) private var layoutDirection
 
@@ -53,12 +55,18 @@ struct SwipeToReplyBubble<Content: View>: View {
     private var swipe: some Gesture {
         DragGesture(minimumDistance: 14)
             .updating($translation) { value, state, _ in
-                if state != 0 || abs(value.translation.width) > abs(value.translation.height) {
+                if engagedDrag == value.startLocation || SwipeToReplyBubblePhysics.engages(value.translation) {
                     state = value.translation.width * forward
                 }
             }
+            .onChanged { value in
+                if engagedDrag != value.startLocation, SwipeToReplyBubblePhysics.engages(value.translation) {
+                    engagedDrag = value.startLocation
+                }
+            }
             .onEnded { value in
-                guard abs(value.translation.width) > abs(value.translation.height),
+                defer { engagedDrag = nil }
+                guard engagedDrag == value.startLocation,
                       SwipeToReplyBubblePhysics.replies(after: value.translation.width * forward, threshold: threshold)
                 else { return }
                 onReply()
@@ -68,6 +76,11 @@ struct SwipeToReplyBubble<Content: View>: View {
 
 /// How a ``SwipeToReplyBubble`` follows a drag, measured toward the trailing edge.
 nonisolated enum SwipeToReplyBubblePhysics {
+    /// Whether a drag goes mostly sideways, which is what moves the bubble.
+    static func engages(_ translation: CGSize) -> Bool {
+        abs(translation.width) > abs(translation.height)
+    }
+
     /// How far the bubble moves for a drag: with the finger up to the threshold, then with
     /// growing resistance, and never toward the leading edge.
     static func offset(for translation: CGFloat, threshold: CGFloat) -> CGFloat {
