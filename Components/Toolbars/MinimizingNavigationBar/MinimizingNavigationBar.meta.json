@@ -1,0 +1,47 @@
+{
+  "id": "minimizing-navigation-bar",
+  "name": "MinimizingNavigationBar",
+  "title": "Minimizing Navigation Bar",
+  "category": "Toolbars",
+  "summary": "A navigation stack whose navigation bar minimizes while the content scrolls down and returns on scrolling up or only at the top, using the system toolbar minimization.",
+  "keywords": {
+    "en": [
+      "navigation bar",
+      "toolbar",
+      "minimize",
+      "hide on scroll",
+      "collapse",
+      "scroll",
+      "reader"
+    ],
+    "es": [
+      "barra de navegación",
+      "barra de herramientas",
+      "minimizar",
+      "ocultar al desplazar",
+      "contraer",
+      "desplazamiento",
+      "lector"
+    ]
+  },
+  "difficulty": "beginner",
+  "minIOS": "27.0",
+  "apis": [
+    "toolbarMinimizationBehavior",
+    "toolbarMinimizationRestoration",
+    "toolbarMinimizationSafeAreaAdjustment",
+    "NavigationStack"
+  ],
+  "origin": {
+    "kind": "original"
+  },
+  "previewSteps": [
+    "sleep 0.6",
+    "swipe --start-x 201 --start-y 700 --end-x 201 --end-y 250 --duration 0.7",
+    "sleep 1.2",
+    "swipe --start-x 201 --start-y 400 --end-x 201 --end-y 480 --duration 0.5",
+    "sleep 1.2",
+    "swipe --start-x 201 --start-y 700 --end-x 201 --end-y 250 --duration 0.7",
+    "sleep 1.2"
+  ]
+}

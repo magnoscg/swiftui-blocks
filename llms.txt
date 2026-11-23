@@ -47,7 +47,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Sheets: CustomDetentSheet, DynamicHeightTray, WhatsNewSheet
 - Tabs: MinimizingTabBar (iOS 26.0+), NotchedTabBar, ScrollingTabStrip, TabsPickerPages (iOS 27.0+)
 - Text: AnimatedGradientText, BouncyLettersText, CountingNumberText, GlitchText, GlyphWaveText, HighlightedSearchText, KaraokeLyricsText, MarqueeText, ReadMoreText, RotatingWordsText, ScrambleText, ShimmerText, StreamingText, TextBlurReveal, TypewriterText
-- Toolbars: CollapsingBottomBar, FloatingDockBar
+- Toolbars: CollapsingBottomBar, FloatingDockBar, MinimizingNavigationBar (iOS 27.0+)
 - Transitions: BlurFadeTransition, CircleRevealTransition, ContentSwapTransition, CrossFadeNavigation (iOS 27.0+), DissolveShaderTransition (Metal), FlipCardTransition, InteractivePagerTransition, MatchedHeroCard, ParallaxPushTransition, SlideScaleTransition, StaggeredAppearList, SymbolMorphToggle, ZoomHeroTransition
 
 ## Docs
