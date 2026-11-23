@@ -86,8 +86,9 @@ const text = landingText[Astro.props.lang ?? 'en'];
         .split(/\s+/)
         .filter((word) => word.length > 1 && !EMPTY_WORDS.has(word))
         .map(stem);
-      // An empty box hides the list; words that fit nothing, like "!!!", still say so.
-      if (input.value.trim() === '') {
+      // A box with nothing to look for yet, empty, a lone letter or "the", hides the list; symbols alone, like
+      // "!!!", say that nothing fits.
+      if (words.length === 0 && (input.value.trim() === '' || /[a-z0-9]/.test(plain(input.value)))) {
         results.hidden = true;
         status.textContent = '';
         return;
