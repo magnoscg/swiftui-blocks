@@ -15623,6 +15623,7 @@ struct SignaturePad: View {
     var lineWidth: CGFloat = 3
 
     @State private var size = CGSize.zero
+    @State private var drawing: CGPoint?
 
     private var isSigned: Bool { SignaturePadStrokes.isSigned(strokes) }
 
@@ -15685,7 +15686,7 @@ struct SignaturePad: View {
     private var draw: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                SignaturePadStrokes.add(value.location, startedAt: value.startLocation, in: size, to: &strokes)
+                SignaturePadStrokes.add(value.location, startedAt: value.startLocation, drawing: &drawing, in: size, to: &strokes)
             }
     }
 }
@@ -15711,12 +15712,16 @@ nonisolated enum SignaturePadStrokes {
     /// Adds a point of a drag: to the stroke of that drag while it goes on, or as a new stroke
     /// when another drag begins, even if the last one never ended. Points outside a pad of
     /// `size` move to its edge.
-    static func add(_ point: CGPoint, startedAt start: CGPoint, in size: CGSize, to strokes: inout [[CGPoint]]) {
+    ///
+    /// - Parameter drawing: Where the drag that drew the last stroke began. The function keeps
+    ///   it up to date, so a drag whose strokes are cleared under it goes on as one new stroke.
+    static func add(_ point: CGPoint, startedAt start: CGPoint, drawing: inout CGPoint?, in size: CGSize, to strokes: inout [[CGPoint]]) {
         let point = clamped(point, to: size)
-        if let stroke = strokes.last, stroke.first == clamped(start, to: size) {
+        if drawing == start, !strokes.isEmpty {
             strokes[strokes.count - 1].append(point)
         } else {
             strokes.append([point])
+            drawing = start
         }
     }
 
