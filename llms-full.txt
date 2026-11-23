@@ -30678,14 +30678,13 @@ nonisolated struct AlphabetIndexedListSection<Item>: Identifiable {
         let sorted = items.sorted {
             name($0).compare(name($1), options: .caseInsensitive, locale: locale) == .orderedAscending
         }
-        var letters: [String] = []
         var itemsByLetter: [String: [Item]] = [:]
         for item in sorted {
-            let letter = letter(of: name(item), locale: locale)
-            if itemsByLetter[letter] == nil, letter != otherLetter {
-                letters.append(letter)
-            }
-            itemsByLetter[letter, default: []].append(item)
+            itemsByLetter[letter(of: name(item), locale: locale), default: []].append(item)
+        }
+        // Sorted apart from the names: a locale can put Å after Z while the letter groups it under A.
+        var letters = itemsByLetter.keys.filter { $0 != otherLetter }.sorted {
+            $0.compare($1, locale: locale) == .orderedAscending
         }
         if itemsByLetter[otherLetter] != nil {
             letters.append(otherLetter)
