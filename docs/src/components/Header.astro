@@ -214,8 +214,8 @@ const other = lang && (Object.keys(landingPaths) as LandingLang[]).find((each) =
     }
   }
 
-  /* The landing page keeps the name down to 360 pixels, where the bar runs out of room for it. */
-  @media (max-width: 22.5rem) {
+  /* The landing page keeps the name down to 360 pixels; below that the bar runs out of room for it. */
+  @media (max-width: 22.49rem) {
     .brand span {
       display: none;
     }
@@ -227,7 +227,7 @@ const other = lang && (Object.keys(landingPaths) as LandingLang[]).find((each) =
     }
 
     .search {
-      width: 8rem;
+      width: 8.5rem;
     }
   }
 
