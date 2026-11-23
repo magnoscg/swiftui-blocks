@@ -80,4 +80,16 @@ and tags are `X.Y.Z` without a `v`.
    or changes on `/install/`, such as the Gemini CLI extension.
 4. Merge the pull request without fast-forward, then tag the merge on `main`
    with an annotated `X.Y.Z` tag. The merge publishes the site.
-5. Merge `main` back into `develop`.
+5. Publish the GitHub release of the tag, with the notes of X.Y.Z in
+   [CHANGELOG.md](CHANGELOG.md) as its text. GitHub shows every line break of
+   a release as a break, so the command joins each paragraph and item into
+   one line. The README's release badge reads this release.
+
+   ```sh
+   awk -v v=X.Y.Z '$0 ~ "^## " v " " {f = 1; next} /^## / {f = 0} f' CHANGELOG.md \
+     | awk '/^$/ || /^(#|- )/ {if (b != "") print b; b = $0; if ($0 == "") {print; b = ""}; next} {sub(/^ +/, ""); b = b " " $0} END {if (b != "") print b}' \
+     | sed '/./,$!d' \
+     | gh release create X.Y.Z --verify-tag --title X.Y.Z --notes-file -
+   ```
+
+6. Merge `main` back into `develop`.

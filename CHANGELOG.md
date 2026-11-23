@@ -22,6 +22,8 @@ on `main`.
   "shiny", "cargando", "muro de pago" or "gráfico de tarta". Of 175 everyday
   searches in English and Spanish, 172 now show what they ask for first, up
   from 139.
+- Every version since 0.7.0 has its GitHub release, which the README's badge
+  reads, and the steps for a release in CONTRIBUTING.md now publish it.
 
 ## 0.18.1 - 2026-11-23
 
