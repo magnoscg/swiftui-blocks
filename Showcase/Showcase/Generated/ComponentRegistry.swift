@@ -1137,6 +1137,18 @@ enum ComponentRegistry {
             demo: { AnyView(LongPressRadialMenuDemo()) }
         ),
         ShowcaseEntry(
+            id: "multi-item-drag-grid",
+            title: "Multi Item Drag Grid",
+            category: "Gestures",
+            summary: "A grid where tapping selects items and dragging one of them carries the whole selection to a drop target in a single system drag.",
+            keywords: ["drag and drop", "multiple items", "selection", "photo grid", "album", "drag container", "move", "arrastrar y soltar", "varios elementos", "selección", "rejilla de fotos", "álbum", "contenedor de arrastre", "mover"],
+            minIOS: "27.0",
+            demo: {
+                guard #available(iOS 27.0, *) else { return nil }
+                return AnyView(MultiItemDragGridDemo())
+            }
+        ),
+        ShowcaseEntry(
             id: "pinch-zoom-view",
             title: "Pinch Zoom View",
             category: "Gestures",

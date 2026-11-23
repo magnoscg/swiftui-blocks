@@ -1,5 +1,5 @@
 {
-  "count": 302,
+  "count": 303,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -5152,6 +5152,48 @@
       "path": "Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.swift",
       "preview": "Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.swift"
+    },
+    {
+      "id": "multi-item-drag-grid",
+      "name": "MultiItemDragGrid",
+      "title": "Multi Item Drag Grid",
+      "category": "Gestures",
+      "summary": "A grid where tapping selects items and dragging one of them carries the whole selection to a drop target in a single system drag.",
+      "keywords": {
+        "en": [
+          "drag and drop",
+          "multiple items",
+          "selection",
+          "photo grid",
+          "album",
+          "drag container",
+          "move"
+        ],
+        "es": [
+          "arrastrar y soltar",
+          "varios elementos",
+          "selección",
+          "rejilla de fotos",
+          "álbum",
+          "contenedor de arrastre",
+          "mover"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "27.0",
+      "apis": [
+        "draggable(containerItemID:)",
+        "dragContainer",
+        "dragContainerSelection",
+        "dropDestination",
+        "Transferable"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.swift",
+      "preview": "Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.swift"
     },
     {
       "id": "pinch-zoom-view",
