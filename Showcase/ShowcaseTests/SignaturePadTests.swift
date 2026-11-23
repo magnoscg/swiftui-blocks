@@ -38,6 +38,39 @@ struct SignaturePadTests {
         #expect(SignaturePadStrokes.bounds(of: []) == nil)
     }
 
+    @Test func aNewDragStartsANewStroke() {
+        var strokes = [[CGPoint(x: 0, y: 0), CGPoint(x: 10, y: 0)]]
+
+        SignaturePadStrokes.add(CGPoint(x: 50, y: 50), startedAt: CGPoint(x: 50, y: 50), in: CGSize(width: 200, height: 100), to: &strokes)
+
+        #expect(strokes == [[CGPoint(x: 0, y: 0), CGPoint(x: 10, y: 0)], [CGPoint(x: 50, y: 50)]])
+    }
+
+    @Test func theSameDragKeepsDrawingItsStroke() {
+        var strokes = [[CGPoint(x: 5, y: 5)]]
+
+        SignaturePadStrokes.add(CGPoint(x: 20, y: 20), startedAt: CGPoint(x: 5, y: 5), in: CGSize(width: 200, height: 100), to: &strokes)
+
+        #expect(strokes == [[CGPoint(x: 5, y: 5), CGPoint(x: 20, y: 20)]])
+    }
+
+    @Test func aDragThatNeverEndedDoesNotJoinTheNextOne() {
+        var strokes = [[CGPoint(x: 5, y: 5), CGPoint(x: 40, y: 30)]]
+
+        SignaturePadStrokes.add(CGPoint(x: 120, y: 60), startedAt: CGPoint(x: 120, y: 60), in: CGSize(width: 200, height: 100), to: &strokes)
+
+        #expect(strokes.count == 2)
+        #expect(strokes.last == [CGPoint(x: 120, y: 60)])
+    }
+
+    @Test func inkStaysInsideThePad() {
+        var strokes = [[CGPoint(x: 10, y: 10)]]
+
+        SignaturePadStrokes.add(CGPoint(x: -20, y: 300), startedAt: CGPoint(x: 10, y: 10), in: CGSize(width: 200, height: 100), to: &strokes)
+
+        #expect(strokes == [[CGPoint(x: 10, y: 10), CGPoint(x: 0, y: 100)]])
+    }
+
     @Test func aSinglePointDrawsADot() {
         #expect(!SignaturePadStrokes.path(for: [[CGPoint(x: 20, y: 20)]]).isEmpty)
         #expect(SignaturePadStrokes.path(for: []).isEmpty)
