@@ -8,7 +8,8 @@ import SwiftUI
 ///
 /// The pin lifts while the map moves and lands with a small bounce where it stops, and only
 /// then does the picker update ``coordinate``. Setting ``coordinate`` from outside moves the
-/// map there. With Reduce Motion the pin stays down and only its shadow changes.
+/// map there. With Reduce Motion the pin stays down and only its shadow changes. VoiceOver
+/// reads the pin with its latitude and longitude.
 ///
 /// The pin marks the center of the picker's frame, so controls placed over the map can hide
 /// it: put them next to the map instead.
@@ -46,7 +47,10 @@ struct MapPinLocationPicker: View {
             .overlay {
                 pin
                     .allowsHitTesting(false)
-                    .accessibilityHidden(true)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("Pin"))
+                    .accessibilityValue(Text("Latitude \(coordinate.latitude, format: .number.precision(.fractionLength(5))), longitude \(coordinate.longitude, format: .number.precision(.fractionLength(5)))"))
+                    .accessibilityHint(Text("Move the map to move the pin."))
             }
             .onAppear {
                 move(to: coordinate)
