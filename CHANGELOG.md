@@ -12,6 +12,9 @@ on `main`.
 - Minimizing Navigation Bar, for iOS 27: a navigation stack whose bar gets out
   of the way while the content scrolls down, and comes back on scrolling up or
   only at the top.
+- Multi Item Drag Grid, for iOS 27: a grid where tapping selects items and
+  dragging one of them carries the whole selection to a drop target, as a
+  single system drag.
 
 ## 0.17.1 - 2026-11-21
 

@@ -303,6 +303,30 @@
         }
       }
     },
+    "^[%lld photo](inflect: true) selected": {
+      "comment": "English on purpose. Only the demo of Onboarding Pager is translated, and this keeps the plural of a demo that is not, where the app runs in Spanish.",
+      "extractionState": "manual",
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photo selected"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld photos selected"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "^[%lld place](inflect: true)": {
       "comment": "English on purpose. Only the demo of Onboarding Pager is translated, and this keeps the plural of a demo that is not, where the app runs in Spanish.",
       "extractionState": "manual",
