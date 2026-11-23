@@ -19,10 +19,10 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Calendars: CalendarMonthGrid, CalendarRangeSelector, DateStripPicker, DayScheduleTimeline
 - Cards: AvatarStack, ExpandableInfoCard, HolographicCard (Metal), SwipeableCardStack, TiltCard, WalletCardStack
 - Charts: AnimatedBarChart, AnimatedDonutChart, CandlestickChart, ContributionHeatmap, GaugeChart, InteractiveLineChart, LineChartDrawIn, RadarChart, ScrollableBarChart, SparklineStatTile, Surface3DChart (iOS 26.0+)
-- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, TapbackReactionBubble, TypingIndicatorBubble
+- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, SwipeToReplyBubble, TapbackReactionBubble, TypingIndicatorBubble
 - Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, TrialTimelinePaywall
 - Controls: AnimatedRadioButton, CheckmarkBoxToggleStyle, CircularRangeSlider, CounterStepper, DayNightToggle, FilterChipGroup, IconSwitchToggleStyle, RangeSlider, RulerScrollPicker, SelectAllChecklist, SettingsToggleRow, SlidingSegmentedPicker, SpringToggleStyle, SwipeToConfirmSlider, TickMarkSlider (iOS 26.0+), WeekdaySegmentedPicker
-- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape
+- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape, SignaturePad
 - Effects: BlurredImageBackdrop, BorderBeamModifier, ChromaticGlitchShader (Metal), CoinFlipView, ColorRevealImage, ConfettiBurst, FireworksBurst, FloatingReactionsEmitter, FlowFieldParticles, Globe3DWireframe, IntelligenceGlowBorder, JiggleEditModifier, MetaballLavaLamp, NoiseGrainOverlay, PixelateShaderEffect (Metal), ProgressiveBlurHeader (Metal), RippleShaderEffect (Metal), RippleTapEffect, SpotlightOverlay, TouchParticleTrail, VoiceOrb
 - Feedback: AnimatedBadgeCount, AnimatedCheckmarkBadge, DynamicIslandPill, EmptyStatePlaceholder, NotificationStack, RatingStars, ShakeErrorModifier, ToastBanner, ToastHost, TooltipPopover, UndoSnackbar
 - Gestures: CompletionSwipeRow, DoubleTapHeartOverlay, DragSelectGrid, DropZoneHighlight, LongPressRadialMenu, MultiItemDragGrid (iOS 27.0+), PinchZoomView, ScratchToReveal, SnapCornerDraggable, SwipeActionRow
@@ -31,9 +31,9 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Inputs: CharacterCountTextEditor, ClearableTextField, ColorSwatchPicker, FloatingLabelTextField, MaskedTextField, MultiStepForm, OTPCodeField, PasscodeKeypad, PasswordStrengthField, RichTextEditor (iOS 26.0+), SearchFieldWithSuggestions, TagInputField, ValidatedTextField
 - Intelligence: ModelAvailabilityGate (iOS 26.0+), OnDeviceStreamingAnswer (iOS 26.0+), StructuredOutputForm (iOS 27.0+)
 - Layouts: AdaptiveColumnsGrid, AnyLayoutAdaptiveSwitch, BentoGridLayout, FlowTagsLayout, KanbanBoard, MasonryLayout, MorphingLayoutSwitch, RadialLayout, ReadableWidthContainer, SubviewCardContainer
-- Lists: AccordionSection, DisclosureTreeView, EditModeMultiSelect, LoadMoreFooter, ReorderableCardList (iOS 27.0+), ReorderableGrid (iOS 27.0+), StickySectionHeaders, SwipeActionCards (iOS 27.0+)
+- Lists: AccordionSection, AlphabetIndexedList (iOS 26.0+), DisclosureTreeView, EditModeMultiSelect, LoadMoreFooter, ReorderableCardList (iOS 27.0+), ReorderableGrid (iOS 27.0+), StickySectionHeaders, SwipeActionCards (iOS 27.0+)
 - Loaders: ArcSegmentsLoader, BlobMorphLoader, DotsPulseLoader, OrbitLoader, SkeletonShimmerModifier, SymbolBreatheLoader, WaveBarsLoader
-- Maps: MapAnnotationCallout, MapClusterAnnotations, MapRouteTracker, MapSearchSheet
+- Maps: MapAnnotationCallout, MapClusterAnnotations, MapPinLocationPicker, MapRouteTracker, MapSearchSheet
 - Media: AudioPlayerCard, DoubleTapSeekOverlay, ExpandingMiniPlayer, ShutterCaptureButton, SpinningVinylArt, VideoPlayerChrome, VideoPosterToPlayer, WaveformScrubber
 - Menus: CoachMarkTour, CommandPalette, ContextMenuPreviewCard, DropdownSelectMenu, GooeyFloatingMenu
 - Modern: AnimatableRing (iOS 26.0+), ConcentricCard (iOS 26.0+), ProminentTabBar (iOS 27.0+), ScrollEdgeHeader (iOS 26.0+), SymbolDrawOn (iOS 26.0+), ToolbarOverflowDemo (iOS 27.0+)

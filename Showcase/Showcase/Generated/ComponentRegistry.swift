@@ -558,6 +558,15 @@ enum ComponentRegistry {
             demo: { AnyView(NestedCommentThreadDemo()) }
         ),
         ShowcaseEntry(
+            id: "swipe-to-reply-bubble",
+            title: "Swipe To Reply Bubble",
+            category: "Chat",
+            summary: "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+            keywords: ["swipe to reply", "reply", "quote", "message", "chat bubble", "drag", "haptic", "messaging", "deslizar para responder", "responder", "citar", "mensaje", "burbuja de chat", "arrastrar", "háptica", "mensajería"],
+            minIOS: "18.0",
+            demo: { AnyView(SwipeToReplyBubbleDemo()) }
+        ),
+        ShowcaseEntry(
             id: "tapback-reaction-bubble",
             title: "Tapback Reaction Bubble",
             category: "Chat",
@@ -802,6 +811,15 @@ enum ComponentRegistry {
             keywords: ["shape", "morph", "polygon", "star", "animatable", "vector arithmetic", "path", "forma", "transformación", "polígono", "estrella", "animable", "vector", "trazado"],
             minIOS: "18.0",
             demo: { AnyView(PolygonMorphShapeDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "signature-pad",
+            title: "Signature Pad",
+            category: "Drawing",
+            summary: "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+            keywords: ["signature", "sign here", "signature pad", "e-signature", "draw", "delivery confirmation", "export image", "canvas", "firma", "firme aquí", "panel de firma", "firma electrónica", "dibujar", "confirmación de entrega", "exportar imagen", "lienzo"],
+            minIOS: "18.0",
+            demo: { AnyView(SignaturePadDemo()) }
         ),
         ShowcaseEntry(
             id: "blurred-image-backdrop",
@@ -1611,6 +1629,18 @@ enum ComponentRegistry {
             demo: { AnyView(AccordionSectionDemo()) }
         ),
         ShowcaseEntry(
+            id: "alphabet-indexed-list",
+            title: "Alphabet Indexed List",
+            category: "Lists",
+            summary: "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+            keywords: ["section index", "alphabet", "contacts", "index bar", "A to Z", "jump to letter", "sections", "list", "índice de secciones", "alfabeto", "contactos", "barra de índice", "de la A a la Z", "saltar a una letra", "secciones", "lista"],
+            minIOS: "26.0",
+            demo: {
+                guard #available(iOS 26.0, *) else { return nil }
+                return AnyView(AlphabetIndexedListDemo())
+            }
+        ),
+        ShowcaseEntry(
             id: "disclosure-tree-view",
             title: "Disclosure Tree View",
             category: "Lists",
@@ -1762,6 +1792,15 @@ enum ComponentRegistry {
             keywords: ["map clustering", "cluster", "annotations", "pins", "mapkit", "zoom", "grouped markers", "count bubble", "agrupar en el mapa", "clúster", "anotaciones", "chinchetas", "mapkit", "zoom", "marcadores agrupados", "burbuja con número"],
             minIOS: "18.0",
             demo: { AnyView(MapClusterAnnotationsDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "map-pin-location-picker",
+            title: "Map Pin Location Picker",
+            category: "Maps",
+            summary: "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+            keywords: ["location picker", "map", "pin", "choose location", "drop pin", "coordinate", "pick a place", "delivery address", "selector de ubicación", "mapa", "chincheta", "elegir ubicación", "soltar chincheta", "coordenada", "elegir un lugar", "dirección de entrega"],
+            minIOS: "18.0",
+            demo: { AnyView(MapPinLocationPickerDemo()) }
         ),
         ShowcaseEntry(
             id: "map-route-tracker",

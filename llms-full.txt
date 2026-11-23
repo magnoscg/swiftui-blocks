@@ -10195,6 +10195,238 @@ struct NestedCommentThreadDemo: View {
 }
 ```
 
+## Swipe To Reply Bubble
+
+A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.
+
+Category: Chat. Minimum: iOS 18.0. Path: Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A message bubble that can be dragged toward the trailing edge to reply to it.
+///
+/// A reply arrow appears behind the bubble as it moves, and the phone taps once when the drag
+/// passes ``threshold``. Letting go past it calls ``onReply``, and the bubble springs back
+/// either way. Only a mostly horizontal drag moves the bubble, so the conversation still
+/// scrolls. VoiceOver offers the same as a Reply action, and with Reduce Motion the bubble
+/// returns without a spring. In a right-to-left layout the drag goes the other way.
+struct SwipeToReplyBubble<Content: View>: View {
+    /// How far the bubble has to travel, in points, for letting go to reply.
+    var threshold: CGFloat = 64
+    /// What happens when the message is replied to.
+    let onReply: () -> Void
+    /// The bubble.
+    @ViewBuilder let content: () -> Content
+
+    @GestureState private var translation: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
+
+    /// Gestures report screen points, but layout mirrors in right-to-left layouts: 1 or -1 converts between them.
+    private var forward: CGFloat { layoutDirection == .rightToLeft ? -1 : 1 }
+    private var progress: CGFloat { SwipeToReplyBubblePhysics.progress(for: translation, threshold: threshold) }
+    private var isPastThreshold: Bool { SwipeToReplyBubblePhysics.replies(after: translation, threshold: threshold) }
+
+    var body: some View {
+        content()
+            .offset(x: SwipeToReplyBubblePhysics.offset(for: translation, threshold: threshold))
+            .background(alignment: .leading) { arrow }
+            .simultaneousGesture(swipe)
+            .sensoryFeedback(.impact(flexibility: .soft), trigger: isPastThreshold) { wasPast, isPast in
+                !wasPast && isPast
+            }
+            .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.3), value: translation == 0)
+            .accessibilityAction(named: "Reply", onReply)
+    }
+
+    private var arrow: some View {
+        Image(systemName: "arrowshape.turn.up.backward.fill")
+            .font(.body.weight(.semibold))
+            .foregroundStyle(isPastThreshold ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+            .padding(8)
+            .background(.fill.tertiary, in: .circle)
+            .scaleEffect(reduceMotion ? 1 : 0.5 + progress / 2)
+            .opacity(progress)
+            .accessibilityHidden(true)
+    }
+
+    private var swipe: some Gesture {
+        DragGesture(minimumDistance: 14)
+            .updating($translation) { value, state, _ in
+                if state != 0 || abs(value.translation.width) > abs(value.translation.height) {
+                    state = value.translation.width * forward
+                }
+            }
+            .onEnded { value in
+                guard abs(value.translation.width) > abs(value.translation.height),
+                      SwipeToReplyBubblePhysics.replies(after: value.translation.width * forward, threshold: threshold)
+                else { return }
+                onReply()
+            }
+    }
+}
+
+/// How a ``SwipeToReplyBubble`` follows a drag, measured toward the trailing edge.
+nonisolated enum SwipeToReplyBubblePhysics {
+    /// How far the bubble moves for a drag: with the finger up to the threshold, then with
+    /// growing resistance, and never toward the leading edge.
+    static func offset(for translation: CGFloat, threshold: CGFloat) -> CGFloat {
+        guard translation > 0, threshold > 0 else { return 0 }
+        guard translation > threshold else { return translation }
+        let excess = translation - threshold
+        return threshold + excess / (1 + excess / threshold)
+    }
+
+    /// How far a drag has gone toward replying, from 0 to 1.
+    static func progress(for translation: CGFloat, threshold: CGFloat) -> CGFloat {
+        guard threshold > 0 else { return 0 }
+        return min(max(translation / threshold, 0), 1)
+    }
+
+    /// Whether letting go after a drag replies.
+    static func replies(after translation: CGFloat, threshold: CGFloat) -> Bool {
+        threshold > 0 && translation >= threshold
+    }
+}
+
+// MARK: - Demo
+
+struct SwipeToReplyBubbleDemo: View {
+    private struct Message: Identifiable {
+        let id: Int
+        let text: String
+        let isOutgoing: Bool
+        var quote: String?
+    }
+
+    @State private var messages = [
+        Message(id: 1, text: "Are we still on for the hike on Saturday?", isOutgoing: false),
+        Message(id: 2, text: "Yes! I found a trail with a lake at the top.", isOutgoing: true),
+        Message(id: 3, text: "Perfect. How long is it?", isOutgoing: false),
+        Message(id: 4, text: "About three hours there and back.", isOutgoing: true),
+        Message(id: 5, text: "Should I bring lunch for both of us?", isOutgoing: false),
+        Message(id: 6, text: "I'll bring the sandwiches, you bring the snacks.", isOutgoing: true),
+        Message(id: 7, text: "Deal. Meet at the station at eight?", isOutgoing: false),
+    ]
+    @State private var replyingTo: Message?
+    @State private var draft = ""
+    @FocusState private var isComposing: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                LazyVStack(spacing: 8) {
+                    ForEach(messages) { message in
+                        SwipeToReplyBubble {
+                            replyingTo = message
+                            isComposing = true
+                        } content: {
+                            bubble(message)
+                        }
+                        .frame(maxWidth: .infinity, alignment: message.isOutgoing ? .trailing : .leading)
+                    }
+                }
+                .padding(16)
+            }
+            .defaultScrollAnchor(.bottom)
+            .scrollDismissesKeyboard(.interactively)
+
+            composer
+        }
+        .animation(reduceMotion ? nil : .snappy, value: replyingTo?.id)
+    }
+
+    private func bubble(_ message: Message) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let quote = message.quote {
+                Text(quote)
+                    .font(.footnote)
+                    .lineLimit(2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(.white.opacity(0.2), in: .rect(cornerRadius: 10))
+            }
+
+            Text(message.text)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .foregroundStyle(message.isOutgoing ? .white : .primary)
+        .background(message.isOutgoing ? Color.blue : Color(uiColor: .secondarySystemBackground), in: .rect(cornerRadius: 18))
+        .frame(maxWidth: 300, alignment: message.isOutgoing ? .trailing : .leading)
+    }
+
+    private var composer: some View {
+        VStack(spacing: 10) {
+            if let replyingTo {
+                HStack(spacing: 10) {
+                    Capsule()
+                        .fill(.blue)
+                        .frame(width: 3)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(replyingTo.isOutgoing ? "Replying to yourself" : "Replying to Maya")
+                            .font(.caption.bold())
+                            .foregroundStyle(.blue)
+
+                        Text(replyingTo.text)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Button("Cancel reply", systemImage: "xmark.circle.fill") {
+                        self.replyingTo = nil
+                    }
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(.secondary)
+                    .padding(13)
+                    .contentShape(.rect)
+                    .padding(-13)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            HStack(spacing: 10) {
+                TextField("Message", text: $draft)
+                    .focused($isComposing)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Color(uiColor: .secondarySystemBackground), in: .capsule)
+                    .onSubmit(send)
+
+                Button("Send", systemImage: "arrow.up.circle.fill", action: send)
+                    .labelStyle(.iconOnly)
+                    .font(.title)
+                    .disabled(draft.isEmpty)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.bar)
+    }
+
+    private func send() {
+        guard !draft.isEmpty else { return }
+        messages.append(Message(id: messages.count + 1, text: draft, isOutgoing: true, quote: replyingTo?.text))
+        draft = ""
+        replyingTo = nil
+    }
+}
+
+#Preview {
+    SwipeToReplyBubbleDemo()
+}
+```
+
 ## Tapback Reaction Bubble
 
 A message you press and hold to react to, with a bar of reactions above it and the chosen one kept as a badge on its corner.
@@ -15086,6 +15318,279 @@ struct PolygonMorphShapeDemo: View {
 
 #Preview {
     PolygonMorphShapeDemo()
+}
+```
+
+## Signature Pad
+
+A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.
+
+Category: Drawing. Minimum: iOS 18.0. Path: Components/Drawing/SignaturePad/SignaturePad.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A box to sign with a finger over a baseline, with a button that clears it.
+///
+/// The ink follows the finger with rounded, smoothed lines. A signature counts once its ink adds up
+/// to ``SignaturePadStrokes/isSigned(_:minimumLength:)``, so a stray tap does not. VoiceOver reads the
+/// prompt and whether the pad is signed, and lets its user sign with direct touch.
+/// ``SignaturePadStrokes/image(of:ink:lineWidth:scale:)`` turns the strokes into an image cropped
+/// to the ink.
+struct SignaturePad: View {
+    /// The strokes of the signature, each a list of points in the coordinate space of the pad.
+    @Binding var strokes: [[CGPoint]]
+    /// The text under the baseline.
+    var prompt: LocalizedStringResource = "Sign here"
+    /// The color of the ink.
+    var ink: Color = .primary
+    /// The width of the ink, in points.
+    var lineWidth: CGFloat = 3
+
+    @State private var isDrawing = false
+
+    private var isSigned: Bool { SignaturePadStrokes.isSigned(strokes) }
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            VStack(alignment: .leading, spacing: 6) {
+                Rectangle()
+                    .fill(.separator)
+                    .frame(height: 1)
+
+                Text(prompt)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 14)
+
+            Canvas { context, _ in
+                context.stroke(
+                    SignaturePadStrokes.path(for: strokes),
+                    with: .color(ink),
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
+                )
+            }
+        }
+        .frame(minHeight: 160)
+        .contentShape(.rect)
+        .gesture(draw)
+        .background(.background, in: .rect(cornerRadius: 16))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(.separator)
+        }
+        .clipShape(.rect(cornerRadius: 16))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(prompt))
+        .accessibilityValue(isSigned ? Text("Signed") : Text("Empty"))
+        .accessibilityDirectTouch(options: .silentOnTouch)
+        .overlay(alignment: .topTrailing) {
+            if !strokes.isEmpty {
+                Button("Clear", systemImage: "eraser") {
+                    strokes.removeAll()
+                }
+                .labelStyle(.iconOnly)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(13)
+                .contentShape(.rect)
+                .padding(-13)
+                .padding(12)
+            }
+        }
+    }
+
+    private var draw: some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                if isDrawing, !strokes.isEmpty {
+                    strokes[strokes.count - 1].append(value.location)
+                } else {
+                    strokes.append([value.location])
+                    isDrawing = true
+                }
+            }
+            .onEnded { _ in
+                isDrawing = false
+            }
+    }
+}
+
+/// What a ``SignaturePad`` knows about its strokes: their length, their bounds and their path.
+nonisolated enum SignaturePadStrokes {
+    /// The total length of the ink, in points.
+    static func length(of strokes: [[CGPoint]]) -> CGFloat {
+        strokes.reduce(0) { total, stroke in
+            zip(stroke, stroke.dropFirst()).reduce(total) { sum, pair in
+                sum + hypot(pair.1.x - pair.0.x, pair.1.y - pair.0.y)
+            }
+        }
+    }
+
+    /// Whether the ink adds up to a signature rather than a stray tap.
+    ///
+    /// - Parameter minimumLength: The least ink, in points, that counts as signing.
+    static func isSigned(_ strokes: [[CGPoint]], minimumLength: CGFloat = 20) -> Bool {
+        !strokes.isEmpty && length(of: strokes) >= minimumLength
+    }
+
+    /// The smallest rectangle that holds every point, or `nil` when there are none.
+    static func bounds(of strokes: [[CGPoint]]) -> CGRect? {
+        let points = strokes.joined()
+        guard let first = points.first else { return nil }
+        var minimum = first
+        var maximum = first
+        for point in points {
+            minimum = CGPoint(x: min(minimum.x, point.x), y: min(minimum.y, point.y))
+            maximum = CGPoint(x: max(maximum.x, point.x), y: max(maximum.y, point.y))
+        }
+        return CGRect(x: minimum.x, y: minimum.y, width: maximum.x - minimum.x, height: maximum.y - minimum.y)
+    }
+
+    /// The strokes as one path, smoothed through the middle of each pair of points. A stroke
+    /// of a single point is a dot.
+    static func path(for strokes: [[CGPoint]]) -> Path {
+        var path = Path()
+        for stroke in strokes {
+            guard let first = stroke.first, let last = stroke.last else { continue }
+            guard stroke.count > 1 else {
+                path.addEllipse(in: CGRect(x: first.x - 0.5, y: first.y - 0.5, width: 1, height: 1))
+                continue
+            }
+            path.move(to: first)
+            for (point, next) in zip(stroke.dropFirst(), stroke.dropFirst(2)) {
+                path.addQuadCurve(to: CGPoint(x: (point.x + next.x) / 2, y: (point.y + next.y) / 2), control: point)
+            }
+            path.addLine(to: last)
+        }
+        return path
+    }
+
+    /// Draws strokes into an image cropped to the ink, on a clear background.
+    ///
+    /// - Parameters:
+    ///   - ink: The color of the ink. Pick a fixed color, like black, for an image that is
+    ///     kept or sent: a dynamic one resolves in the light appearance.
+    ///   - lineWidth: The width of the ink, in points.
+    ///   - scale: The pixels per point of the image.
+    /// - Returns: The image, or `nil` when there is no ink.
+    @MainActor static func image(of strokes: [[CGPoint]], ink: Color = .black, lineWidth: CGFloat = 3, scale: CGFloat = 3) -> UIImage? {
+        guard let bounds = bounds(of: strokes) else { return nil }
+        let frame = bounds.insetBy(dx: -lineWidth, dy: -lineWidth)
+        let ink = path(for: strokes)
+            .offsetBy(dx: -frame.minX, dy: -frame.minY)
+            .stroke(ink, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+            .frame(width: frame.width, height: frame.height)
+        let renderer = ImageRenderer(content: ink)
+        renderer.scale = scale
+        return renderer.uiImage
+    }
+}
+
+// MARK: - Demo
+
+struct SignaturePadDemo: View {
+    /// A scribble in the shape of a signature, for the demo to draw by itself.
+    private static let sample: [[CGPoint]] = {
+        let loops = (0...150).map { step in
+            let t = Double(step) / 150
+            let angle = t * 2 * .pi * 6
+            let envelope = 0.65 + 0.35 * sin(t * 3 * .pi)
+            return CGPoint(x: 40 + 250 * t - 16 * sin(angle), y: 118 - 26 * cos(angle) * envelope - 14 * t)
+        }
+        let flourish = (0...40).map { step in
+            let t = Double(step) / 40
+            return CGPoint(x: 70 + 230 * t, y: 162 - 18 * t + 10 * sin(t * .pi))
+        }
+        return [loops, flourish]
+    }()
+
+    /// Only for this demo: it plays by itself until someone touches it.
+    @State private var isAutoPlaying = true
+    @State private var strokes: [[CGPoint]] = []
+    @State private var sampleStrokes = 0
+    @State private var signature: UIImage?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Delivery confirmation")
+                .font(.title2.bold())
+
+            Text("Sign to confirm you received the parcel.")
+                .foregroundStyle(.secondary)
+
+            if let signature {
+                VStack(alignment: .leading, spacing: 12) {
+                    Image(uiImage: signature)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: 120)
+                        .padding(12)
+                        .background(.white, in: .rect(cornerRadius: 12))
+                        .accessibilityLabel(Text("Your signature"))
+
+                    Label("Signed", systemImage: "checkmark.seal.fill")
+                        .foregroundStyle(.green)
+
+                    Button("Sign again") {
+                        self.signature = nil
+                        strokes.removeAll()
+                    }
+                }
+                .padding(16)
+                .background(.fill.tertiary, in: .rect(cornerRadius: 16))
+            } else {
+                SignaturePad(strokes: $strokes)
+                    .frame(height: 220)
+
+                Button {
+                    signature = SignaturePadStrokes.image(of: strokes)
+                } label: {
+                    Text("Done")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(!SignaturePadStrokes.isSigned(strokes))
+            }
+        }
+        .padding(20)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in isAutoPlaying = false })
+        .onChange(of: isAutoPlaying) {
+            strokes.removeFirst(min(sampleStrokes, strokes.count))
+            sampleStrokes = 0
+        }
+        .task {
+            while isAutoPlaying {
+                strokes.removeAll()
+                sampleStrokes = 0
+                for stroke in Self.sample {
+                    strokes.append([])
+                    sampleStrokes += 1
+                    for point in stroke {
+                        try? await Task.sleep(for: .milliseconds(12))
+                        guard !Task.isCancelled, isAutoPlaying else { return }
+                        strokes[sampleStrokes - 1].append(point)
+                    }
+                }
+                try? await Task.sleep(for: .seconds(1.3))
+                guard !Task.isCancelled, isAutoPlaying else { return }
+                strokes.removeAll()
+                sampleStrokes = 0
+                try? await Task.sleep(for: .seconds(0.5))
+            }
+        }
+    }
+}
+
+#Preview {
+    SignaturePadDemo()
 }
 ```
 
@@ -29854,6 +30359,180 @@ struct AccordionSectionDemo: View {
 }
 ```
 
+## Alphabet Indexed List
+
+A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.
+
+Category: Lists. Minimum: iOS 26.0. Path: Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A list in sections by the first letter of each name, with the system's index of letters along
+/// the trailing edge.
+///
+/// Tapping a letter of the index, or sliding a finger along it, jumps to its section. The list
+/// sorts and groups the names in the order of the environment's locale, ignoring case and
+/// accents, so Álvaro goes under A. A name that does not start with a letter, like a number or an
+/// emoji, goes under # at the end.
+@available(iOS 26, *)
+struct AlphabetIndexedList<Item: Identifiable, Row: View>: View {
+    /// The items, in any order.
+    let items: [Item]
+    /// The text an item is sorted and grouped by, like the name of a person.
+    let name: (Item) -> String
+    /// The row of one item.
+    @ViewBuilder let row: (Item) -> Row
+
+    @Environment(\.locale) private var locale
+
+    var body: some View {
+        List {
+            ForEach(AlphabetIndexedListSection.sections(of: items, name: name, locale: locale)) { section in
+                Section(section.letter) {
+                    ForEach(section.items) { item in
+                        row(item)
+                    }
+                }
+                .sectionIndexLabel(section.letter)
+            }
+        }
+        .listSectionIndexVisibility(.visible)
+    }
+}
+
+/// The items of one letter of an ``AlphabetIndexedList``.
+nonisolated struct AlphabetIndexedListSection<Item>: Identifiable {
+    /// The letter the names start with, or # for the names that do not start with a letter.
+    let letter: String
+    /// The items of the letter, sorted by name.
+    let items: [Item]
+
+    var id: String { letter }
+
+    /// The letter of the section of names that do not start with a letter.
+    static var otherLetter: String { "#" }
+
+    /// Sorts items by name in the order of a locale and groups them by their first letter.
+    ///
+    /// - Returns: A section for every first letter, in alphabetical order, and the names that
+    ///   do not start with a letter in a last section under ``otherLetter``.
+    static func sections(of items: [Item], name: (Item) -> String, locale: Locale) -> [Self] {
+        let sorted = items.sorted {
+            name($0).compare(name($1), options: .caseInsensitive, locale: locale) == .orderedAscending
+        }
+        var letters: [String] = []
+        var itemsByLetter: [String: [Item]] = [:]
+        for item in sorted {
+            let letter = letter(of: name(item), locale: locale)
+            if itemsByLetter[letter] == nil, letter != otherLetter {
+                letters.append(letter)
+            }
+            itemsByLetter[letter, default: []].append(item)
+        }
+        if itemsByLetter[otherLetter] != nil {
+            letters.append(otherLetter)
+        }
+        return letters.map { Self(letter: $0, items: itemsByLetter[$0] ?? []) }
+    }
+
+    /// The letter a name goes under: its first letter, without accents and in uppercase, or
+    /// ``otherLetter`` when the name does not start with a letter.
+    static func letter(of name: String, locale: Locale) -> String {
+        guard let first = name.trimmingCharacters(in: .whitespaces).first, first.isLetter else {
+            return otherLetter
+        }
+        let folded = String(first).folding(options: [.caseInsensitive, .diacriticInsensitive], locale: locale)
+        return folded.uppercased(with: locale).first.map(String.init) ?? otherLetter
+    }
+}
+
+// MARK: - Demo
+
+@available(iOS 26, *)
+struct AlphabetIndexedListDemo: View {
+    private struct Contact: Identifiable {
+        let name: String
+        let detail: LocalizedStringResource
+
+        var id: String { name }
+    }
+
+    private let contacts = [
+        Contact(name: "Álvaro Ruiz", detail: "Mobile"), Contact(name: "Amelia Clarke", detail: "Work"),
+        Contact(name: "Ana Torres", detail: "Mobile"), Contact(name: "Ángela Vidal", detail: "Home"),
+        Contact(name: "Ben Carter", detail: "Mobile"), Contact(name: "Bianca Rossi", detail: "Work"),
+        Contact(name: "Camille Dubois", detail: "Mobile"), Contact(name: "Carlos Méndez", detail: "Mobile"),
+        Contact(name: "Chloé Martin", detail: "Home"), Contact(name: "Daniel Kim", detail: "Work"),
+        Contact(name: "Diego Herrera", detail: "Mobile"), Contact(name: "Elena Petrova", detail: "Mobile"),
+        Contact(name: "Émile Laurent", detail: "Work"), Contact(name: "Ethan Brooks", detail: "Mobile"),
+        Contact(name: "Fatima Zahra", detail: "Mobile"), Contact(name: "Gabriel Silva", detail: "Home"),
+        Contact(name: "Hana Sato", detail: "Mobile"), Contact(name: "Hugo Lefèvre", detail: "Work"),
+        Contact(name: "Íñigo Etxeberria", detail: "Mobile"), Contact(name: "Isla Murphy", detail: "Mobile"),
+        Contact(name: "Jonas Weber", detail: "Work"), Contact(name: "Julia Nowak", detail: "Mobile"),
+        Contact(name: "Kai Nakamura", detail: "Mobile"), Contact(name: "Laila Haddad", detail: "Home"),
+        Contact(name: "Lucas Moreau", detail: "Mobile"), Contact(name: "Maya Patel", detail: "Work"),
+        Contact(name: "Mateo García", detail: "Mobile"), Contact(name: "Noah Fischer", detail: "Mobile"),
+        Contact(name: "Nuria Soler", detail: "Home"), Contact(name: "Olivia Jensen", detail: "Mobile"),
+        Contact(name: "Pablo Ortega", detail: "Work"), Contact(name: "Quentin Roux", detail: "Mobile"),
+        Contact(name: "Rosa Delgado", detail: "Mobile"), Contact(name: "Sofia Bianchi", detail: "Home"),
+        Contact(name: "Tomás Navarro", detail: "Mobile"), Contact(name: "Uma Reddy", detail: "Work"),
+        Contact(name: "Valentina Cruz", detail: "Mobile"), Contact(name: "Wei Chen", detail: "Mobile"),
+        Contact(name: "Yara Costa", detail: "Home"), Contact(name: "Zoe Walsh", detail: "Mobile"),
+        Contact(name: "24h Pharmacy", detail: "Work"), Contact(name: "@studio", detail: "Work"),
+    ]
+
+    @ScaledMetric(relativeTo: .subheadline) private var avatarSize = 40.0
+
+    var body: some View {
+        NavigationStack {
+            AlphabetIndexedList(items: contacts, name: \.name) { contact in
+                HStack(spacing: 12) {
+                    Text(initials(of: contact.name))
+                        .font(.subheadline.bold())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .foregroundStyle(.white)
+                        .frame(width: avatarSize, height: avatarSize)
+                        .background(color(for: contact.name).gradient, in: .circle)
+                        .accessibilityHidden(true)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(contact.name)
+                            .font(.body)
+
+                        Text(contact.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+            }
+            .navigationTitle("Contacts")
+        }
+    }
+
+    private func initials(of name: String) -> String {
+        let letters = name.split(separator: " ").prefix(2).compactMap(\.first).filter(\.isLetter)
+        return letters.isEmpty ? "#" : String(letters).uppercased()
+    }
+
+    private func color(for name: String) -> Color {
+        let palette: [Color] = [.indigo, .teal, .orange, .pink, .blue, .purple, .green, .red]
+        let index = name.unicodeScalars.reduce(0) { ($0 + Int($1.value)) % palette.count }
+        return palette[index]
+    }
+}
+
+@available(iOS 26, *)
+#Preview {
+    AlphabetIndexedListDemo()
+}
+```
+
 ## Disclosure Tree View
 
 A nested tree of rows that expand and collapse, indenting each level, for folders or category hierarchies.
@@ -31960,6 +32639,194 @@ struct MapClusterAnnotationsDemo: View {
 
 #Preview {
     MapClusterAnnotationsDemo()
+}
+```
+
+## Map Pin Location Picker
+
+A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.
+
+Category: Maps. Minimum: iOS 18.0. Path: Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import MapKit
+import SwiftUI
+
+/// A map with a pin fixed at its center, to pick a place by moving the map under the pin.
+///
+/// The pin lifts while the map moves and lands with a small bounce where it stops, and only
+/// then does the picker update ``coordinate``. Setting ``coordinate`` from outside moves the
+/// map there. With Reduce Motion the pin stays down and only its shadow changes.
+///
+/// The pin marks the center of the picker's frame, so controls placed over the map can hide
+/// it: put them next to the map instead.
+struct MapPinLocationPicker: View {
+    /// The point under the tip of the pin. The picker writes it each time the map comes to rest.
+    @Binding var coordinate: CLLocationCoordinate2D
+    /// How much of the map shows around the pin when the picker moves the map, in meters.
+    var span: CLLocationDistance = 800
+    /// The color of the head of the pin.
+    var tint: Color = .red
+
+    @State private var position: MapCameraPosition = .automatic
+    @State private var isMoving = false
+    @State private var reported: [Double] = []
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let headSize: CGFloat = 28
+    private let stemHeight: CGFloat = 16
+    private let lift: CGFloat = 14
+
+    var body: some View {
+        Map(position: $position)
+            .onMapCameraChange(frequency: .continuous) { context in
+                let center = context.camera.centerCoordinate
+                if [center.latitude, center.longitude] != reported {
+                    isMoving = true
+                }
+            }
+            .onMapCameraChange(frequency: .onEnd) { context in
+                let center = context.camera.centerCoordinate
+                reported = [center.latitude, center.longitude]
+                isMoving = false
+                coordinate = center
+            }
+            .overlay {
+                pin
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+            }
+            .onAppear {
+                move(to: coordinate)
+            }
+            .onChange(of: [coordinate.latitude, coordinate.longitude]) { _, new in
+                if new != reported {
+                    withAnimation(reduceMotion ? nil : .smooth) { move(to: coordinate) }
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.45), value: isMoving)
+    }
+
+    private var pin: some View {
+        ZStack {
+            Ellipse()
+                .fill(.black.opacity(isMoving ? 0.15 : 0.3))
+                .frame(width: isMoving ? 16 : 10, height: isMoving ? 6 : 4)
+
+            VStack(spacing: 0) {
+                Circle()
+                    .fill(tint)
+                    .frame(width: headSize, height: headSize)
+                    .overlay {
+                        Circle()
+                            .fill(MapPinLocationPickerContrastingForeground(background: tint))
+                            .frame(width: headSize / 3, height: headSize / 3)
+                    }
+                    .shadow(color: .black.opacity(0.25), radius: isMoving ? 6 : 2, y: isMoving ? 4 : 1)
+
+                Capsule()
+                    .fill(Color(white: 0.3))
+                    .frame(width: 3, height: stemHeight)
+            }
+            .offset(y: -(headSize + stemHeight) / 2 - (isMoving && !reduceMotion ? lift : 0))
+        }
+    }
+
+    private func move(to coordinate: CLLocationCoordinate2D) {
+        position = .region(MKCoordinateRegion(center: coordinate, latitudinalMeters: span, longitudinalMeters: span))
+    }
+}
+
+/// White or black, whichever reads better on `background`. Black only on a
+/// light color, so the system's own colors keep white.
+nonisolated struct MapPinLocationPickerContrastingForeground: ShapeStyle {
+    let background: Color
+
+    func resolve(in environment: EnvironmentValues) -> Color {
+        let color = background.resolve(in: environment)
+        let luminance = 0.2126 * color.linearRed + 0.7152 * color.linearGreen + 0.0722 * color.linearBlue
+        return luminance > 0.5 ? .black : .white
+    }
+}
+
+// MARK: - Demo
+
+struct MapPinLocationPickerDemo: View {
+    private static let start = CLLocationCoordinate2D(latitude: 40.4169, longitude: -3.7035)
+
+    @State private var coordinate = start
+    @State private var chosen: CLLocationCoordinate2D?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    var body: some View {
+        let stack = dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: 24))
+
+        VStack(spacing: 0) {
+            MapPinLocationPicker(coordinate: $coordinate)
+                .ignoresSafeArea(edges: .top)
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Move the map to place the pin")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                stack {
+                    value("Latitude", coordinate.latitude)
+                    value("Longitude", coordinate.longitude)
+                }
+
+                stack {
+                    Button("Reset") {
+                        coordinate = Self.start
+                        chosen = nil
+                    }
+                    .buttonStyle(.bordered)
+
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
+
+                    Button {
+                        chosen = coordinate
+                    } label: {
+                        if chosen == nil {
+                            Label("Choose this spot", systemImage: "mappin.and.ellipse")
+                        } else {
+                            Label("Chosen", systemImage: "checkmark")
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(.background)
+            .onChange(of: [coordinate.latitude, coordinate.longitude]) {
+                chosen = nil
+            }
+        }
+    }
+
+    private func value(_ title: LocalizedStringResource, _ degrees: Double) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(degrees, format: .number.precision(.fractionLength(5)))
+                .font(.headline.monospacedDigit())
+                .contentTransition(.numericText(value: degrees))
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+#Preview {
+    MapPinLocationPickerDemo()
 }
 ```
 

@@ -1,5 +1,5 @@
 {
-  "count": 303,
+  "count": 307,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -2495,6 +2495,49 @@
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/NestedCommentThread/NestedCommentThread.swift"
     },
     {
+      "id": "swipe-to-reply-bubble",
+      "name": "SwipeToReplyBubble",
+      "title": "Swipe To Reply Bubble",
+      "category": "Chat",
+      "summary": "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+      "keywords": {
+        "en": [
+          "swipe to reply",
+          "reply",
+          "quote",
+          "message",
+          "chat bubble",
+          "drag",
+          "haptic",
+          "messaging"
+        ],
+        "es": [
+          "deslizar para responder",
+          "responder",
+          "citar",
+          "mensaje",
+          "burbuja de chat",
+          "arrastrar",
+          "háptica",
+          "mensajería"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "DragGesture",
+        "GestureState",
+        "sensoryFeedback",
+        "accessibilityAction"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift",
+      "preview": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift"
+    },
+    {
       "id": "tapback-reaction-bubble",
       "name": "TapbackReactionBubble",
       "title": "Tapback Reaction Bubble",
@@ -3616,6 +3659,49 @@
       "path": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift",
       "preview": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift"
+    },
+    {
+      "id": "signature-pad",
+      "name": "SignaturePad",
+      "title": "Signature Pad",
+      "category": "Drawing",
+      "summary": "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+      "keywords": {
+        "en": [
+          "signature",
+          "sign here",
+          "signature pad",
+          "e-signature",
+          "draw",
+          "delivery confirmation",
+          "export image",
+          "canvas"
+        ],
+        "es": [
+          "firma",
+          "firme aquí",
+          "panel de firma",
+          "firma electrónica",
+          "dibujar",
+          "confirmación de entrega",
+          "exportar imagen",
+          "lienzo"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Canvas",
+        "DragGesture",
+        "ImageRenderer",
+        "accessibilityDirectTouch"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Drawing/SignaturePad/SignaturePad.swift",
+      "preview": "Components/Drawing/SignaturePad/SignaturePad.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/SignaturePad/SignaturePad.swift"
     },
     {
       "id": "blurred-image-backdrop",
@@ -7134,6 +7220,49 @@
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AccordionSection/AccordionSection.swift"
     },
     {
+      "id": "alphabet-indexed-list",
+      "name": "AlphabetIndexedList",
+      "title": "Alphabet Indexed List",
+      "category": "Lists",
+      "summary": "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+      "keywords": {
+        "en": [
+          "section index",
+          "alphabet",
+          "contacts",
+          "index bar",
+          "A to Z",
+          "jump to letter",
+          "sections",
+          "list"
+        ],
+        "es": [
+          "índice de secciones",
+          "alfabeto",
+          "contactos",
+          "barra de índice",
+          "de la A a la Z",
+          "saltar a una letra",
+          "secciones",
+          "lista"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "26.0",
+      "apis": [
+        "sectionIndexLabel",
+        "listSectionIndexVisibility",
+        "List",
+        "Section"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift",
+      "preview": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift"
+    },
+    {
       "id": "disclosure-tree-view",
       "name": "DisclosureTreeView",
       "title": "Disclosure Tree View",
@@ -7777,6 +7906,49 @@
       "path": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift",
       "preview": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift"
+    },
+    {
+      "id": "map-pin-location-picker",
+      "name": "MapPinLocationPicker",
+      "title": "Map Pin Location Picker",
+      "category": "Maps",
+      "summary": "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+      "keywords": {
+        "en": [
+          "location picker",
+          "map",
+          "pin",
+          "choose location",
+          "drop pin",
+          "coordinate",
+          "pick a place",
+          "delivery address"
+        ],
+        "es": [
+          "selector de ubicación",
+          "mapa",
+          "chincheta",
+          "elegir ubicación",
+          "soltar chincheta",
+          "coordenada",
+          "elegir un lugar",
+          "dirección de entrega"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Map",
+        "MapCameraPosition",
+        "onMapCameraChange",
+        "MKCoordinateRegion"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift",
+      "preview": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift"
     },
     {
       "id": "map-route-tracker",
