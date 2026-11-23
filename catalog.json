@@ -1,5 +1,5 @@
 {
-  "count": 308,
+  "count": 309,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -2784,6 +2784,49 @@
       "path": "Components/Commerce/PricingTierCards/PricingTierCards.swift",
       "preview": "Components/Commerce/PricingTierCards/PricingTierCards.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Commerce/PricingTierCards/PricingTierCards.swift"
+    },
+    {
+      "id": "promo-code-field",
+      "name": "PromoCodeField",
+      "title": "Promo Code Field",
+      "category": "Commerce",
+      "summary": "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+      "keywords": {
+        "en": [
+          "promo code",
+          "coupon",
+          "discount code",
+          "voucher",
+          "checkout",
+          "apply",
+          "shake",
+          "validation"
+        ],
+        "es": [
+          "código promocional",
+          "cupón",
+          "código de descuento",
+          "vale",
+          "pago",
+          "aplicar",
+          "sacudida",
+          "validación"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "18.0",
+      "apis": [
+        "TextField",
+        "keyframeAnimator",
+        "AccessibilityNotification",
+        "contentTransition"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Commerce/PromoCodeField/PromoCodeField.swift",
+      "preview": "Components/Commerce/PromoCodeField/PromoCodeField.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Commerce/PromoCodeField/PromoCodeField.swift"
     },
     {
       "id": "trial-timeline-paywall",

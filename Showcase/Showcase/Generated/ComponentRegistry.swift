@@ -621,6 +621,15 @@ enum ComponentRegistry {
             demo: { AnyView(PricingTierCardsDemo()) }
         ),
         ShowcaseEntry(
+            id: "promo-code-field",
+            title: "Promo Code Field",
+            category: "Commerce",
+            summary: "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+            keywords: ["promo code", "coupon", "discount code", "voucher", "checkout", "apply", "shake", "validation", "código promocional", "cupón", "código de descuento", "vale", "pago", "aplicar", "sacudida", "validación"],
+            minIOS: "18.0",
+            demo: { AnyView(PromoCodeFieldDemo()) }
+        ),
+        ShowcaseEntry(
             id: "trial-timeline-paywall",
             title: "Trial Timeline Paywall",
             category: "Commerce",

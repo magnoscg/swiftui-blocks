@@ -1,0 +1,54 @@
+{
+  "id": "promo-code-field",
+  "name": "PromoCodeField",
+  "title": "Promo Code Field",
+  "category": "Commerce",
+  "summary": "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+  "keywords": {
+    "en": [
+      "promo code",
+      "coupon",
+      "discount code",
+      "voucher",
+      "checkout",
+      "apply",
+      "shake",
+      "validation"
+    ],
+    "es": [
+      "código promocional",
+      "cupón",
+      "código de descuento",
+      "vale",
+      "pago",
+      "aplicar",
+      "sacudida",
+      "validación"
+    ]
+  },
+  "difficulty": "beginner",
+  "minIOS": "18.0",
+  "apis": [
+    "TextField",
+    "keyframeAnimator",
+    "AccessibilityNotification",
+    "contentTransition"
+  ],
+  "origin": {
+    "kind": "original"
+  },
+  "previewSteps": [
+    "sleep 0.5",
+    "tap -x 167 -y 228",
+    "sleep 0.4",
+    "type 'expired'",
+    "sleep 0.2",
+    "tap --label Apply",
+    "sleep 1.6",
+    "key-combo --modifiers 227 --key 4",
+    "type 'spring20'",
+    "sleep 0.3",
+    "tap --label Apply",
+    "sleep 1.8"
+  ]
+}
