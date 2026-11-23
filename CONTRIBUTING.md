@@ -83,14 +83,14 @@ and tags are `X.Y.Z` without a `v`.
 5. Publish the GitHub release of the tag, with the notes of X.Y.Z in
    [CHANGELOG.md](CHANGELOG.md) as its text. GitHub shows every line break of
    a release as a break, so the command joins each paragraph and item into
-   one line, and it publishes nothing when it finds no notes for X.Y.Z. The
+   one line, and it publishes nothing, and says so, when it finds no notes for X.Y.Z. The
    README's release badge reads this release.
 
    ```sh
    notes=$(awk -v v=X.Y.Z '$0 ~ "^## " v " " {f = 1; next} /^## / {f = 0} f' CHANGELOG.md \
      | awk '/^$/ || /^(#|- )/ {if (b != "") print b; b = $0; if ($0 == "") {print; b = ""}; next} {sub(/^ +/, ""); b = b " " $0} END {if (b != "") print b}' \
      | sed '/./,$!d')
-   test -n "$notes" && gh release create X.Y.Z --verify-tag --title X.Y.Z --notes "$notes"
+   if [ -n "$notes" ]; then gh release create X.Y.Z --verify-tag --title X.Y.Z --notes "$notes"; else echo "No notes for X.Y.Z in CHANGELOG.md" >&2; fi
    ```
 
 6. Merge `main` back into `develop`.
