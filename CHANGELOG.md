@@ -7,6 +7,12 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- The search box on the landing page suggests one example in the language of
+  the page, "button that shines" at `/` and "botón que brilla" at `/es/`, short
+  enough to show whole on a phone.
+
 ## 0.18.1 - 2026-11-23
 
 ### Changed
