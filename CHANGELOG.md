@@ -7,6 +7,11 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- The landing page links to itself in the other language from the bar at the
+  top: Español at `/` and English at `/es/`.
+
 ### Changed
 
 - The search box on the landing page suggests one example in the language of
