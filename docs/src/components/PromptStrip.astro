@@ -2,7 +2,7 @@
 // The prompts that work, in two rows that drift in opposite directions under the hero: what someone asks,
 // the component playing, and the file it adds. Every card runs the whole loop on its own, one slot after the
 // previous one, so a row needs no copies to come back at the other edge. Both rows play every card, the second
-// from halfway, so they never line up. Hovering or focusing the strip holds it; with Reduce Motion it stands
+// from halfway, so they never line up. Focusing a card holds the strip; with Reduce Motion it stands
 // still, scrolls by hand, and each card shows the still of its social card, the middle frame of the preview.
 import { cardURL, pageURL, previewBytes, previewURL } from '../lib/catalog';
 import { landingText, type LandingLang } from '../lib/landing';
@@ -215,7 +215,7 @@ const offset = (index: number, count: number, reverse: boolean) => (reverse ? in
       animation-direction: reverse;
     }
 
-    .prompt-strip:hover li,
+    /* Only focus holds the strip, so a card reached with the keyboard stays put; the pointer does not. */
     .prompt-strip:focus-within li {
       animation-play-state: paused;
     }

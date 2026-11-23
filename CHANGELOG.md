@@ -7,6 +7,11 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- The prompts on the landing page keep drifting under the pointer. Only focus
+  on a card holds them, so the card reached with the keyboard stays in place.
+
 ## 0.18.0 - 2026-11-23
 
 ### Added
