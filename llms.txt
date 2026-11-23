@@ -33,7 +33,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Layouts: AdaptiveColumnsGrid, AnyLayoutAdaptiveSwitch, BentoGridLayout, FlowTagsLayout, KanbanBoard, MasonryLayout, MorphingLayoutSwitch, RadialLayout, ReadableWidthContainer, SubviewCardContainer
 - Lists: AccordionSection, AlphabetIndexedList (iOS 26.0+), DisclosureTreeView, EditModeMultiSelect, LoadMoreFooter, ReorderableCardList (iOS 27.0+), ReorderableGrid (iOS 27.0+), StickySectionHeaders, SwipeActionCards (iOS 27.0+)
 - Loaders: ArcSegmentsLoader, BlobMorphLoader, DotsPulseLoader, OrbitLoader, SkeletonShimmerModifier, SymbolBreatheLoader, WaveBarsLoader
-- Maps: MapAnnotationCallout, MapClusterAnnotations, MapRouteTracker, MapSearchSheet
+- Maps: MapAnnotationCallout, MapClusterAnnotations, MapPinLocationPicker, MapRouteTracker, MapSearchSheet
 - Media: AudioPlayerCard, DoubleTapSeekOverlay, ExpandingMiniPlayer, ShutterCaptureButton, SpinningVinylArt, VideoPlayerChrome, VideoPosterToPlayer, WaveformScrubber
 - Menus: CoachMarkTour, CommandPalette, ContextMenuPreviewCard, DropdownSelectMenu, GooeyFloatingMenu
 - Modern: AnimatableRing (iOS 26.0+), ConcentricCard (iOS 26.0+), ProminentTabBar (iOS 27.0+), ScrollEdgeHeader (iOS 26.0+), SymbolDrawOn (iOS 26.0+), ToolbarOverflowDemo (iOS 27.0+)

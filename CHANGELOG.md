@@ -21,6 +21,9 @@ on `main`.
 - Swipe To Reply Bubble, a message bubble that slides toward the trailing edge
   to reply, with a reply arrow behind it and a tap of the phone when the drag
   passes the point of no return. VoiceOver offers it as a Reply action.
+- Map Pin Location Picker, a map with a pin fixed at its center that lifts
+  while the map moves and lands where it stops, to pick a place by moving the
+  map under it.
 
 ## 0.17.1 - 2026-11-21
 

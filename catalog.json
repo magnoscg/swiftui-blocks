@@ -1,5 +1,5 @@
 {
-  "count": 305,
+  "count": 306,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -7863,6 +7863,49 @@
       "path": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift",
       "preview": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift"
+    },
+    {
+      "id": "map-pin-location-picker",
+      "name": "MapPinLocationPicker",
+      "title": "Map Pin Location Picker",
+      "category": "Maps",
+      "summary": "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+      "keywords": {
+        "en": [
+          "location picker",
+          "map",
+          "pin",
+          "choose location",
+          "drop pin",
+          "coordinate",
+          "pick a place",
+          "delivery address"
+        ],
+        "es": [
+          "selector de ubicación",
+          "mapa",
+          "chincheta",
+          "elegir ubicación",
+          "soltar chincheta",
+          "coordenada",
+          "elegir un lugar",
+          "dirección de entrega"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Map",
+        "MapCameraPosition",
+        "onMapCameraChange",
+        "MKCoordinateRegion"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift",
+      "preview": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift"
     },
     {
       "id": "map-route-tracker",

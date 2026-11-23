@@ -1785,6 +1785,15 @@ enum ComponentRegistry {
             demo: { AnyView(MapClusterAnnotationsDemo()) }
         ),
         ShowcaseEntry(
+            id: "map-pin-location-picker",
+            title: "Map Pin Location Picker",
+            category: "Maps",
+            summary: "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+            keywords: ["location picker", "map", "pin", "choose location", "drop pin", "coordinate", "pick a place", "delivery address", "selector de ubicación", "mapa", "chincheta", "elegir ubicación", "soltar chincheta", "coordenada", "elegir un lugar", "dirección de entrega"],
+            minIOS: "18.0",
+            demo: { AnyView(MapPinLocationPickerDemo()) }
+        ),
+        ShowcaseEntry(
             id: "map-route-tracker",
             title: "Map Route Tracker",
             category: "Maps",
