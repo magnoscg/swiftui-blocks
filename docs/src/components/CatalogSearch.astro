@@ -52,9 +52,13 @@ const text = landingText[Astro.props.lang ?? 'en'];
         .replace(/[̀-ͯ]/g, '')
         .replace(/[^a-z0-9]+/g, ' ')}`;
     const has = (text: string, word: string) => text.includes(` ${word}`);
-    // An ending is dropped so "brilla" finds "brillo" and "glowing" finds "glow".
-    const stem = (word: string) =>
-      word.length <= 4 ? word : /^.{4,}ing$/.test(word) ? word.slice(0, -3) : word.replace(/(es|s|a|o|e)$/, '');
+    // An ending is dropped so "brilla" finds "brillo", "dragging" finds "drag" and "cargando" finds "cargador".
+    const stem = (word: string) => {
+      if (word.length <= 4) return word;
+      if (/^.{4,}ing$/.test(word)) return word.slice(0, -3).replace(/([bdgmnpt])\1$/, '$1');
+      if (/^.{4,}(ando|iendo)$/.test(word)) return word.replace(/(ando|iendo)$/, '');
+      return word.replace(/(es|s|a|o|e)$/, '');
+    };
 
     const EMPTY_WORDS = new Set(['que', 'de', 'la', 'el', 'un', 'una', 'con', 'para', 'the', 'that', 'with', 'for', 'and', 'of']);
 
@@ -68,7 +72,10 @@ const text = landingText[Astro.props.lang ?? 'en'];
         title: plain(entry.title),
         keywords: plain([...entry.keywords.en, ...entry.keywords.es].join(' ')),
         primary: plain([entry.keywords.en[0], entry.keywords.es[0]].join(' ')),
-        rest: plain([entry.summary, entry.category, ...entry.apis].join(' ')),
+        // API names also go split at their capitals, so "animator" finds PhaseAnimator.
+        rest: plain(
+          [entry.summary, entry.category, ...entry.apis, ...entry.apis.map((api) => api.replace(/([a-z0-9])([A-Z])/g, '$1 $2'))].join(' '),
+        ),
       }));
       return entries;
     };
@@ -79,7 +86,9 @@ const text = landingText[Astro.props.lang ?? 'en'];
         .split(/\s+/)
         .filter((word) => word.length > 1 && !EMPTY_WORDS.has(word))
         .map(stem);
-      if (words.length === 0) {
+      // A box with nothing to look for yet, empty, a lone letter or "the", hides the list; symbols alone, like
+      // "!!!", say that nothing fits.
+      if (words.length === 0 && (input.value.trim() === '' || /[a-z0-9]/.test(plain(input.value)))) {
         results.hidden = true;
         status.textContent = '';
         return;

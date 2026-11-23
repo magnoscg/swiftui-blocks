@@ -173,8 +173,12 @@ const other = lang && (Object.keys(landingPaths) as LandingLang[]).find((each) =
     color: var(--sl-color-white);
   }
 
-  /* A narrow bar keeps the globe alone, and the name of the language stays the name of the link. */
-  @media (max-width: 30rem) {
+  /* Below 72rem the bar keeps the globe alone, and the name of the language stays the name of the link. */
+  @media (max-width: 71.99rem) {
+    .site-header {
+      gap: 1rem;
+    }
+
     .tools {
       gap: 0.5rem;
     }
@@ -189,14 +193,29 @@ const other = lang && (Object.keys(landingPaths) as LandingLang[]).find((each) =
     }
   }
 
-  /* A narrow bar keeps only the mark, except on the landing page, the first thing many people see. */
+  /* A narrow bar keeps only the mark, except on the landing page, the first thing many people see, and
+     draws closer so it still holds a count of stars up to three digits. */
   @media (max-width: 30rem) {
     :global(:root:not([data-has-hero])) .brand span {
       display: none;
     }
+
+    .site-header {
+      gap: 0.75rem;
+    }
+
+    .tools {
+      gap: 0.375rem;
+    }
+
+    .repository,
+    .language {
+      padding-inline: 0.5rem;
+    }
   }
 
-  @media (max-width: 20rem) {
+  /* The landing page keeps the name down to 360 pixels; below that the bar runs out of room for it. */
+  @media (max-width: 22.49rem) {
     .brand span {
       display: none;
     }
@@ -207,6 +226,12 @@ const other = lang && (Object.keys(landingPaths) as LandingLang[]).find((each) =
       display: flex;
     }
 
+    .search {
+      width: 8.5rem;
+    }
+  }
+
+  @media (min-width: 72rem) {
     .search {
       width: 15rem;
     }

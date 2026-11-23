@@ -52,7 +52,7 @@ export const landingText = {
     allOptions: 'Todas las opciones',
     stripTitle: 'Lo que pides y lo que añade tu agente',
     searchLabel: 'Describe lo que necesitas',
-    searchPlaceholder: 'Prueba con «botón que brilla»…',
+    searchPlaceholder: 'Prueba «botón que brilla»…',
     searchNothing: 'Nada encaja con esas palabras. Prueba con otras o explora el catálogo.',
     searchOne: '1 componente',
     searchMany: 'componentes',
