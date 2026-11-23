@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.19.0 - 2026-11-23
+
 ### Added
 
 - The landing page links to itself in the other language from the bar at the
