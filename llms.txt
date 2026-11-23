@@ -20,7 +20,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Cards: AvatarStack, ExpandableInfoCard, HolographicCard (Metal), SwipeableCardStack, TiltCard, WalletCardStack
 - Charts: AnimatedBarChart, AnimatedDonutChart, CandlestickChart, ContributionHeatmap, GaugeChart, InteractiveLineChart, LineChartDrawIn, RadarChart, ScrollableBarChart, SparklineStatTile, Surface3DChart (iOS 26.0+)
 - Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, SwipeToReplyBubble, TapbackReactionBubble, TypingIndicatorBubble
-- Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, TrialTimelinePaywall
+- Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, PromoCodeField, TrialTimelinePaywall
 - Controls: AnimatedRadioButton, CheckmarkBoxToggleStyle, CircularRangeSlider, CounterStepper, DayNightToggle, FilterChipGroup, IconSwitchToggleStyle, RangeSlider, RulerScrollPicker, SelectAllChecklist, SettingsToggleRow, SlidingSegmentedPicker, SpringToggleStyle, SwipeToConfirmSlider, TickMarkSlider (iOS 26.0+), WeekdaySegmentedPicker
 - Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape, SignaturePad
 - Effects: BlurredImageBackdrop, BorderBeamModifier, ChromaticGlitchShader (Metal), CoinFlipView, ColorRevealImage, ConfettiBurst, FireworksBurst, FloatingReactionsEmitter, FlowFieldParticles, Globe3DWireframe, IntelligenceGlowBorder, JiggleEditModifier, MetaballLavaLamp, NoiseGrainOverlay, PixelateShaderEffect (Metal), ProgressiveBlurHeader (Metal), RippleShaderEffect (Metal), RippleTapEffect, SpotlightOverlay, TouchParticleTrail, VoiceOrb
@@ -40,7 +40,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Navigation: AdaptiveSidebarLayout, AnimatedTabBar, BottomDrawer, BreadcrumbTrail, DragToDismissScreen, EmbeddedWebBrowser (iOS 26.0+), FullScreenMenuOverlay, NavigationPathRouter, PageDotsIndicator, ScrollSpyHeader, ScrollToTopButton, SearchScopesAndSuggestions, SideDrawer, SidebarAdaptiveTabs, TabNavigationStatePreserve, TwoPaneSplitLayout
 - Patterns: PermissionPrimerScreen, VerticalTimeline, WeatherForecastScreen
 - Pickers: CountryPicker, EmojiPicker, InlineDatePickerDisclosure, MultiPhotoPickerTray, TimeSlotGridPicker, WheelPicker
-- Playful: BubbleWrapPop, SlotMachineReels, SpinWheelRoulette
+- Playful: BubbleWrapPop, MemoryMatchGame, SlotMachineReels, SpinWheelRoulette
 - Profiles: ProfileHeaderStretchy, StoriesViewer, StoryRingAvatar
 - Progress: ActivityRings, CircularProgressRing, CountdownRing, DownloadPillProgress, GradientProgressBar, LiquidFillProgress, StepProgressIndicator
 - Scrolling: AutoAdvanceCarousel, CoverFlowCarousel, HideOnScrollBar, InfiniteMarqueeRow, NetflixRowsScroller, OnboardingPager, PagedGridLauncher, ParallaxCardsRow, PeekCarousel, PullProgressRefresh, ScrollFadeCards, ScrollProgressBar, ScrollVisibilityReveal, StickyParallaxHeader, StickyStackedCards, VerticalFullScreenFeed

@@ -122,9 +122,16 @@ struct MultiItemDragGridDemo: View {
                                 let droppedIDs = dropped.map(\.id)
                                 album.photoIDs.append(contentsOf: droppedIDs.filter { !album.photoIDs.contains($0) })
                                 selection.removeAll { droppedIDs.contains($0) }
-                                return true
-                            } isTargeted: { isTargeted in
-                                targetedAlbum = isTargeted ? album.id : (targetedAlbum == album.id ? nil : targetedAlbum)
+                            }
+                            .onDropSessionUpdated { session in
+                                switch session.phase {
+                                case .entering, .active:
+                                    targetedAlbum = album.id
+                                default:
+                                    if targetedAlbum == album.id {
+                                        targetedAlbum = nil
+                                    }
+                                }
                             }
                     }
                 }

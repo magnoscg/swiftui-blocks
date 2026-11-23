@@ -34,6 +34,13 @@ struct SwipeToReplyBubbleTests {
         #expect(SwipeToReplyBubblePhysics.progress(for: translation, threshold: 64) == expected)
     }
 
+    @Test func onlyAMostlyHorizontalDragMovesTheBubble() {
+        #expect(SwipeToReplyBubblePhysics.engages(CGSize(width: 30, height: 10)))
+        #expect(SwipeToReplyBubblePhysics.engages(CGSize(width: -30, height: 10)))
+        #expect(!SwipeToReplyBubblePhysics.engages(CGSize(width: 10, height: 30)))
+        #expect(!SwipeToReplyBubblePhysics.engages(CGSize(width: 20, height: -20)))
+    }
+
     @Test func aThresholdOfZeroNeverReplies() {
         #expect(!SwipeToReplyBubblePhysics.replies(after: 50, threshold: 0))
         #expect(SwipeToReplyBubblePhysics.offset(for: 50, threshold: 0) == 0)

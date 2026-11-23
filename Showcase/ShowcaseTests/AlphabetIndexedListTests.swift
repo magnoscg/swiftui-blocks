@@ -48,6 +48,18 @@ struct AlphabetIndexedListTests {
         #expect(result.map(\.letter) == ["A", "Д"])
     }
 
+    @Test func keepsTheSectionsInAlphabeticalOrderWhereAccentedLettersSortAfterZ() {
+        let result = sections(["Zoe", "Åsa", "Örjan", "Bo"], locale: Locale(identifier: "sv_SE"))
+
+        #expect(result.map(\.letter) == ["A", "B", "O", "Z"])
+    }
+
+    @Test func keepsTheSectionsInAlphabeticalOrderWhereDigraphsSortApart() {
+        let result = sections(["Hana", "Chloé", "Igor"], locale: Locale(identifier: "cs_CZ"))
+
+        #expect(result.map(\.letter) == ["C", "H", "I"])
+    }
+
     @Test func letterSkipsLeadingSpacesAndIgnoresCase() {
         #expect(AlphabetIndexedListSection<String>.letter(of: "  zoe", locale: english) == "Z")
         #expect(AlphabetIndexedListSection<String>.letter(of: "émile", locale: english) == "E")

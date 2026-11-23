@@ -621,6 +621,15 @@ enum ComponentRegistry {
             demo: { AnyView(PricingTierCardsDemo()) }
         ),
         ShowcaseEntry(
+            id: "promo-code-field",
+            title: "Promo Code Field",
+            category: "Commerce",
+            summary: "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+            keywords: ["promo code", "coupon", "discount code", "voucher", "checkout", "apply", "shake", "validation", "código promocional", "cupón", "código de descuento", "vale", "pago", "aplicar", "sacudida", "validación"],
+            minIOS: "18.0",
+            demo: { AnyView(PromoCodeFieldDemo()) }
+        ),
+        ShowcaseEntry(
             id: "trial-timeline-paywall",
             title: "Trial Timeline Paywall",
             category: "Commerce",
@@ -2245,6 +2254,15 @@ enum ComponentRegistry {
             keywords: ["bubble wrap", "pop", "fidget", "toy", "playful", "haptics", "grid", "plástico de burbujas", "explotar", "juguete", "divertido", "vibración", "cuadrícula"],
             minIOS: "18.0",
             demo: { AnyView(BubbleWrapPopDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "memory-match-game",
+            title: "Memory Match Game",
+            category: "Playful",
+            summary: "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+            keywords: ["memory game", "match pairs", "concentration", "card flip", "game", "pairs", "flip animation", "puzzle", "juego de memoria", "parejas", "memorama", "girar cartas", "juego", "emparejar", "animación de giro", "puzle"],
+            minIOS: "18.0",
+            demo: { AnyView(MemoryMatchGameDemo()) }
         ),
         ShowcaseEntry(
             id: "slot-machine-reels",

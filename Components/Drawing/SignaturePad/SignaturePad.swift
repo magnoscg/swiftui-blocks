@@ -20,7 +20,8 @@ struct SignaturePad: View {
     /// The width of the ink, in points.
     var lineWidth: CGFloat = 3
 
-    @State private var isDrawing = false
+    @State private var size = CGSize.zero
+    @State private var drawing: CGPoint?
 
     private var isSigned: Bool { SignaturePadStrokes.isSigned(strokes) }
 
@@ -47,6 +48,11 @@ struct SignaturePad: View {
             }
         }
         .frame(minHeight: 160)
+        .onGeometryChange(for: CGSize.self) { proxy in
+            proxy.size
+        } action: { newSize in
+            size = newSize
+        }
         .contentShape(.rect)
         .gesture(draw)
         .background(.background, in: .rect(cornerRadius: 16))
@@ -78,15 +84,7 @@ struct SignaturePad: View {
     private var draw: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                if isDrawing, !strokes.isEmpty {
-                    strokes[strokes.count - 1].append(value.location)
-                } else {
-                    strokes.append([value.location])
-                    isDrawing = true
-                }
-            }
-            .onEnded { _ in
-                isDrawing = false
+                SignaturePadStrokes.add(value.location, startedAt: value.startLocation, drawing: &drawing, in: size, to: &strokes)
             }
     }
 }
@@ -107,6 +105,27 @@ nonisolated enum SignaturePadStrokes {
     /// - Parameter minimumLength: The least ink, in points, that counts as signing.
     static func isSigned(_ strokes: [[CGPoint]], minimumLength: CGFloat = 20) -> Bool {
         !strokes.isEmpty && length(of: strokes) >= minimumLength
+    }
+
+    /// Adds a point of a drag: to the stroke of that drag while it goes on, or as a new stroke
+    /// when another drag begins, even if the last one never ended. Points outside a pad of
+    /// `size` move to its edge.
+    ///
+    /// - Parameter drawing: Where the drag that drew the last stroke began. The function keeps
+    ///   it up to date, so a drag whose strokes are cleared under it goes on as one new stroke.
+    static func add(_ point: CGPoint, startedAt start: CGPoint, drawing: inout CGPoint?, in size: CGSize, to strokes: inout [[CGPoint]]) {
+        let point = clamped(point, to: size)
+        if drawing == start, !strokes.isEmpty {
+            strokes[strokes.count - 1].append(point)
+        } else {
+            strokes.append([point])
+            drawing = start
+        }
+    }
+
+    private static func clamped(_ point: CGPoint, to size: CGSize) -> CGPoint {
+        guard size.width > 0, size.height > 0 else { return point }
+        return CGPoint(x: min(max(point.x, 0), size.width), y: min(max(point.y, 0), size.height))
     }
 
     /// The smallest rectangle that holds every point, or `nil` when there are none.
