@@ -1,5 +1,5 @@
 {
-  "count": 306,
+  "count": 307,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -3659,6 +3659,49 @@
       "path": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift",
       "preview": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift"
+    },
+    {
+      "id": "signature-pad",
+      "name": "SignaturePad",
+      "title": "Signature Pad",
+      "category": "Drawing",
+      "summary": "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+      "keywords": {
+        "en": [
+          "signature",
+          "sign here",
+          "signature pad",
+          "e-signature",
+          "draw",
+          "delivery confirmation",
+          "export image",
+          "canvas"
+        ],
+        "es": [
+          "firma",
+          "firme aquí",
+          "panel de firma",
+          "firma electrónica",
+          "dibujar",
+          "confirmación de entrega",
+          "exportar imagen",
+          "lienzo"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Canvas",
+        "DragGesture",
+        "ImageRenderer",
+        "accessibilityDirectTouch"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Drawing/SignaturePad/SignaturePad.swift",
+      "preview": "Components/Drawing/SignaturePad/SignaturePad.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/SignaturePad/SignaturePad.swift"
     },
     {
       "id": "blurred-image-backdrop",

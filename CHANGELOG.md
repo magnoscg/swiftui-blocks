@@ -24,6 +24,9 @@ on `main`.
 - Map Pin Location Picker, a map with a pin fixed at its center that lifts
   while the map moves and lands where it stops, to pick a place by moving the
   map under it.
+- Signature Pad, a box to sign with a finger over a baseline, which ignores
+  stray taps, clears with a button and turns the signature into an image
+  cropped to the ink.
 
 ## 0.17.1 - 2026-11-21
 

@@ -813,6 +813,15 @@ enum ComponentRegistry {
             demo: { AnyView(PolygonMorphShapeDemo()) }
         ),
         ShowcaseEntry(
+            id: "signature-pad",
+            title: "Signature Pad",
+            category: "Drawing",
+            summary: "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+            keywords: ["signature", "sign here", "signature pad", "e-signature", "draw", "delivery confirmation", "export image", "canvas", "firma", "firme aquí", "panel de firma", "firma electrónica", "dibujar", "confirmación de entrega", "exportar imagen", "lienzo"],
+            minIOS: "18.0",
+            demo: { AnyView(SignaturePadDemo()) }
+        ),
+        ShowcaseEntry(
             id: "blurred-image-backdrop",
             title: "Blurred Image Backdrop",
             category: "Effects",

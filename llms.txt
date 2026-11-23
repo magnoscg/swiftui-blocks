@@ -22,7 +22,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, SwipeToReplyBubble, TapbackReactionBubble, TypingIndicatorBubble
 - Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, TrialTimelinePaywall
 - Controls: AnimatedRadioButton, CheckmarkBoxToggleStyle, CircularRangeSlider, CounterStepper, DayNightToggle, FilterChipGroup, IconSwitchToggleStyle, RangeSlider, RulerScrollPicker, SelectAllChecklist, SettingsToggleRow, SlidingSegmentedPicker, SpringToggleStyle, SwipeToConfirmSlider, TickMarkSlider (iOS 26.0+), WeekdaySegmentedPicker
-- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape
+- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape, SignaturePad
 - Effects: BlurredImageBackdrop, BorderBeamModifier, ChromaticGlitchShader (Metal), CoinFlipView, ColorRevealImage, ConfettiBurst, FireworksBurst, FloatingReactionsEmitter, FlowFieldParticles, Globe3DWireframe, IntelligenceGlowBorder, JiggleEditModifier, MetaballLavaLamp, NoiseGrainOverlay, PixelateShaderEffect (Metal), ProgressiveBlurHeader (Metal), RippleShaderEffect (Metal), RippleTapEffect, SpotlightOverlay, TouchParticleTrail, VoiceOrb
 - Feedback: AnimatedBadgeCount, AnimatedCheckmarkBadge, DynamicIslandPill, EmptyStatePlaceholder, NotificationStack, RatingStars, ShakeErrorModifier, ToastBanner, ToastHost, TooltipPopover, UndoSnackbar
 - Gestures: CompletionSwipeRow, DoubleTapHeartOverlay, DragSelectGrid, DropZoneHighlight, LongPressRadialMenu, MultiItemDragGrid (iOS 27.0+), PinchZoomView, ScratchToReveal, SnapCornerDraggable, SwipeActionRow
