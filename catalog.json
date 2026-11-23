@@ -1,5 +1,5 @@
 {
-  "count": 301,
+  "count": 309,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -2495,6 +2495,49 @@
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/NestedCommentThread/NestedCommentThread.swift"
     },
     {
+      "id": "swipe-to-reply-bubble",
+      "name": "SwipeToReplyBubble",
+      "title": "Swipe To Reply Bubble",
+      "category": "Chat",
+      "summary": "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+      "keywords": {
+        "en": [
+          "swipe to reply",
+          "reply",
+          "quote",
+          "message",
+          "chat bubble",
+          "drag",
+          "haptic",
+          "messaging"
+        ],
+        "es": [
+          "deslizar para responder",
+          "responder",
+          "citar",
+          "mensaje",
+          "burbuja de chat",
+          "arrastrar",
+          "háptica",
+          "mensajería"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "DragGesture",
+        "GestureState",
+        "sensoryFeedback",
+        "accessibilityAction"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift",
+      "preview": "Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift"
+    },
+    {
       "id": "tapback-reaction-bubble",
       "name": "TapbackReactionBubble",
       "title": "Tapback Reaction Bubble",
@@ -2741,6 +2784,49 @@
       "path": "Components/Commerce/PricingTierCards/PricingTierCards.swift",
       "preview": "Components/Commerce/PricingTierCards/PricingTierCards.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Commerce/PricingTierCards/PricingTierCards.swift"
+    },
+    {
+      "id": "promo-code-field",
+      "name": "PromoCodeField",
+      "title": "Promo Code Field",
+      "category": "Commerce",
+      "summary": "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+      "keywords": {
+        "en": [
+          "promo code",
+          "coupon",
+          "discount code",
+          "voucher",
+          "checkout",
+          "apply",
+          "shake",
+          "validation"
+        ],
+        "es": [
+          "código promocional",
+          "cupón",
+          "código de descuento",
+          "vale",
+          "pago",
+          "aplicar",
+          "sacudida",
+          "validación"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "18.0",
+      "apis": [
+        "TextField",
+        "keyframeAnimator",
+        "AccessibilityNotification",
+        "contentTransition"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Commerce/PromoCodeField/PromoCodeField.swift",
+      "preview": "Components/Commerce/PromoCodeField/PromoCodeField.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Commerce/PromoCodeField/PromoCodeField.swift"
     },
     {
       "id": "trial-timeline-paywall",
@@ -3616,6 +3702,49 @@
       "path": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift",
       "preview": "Components/Drawing/PolygonMorphShape/PolygonMorphShape.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/PolygonMorphShape/PolygonMorphShape.swift"
+    },
+    {
+      "id": "signature-pad",
+      "name": "SignaturePad",
+      "title": "Signature Pad",
+      "category": "Drawing",
+      "summary": "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+      "keywords": {
+        "en": [
+          "signature",
+          "sign here",
+          "signature pad",
+          "e-signature",
+          "draw",
+          "delivery confirmation",
+          "export image",
+          "canvas"
+        ],
+        "es": [
+          "firma",
+          "firme aquí",
+          "panel de firma",
+          "firma electrónica",
+          "dibujar",
+          "confirmación de entrega",
+          "exportar imagen",
+          "lienzo"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Canvas",
+        "DragGesture",
+        "ImageRenderer",
+        "accessibilityDirectTouch"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Drawing/SignaturePad/SignaturePad.swift",
+      "preview": "Components/Drawing/SignaturePad/SignaturePad.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Drawing/SignaturePad/SignaturePad.swift"
     },
     {
       "id": "blurred-image-backdrop",
@@ -5152,6 +5281,48 @@
       "path": "Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.swift",
       "preview": "Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Gestures/LongPressRadialMenu/LongPressRadialMenu.swift"
+    },
+    {
+      "id": "multi-item-drag-grid",
+      "name": "MultiItemDragGrid",
+      "title": "Multi Item Drag Grid",
+      "category": "Gestures",
+      "summary": "A grid where tapping selects items and dragging one of them carries the whole selection to a drop target in a single system drag.",
+      "keywords": {
+        "en": [
+          "drag and drop",
+          "multiple items",
+          "selection",
+          "photo grid",
+          "album",
+          "drag container",
+          "move"
+        ],
+        "es": [
+          "arrastrar y soltar",
+          "varios elementos",
+          "selección",
+          "rejilla de fotos",
+          "álbum",
+          "contenedor de arrastre",
+          "mover"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "27.0",
+      "apis": [
+        "draggable(containerItemID:)",
+        "dragContainer",
+        "dragContainerSelection",
+        "dropDestination",
+        "Transferable"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.swift",
+      "preview": "Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.swift"
     },
     {
       "id": "pinch-zoom-view",
@@ -7092,6 +7263,49 @@
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AccordionSection/AccordionSection.swift"
     },
     {
+      "id": "alphabet-indexed-list",
+      "name": "AlphabetIndexedList",
+      "title": "Alphabet Indexed List",
+      "category": "Lists",
+      "summary": "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+      "keywords": {
+        "en": [
+          "section index",
+          "alphabet",
+          "contacts",
+          "index bar",
+          "A to Z",
+          "jump to letter",
+          "sections",
+          "list"
+        ],
+        "es": [
+          "índice de secciones",
+          "alfabeto",
+          "contactos",
+          "barra de índice",
+          "de la A a la Z",
+          "saltar a una letra",
+          "secciones",
+          "lista"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "26.0",
+      "apis": [
+        "sectionIndexLabel",
+        "listSectionIndexVisibility",
+        "List",
+        "Section"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift",
+      "preview": "Components/Lists/AlphabetIndexedList/AlphabetIndexedList.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift"
+    },
+    {
       "id": "disclosure-tree-view",
       "name": "DisclosureTreeView",
       "title": "Disclosure Tree View",
@@ -7735,6 +7949,49 @@
       "path": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift",
       "preview": "Components/Maps/MapClusterAnnotations/MapClusterAnnotations.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapClusterAnnotations/MapClusterAnnotations.swift"
+    },
+    {
+      "id": "map-pin-location-picker",
+      "name": "MapPinLocationPicker",
+      "title": "Map Pin Location Picker",
+      "category": "Maps",
+      "summary": "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+      "keywords": {
+        "en": [
+          "location picker",
+          "map",
+          "pin",
+          "choose location",
+          "drop pin",
+          "coordinate",
+          "pick a place",
+          "delivery address"
+        ],
+        "es": [
+          "selector de ubicación",
+          "mapa",
+          "chincheta",
+          "elegir ubicación",
+          "soltar chincheta",
+          "coordenada",
+          "elegir un lugar",
+          "dirección de entrega"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "Map",
+        "MapCameraPosition",
+        "onMapCameraChange",
+        "MKCoordinateRegion"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift",
+      "preview": "Components/Maps/MapPinLocationPicker/MapPinLocationPicker.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift"
     },
     {
       "id": "map-route-tracker",
@@ -9649,6 +9906,49 @@
       "path": "Components/Playful/BubbleWrapPop/BubbleWrapPop.swift",
       "preview": "Components/Playful/BubbleWrapPop/BubbleWrapPop.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Playful/BubbleWrapPop/BubbleWrapPop.swift"
+    },
+    {
+      "id": "memory-match-game",
+      "name": "MemoryMatchGame",
+      "title": "Memory Match Game",
+      "category": "Playful",
+      "summary": "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+      "keywords": {
+        "en": [
+          "memory game",
+          "match pairs",
+          "concentration",
+          "card flip",
+          "game",
+          "pairs",
+          "flip animation",
+          "puzzle"
+        ],
+        "es": [
+          "juego de memoria",
+          "parejas",
+          "memorama",
+          "girar cartas",
+          "juego",
+          "emparejar",
+          "animación de giro",
+          "puzle"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "rotation3DEffect",
+        "Animatable",
+        "LazyVGrid",
+        "sensoryFeedback"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Playful/MemoryMatchGame/MemoryMatchGame.swift",
+      "preview": "Components/Playful/MemoryMatchGame/MemoryMatchGame.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Playful/MemoryMatchGame/MemoryMatchGame.swift"
     },
     {
       "id": "slot-machine-reels",
@@ -11723,6 +12023,47 @@
       "path": "Components/Toolbars/FloatingDockBar/FloatingDockBar.swift",
       "preview": "Components/Toolbars/FloatingDockBar/FloatingDockBar.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Toolbars/FloatingDockBar/FloatingDockBar.swift"
+    },
+    {
+      "id": "minimizing-navigation-bar",
+      "name": "MinimizingNavigationBar",
+      "title": "Minimizing Navigation Bar",
+      "category": "Toolbars",
+      "summary": "A navigation stack whose navigation bar minimizes while the content scrolls down and returns on scrolling up or only at the top, using the system toolbar minimization.",
+      "keywords": {
+        "en": [
+          "navigation bar",
+          "toolbar",
+          "minimize",
+          "hide on scroll",
+          "collapse",
+          "scroll",
+          "reader"
+        ],
+        "es": [
+          "barra de navegación",
+          "barra de herramientas",
+          "minimizar",
+          "ocultar al desplazar",
+          "contraer",
+          "desplazamiento",
+          "lector"
+        ]
+      },
+      "difficulty": "beginner",
+      "minIOS": "27.0",
+      "apis": [
+        "toolbarMinimizationBehavior",
+        "toolbarMinimizationRestoration",
+        "toolbarMinimizationSafeAreaAdjustment",
+        "NavigationStack"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Toolbars/MinimizingNavigationBar/MinimizingNavigationBar.swift",
+      "preview": "Components/Toolbars/MinimizingNavigationBar/MinimizingNavigationBar.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Toolbars/MinimizingNavigationBar/MinimizingNavigationBar.swift"
     },
     {
       "id": "blur-fade-transition",

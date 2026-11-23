@@ -1,0 +1,49 @@
+{
+  "id": "swipe-to-reply-bubble",
+  "name": "SwipeToReplyBubble",
+  "title": "Swipe To Reply Bubble",
+  "category": "Chat",
+  "summary": "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+  "keywords": {
+    "en": [
+      "swipe to reply",
+      "reply",
+      "quote",
+      "message",
+      "chat bubble",
+      "drag",
+      "haptic",
+      "messaging"
+    ],
+    "es": [
+      "deslizar para responder",
+      "responder",
+      "citar",
+      "mensaje",
+      "burbuja de chat",
+      "arrastrar",
+      "háptica",
+      "mensajería"
+    ]
+  },
+  "difficulty": "intermediate",
+  "minIOS": "18.0",
+  "apis": [
+    "DragGesture",
+    "GestureState",
+    "sensoryFeedback",
+    "accessibilityAction"
+  ],
+  "origin": {
+    "kind": "original"
+  },
+  "previewSteps": [
+    "sleep 0.6",
+    "swipe --start-x 60 --start-y 741 --end-x 240 --end-y 741 --duration 1.0",
+    "sleep 1.2",
+    "type 'See you there!'",
+    "sleep 0.4",
+    "tap --label Send",
+    "sleep 1.2"
+  ]
+}

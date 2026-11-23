@@ -1,0 +1,15 @@
+{
+  "id": "memory-match-game",
+  "name": "MemoryMatchGame",
+  "title": "Memory Match Game",
+  "category": "Playful",
+  "summary": "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+  "keywords": {
+    "en": ["memory game", "match pairs", "concentration", "card flip", "game", "pairs", "flip animation", "puzzle"],
+    "es": ["juego de memoria", "parejas", "memorama", "girar cartas", "juego", "emparejar", "animación de giro", "puzle"]
+  },
+  "difficulty": "intermediate",
+  "minIOS": "18.0",
+  "apis": ["rotation3DEffect", "Animatable", "LazyVGrid", "sensoryFeedback"],
+  "origin": { "kind": "original" }
+}

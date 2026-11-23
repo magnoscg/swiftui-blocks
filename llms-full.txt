@@ -10195,6 +10195,252 @@ struct NestedCommentThreadDemo: View {
 }
 ```
 
+## Swipe To Reply Bubble
+
+A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.
+
+Category: Chat. Minimum: iOS 18.0. Path: Components/Chat/SwipeToReplyBubble/SwipeToReplyBubble.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A message bubble that can be dragged toward the trailing edge to reply to it.
+///
+/// A reply arrow appears behind the bubble as it moves, and the phone taps once when the drag
+/// passes ``threshold``. Letting go past it calls ``onReply``, and the bubble springs back
+/// either way. Only a mostly horizontal drag moves the bubble, so the conversation still
+/// scrolls. VoiceOver offers the same as a Reply action, and with Reduce Motion the bubble
+/// returns without a spring. In a right-to-left layout the drag goes the other way.
+struct SwipeToReplyBubble<Content: View>: View {
+    /// How far the bubble has to travel, in points, for letting go to reply.
+    var threshold: CGFloat = 64
+    /// What happens when the message is replied to.
+    let onReply: () -> Void
+    /// The bubble.
+    @ViewBuilder let content: () -> Content
+
+    @GestureState private var translation: CGFloat = 0
+    /// Where the drag that moves the bubble began: the bubble keeps following it, and only it can reply.
+    @State private var engagedDrag: CGPoint?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
+
+    /// Gestures report screen points, but layout mirrors in right-to-left layouts: 1 or -1 converts between them.
+    private var forward: CGFloat { layoutDirection == .rightToLeft ? -1 : 1 }
+    private var progress: CGFloat { SwipeToReplyBubblePhysics.progress(for: translation, threshold: threshold) }
+    private var isPastThreshold: Bool { SwipeToReplyBubblePhysics.replies(after: translation, threshold: threshold) }
+
+    var body: some View {
+        content()
+            .offset(x: SwipeToReplyBubblePhysics.offset(for: translation, threshold: threshold))
+            .background(alignment: .leading) { arrow }
+            .simultaneousGesture(swipe)
+            .sensoryFeedback(.impact(flexibility: .soft), trigger: isPastThreshold) { wasPast, isPast in
+                !wasPast && isPast
+            }
+            .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.3), value: translation == 0)
+            .accessibilityAction(named: "Reply", onReply)
+    }
+
+    private var arrow: some View {
+        Image(systemName: "arrowshape.turn.up.backward.fill")
+            .font(.body.weight(.semibold))
+            .foregroundStyle(isPastThreshold ? AnyShapeStyle(.tint) : AnyShapeStyle(.secondary))
+            .padding(8)
+            .background(.fill.tertiary, in: .circle)
+            .scaleEffect(reduceMotion ? 1 : 0.5 + progress / 2)
+            .opacity(progress)
+            .accessibilityHidden(true)
+    }
+
+    private var swipe: some Gesture {
+        // In global space the start of a drag stays put while the conversation scrolls under it.
+        DragGesture(minimumDistance: 14, coordinateSpace: .global)
+            .updating($translation) { value, state, _ in
+                if engagedDrag == value.startLocation || SwipeToReplyBubblePhysics.engages(value.translation) {
+                    state = value.translation.width * forward
+                }
+            }
+            .onChanged { value in
+                if engagedDrag != value.startLocation, SwipeToReplyBubblePhysics.engages(value.translation) {
+                    engagedDrag = value.startLocation
+                }
+            }
+            .onEnded { value in
+                defer { engagedDrag = nil }
+                guard engagedDrag == value.startLocation,
+                      SwipeToReplyBubblePhysics.replies(after: value.translation.width * forward, threshold: threshold)
+                else { return }
+                onReply()
+            }
+    }
+}
+
+/// How a ``SwipeToReplyBubble`` follows a drag, measured toward the trailing edge.
+nonisolated enum SwipeToReplyBubblePhysics {
+    /// Whether a drag goes mostly sideways, which is what moves the bubble.
+    static func engages(_ translation: CGSize) -> Bool {
+        abs(translation.width) > abs(translation.height)
+    }
+
+    /// How far the bubble moves for a drag: with the finger up to the threshold, then with
+    /// growing resistance, and never toward the leading edge.
+    static func offset(for translation: CGFloat, threshold: CGFloat) -> CGFloat {
+        guard translation > 0, threshold > 0 else { return 0 }
+        guard translation > threshold else { return translation }
+        let excess = translation - threshold
+        return threshold + excess / (1 + excess / threshold)
+    }
+
+    /// How far a drag has gone toward replying, from 0 to 1.
+    static func progress(for translation: CGFloat, threshold: CGFloat) -> CGFloat {
+        guard threshold > 0 else { return 0 }
+        return min(max(translation / threshold, 0), 1)
+    }
+
+    /// Whether letting go after a drag replies.
+    static func replies(after translation: CGFloat, threshold: CGFloat) -> Bool {
+        threshold > 0 && translation >= threshold
+    }
+}
+
+// MARK: - Demo
+
+struct SwipeToReplyBubbleDemo: View {
+    private struct Message: Identifiable {
+        let id: Int
+        let text: String
+        let isOutgoing: Bool
+        var quote: String?
+    }
+
+    @State private var messages = [
+        Message(id: 1, text: "Are we still on for the hike on Saturday?", isOutgoing: false),
+        Message(id: 2, text: "Yes! I found a trail with a lake at the top.", isOutgoing: true),
+        Message(id: 3, text: "Perfect. How long is it?", isOutgoing: false),
+        Message(id: 4, text: "About three hours there and back.", isOutgoing: true),
+        Message(id: 5, text: "Should I bring lunch for both of us?", isOutgoing: false),
+        Message(id: 6, text: "I'll bring the sandwiches, you bring the snacks.", isOutgoing: true),
+        Message(id: 7, text: "Deal. Meet at the station at eight?", isOutgoing: false),
+    ]
+    @State private var replyingTo: Message?
+    @State private var draft = ""
+    @FocusState private var isComposing: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        VStack(spacing: 0) {
+            ScrollView {
+                LazyVStack(spacing: 8) {
+                    ForEach(messages) { message in
+                        SwipeToReplyBubble {
+                            replyingTo = message
+                            isComposing = true
+                        } content: {
+                            bubble(message)
+                        }
+                        .frame(maxWidth: .infinity, alignment: message.isOutgoing ? .trailing : .leading)
+                    }
+                }
+                .padding(16)
+            }
+            .defaultScrollAnchor(.bottom)
+            .scrollDismissesKeyboard(.interactively)
+
+            composer
+        }
+        .animation(reduceMotion ? nil : .snappy, value: replyingTo?.id)
+    }
+
+    private func bubble(_ message: Message) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let quote = message.quote {
+                Text(quote)
+                    .font(.footnote)
+                    .lineLimit(2)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(.white.opacity(0.2), in: .rect(cornerRadius: 10))
+            }
+
+            Text(message.text)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .foregroundStyle(message.isOutgoing ? .white : .primary)
+        .background(message.isOutgoing ? Color.blue : Color(uiColor: .secondarySystemBackground), in: .rect(cornerRadius: 18))
+        .frame(maxWidth: 300, alignment: message.isOutgoing ? .trailing : .leading)
+    }
+
+    private var composer: some View {
+        VStack(spacing: 10) {
+            if let replyingTo {
+                HStack(spacing: 10) {
+                    Capsule()
+                        .fill(.blue)
+                        .frame(width: 3)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(replyingTo.isOutgoing ? "Replying to yourself" : "Replying to Maya")
+                            .font(.caption.bold())
+                            .foregroundStyle(.blue)
+
+                        Text(replyingTo.text)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Button("Cancel reply", systemImage: "xmark.circle.fill") {
+                        self.replyingTo = nil
+                    }
+                    .labelStyle(.iconOnly)
+                    .foregroundStyle(.secondary)
+                    .padding(13)
+                    .contentShape(.rect)
+                    .padding(-13)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+
+            HStack(spacing: 10) {
+                TextField("Message", text: $draft)
+                    .focused($isComposing)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(Color(uiColor: .secondarySystemBackground), in: .capsule)
+                    .onSubmit(send)
+
+                Button("Send", systemImage: "arrow.up.circle.fill", action: send)
+                    .labelStyle(.iconOnly)
+                    .font(.title)
+                    .disabled(draft.isEmpty)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.bar)
+    }
+
+    private func send() {
+        guard !draft.isEmpty else { return }
+        messages.append(Message(id: messages.count + 1, text: draft, isOutgoing: true, quote: replyingTo?.text))
+        draft = ""
+        replyingTo = nil
+    }
+}
+
+#Preview {
+    SwipeToReplyBubbleDemo()
+}
+```
+
 ## Tapback Reaction Bubble
 
 A message you press and hold to react to, with a bar of reactions above it and the chosen one kept as a badge on its corner.
@@ -11364,6 +11610,265 @@ struct PricingTierCardsDemo: View {
 
 #Preview {
     PricingTierCardsDemo()
+}
+```
+
+## Promo Code Field
+
+A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.
+
+Category: Commerce. Minimum: iOS 18.0. Path: Components/Commerce/PromoCodeField/PromoCodeField.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A field for a promo code, with an Apply button that checks it.
+///
+/// While ``validate`` runs, the button shows a spinner and the field waits. An accepted code
+/// replaces the field with a row that says it is applied, with a button that removes it. A
+/// rejected code shakes the field, outlines it in red and shows the reason under it, which
+/// VoiceOver also announces, and the field takes the focus back so typing again clears it.
+/// With Reduce Motion the field does not shake. Codes are checked without surrounding spaces
+/// and in uppercase.
+struct PromoCodeField: View {
+    /// The code that is applied, or `nil`. The field sets it when ``validate`` accepts a code
+    /// and clears it when the code is removed.
+    @Binding var appliedCode: String?
+    /// Checks a code and returns `nil` when it is accepted, or the reason it is not.
+    let validate: (String) async -> LocalizedStringResource?
+    /// The text shown in the empty field.
+    var prompt: LocalizedStringResource = "Promo code"
+
+    @State private var text = ""
+    @State private var phase = PromoCodeFieldPhase.editing
+    @State private var rejections = 0
+    @FocusState private var isFocused: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let cornerRadius: CGFloat = 12
+    private let fieldInset: CGFloat = 6
+
+    private var isRejected: Bool {
+        if case .rejected = phase { true } else { false }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            if let appliedCode {
+                applied(appliedCode)
+            } else {
+                field
+
+                if case .rejected(let reason) = phase {
+                    Text(reason)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                }
+            }
+        }
+        .animation(reduceMotion ? nil : .snappy, value: appliedCode)
+        .animation(reduceMotion ? nil : .snappy, value: phase)
+        .onChange(of: text) {
+            phase = phase.afterEditing
+        }
+        .onChange(of: rejections) {
+            isFocused = true
+        }
+    }
+
+    private var field: some View {
+        let shakes = !reduceMotion
+
+        return HStack(spacing: 8) {
+            TextField(text: $text, prompt: Text(prompt)) {
+                Text(prompt)
+            }
+            .textInputAutocapitalization(.characters)
+            .autocorrectionDisabled()
+            .submitLabel(.go)
+            .onSubmit(apply)
+            .focused($isFocused)
+            .disabled(phase == .checking)
+            .accessibilityLabel(Text(prompt))
+
+            Button(action: apply) {
+                Text("Apply")
+                    .opacity(phase == .checking ? 0 : 1)
+                    .overlay {
+                        if phase == .checking {
+                            ProgressView()
+                        }
+                    }
+            }
+            .buttonStyle(.bordered)
+            .disabled(!PromoCodeFieldLogic.canApply(text, phase: phase))
+        }
+        .padding(.leading, 14)
+        .padding(.trailing, fieldInset)
+        .padding(.vertical, fieldInset)
+        .background(.fill.tertiary, in: .rect(cornerRadius: cornerRadius))
+        .overlay {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .strokeBorder(.red, lineWidth: isRejected ? 1.5 : 0)
+        }
+        .keyframeAnimator(initialValue: 0.0, trigger: rejections) { content, offset in
+            content.offset(x: shakes ? offset : 0)
+        } keyframes: { _ in
+            KeyframeTrack {
+                CubicKeyframe(-10, duration: 0.06)
+                CubicKeyframe(9, duration: 0.08)
+                CubicKeyframe(-6, duration: 0.08)
+                CubicKeyframe(3, duration: 0.07)
+                CubicKeyframe(0, duration: 0.06)
+            }
+        }
+    }
+
+    private func applied(_ code: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark.seal.fill")
+                .foregroundStyle(.green)
+                .accessibilityHidden(true)
+
+            Text("\(code) applied")
+                .font(.subheadline.weight(.semibold))
+
+            Spacer(minLength: 0)
+
+            Button {
+                appliedCode = nil
+            } label: {
+                Text("Remove")
+                    .padding(13)
+                    .contentShape(.rect)
+                    .padding(-13)
+            }
+            .font(.subheadline)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .background(.green.opacity(0.12), in: .rect(cornerRadius: cornerRadius))
+        .transition(.scale(scale: 0.95).combined(with: .opacity))
+    }
+
+    private func apply() {
+        let code = PromoCodeFieldLogic.normalized(text)
+        guard PromoCodeFieldLogic.canApply(code, phase: phase) else { return }
+        phase = .checking
+        Task {
+            if let reason = await validate(code) {
+                phase = .rejected(reason)
+                rejections += 1
+                AccessibilityNotification.Announcement(String(localized: reason)).post()
+            } else {
+                text = ""
+                phase = .editing
+                appliedCode = code
+                AccessibilityNotification.Announcement(String(localized: "\(code) applied")).post()
+            }
+        }
+    }
+}
+
+/// Where a ``PromoCodeField`` stands while a code is typed and checked.
+nonisolated enum PromoCodeFieldPhase: Equatable {
+    /// The field is waiting for a code.
+    case editing
+    /// The last code is being checked.
+    case checking
+    /// The last code was turned down, for the reason given.
+    case rejected(LocalizedStringResource)
+
+    /// The phase once the text changes: a rejection goes away, a check goes on.
+    var afterEditing: Self {
+        if case .rejected = self { .editing } else { self }
+    }
+}
+
+/// The rules of a ``PromoCodeField`` that do not need a view.
+nonisolated enum PromoCodeFieldLogic {
+    /// The code as it is checked: without surrounding spaces and in uppercase.
+    static func normalized(_ text: String) -> String {
+        text.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+    }
+
+    /// Whether the code in the field can be applied in a phase.
+    static func canApply(_ text: String, phase: PromoCodeFieldPhase) -> Bool {
+        phase != .checking && !normalized(text).isEmpty
+    }
+}
+
+// MARK: - Demo
+
+struct PromoCodeFieldDemo: View {
+    private let subtotal = 48.0
+
+    @State private var appliedCode: String?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var discount: Double {
+        appliedCode == nil ? 0 : subtotal * 0.2
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Text("Order summary")
+                .font(.title2.bold())
+
+            VStack(spacing: 10) {
+                row("Subtotal", amount: subtotal)
+
+                if appliedCode != nil {
+                    row("Discount", amount: -discount)
+                        .foregroundStyle(.green)
+                        .transition(.opacity)
+                }
+
+                Divider()
+
+                row("Total", amount: subtotal - discount)
+                    .font(.headline)
+            }
+
+            PromoCodeField(appliedCode: $appliedCode) { code in
+                try? await Task.sleep(for: .seconds(0.9))
+                switch code {
+                case "SPRING20":
+                    return nil
+                case "EXPIRED":
+                    return "This code has expired."
+                default:
+                    return "That code does not exist."
+                }
+            }
+
+            Text("Try SPRING20, or EXPIRED to see a code turned down.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .padding(20)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .animation(reduceMotion ? nil : .snappy, value: appliedCode)
+    }
+
+    private func row(_ title: LocalizedStringResource, amount: Double) -> some View {
+        HStack {
+            Text(title)
+
+            Spacer()
+
+            Text(amount, format: .currency(code: "USD"))
+                .monospacedDigit()
+                .contentTransition(.numericText(value: amount))
+        }
+    }
+}
+
+#Preview {
+    PromoCodeFieldDemo()
 }
 ```
 
@@ -15086,6 +15591,298 @@ struct PolygonMorphShapeDemo: View {
 
 #Preview {
     PolygonMorphShapeDemo()
+}
+```
+
+## Signature Pad
+
+A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.
+
+Category: Drawing. Minimum: iOS 18.0. Path: Components/Drawing/SignaturePad/SignaturePad.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A box to sign with a finger over a baseline, with a button that clears it.
+///
+/// The ink follows the finger with rounded, smoothed lines. A signature counts once its ink adds up
+/// to ``SignaturePadStrokes/isSigned(_:minimumLength:)``, so a stray tap does not. VoiceOver reads the
+/// prompt and whether the pad is signed, and lets its user sign with direct touch.
+/// ``SignaturePadStrokes/image(of:ink:lineWidth:scale:)`` turns the strokes into an image cropped
+/// to the ink.
+struct SignaturePad: View {
+    /// The strokes of the signature, each a list of points in the coordinate space of the pad.
+    @Binding var strokes: [[CGPoint]]
+    /// The text under the baseline.
+    var prompt: LocalizedStringResource = "Sign here"
+    /// The color of the ink.
+    var ink: Color = .primary
+    /// The width of the ink, in points.
+    var lineWidth: CGFloat = 3
+
+    @State private var size = CGSize.zero
+    @State private var drawing: CGPoint?
+
+    private var isSigned: Bool { SignaturePadStrokes.isSigned(strokes) }
+
+    var body: some View {
+        ZStack(alignment: .bottomLeading) {
+            VStack(alignment: .leading, spacing: 6) {
+                Rectangle()
+                    .fill(.separator)
+                    .frame(height: 1)
+
+                Text(prompt)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 14)
+
+            Canvas { context, _ in
+                context.stroke(
+                    SignaturePadStrokes.path(for: strokes),
+                    with: .color(ink),
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
+                )
+            }
+        }
+        .frame(minHeight: 160)
+        .onGeometryChange(for: CGSize.self) { proxy in
+            proxy.size
+        } action: { newSize in
+            size = newSize
+        }
+        .contentShape(.rect)
+        .gesture(draw)
+        .background(.background, in: .rect(cornerRadius: 16))
+        .overlay {
+            RoundedRectangle(cornerRadius: 16)
+                .strokeBorder(.separator)
+        }
+        .clipShape(.rect(cornerRadius: 16))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(prompt))
+        .accessibilityValue(isSigned ? Text("Signed") : Text("Empty"))
+        .accessibilityDirectTouch(options: .silentOnTouch)
+        .overlay(alignment: .topTrailing) {
+            if !strokes.isEmpty {
+                Button("Clear", systemImage: "eraser") {
+                    strokes.removeAll()
+                }
+                .labelStyle(.iconOnly)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(13)
+                .contentShape(.rect)
+                .padding(-13)
+                .padding(12)
+            }
+        }
+    }
+
+    private var draw: some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                SignaturePadStrokes.add(value.location, startedAt: value.startLocation, drawing: &drawing, in: size, to: &strokes)
+            }
+    }
+}
+
+/// What a ``SignaturePad`` knows about its strokes: their length, their bounds and their path.
+nonisolated enum SignaturePadStrokes {
+    /// The total length of the ink, in points.
+    static func length(of strokes: [[CGPoint]]) -> CGFloat {
+        strokes.reduce(0) { total, stroke in
+            zip(stroke, stroke.dropFirst()).reduce(total) { sum, pair in
+                sum + hypot(pair.1.x - pair.0.x, pair.1.y - pair.0.y)
+            }
+        }
+    }
+
+    /// Whether the ink adds up to a signature rather than a stray tap.
+    ///
+    /// - Parameter minimumLength: The least ink, in points, that counts as signing.
+    static func isSigned(_ strokes: [[CGPoint]], minimumLength: CGFloat = 20) -> Bool {
+        !strokes.isEmpty && length(of: strokes) >= minimumLength
+    }
+
+    /// Adds a point of a drag: to the stroke of that drag while it goes on, or as a new stroke
+    /// when another drag begins, even if the last one never ended. Points outside a pad of
+    /// `size` move to its edge.
+    ///
+    /// - Parameter drawing: Where the drag that drew the last stroke began. The function keeps
+    ///   it up to date, so a drag whose strokes are cleared under it goes on as one new stroke.
+    static func add(_ point: CGPoint, startedAt start: CGPoint, drawing: inout CGPoint?, in size: CGSize, to strokes: inout [[CGPoint]]) {
+        let point = clamped(point, to: size)
+        if drawing == start, !strokes.isEmpty {
+            strokes[strokes.count - 1].append(point)
+        } else {
+            strokes.append([point])
+            drawing = start
+        }
+    }
+
+    private static func clamped(_ point: CGPoint, to size: CGSize) -> CGPoint {
+        guard size.width > 0, size.height > 0 else { return point }
+        return CGPoint(x: min(max(point.x, 0), size.width), y: min(max(point.y, 0), size.height))
+    }
+
+    /// The smallest rectangle that holds every point, or `nil` when there are none.
+    static func bounds(of strokes: [[CGPoint]]) -> CGRect? {
+        let points = strokes.joined()
+        guard let first = points.first else { return nil }
+        var minimum = first
+        var maximum = first
+        for point in points {
+            minimum = CGPoint(x: min(minimum.x, point.x), y: min(minimum.y, point.y))
+            maximum = CGPoint(x: max(maximum.x, point.x), y: max(maximum.y, point.y))
+        }
+        return CGRect(x: minimum.x, y: minimum.y, width: maximum.x - minimum.x, height: maximum.y - minimum.y)
+    }
+
+    /// The strokes as one path, smoothed through the middle of each pair of points. A stroke
+    /// of a single point is a dot.
+    static func path(for strokes: [[CGPoint]]) -> Path {
+        var path = Path()
+        for stroke in strokes {
+            guard let first = stroke.first, let last = stroke.last else { continue }
+            guard stroke.count > 1 else {
+                path.addEllipse(in: CGRect(x: first.x - 0.5, y: first.y - 0.5, width: 1, height: 1))
+                continue
+            }
+            path.move(to: first)
+            for (point, next) in zip(stroke.dropFirst(), stroke.dropFirst(2)) {
+                path.addQuadCurve(to: CGPoint(x: (point.x + next.x) / 2, y: (point.y + next.y) / 2), control: point)
+            }
+            path.addLine(to: last)
+        }
+        return path
+    }
+
+    /// Draws strokes into an image cropped to the ink, on a clear background.
+    ///
+    /// - Parameters:
+    ///   - ink: The color of the ink. Pick a fixed color, like black, for an image that is
+    ///     kept or sent: a dynamic one resolves in the light appearance.
+    ///   - lineWidth: The width of the ink, in points.
+    ///   - scale: The pixels per point of the image.
+    /// - Returns: The image, or `nil` when there is no ink.
+    @MainActor static func image(of strokes: [[CGPoint]], ink: Color = .black, lineWidth: CGFloat = 3, scale: CGFloat = 3) -> UIImage? {
+        guard let bounds = bounds(of: strokes) else { return nil }
+        let frame = bounds.insetBy(dx: -lineWidth, dy: -lineWidth)
+        let ink = path(for: strokes)
+            .offsetBy(dx: -frame.minX, dy: -frame.minY)
+            .stroke(ink, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round))
+            .frame(width: frame.width, height: frame.height)
+        let renderer = ImageRenderer(content: ink)
+        renderer.scale = scale
+        return renderer.uiImage
+    }
+}
+
+// MARK: - Demo
+
+struct SignaturePadDemo: View {
+    /// A scribble in the shape of a signature, for the demo to draw by itself.
+    private static let sample: [[CGPoint]] = {
+        let loops = (0...150).map { step in
+            let t = Double(step) / 150
+            let angle = t * 2 * .pi * 6
+            let envelope = 0.65 + 0.35 * sin(t * 3 * .pi)
+            return CGPoint(x: 40 + 250 * t - 16 * sin(angle), y: 118 - 26 * cos(angle) * envelope - 14 * t)
+        }
+        let flourish = (0...40).map { step in
+            let t = Double(step) / 40
+            return CGPoint(x: 70 + 230 * t, y: 162 - 18 * t + 10 * sin(t * .pi))
+        }
+        return [loops, flourish]
+    }()
+
+    /// Only for this demo: it plays by itself until someone touches it.
+    @State private var isAutoPlaying = true
+    @State private var strokes: [[CGPoint]] = []
+    @State private var sampleStrokes = 0
+    @State private var signature: UIImage?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Delivery confirmation")
+                .font(.title2.bold())
+
+            Text("Sign to confirm you received the parcel.")
+                .foregroundStyle(.secondary)
+
+            if let signature {
+                VStack(alignment: .leading, spacing: 12) {
+                    Image(uiImage: signature)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: 120)
+                        .padding(12)
+                        .background(.white, in: .rect(cornerRadius: 12))
+                        .accessibilityLabel(Text("Your signature"))
+
+                    Label("Signed", systemImage: "checkmark.seal.fill")
+                        .foregroundStyle(.green)
+
+                    Button("Sign again") {
+                        self.signature = nil
+                        strokes.removeAll()
+                    }
+                }
+                .padding(16)
+                .background(.fill.tertiary, in: .rect(cornerRadius: 16))
+            } else {
+                SignaturePad(strokes: $strokes)
+                    .frame(height: 220)
+
+                Button {
+                    signature = SignaturePadStrokes.image(of: strokes)
+                } label: {
+                    Text("Done")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .disabled(!SignaturePadStrokes.isSigned(strokes))
+            }
+        }
+        .padding(20)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in isAutoPlaying = false })
+        .onChange(of: isAutoPlaying) {
+            strokes.removeFirst(min(sampleStrokes, strokes.count))
+            sampleStrokes = 0
+        }
+        .task {
+            while isAutoPlaying {
+                strokes.removeAll()
+                sampleStrokes = 0
+                for stroke in Self.sample {
+                    strokes.append([])
+                    sampleStrokes += 1
+                    for point in stroke {
+                        try? await Task.sleep(for: .milliseconds(12))
+                        guard !Task.isCancelled, isAutoPlaying else { return }
+                        strokes[sampleStrokes - 1].append(point)
+                    }
+                }
+                try? await Task.sleep(for: .seconds(1.3))
+                guard !Task.isCancelled, isAutoPlaying else { return }
+                strokes.removeAll()
+                sampleStrokes = 0
+                try? await Task.sleep(for: .seconds(0.5))
+            }
+        }
+    }
+}
+
+#Preview {
+    SignaturePadDemo()
 }
 ```
 
@@ -21643,6 +22440,217 @@ struct LongPressRadialMenuDemo: View {
 
 #Preview {
     LongPressRadialMenuDemo()
+}
+```
+
+## Multi Item Drag Grid
+
+A grid where tapping selects items and dragging one of them carries the whole selection to a drop target in a single system drag.
+
+Category: Gestures. Minimum: iOS 27.0. Path: Components/Gestures/MultiItemDragGrid/MultiItemDragGrid.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+import UniformTypeIdentifiers
+
+/// A grid where tapping selects items and dragging one of the selected items carries them all.
+///
+/// A drag that starts on an item that is not selected carries only that item. The system lifts
+/// the items after a short hold and draws them as a stack under the finger. The receiving view
+/// takes them with `dropDestination(for:)`, so `Item` needs a transfer representation it can
+/// also import, such as `CodableRepresentation`.
+@available(iOS 27, *)
+struct MultiItemDragGrid<Item: Identifiable & Transferable, Cell: View>: View where Item.ID: Sendable {
+    /// The items in the grid, in order.
+    let items: [Item]
+    /// The identifiers of the selected items, in the order they were picked.
+    @Binding var selection: [Item.ID]
+    /// The narrowest a column can be: the grid fits as many columns as its width allows.
+    var minimumColumnWidth: CGFloat = 100
+    /// The space between cells, in points.
+    var spacing: CGFloat = 4
+    /// The view of one item, given the item and whether it is selected.
+    @ViewBuilder let cell: (Item, Bool) -> Cell
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumColumnWidth), spacing: spacing)], spacing: spacing) {
+            ForEach(items) { item in
+                let isSelected = selection.contains(item.id)
+
+                Button {
+                    toggle(item.id)
+                } label: {
+                    cell(item, isSelected)
+                }
+                .buttonStyle(.plain)
+                .overlay(alignment: .bottomTrailing) {
+                    if isSelected {
+                        checkmark
+                    }
+                }
+                .accessibilityAddTraits(isSelected ? .isSelected : [])
+                .draggable(containerItemID: item.id)
+            }
+        }
+        .dragContainer(for: Item.self) { draggedIDs in
+            draggedIDs.compactMap { id in items.first { $0.id == id } }
+        }
+        .dragContainerSelection(selection)
+    }
+
+    private var checkmark: some View {
+        Image(systemName: "checkmark.circle.fill")
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(.white, .blue)
+            .font(.title3)
+            .shadow(radius: 2)
+            .padding(6)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    private func toggle(_ id: Item.ID) {
+        if let index = selection.firstIndex(of: id) {
+            selection.remove(at: index)
+        } else {
+            selection.append(id)
+        }
+    }
+}
+
+// MARK: - Demo
+
+@available(iOS 27, *)
+struct MultiItemDragGridDemo: View {
+    nonisolated private struct Photo: Identifiable, Codable, Transferable {
+        let id: Int
+        let symbol: String
+        let hue: Double
+
+        static var transferRepresentation: some TransferRepresentation {
+            CodableRepresentation(contentType: .json)
+        }
+    }
+
+    private struct Album: Identifiable {
+        let id: String
+        let title: LocalizedStringResource
+        let symbol: String
+        var photoIDs: [Int] = []
+    }
+
+    private static let symbols = ["sun.max.fill", "leaf.fill", "mountain.2.fill", "cloud.rain.fill", "flame.fill", "snowflake", "moon.stars.fill", "bird.fill", "camera.macro", "drop.fill", "tree.fill", "wind"]
+
+    private let photos = (0..<24).map { index in
+        Photo(id: index, symbol: symbols[index % symbols.count], hue: Double(index) / 24)
+    }
+
+    @State private var selection: [Int] = []
+    @State private var albums = [
+        Album(id: "favorites", title: "Favorites", symbol: "heart.fill"),
+        Album(id: "trip", title: "Trip", symbol: "airplane"),
+        Album(id: "family", title: "Family", symbol: "person.2.fill"),
+    ]
+    @State private var targetedAlbum: String?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Tap photos to select them, then hold one and drag them all to an album.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                let albumLayout = dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(spacing: 10)) : AnyLayout(HStackLayout(spacing: 10))
+
+                albumLayout {
+                    ForEach($albums) { $album in
+                        albumTile(album)
+                            .dropDestination(for: Photo.self) { dropped, _ in
+                                let droppedIDs = dropped.map(\.id)
+                                album.photoIDs.append(contentsOf: droppedIDs.filter { !album.photoIDs.contains($0) })
+                                selection.removeAll { droppedIDs.contains($0) }
+                            }
+                            .onDropSessionUpdated { session in
+                                switch session.phase {
+                                case .entering, .active:
+                                    targetedAlbum = album.id
+                                default:
+                                    if targetedAlbum == album.id {
+                                        targetedAlbum = nil
+                                    }
+                                }
+                            }
+                    }
+                }
+
+                HStack {
+                    Text("^[\(selection.count) photo](inflect: true) selected")
+                        .font(.headline)
+                        .contentTransition(.numericText())
+
+                    Spacer()
+
+                    Button("Clear") {
+                        selection.removeAll()
+                    }
+                    .disabled(selection.isEmpty)
+                }
+
+                MultiItemDragGrid(items: photos, selection: $selection, minimumColumnWidth: 96) { photo, isSelected in
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color(hue: photo.hue, saturation: 0.55, brightness: 0.9).gradient)
+                        .aspectRatio(1, contentMode: .fit)
+                        .overlay {
+                            Image(systemName: photo.symbol)
+                                .font(.title)
+                                .foregroundStyle(.white)
+                        }
+                        .opacity(isSelected ? 0.75 : 1)
+                        .accessibilityLabel(Text("Photo \(photo.id + 1)"))
+                }
+            }
+            .padding(16)
+            .animation(reduceMotion ? nil : .snappy, value: selection)
+            .animation(reduceMotion ? nil : .snappy, value: targetedAlbum)
+        }
+    }
+
+    private func albumTile(_ album: Album) -> some View {
+        let isTargeted = targetedAlbum == album.id
+
+        return VStack(spacing: 6) {
+            Image(systemName: album.symbol)
+                .font(.title2)
+                .frame(maxWidth: .infinity, minHeight: 56)
+                .background(.fill.tertiary, in: .rect(cornerRadius: 14))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14)
+                        .strokeBorder(.blue, lineWidth: isTargeted ? 3 : 0)
+                }
+                .scaleEffect(isTargeted && !reduceMotion ? 1.06 : 1)
+                .accessibilityHidden(true)
+
+            Text(album.title)
+                .font(.footnote.bold())
+
+            Text("^[\(album.photoIDs.count) photo](inflect: true)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+@available(iOS 27, *)
+#Preview {
+    MultiItemDragGridDemo()
 }
 ```
 
@@ -29650,6 +30658,179 @@ struct AccordionSectionDemo: View {
 }
 ```
 
+## Alphabet Indexed List
+
+A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.
+
+Category: Lists. Minimum: iOS 26.0. Path: Components/Lists/AlphabetIndexedList/AlphabetIndexedList.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A list in sections by the first letter of each name, with the system's index of letters along
+/// the trailing edge.
+///
+/// Tapping a letter of the index, or sliding a finger along it, jumps to its section. The list
+/// sorts and groups the names in the order of the environment's locale, ignoring case and
+/// accents, so Álvaro goes under A. A name that does not start with a letter, like a number or an
+/// emoji, goes under # at the end.
+@available(iOS 26, *)
+struct AlphabetIndexedList<Item: Identifiable, Row: View>: View {
+    /// The items, in any order.
+    let items: [Item]
+    /// The text an item is sorted and grouped by, like the name of a person.
+    let name: (Item) -> String
+    /// The row of one item.
+    @ViewBuilder let row: (Item) -> Row
+
+    @Environment(\.locale) private var locale
+
+    var body: some View {
+        List {
+            ForEach(AlphabetIndexedListSection.sections(of: items, name: name, locale: locale)) { section in
+                Section(section.letter) {
+                    ForEach(section.items) { item in
+                        row(item)
+                    }
+                }
+                .sectionIndexLabel(section.letter)
+            }
+        }
+        .listSectionIndexVisibility(.visible)
+    }
+}
+
+/// The items of one letter of an ``AlphabetIndexedList``.
+nonisolated struct AlphabetIndexedListSection<Item>: Identifiable {
+    /// The letter the names start with, or # for the names that do not start with a letter.
+    let letter: String
+    /// The items of the letter, sorted by name.
+    let items: [Item]
+
+    var id: String { letter }
+
+    /// The letter of the section of names that do not start with a letter.
+    static var otherLetter: String { "#" }
+
+    /// Sorts items by name in the order of a locale and groups them by their first letter.
+    ///
+    /// - Returns: A section for every first letter, in alphabetical order, and the names that
+    ///   do not start with a letter in a last section under ``otherLetter``.
+    static func sections(of items: [Item], name: (Item) -> String, locale: Locale) -> [Self] {
+        let sorted = items.sorted {
+            name($0).compare(name($1), options: .caseInsensitive, locale: locale) == .orderedAscending
+        }
+        var itemsByLetter: [String: [Item]] = [:]
+        for item in sorted {
+            itemsByLetter[letter(of: name(item), locale: locale), default: []].append(item)
+        }
+        // Sorted apart from the names: a locale can put Å after Z while the letter groups it under A.
+        var letters = itemsByLetter.keys.filter { $0 != otherLetter }.sorted {
+            $0.compare($1, locale: locale) == .orderedAscending
+        }
+        if itemsByLetter[otherLetter] != nil {
+            letters.append(otherLetter)
+        }
+        return letters.map { Self(letter: $0, items: itemsByLetter[$0] ?? []) }
+    }
+
+    /// The letter a name goes under: its first letter, without accents and in uppercase, or
+    /// ``otherLetter`` when the name does not start with a letter.
+    static func letter(of name: String, locale: Locale) -> String {
+        guard let first = name.trimmingCharacters(in: .whitespaces).first, first.isLetter else {
+            return otherLetter
+        }
+        let folded = String(first).folding(options: [.caseInsensitive, .diacriticInsensitive], locale: locale)
+        return folded.uppercased(with: locale).first.map(String.init) ?? otherLetter
+    }
+}
+
+// MARK: - Demo
+
+@available(iOS 26, *)
+struct AlphabetIndexedListDemo: View {
+    private struct Contact: Identifiable {
+        let name: String
+        let detail: LocalizedStringResource
+
+        var id: String { name }
+    }
+
+    private let contacts = [
+        Contact(name: "Álvaro Ruiz", detail: "Mobile"), Contact(name: "Amelia Clarke", detail: "Work"),
+        Contact(name: "Ana Torres", detail: "Mobile"), Contact(name: "Ángela Vidal", detail: "Home"),
+        Contact(name: "Ben Carter", detail: "Mobile"), Contact(name: "Bianca Rossi", detail: "Work"),
+        Contact(name: "Camille Dubois", detail: "Mobile"), Contact(name: "Carlos Méndez", detail: "Mobile"),
+        Contact(name: "Chloé Martin", detail: "Home"), Contact(name: "Daniel Kim", detail: "Work"),
+        Contact(name: "Diego Herrera", detail: "Mobile"), Contact(name: "Elena Petrova", detail: "Mobile"),
+        Contact(name: "Émile Laurent", detail: "Work"), Contact(name: "Ethan Brooks", detail: "Mobile"),
+        Contact(name: "Fatima Zahra", detail: "Mobile"), Contact(name: "Gabriel Silva", detail: "Home"),
+        Contact(name: "Hana Sato", detail: "Mobile"), Contact(name: "Hugo Lefèvre", detail: "Work"),
+        Contact(name: "Íñigo Etxeberria", detail: "Mobile"), Contact(name: "Isla Murphy", detail: "Mobile"),
+        Contact(name: "Jonas Weber", detail: "Work"), Contact(name: "Julia Nowak", detail: "Mobile"),
+        Contact(name: "Kai Nakamura", detail: "Mobile"), Contact(name: "Laila Haddad", detail: "Home"),
+        Contact(name: "Lucas Moreau", detail: "Mobile"), Contact(name: "Maya Patel", detail: "Work"),
+        Contact(name: "Mateo García", detail: "Mobile"), Contact(name: "Noah Fischer", detail: "Mobile"),
+        Contact(name: "Nuria Soler", detail: "Home"), Contact(name: "Olivia Jensen", detail: "Mobile"),
+        Contact(name: "Pablo Ortega", detail: "Work"), Contact(name: "Quentin Roux", detail: "Mobile"),
+        Contact(name: "Rosa Delgado", detail: "Mobile"), Contact(name: "Sofia Bianchi", detail: "Home"),
+        Contact(name: "Tomás Navarro", detail: "Mobile"), Contact(name: "Uma Reddy", detail: "Work"),
+        Contact(name: "Valentina Cruz", detail: "Mobile"), Contact(name: "Wei Chen", detail: "Mobile"),
+        Contact(name: "Yara Costa", detail: "Home"), Contact(name: "Zoe Walsh", detail: "Mobile"),
+        Contact(name: "24h Pharmacy", detail: "Work"), Contact(name: "@studio", detail: "Work"),
+    ]
+
+    @ScaledMetric(relativeTo: .subheadline) private var avatarSize = 40.0
+
+    var body: some View {
+        NavigationStack {
+            AlphabetIndexedList(items: contacts, name: \.name) { contact in
+                HStack(spacing: 12) {
+                    Text(initials(of: contact.name))
+                        .font(.subheadline.bold())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .foregroundStyle(.white)
+                        .frame(width: avatarSize, height: avatarSize)
+                        .background(color(for: contact.name).gradient, in: .circle)
+                        .accessibilityHidden(true)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(contact.name)
+                            .font(.body)
+
+                        Text(contact.detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityElement(children: .combine)
+            }
+            .navigationTitle("Contacts")
+        }
+    }
+
+    private func initials(of name: String) -> String {
+        let letters = name.split(separator: " ").prefix(2).compactMap(\.first).filter(\.isLetter)
+        return letters.isEmpty ? "#" : String(letters).uppercased()
+    }
+
+    private func color(for name: String) -> Color {
+        let palette: [Color] = [.indigo, .teal, .orange, .pink, .blue, .purple, .green, .red]
+        let index = name.unicodeScalars.reduce(0) { ($0 + Int($1.value)) % palette.count }
+        return palette[index]
+    }
+}
+
+@available(iOS 26, *)
+#Preview {
+    AlphabetIndexedListDemo()
+}
+```
+
 ## Disclosure Tree View
 
 A nested tree of rows that expand and collapse, indenting each level, for folders or category hierarchies.
@@ -31756,6 +32937,198 @@ struct MapClusterAnnotationsDemo: View {
 
 #Preview {
     MapClusterAnnotationsDemo()
+}
+```
+
+## Map Pin Location Picker
+
+A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.
+
+Category: Maps. Minimum: iOS 18.0. Path: Components/Maps/MapPinLocationPicker/MapPinLocationPicker.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import MapKit
+import SwiftUI
+
+/// A map with a pin fixed at its center, to pick a place by moving the map under the pin.
+///
+/// The pin lifts while the map moves and lands with a small bounce where it stops, and only
+/// then does the picker update ``coordinate``. Setting ``coordinate`` from outside moves the
+/// map there. With Reduce Motion the pin stays down and only its shadow changes. VoiceOver
+/// reads the pin with its latitude and longitude.
+///
+/// The pin marks the center of the picker's frame, so controls placed over the map can hide
+/// it: put them next to the map instead.
+struct MapPinLocationPicker: View {
+    /// The point under the tip of the pin. The picker writes it each time the map comes to rest.
+    @Binding var coordinate: CLLocationCoordinate2D
+    /// How much of the map shows around the pin when the picker moves the map, in meters.
+    var span: CLLocationDistance = 800
+    /// The color of the head of the pin.
+    var tint: Color = .red
+
+    @State private var position: MapCameraPosition = .automatic
+    @State private var isMoving = false
+    @State private var reported: [Double] = []
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let headSize: CGFloat = 28
+    private let stemHeight: CGFloat = 16
+    private let lift: CGFloat = 14
+
+    var body: some View {
+        Map(position: $position)
+            .onMapCameraChange(frequency: .continuous) { context in
+                let center = context.camera.centerCoordinate
+                if [center.latitude, center.longitude] != reported {
+                    isMoving = true
+                }
+            }
+            .onMapCameraChange(frequency: .onEnd) { context in
+                let center = context.camera.centerCoordinate
+                reported = [center.latitude, center.longitude]
+                isMoving = false
+                coordinate = center
+            }
+            .overlay {
+                pin
+                    .allowsHitTesting(false)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(Text("Pin"))
+                    .accessibilityValue(Text("Latitude \(coordinate.latitude, format: .number.precision(.fractionLength(5))), longitude \(coordinate.longitude, format: .number.precision(.fractionLength(5)))"))
+                    .accessibilityHint(Text("Move the map to move the pin."))
+            }
+            .onAppear {
+                move(to: coordinate)
+            }
+            .onChange(of: [coordinate.latitude, coordinate.longitude]) { _, new in
+                if new != reported {
+                    withAnimation(reduceMotion ? nil : .smooth) { move(to: coordinate) }
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(duration: 0.35, bounce: 0.45), value: isMoving)
+    }
+
+    private var pin: some View {
+        ZStack {
+            Ellipse()
+                .fill(.black.opacity(isMoving ? 0.15 : 0.3))
+                .frame(width: isMoving ? 16 : 10, height: isMoving ? 6 : 4)
+
+            VStack(spacing: 0) {
+                Circle()
+                    .fill(tint)
+                    .frame(width: headSize, height: headSize)
+                    .overlay {
+                        Circle()
+                            .fill(MapPinLocationPickerContrastingForeground(background: tint))
+                            .frame(width: headSize / 3, height: headSize / 3)
+                    }
+                    .shadow(color: .black.opacity(0.25), radius: isMoving ? 6 : 2, y: isMoving ? 4 : 1)
+
+                Capsule()
+                    .fill(Color(white: 0.3))
+                    .frame(width: 3, height: stemHeight)
+            }
+            .offset(y: -(headSize + stemHeight) / 2 - (isMoving && !reduceMotion ? lift : 0))
+        }
+    }
+
+    private func move(to coordinate: CLLocationCoordinate2D) {
+        position = .region(MKCoordinateRegion(center: coordinate, latitudinalMeters: span, longitudinalMeters: span))
+    }
+}
+
+/// White or black, whichever reads better on `background`. Black only on a
+/// light color, so the system's own colors keep white.
+nonisolated struct MapPinLocationPickerContrastingForeground: ShapeStyle {
+    let background: Color
+
+    func resolve(in environment: EnvironmentValues) -> Color {
+        let color = background.resolve(in: environment)
+        let luminance = 0.2126 * color.linearRed + 0.7152 * color.linearGreen + 0.0722 * color.linearBlue
+        return luminance > 0.5 ? .black : .white
+    }
+}
+
+// MARK: - Demo
+
+struct MapPinLocationPickerDemo: View {
+    private static let start = CLLocationCoordinate2D(latitude: 40.4169, longitude: -3.7035)
+
+    @State private var coordinate = start
+    @State private var chosen: CLLocationCoordinate2D?
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    var body: some View {
+        let stack = dynamicTypeSize.isAccessibilitySize ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12)) : AnyLayout(HStackLayout(spacing: 24))
+
+        VStack(spacing: 0) {
+            MapPinLocationPicker(coordinate: $coordinate)
+                .ignoresSafeArea(edges: .top)
+
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Move the map to place the pin")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                stack {
+                    value("Latitude", coordinate.latitude)
+                    value("Longitude", coordinate.longitude)
+                }
+
+                stack {
+                    Button("Reset") {
+                        coordinate = Self.start
+                        chosen = nil
+                    }
+                    .buttonStyle(.bordered)
+
+                    if !dynamicTypeSize.isAccessibilitySize {
+                        Spacer()
+                    }
+
+                    Button {
+                        chosen = coordinate
+                    } label: {
+                        if chosen == nil {
+                            Label("Choose this spot", systemImage: "mappin.and.ellipse")
+                        } else {
+                            Label("Chosen", systemImage: "checkmark")
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+            .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .fixedSize(horizontal: false, vertical: true)
+            .background(.background)
+            .onChange(of: [coordinate.latitude, coordinate.longitude]) {
+                chosen = nil
+            }
+        }
+    }
+
+    private func value(_ title: LocalizedStringResource, _ degrees: Double) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(degrees, format: .number.precision(.fractionLength(5)))
+                .font(.headline.monospacedDigit())
+                .contentTransition(.numericText(value: degrees))
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+#Preview {
+    MapPinLocationPickerDemo()
 }
 ```
 
@@ -40164,6 +41537,304 @@ struct BubbleWrapPopDemo: View {
 }
 ```
 
+## Memory Match Game
+
+A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.
+
+Category: Playful. Minimum: iOS 18.0. Path: Components/Playful/MemoryMatchGame/MemoryMatchGame.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A memory game: cards that turn over in 3D when tapped, to find their pairs.
+///
+/// A missed pair turns back after ``mismatchDelay``, and the other cards ignore taps until it
+/// does. A found pair stays face up and fades a little, and the phone taps for each one. With
+/// Reduce Motion the cards change sides without turning. VoiceOver reads a face-down card as
+/// such, and a found card as matched.
+struct MemoryMatchGame<Face: Hashable & Sendable, CardFace: View>: View {
+    /// The game: its cards, the moves made and whether every pair is found. Assign a new board
+    /// to start again.
+    @Binding var board: MemoryMatchGameBoard<Face>
+    /// The narrowest a column of cards can be, in points.
+    var minimumCardWidth: CGFloat = 72
+    /// How long a missed pair stays face up before it turns back.
+    var mismatchDelay: Duration = .seconds(0.8)
+    /// The face of a card.
+    @ViewBuilder let face: (Face) -> CardFace
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private let spacing: CGFloat = 10
+    private let cornerRadius: CGFloat = 12
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumCardWidth), spacing: spacing)], spacing: spacing) {
+            ForEach(board.cards) { card in
+                Button {
+                    turn(card)
+                } label: {
+                    cardView(card)
+                }
+                .buttonStyle(.plain)
+                .disabled(card.isMatched)
+                .accessibilityValue(card.isMatched ? Text("Matched") : Text(verbatim: ""))
+            }
+        }
+        .sensoryFeedback(.success, trigger: board.matchedPairs) { old, new in
+            new > old
+        }
+        // Read from the board, so a view made again while a pair is missed still turns it back.
+        .task(id: board.missedPair) {
+            guard let pair = board.missedPair else { return }
+            try? await Task.sleep(for: mismatchDelay)
+            guard !Task.isCancelled, board.missedPair == pair else { return }
+            withAnimation(.smooth(duration: 0.4)) { board.hide(pair) }
+        }
+    }
+
+    private func cardView(_ card: MemoryMatchGameBoard<Face>.Card) -> some View {
+        let showsFace = card.isFaceUp || card.isMatched
+
+        return MemoryMatchGameCardFlip(angle: showsFace ? 0 : 180, turns: !reduceMotion) {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(.background.secondary)
+                .overlay {
+                    face(card.face)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .strokeBorder(.separator)
+                }
+                .opacity(card.isMatched ? 0.55 : 1)
+        } back: {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(LinearGradient(colors: [.indigo, .purple], startPoint: .topLeading, endPoint: .bottomTrailing))
+                .overlay {
+                    Image(systemName: "sparkles")
+                        .font(.title2)
+                        .foregroundStyle(.white.opacity(0.85))
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text("Face-down card"))
+        }
+        .aspectRatio(3 / 4, contentMode: .fit)
+    }
+
+    private func turn(_ card: MemoryMatchGameBoard<Face>.Card) {
+        withAnimation(.smooth(duration: 0.4)) { _ = board.flip(card.id) }
+    }
+}
+
+/// A card that shows its front up to a quarter turn and its back beyond it.
+private struct MemoryMatchGameCardFlip<Front: View, Back: View>: View, Animatable {
+    /// 0 shows the front, 180 the back.
+    var angle: Double
+    let turns: Bool
+    @ViewBuilder let front: () -> Front
+    @ViewBuilder let back: () -> Back
+
+    nonisolated var animatableData: Double {
+        get { angle }
+        set { angle = newValue }
+    }
+
+    var body: some View {
+        let showsFront = angle < 90
+
+        ZStack {
+            front()
+                .opacity(showsFront ? 1 : 0)
+                .accessibilityHidden(!showsFront)
+
+            back()
+                .rotation3DEffect(.degrees(turns ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+                .opacity(showsFront ? 0 : 1)
+                .accessibilityHidden(showsFront)
+        }
+        .rotation3DEffect(.degrees(turns ? angle : 0), axis: (x: 0, y: 1, z: 0), perspective: 0.4)
+    }
+}
+
+/// The cards of a memory game and its rules, without any view.
+nonisolated struct MemoryMatchGameBoard<Face: Hashable & Sendable>: Equatable, Sendable {
+    /// One card of the board.
+    struct Card: Identifiable, Equatable, Sendable {
+        let id: Int
+        /// What the card shows when it is face up.
+        let face: Face
+        /// Whether the card shows its face.
+        var isFaceUp = false
+        /// Whether the card is part of a pair already found.
+        var isMatched = false
+    }
+
+    /// What turning a card over did.
+    enum Flip: Equatable, Sendable {
+        /// Nothing: the card was face up or matched, or a missed pair is still face up.
+        case ignored
+        /// The first card of a pair is face up.
+        case first
+        /// The two cards match and stay face up.
+        case match
+        /// The two cards differ: pass their identifiers to ``hide(_:)`` to turn them back.
+        case mismatch([Int])
+    }
+
+    /// The two cards of a missed pair while they are face up, or `nil`.
+    var missedPair: [Int]? {
+        let open = cards.filter { $0.isFaceUp && !$0.isMatched }.map(\.id)
+        return open.count == 2 ? open : nil
+    }
+    /// The cards, in the order they are laid out.
+    private(set) var cards: [Card] = []
+    /// How many pairs have been turned over, found or not.
+    private(set) var moves = 0
+
+    /// Whether every pair has been found.
+    var isFinished: Bool { !cards.isEmpty && cards.allSatisfy(\.isMatched) }
+    /// How many pairs have been found.
+    var matchedPairs: Int { cards.filter(\.isMatched).count / 2 }
+
+    /// Creates a board with each face twice, shuffled with a generator.
+    init<Generator: RandomNumberGenerator>(faces: [Face], using generator: inout Generator) {
+        cards = (faces + faces).shuffled(using: &generator).enumerated().map { Card(id: $0.offset, face: $0.element) }
+    }
+
+    /// Creates a board with each face twice, shuffled.
+    init(faces: [Face]) {
+        var generator = SystemRandomNumberGenerator()
+        self.init(faces: faces, using: &generator)
+    }
+
+    /// Turns a card face up and, when it is the second of a pair, compares the two.
+    mutating func flip(_ id: Int) -> Flip {
+        let open = cards.indices.filter { cards[$0].isFaceUp && !cards[$0].isMatched }
+        guard open.count < 2,
+              let index = cards.firstIndex(where: { $0.id == id }),
+              !cards[index].isFaceUp, !cards[index].isMatched
+        else { return .ignored }
+
+        cards[index].isFaceUp = true
+        guard let other = open.first else { return .first }
+
+        moves += 1
+        guard cards[other].face == cards[index].face else {
+            return .mismatch([cards[other].id, cards[index].id])
+        }
+        cards[other].isMatched = true
+        cards[index].isMatched = true
+        return .match
+    }
+
+    /// Turns face down the cards of a missed pair. Found pairs stay face up.
+    mutating func hide(_ ids: [Int]) {
+        for index in cards.indices where ids.contains(cards[index].id) && !cards[index].isMatched {
+            cards[index].isFaceUp = false
+        }
+    }
+}
+
+// MARK: - Demo
+
+struct MemoryMatchGameDemo: View {
+    private static let faces = ["leaf.fill", "flame.fill", "drop.fill", "bolt.fill", "moon.fill", "star.fill"]
+
+    /// Only for this demo: it plays by itself until someone touches it.
+    @State private var isAutoPlaying = true
+    @State private var board = MemoryMatchGameBoard(faces: faces)
+    @State private var missesNext = true
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            HStack(alignment: .firstTextBaseline) {
+                Text("Memory")
+                    .font(.largeTitle.bold())
+
+                Spacer()
+
+                Text("^[\(board.moves) move](inflect: true)")
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(.secondary)
+                    .contentTransition(.numericText(value: Double(board.moves)))
+            }
+
+            MemoryMatchGame(board: $board, minimumCardWidth: 80) { face in
+                Image(systemName: face)
+                    .font(.largeTitle)
+                    .foregroundStyle(color(of: face))
+            }
+
+            if board.isFinished {
+                HStack {
+                    Label("Every pair found", systemImage: "trophy.fill")
+                        .font(.headline)
+
+                    Spacer()
+
+                    Button("Play again") {
+                        board = MemoryMatchGameBoard(faces: Self.faces)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .transition(.opacity)
+            }
+        }
+        .padding(20)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .animation(reduceMotion ? nil : .smooth, value: board.isFinished)
+        .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in isAutoPlaying = false })
+        .onChange(of: isAutoPlaying) {
+            board.hide(board.cards.filter { $0.isFaceUp && !$0.isMatched }.map(\.id))
+        }
+        .task {
+            while isAutoPlaying {
+                try? await Task.sleep(for: .seconds(0.6))
+                guard !Task.isCancelled, isAutoPlaying else { return }
+                if board.isFinished {
+                    board = MemoryMatchGameBoard(faces: Self.faces)
+                    continue
+                }
+                let hidden = board.cards.filter { !$0.isMatched }
+                guard let first = hidden.first,
+                      let twin = hidden.first(where: { $0.id != first.id && $0.face == first.face })
+                else { continue }
+                let second = missesNext ? hidden.first { $0.face != first.face } ?? twin : twin
+                missesNext.toggle()
+
+                withAnimation(.smooth(duration: 0.4)) { _ = board.flip(first.id) }
+                try? await Task.sleep(for: .seconds(0.5))
+                guard !Task.isCancelled, isAutoPlaying else { return }
+                let flip = withAnimation(.smooth(duration: 0.4)) { board.flip(second.id) }
+                guard case .mismatch(let ids) = flip else { continue }
+                try? await Task.sleep(for: .seconds(0.8))
+                guard !Task.isCancelled, isAutoPlaying else { return }
+                withAnimation(.smooth(duration: 0.4)) { board.hide(ids) }
+            }
+        }
+    }
+
+    private func color(of face: String) -> Color {
+        switch face {
+        case "leaf.fill": .green
+        case "flame.fill": .orange
+        case "drop.fill": .blue
+        case "bolt.fill": .red
+        case "moon.fill": .indigo
+        default: .pink
+        }
+    }
+}
+
+#Preview {
+    MemoryMatchGameDemo()
+}
+```
+
 ## Slot Machine Reels
 
 Reels of symbols that spin and stop one after another, with the result under a line across them.
@@ -47964,6 +49635,130 @@ struct FloatingDockBarDemo: View {
 
 #Preview {
     FloatingDockBarDemo()
+}
+```
+
+## Minimizing Navigation Bar
+
+A navigation stack whose navigation bar minimizes while the content scrolls down and returns on scrolling up or only at the top, using the system toolbar minimization.
+
+Category: Toolbars. Minimum: iOS 27.0. Path: Components/Toolbars/MinimizingNavigationBar/MinimizingNavigationBar.swift
+
+```swift
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Oscar Canton and SwiftUI Blocks contributors
+
+import SwiftUI
+
+/// A navigation stack whose navigation bar gets out of the way while the content scrolls.
+///
+/// The system minimizes and restores the bar, and honours Reduce Motion. The root screen
+/// needs a scroll view for the bar to react. A screen pushed onto the stack keeps a full bar
+/// unless it is given the same `toolbarMinimizationBehavior`.
+@available(iOS 27, *)
+struct MinimizingNavigationBar<Content: View>: View {
+    /// When the bar minimizes: by default while the content scrolls down.
+    var behavior: ToolbarMinimizationBehavior = .onScrollDown
+    /// When the full bar returns: `.automatic` as soon as the content scrolls up, and
+    /// `.atScrollEdge` only once it is back at the top.
+    var restoration: ToolbarMinimizationRestoration = .automatic
+    /// Whether the safe area of the content follows the minimized bar, which gives the
+    /// content the room it leaves.
+    var safeAreaAdjustment: ToolbarMinimizationSafeAreaAdjustment = .automatic
+    /// The root screen: a scroll view with its navigation title and toolbar.
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        NavigationStack {
+            // On the NavigationStack itself these modifiers do nothing: they belong to its screen.
+            content()
+                .toolbarMinimizationBehavior(behavior, for: .navigationBar)
+                .toolbarMinimizationRestoration(restoration, for: .navigationBar)
+                .toolbarMinimizationSafeAreaAdjustment(safeAreaAdjustment, for: .navigationBar)
+        }
+    }
+}
+
+// MARK: - Demo
+
+@available(iOS 27, *)
+struct MinimizingNavigationBarDemo: View {
+    private struct Article: Identifiable {
+        let id: Int
+        let title: String
+        let source: String
+        let minutes: Int
+        let symbol: String
+        let colors: [Color]
+    }
+
+    private let articles = [
+        Article(id: 1, title: "The quiet return of night trains", source: "Slow Travel", minutes: 6, symbol: "tram.fill", colors: [.indigo, .purple]),
+        Article(id: 2, title: "How bees decide where to live", source: "Field Notes", minutes: 4, symbol: "ladybug.fill", colors: [.orange, .yellow]),
+        Article(id: 3, title: "Why sourdough needs patience", source: "Kitchen Lab", minutes: 8, symbol: "flame.fill", colors: [.red, .orange]),
+        Article(id: 4, title: "Mapping the ocean floor", source: "Deep Blue", minutes: 11, symbol: "water.waves", colors: [.blue, .cyan]),
+        Article(id: 5, title: "A field guide to city birds", source: "Field Notes", minutes: 5, symbol: "bird.fill", colors: [.teal, .green]),
+        Article(id: 6, title: "Sketching in ten minutes a day", source: "Open Studio", minutes: 3, symbol: "pencil.and.scribble", colors: [.pink, .purple]),
+        Article(id: 7, title: "The science of a perfect nap", source: "Kitchen Lab", minutes: 7, symbol: "moon.zzz.fill", colors: [.indigo, .blue]),
+        Article(id: 8, title: "Inside a seed vault", source: "Field Notes", minutes: 9, symbol: "leaf.fill", colors: [.green, .mint]),
+        Article(id: 9, title: "What makes a good walking route", source: "Slow Travel", minutes: 5, symbol: "figure.walk", colors: [.brown, .orange]),
+        Article(id: 10, title: "Small gardens, big harvests", source: "Open Studio", minutes: 6, symbol: "carrot.fill", colors: [.orange, .red]),
+        Article(id: 11, title: "The return of the paper map", source: "Slow Travel", minutes: 4, symbol: "map.fill", colors: [.cyan, .teal]),
+        Article(id: 12, title: "Listening to glaciers", source: "Deep Blue", minutes: 10, symbol: "snowflake", colors: [.blue, .indigo]),
+    ]
+
+    @State private var returnsAtTop = false
+
+    var body: some View {
+        MinimizingNavigationBar(restoration: returnsAtTop ? .atScrollEdge : .automatic) {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(articles, content: row)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 8)
+            }
+            .navigationTitle("Reader")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu("Bar returns", systemImage: "arrow.up.to.line") {
+                        Picker("Bar returns", selection: $returnsAtTop) {
+                            Text("On scrolling up").tag(false)
+                            Text("At the top").tag(true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private func row(_ article: Article) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(LinearGradient(colors: article.colors, startPoint: .topLeading, endPoint: .bottomTrailing))
+                .frame(height: 150)
+                .overlay {
+                    Image(systemName: article.symbol)
+                        .font(.system(size: 54))
+                        .foregroundStyle(.white)
+                }
+                .accessibilityHidden(true)
+
+            Text(article.title)
+                .font(.title3.bold())
+
+            Text("\(article.source) · \(article.minutes) min read")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.bottom, 8)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+@available(iOS 27, *)
+#Preview {
+    MinimizingNavigationBarDemo()
 }
 ```
 

@@ -19,35 +19,35 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Calendars: CalendarMonthGrid, CalendarRangeSelector, DateStripPicker, DayScheduleTimeline
 - Cards: AvatarStack, ExpandableInfoCard, HolographicCard (Metal), SwipeableCardStack, TiltCard, WalletCardStack
 - Charts: AnimatedBarChart, AnimatedDonutChart, CandlestickChart, ContributionHeatmap, GaugeChart, InteractiveLineChart, LineChartDrawIn, RadarChart, ScrollableBarChart, SparklineStatTile, Surface3DChart (iOS 26.0+)
-- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, TapbackReactionBubble, TypingIndicatorBubble
-- Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, TrialTimelinePaywall
+- Chat: ChatAutoScrollList, ChatBubbleShape, KeyboardTrackingInputBar, NestedCommentThread, SwipeToReplyBubble, TapbackReactionBubble, TypingIndicatorBubble
+- Commerce: AddToCartFlyButton, AddToCartStepper, BillingPeriodToggle, PricingTierCards, PromoCodeField, TrialTimelinePaywall
 - Controls: AnimatedRadioButton, CheckmarkBoxToggleStyle, CircularRangeSlider, CounterStepper, DayNightToggle, FilterChipGroup, IconSwitchToggleStyle, RangeSlider, RulerScrollPicker, SelectAllChecklist, SettingsToggleRow, SlidingSegmentedPicker, SpringToggleStyle, SwipeToConfirmSlider, TickMarkSlider (iOS 26.0+), WeekdaySegmentedPicker
-- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape
+- Drawing: DrawingPadSpeedBrush, DrawingPadUndoRedo, PathTrimDrawOn, PolygonMorphShape, SignaturePad
 - Effects: BlurredImageBackdrop, BorderBeamModifier, ChromaticGlitchShader (Metal), CoinFlipView, ColorRevealImage, ConfettiBurst, FireworksBurst, FloatingReactionsEmitter, FlowFieldParticles, Globe3DWireframe, IntelligenceGlowBorder, JiggleEditModifier, MetaballLavaLamp, NoiseGrainOverlay, PixelateShaderEffect (Metal), ProgressiveBlurHeader (Metal), RippleShaderEffect (Metal), RippleTapEffect, SpotlightOverlay, TouchParticleTrail, VoiceOrb
 - Feedback: AnimatedBadgeCount, AnimatedCheckmarkBadge, DynamicIslandPill, EmptyStatePlaceholder, NotificationStack, RatingStars, ShakeErrorModifier, ToastBanner, ToastHost, TooltipPopover, UndoSnackbar
-- Gestures: CompletionSwipeRow, DoubleTapHeartOverlay, DragSelectGrid, DropZoneHighlight, LongPressRadialMenu, PinchZoomView, ScratchToReveal, SnapCornerDraggable, SwipeActionRow
+- Gestures: CompletionSwipeRow, DoubleTapHeartOverlay, DragSelectGrid, DropZoneHighlight, LongPressRadialMenu, MultiItemDragGrid (iOS 27.0+), PinchZoomView, ScratchToReveal, SnapCornerDraggable, SwipeActionRow
 - Glass: GlassActionMenu (iOS 26.0+), GlassButtonGallery (iOS 26.0+), GlassSegmentedControl (iOS 26.0+), GlassTabAccessory (iOS 26.0+), GlassTagCloud (iOS 26.0+), GlassToolStrip (iOS 26.0+)
 - Images: BeforeAfterSlider, BlurUpImage, CircularAvatarCropper, CropRectangleOverlay, DoubleTapZoomImage, KenBurnsImage, PhotoAdjustmentSliders, PhotoFilterPresets, PhotoLightbox, PhotoMultiSelectGrid, ScatteredPhotoBoard
 - Inputs: CharacterCountTextEditor, ClearableTextField, ColorSwatchPicker, FloatingLabelTextField, MaskedTextField, MultiStepForm, OTPCodeField, PasscodeKeypad, PasswordStrengthField, RichTextEditor (iOS 26.0+), SearchFieldWithSuggestions, TagInputField, ValidatedTextField
 - Intelligence: ModelAvailabilityGate (iOS 26.0+), OnDeviceStreamingAnswer (iOS 26.0+), StructuredOutputForm (iOS 27.0+)
 - Layouts: AdaptiveColumnsGrid, AnyLayoutAdaptiveSwitch, BentoGridLayout, FlowTagsLayout, KanbanBoard, MasonryLayout, MorphingLayoutSwitch, RadialLayout, ReadableWidthContainer, SubviewCardContainer
-- Lists: AccordionSection, DisclosureTreeView, EditModeMultiSelect, LoadMoreFooter, ReorderableCardList (iOS 27.0+), ReorderableGrid (iOS 27.0+), StickySectionHeaders, SwipeActionCards (iOS 27.0+)
+- Lists: AccordionSection, AlphabetIndexedList (iOS 26.0+), DisclosureTreeView, EditModeMultiSelect, LoadMoreFooter, ReorderableCardList (iOS 27.0+), ReorderableGrid (iOS 27.0+), StickySectionHeaders, SwipeActionCards (iOS 27.0+)
 - Loaders: ArcSegmentsLoader, BlobMorphLoader, DotsPulseLoader, OrbitLoader, SkeletonShimmerModifier, SymbolBreatheLoader, WaveBarsLoader
-- Maps: MapAnnotationCallout, MapClusterAnnotations, MapRouteTracker, MapSearchSheet
+- Maps: MapAnnotationCallout, MapClusterAnnotations, MapPinLocationPicker, MapRouteTracker, MapSearchSheet
 - Media: AudioPlayerCard, DoubleTapSeekOverlay, ExpandingMiniPlayer, ShutterCaptureButton, SpinningVinylArt, VideoPlayerChrome, VideoPosterToPlayer, WaveformScrubber
 - Menus: CoachMarkTour, CommandPalette, ContextMenuPreviewCard, DropdownSelectMenu, GooeyFloatingMenu
 - Modern: AnimatableRing (iOS 26.0+), ConcentricCard (iOS 26.0+), ProminentTabBar (iOS 27.0+), ScrollEdgeHeader (iOS 26.0+), SymbolDrawOn (iOS 26.0+), ToolbarOverflowDemo (iOS 27.0+)
 - Navigation: AdaptiveSidebarLayout, AnimatedTabBar, BottomDrawer, BreadcrumbTrail, DragToDismissScreen, EmbeddedWebBrowser (iOS 26.0+), FullScreenMenuOverlay, NavigationPathRouter, PageDotsIndicator, ScrollSpyHeader, ScrollToTopButton, SearchScopesAndSuggestions, SideDrawer, SidebarAdaptiveTabs, TabNavigationStatePreserve, TwoPaneSplitLayout
 - Patterns: PermissionPrimerScreen, VerticalTimeline, WeatherForecastScreen
 - Pickers: CountryPicker, EmojiPicker, InlineDatePickerDisclosure, MultiPhotoPickerTray, TimeSlotGridPicker, WheelPicker
-- Playful: BubbleWrapPop, SlotMachineReels, SpinWheelRoulette
+- Playful: BubbleWrapPop, MemoryMatchGame, SlotMachineReels, SpinWheelRoulette
 - Profiles: ProfileHeaderStretchy, StoriesViewer, StoryRingAvatar
 - Progress: ActivityRings, CircularProgressRing, CountdownRing, DownloadPillProgress, GradientProgressBar, LiquidFillProgress, StepProgressIndicator
 - Scrolling: AutoAdvanceCarousel, CoverFlowCarousel, HideOnScrollBar, InfiniteMarqueeRow, NetflixRowsScroller, OnboardingPager, PagedGridLauncher, ParallaxCardsRow, PeekCarousel, PullProgressRefresh, ScrollFadeCards, ScrollProgressBar, ScrollVisibilityReveal, StickyParallaxHeader, StickyStackedCards, VerticalFullScreenFeed
 - Sheets: CustomDetentSheet, DynamicHeightTray, WhatsNewSheet
 - Tabs: MinimizingTabBar (iOS 26.0+), NotchedTabBar, ScrollingTabStrip, TabsPickerPages (iOS 27.0+)
 - Text: AnimatedGradientText, BouncyLettersText, CountingNumberText, GlitchText, GlyphWaveText, HighlightedSearchText, KaraokeLyricsText, MarqueeText, ReadMoreText, RotatingWordsText, ScrambleText, ShimmerText, StreamingText, TextBlurReveal, TypewriterText
-- Toolbars: CollapsingBottomBar, FloatingDockBar
+- Toolbars: CollapsingBottomBar, FloatingDockBar, MinimizingNavigationBar (iOS 27.0+)
 - Transitions: BlurFadeTransition, CircleRevealTransition, ContentSwapTransition, CrossFadeNavigation (iOS 27.0+), DissolveShaderTransition (Metal), FlipCardTransition, InteractivePagerTransition, MatchedHeroCard, ParallaxPushTransition, SlideScaleTransition, StaggeredAppearList, SymbolMorphToggle, ZoomHeroTransition
 
 ## Docs

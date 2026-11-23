@@ -7,6 +7,42 @@ on `main`.
 
 ## Unreleased
 
+## 0.18.0 - 2026-11-23
+
+### Added
+
+- Minimizing Navigation Bar, for iOS 27: a navigation stack whose bar gets out
+  of the way while the content scrolls down, and comes back on scrolling up or
+  only at the top.
+- Multi Item Drag Grid, for iOS 27: a grid where tapping selects items and
+  dragging one of them carries the whole selection to a drop target, as a
+  single system drag.
+- Alphabet Indexed List, for iOS 26: a list in sections by the first letter of
+  each name, ignoring accents, with the system's index of letters to jump
+  between them and the names that start with a number or a symbol under #.
+- Swipe To Reply Bubble, a message bubble that slides toward the trailing edge
+  to reply, with a reply arrow behind it and a tap of the phone when the drag
+  passes the point of no return. VoiceOver offers it as a Reply action.
+- Map Pin Location Picker, a map with a pin fixed at its center that lifts
+  while the map moves and lands where it stops, to pick a place by moving the
+  map under it.
+- Signature Pad, a box to sign with a finger over a baseline, which ignores
+  stray taps, clears with a button and turns the signature into an image
+  cropped to the ink.
+- Memory Match Game, a memory game of cards that turn over in 3D to find their
+  pairs, where a missed pair turns back after a moment and the moves are
+  counted. Its rules are a board without a view, with tests.
+- Promo Code Field, a promo code field whose Apply button checks the code, then
+  shows it applied with a way to remove it, or shakes, says why it was turned
+  down and takes the focus back to fix it.
+
+### Changed
+
+- The prompts on the landing page drift in two rows, in opposite directions,
+  as the carousel before them did, and no longer have a Pause button.
+  Hovering or focusing the strip still holds it, and Reduce Motion still stops
+  it.
+
 ## 0.17.1 - 2026-11-21
 
 ### Fixed

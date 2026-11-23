@@ -558,6 +558,15 @@ enum ComponentRegistry {
             demo: { AnyView(NestedCommentThreadDemo()) }
         ),
         ShowcaseEntry(
+            id: "swipe-to-reply-bubble",
+            title: "Swipe To Reply Bubble",
+            category: "Chat",
+            summary: "A message bubble that slides toward the trailing edge to reply, showing a reply arrow and tapping once when the drag passes the point of no return.",
+            keywords: ["swipe to reply", "reply", "quote", "message", "chat bubble", "drag", "haptic", "messaging", "deslizar para responder", "responder", "citar", "mensaje", "burbuja de chat", "arrastrar", "háptica", "mensajería"],
+            minIOS: "18.0",
+            demo: { AnyView(SwipeToReplyBubbleDemo()) }
+        ),
+        ShowcaseEntry(
             id: "tapback-reaction-bubble",
             title: "Tapback Reaction Bubble",
             category: "Chat",
@@ -610,6 +619,15 @@ enum ComponentRegistry {
             keywords: ["pricing", "plans", "tiers", "cards", "paywall", "subscription", "carousel", "precios", "planes", "tarifas", "tarjetas", "paywall", "suscripción", "carrusel"],
             minIOS: "18.0",
             demo: { AnyView(PricingTierCardsDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "promo-code-field",
+            title: "Promo Code Field",
+            category: "Commerce",
+            summary: "A promo code field whose Apply button checks the code, then shows it applied with a way to remove it, or shakes and says why it was turned down.",
+            keywords: ["promo code", "coupon", "discount code", "voucher", "checkout", "apply", "shake", "validation", "código promocional", "cupón", "código de descuento", "vale", "pago", "aplicar", "sacudida", "validación"],
+            minIOS: "18.0",
+            demo: { AnyView(PromoCodeFieldDemo()) }
         ),
         ShowcaseEntry(
             id: "trial-timeline-paywall",
@@ -802,6 +820,15 @@ enum ComponentRegistry {
             keywords: ["shape", "morph", "polygon", "star", "animatable", "vector arithmetic", "path", "forma", "transformación", "polígono", "estrella", "animable", "vector", "trazado"],
             minIOS: "18.0",
             demo: { AnyView(PolygonMorphShapeDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "signature-pad",
+            title: "Signature Pad",
+            category: "Drawing",
+            summary: "A box to sign with a finger over a baseline, which ignores stray taps, clears with a button and turns the signature into an image cropped to the ink.",
+            keywords: ["signature", "sign here", "signature pad", "e-signature", "draw", "delivery confirmation", "export image", "canvas", "firma", "firme aquí", "panel de firma", "firma electrónica", "dibujar", "confirmación de entrega", "exportar imagen", "lienzo"],
+            minIOS: "18.0",
+            demo: { AnyView(SignaturePadDemo()) }
         ),
         ShowcaseEntry(
             id: "blurred-image-backdrop",
@@ -1135,6 +1162,18 @@ enum ComponentRegistry {
             keywords: ["long press", "radial menu", "pie menu", "ring", "drag", "actions", "context menu", "pulsación larga", "menú radial", "menú circular", "anillo", "arrastrar", "acciones", "menú contextual"],
             minIOS: "18.0",
             demo: { AnyView(LongPressRadialMenuDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "multi-item-drag-grid",
+            title: "Multi Item Drag Grid",
+            category: "Gestures",
+            summary: "A grid where tapping selects items and dragging one of them carries the whole selection to a drop target in a single system drag.",
+            keywords: ["drag and drop", "multiple items", "selection", "photo grid", "album", "drag container", "move", "arrastrar y soltar", "varios elementos", "selección", "rejilla de fotos", "álbum", "contenedor de arrastre", "mover"],
+            minIOS: "27.0",
+            demo: {
+                guard #available(iOS 27.0, *) else { return nil }
+                return AnyView(MultiItemDragGridDemo())
+            }
         ),
         ShowcaseEntry(
             id: "pinch-zoom-view",
@@ -1599,6 +1638,18 @@ enum ComponentRegistry {
             demo: { AnyView(AccordionSectionDemo()) }
         ),
         ShowcaseEntry(
+            id: "alphabet-indexed-list",
+            title: "Alphabet Indexed List",
+            category: "Lists",
+            summary: "A list in sections by the first letter of each name, ignoring accents, with the system's index of letters to jump between them.",
+            keywords: ["section index", "alphabet", "contacts", "index bar", "A to Z", "jump to letter", "sections", "list", "índice de secciones", "alfabeto", "contactos", "barra de índice", "de la A a la Z", "saltar a una letra", "secciones", "lista"],
+            minIOS: "26.0",
+            demo: {
+                guard #available(iOS 26.0, *) else { return nil }
+                return AnyView(AlphabetIndexedListDemo())
+            }
+        ),
+        ShowcaseEntry(
             id: "disclosure-tree-view",
             title: "Disclosure Tree View",
             category: "Lists",
@@ -1750,6 +1801,15 @@ enum ComponentRegistry {
             keywords: ["map clustering", "cluster", "annotations", "pins", "mapkit", "zoom", "grouped markers", "count bubble", "agrupar en el mapa", "clúster", "anotaciones", "chinchetas", "mapkit", "zoom", "marcadores agrupados", "burbuja con número"],
             minIOS: "18.0",
             demo: { AnyView(MapClusterAnnotationsDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "map-pin-location-picker",
+            title: "Map Pin Location Picker",
+            category: "Maps",
+            summary: "A map with a pin fixed at its center that lifts while the map moves and lands where it stops, to pick a place by moving the map under it.",
+            keywords: ["location picker", "map", "pin", "choose location", "drop pin", "coordinate", "pick a place", "delivery address", "selector de ubicación", "mapa", "chincheta", "elegir ubicación", "soltar chincheta", "coordenada", "elegir un lugar", "dirección de entrega"],
+            minIOS: "18.0",
+            demo: { AnyView(MapPinLocationPickerDemo()) }
         ),
         ShowcaseEntry(
             id: "map-route-tracker",
@@ -2194,6 +2254,15 @@ enum ComponentRegistry {
             keywords: ["bubble wrap", "pop", "fidget", "toy", "playful", "haptics", "grid", "plástico de burbujas", "explotar", "juguete", "divertido", "vibración", "cuadrícula"],
             minIOS: "18.0",
             demo: { AnyView(BubbleWrapPopDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "memory-match-game",
+            title: "Memory Match Game",
+            category: "Playful",
+            summary: "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+            keywords: ["memory game", "match pairs", "concentration", "card flip", "game", "pairs", "flip animation", "puzzle", "juego de memoria", "parejas", "memorama", "girar cartas", "juego", "emparejar", "animación de giro", "puzle"],
+            minIOS: "18.0",
+            demo: { AnyView(MemoryMatchGameDemo()) }
         ),
         ShowcaseEntry(
             id: "slot-machine-reels",
@@ -2668,6 +2737,18 @@ enum ComponentRegistry {
             keywords: ["dock", "magnify", "icons", "toolbar", "macos dock", "hover scale", "dock", "ampliar", "iconos", "barra de herramientas", "dock de macos", "aumentar"],
             minIOS: "18.0",
             demo: { AnyView(FloatingDockBarDemo()) }
+        ),
+        ShowcaseEntry(
+            id: "minimizing-navigation-bar",
+            title: "Minimizing Navigation Bar",
+            category: "Toolbars",
+            summary: "A navigation stack whose navigation bar minimizes while the content scrolls down and returns on scrolling up or only at the top, using the system toolbar minimization.",
+            keywords: ["navigation bar", "toolbar", "minimize", "hide on scroll", "collapse", "scroll", "reader", "barra de navegación", "barra de herramientas", "minimizar", "ocultar al desplazar", "contraer", "desplazamiento", "lector"],
+            minIOS: "27.0",
+            demo: {
+                guard #available(iOS 27.0, *) else { return nil }
+                return AnyView(MinimizingNavigationBarDemo())
+            }
         ),
         ShowcaseEntry(
             id: "blur-fade-transition",
