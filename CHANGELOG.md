@@ -27,6 +27,9 @@ on `main`.
 - Signature Pad, a box to sign with a finger over a baseline, which ignores
   stray taps, clears with a button and turns the signature into an image
   cropped to the ink.
+- Memory Match Game, a memory game of cards that turn over in 3D to find their
+  pairs, where a missed pair turns back after a moment and the moves are
+  counted. Its rules are a board without a view, with tests.
 
 ## 0.17.1 - 2026-11-21
 

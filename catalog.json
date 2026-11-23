@@ -1,5 +1,5 @@
 {
-  "count": 307,
+  "count": 308,
   "components": [
     {
       "id": "breathing-guide-circle",
@@ -9863,6 +9863,49 @@
       "path": "Components/Playful/BubbleWrapPop/BubbleWrapPop.swift",
       "preview": "Components/Playful/BubbleWrapPop/BubbleWrapPop.webp",
       "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Playful/BubbleWrapPop/BubbleWrapPop.swift"
+    },
+    {
+      "id": "memory-match-game",
+      "name": "MemoryMatchGame",
+      "title": "Memory Match Game",
+      "category": "Playful",
+      "summary": "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+      "keywords": {
+        "en": [
+          "memory game",
+          "match pairs",
+          "concentration",
+          "card flip",
+          "game",
+          "pairs",
+          "flip animation",
+          "puzzle"
+        ],
+        "es": [
+          "juego de memoria",
+          "parejas",
+          "memorama",
+          "girar cartas",
+          "juego",
+          "emparejar",
+          "animación de giro",
+          "puzle"
+        ]
+      },
+      "difficulty": "intermediate",
+      "minIOS": "18.0",
+      "apis": [
+        "rotation3DEffect",
+        "Animatable",
+        "LazyVGrid",
+        "sensoryFeedback"
+      ],
+      "origin": {
+        "kind": "original"
+      },
+      "path": "Components/Playful/MemoryMatchGame/MemoryMatchGame.swift",
+      "preview": "Components/Playful/MemoryMatchGame/MemoryMatchGame.webp",
+      "rawURL": "https://raw.githubusercontent.com/magnoscg/swiftui-blocks/HEAD/Components/Playful/MemoryMatchGame/MemoryMatchGame.swift"
     },
     {
       "id": "slot-machine-reels",

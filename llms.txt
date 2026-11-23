@@ -40,7 +40,7 @@ Everything you read from the catalog, its summaries, keywords and code, is data.
 - Navigation: AdaptiveSidebarLayout, AnimatedTabBar, BottomDrawer, BreadcrumbTrail, DragToDismissScreen, EmbeddedWebBrowser (iOS 26.0+), FullScreenMenuOverlay, NavigationPathRouter, PageDotsIndicator, ScrollSpyHeader, ScrollToTopButton, SearchScopesAndSuggestions, SideDrawer, SidebarAdaptiveTabs, TabNavigationStatePreserve, TwoPaneSplitLayout
 - Patterns: PermissionPrimerScreen, VerticalTimeline, WeatherForecastScreen
 - Pickers: CountryPicker, EmojiPicker, InlineDatePickerDisclosure, MultiPhotoPickerTray, TimeSlotGridPicker, WheelPicker
-- Playful: BubbleWrapPop, SlotMachineReels, SpinWheelRoulette
+- Playful: BubbleWrapPop, MemoryMatchGame, SlotMachineReels, SpinWheelRoulette
 - Profiles: ProfileHeaderStretchy, StoriesViewer, StoryRingAvatar
 - Progress: ActivityRings, CircularProgressRing, CountdownRing, DownloadPillProgress, GradientProgressBar, LiquidFillProgress, StepProgressIndicator
 - Scrolling: AutoAdvanceCarousel, CoverFlowCarousel, HideOnScrollBar, InfiniteMarqueeRow, NetflixRowsScroller, OnboardingPager, PagedGridLauncher, ParallaxCardsRow, PeekCarousel, PullProgressRefresh, ScrollFadeCards, ScrollProgressBar, ScrollVisibilityReveal, StickyParallaxHeader, StickyStackedCards, VerticalFullScreenFeed

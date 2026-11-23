@@ -2247,6 +2247,15 @@ enum ComponentRegistry {
             demo: { AnyView(BubbleWrapPopDemo()) }
         ),
         ShowcaseEntry(
+            id: "memory-match-game",
+            title: "Memory Match Game",
+            category: "Playful",
+            summary: "A memory game of cards that flip in 3D: find the pairs, while a missed pair turns back after a moment and the moves are counted.",
+            keywords: ["memory game", "match pairs", "concentration", "card flip", "game", "pairs", "flip animation", "puzzle", "juego de memoria", "parejas", "memorama", "girar cartas", "juego", "emparejar", "animación de giro", "puzle"],
+            minIOS: "18.0",
+            demo: { AnyView(MemoryMatchGameDemo()) }
+        ),
+        ShowcaseEntry(
             id: "slot-machine-reels",
             title: "Slot Machine Reels",
             category: "Playful",
