@@ -1,8 +1,9 @@
 ---
-// The prompts that work, drifting under the hero: what someone asks, the component playing, and the file it
-// adds. Every card runs the whole loop on its own, one slot after the previous one, so the row needs no
-// copies to come back at the other edge. With Reduce Motion on, the row stands still and scrolls by hand.
-// Paused, or with Reduce Motion, each card shows the still of its social card, the middle frame of the preview.
+// The prompts that work, in two rows that drift in opposite directions under the hero: what someone asks,
+// the component playing, and the file it adds. Every card runs the whole loop on its own, one slot after the
+// previous one, so a row needs no copies to come back at the other edge. Both rows play every card, the second
+// from halfway, so they never line up. Hovering or focusing the strip holds it; with Reduce Motion it stands
+// still, scrolls by hand, and each card shows the still of its social card, the middle frame of the preview.
 import { cardURL, pageURL, previewBytes, previewURL } from '../lib/catalog';
 import { landingText, type LandingLang } from '../lib/landing';
 import { promptGroups } from '../lib/prompts';
@@ -19,66 +20,59 @@ const cards = promptGroups
   .flatMap((group) => group.prompts)
   .filter(({ component }) => previewBytes(component) <= maximumBytes);
 // Fewer cards than this leave a gap in the loop on the widest screens, so the list plays twice.
-const shown = cards.length < 16 ? [...cards, ...cards] : cards;
-const count = shown.length;
-const offset = (index: number) => (count - 1 - index) / count;
+const filled = (row: typeof cards) => (row.length < 16 ? [...row, ...row] : row);
+const half = Math.ceil(cards.length / 2);
+const rows = [filled(cards), filled([...cards.slice(half), ...cards.slice(0, half)])];
+// The fraction of the loop each card has already run, so that card i starts in slot i whichever way its row drifts.
+const offset = (index: number, count: number, reverse: boolean) => (reverse ? index + 1 : count - 1 - index) / count;
 ---
 
-<section class="prompt-strip not-content" aria-labelledby="prompt-strip-title" style={`--count: ${count}`} data-prompt-strip data-pause={text.pause} data-play={text.play}>
-  <div class="head">
-    <h2 id="prompt-strip-title">{text.stripTitle}</h2>
-    <button type="button" class="pause" data-strip-pause>
-      <svg class="pause-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
-        <rect x="6" y="5" width="4" height="14" rx="1" />
-        <rect x="14" y="5" width="4" height="14" rx="1" />
-      </svg>
-      <svg class="play-icon" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="currentColor">
-        <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z" />
-      </svg>
-      <span data-strip-label>{text.pause}</span>
-    </button>
-  </div>
+<section class="prompt-strip not-content" aria-labelledby="prompt-strip-title" data-prompt-strip>
+  <h2 id="prompt-strip-title">{text.stripTitle}</h2>
   <div class="viewport">
-    <ul>
-      {
-        shown.map(({ prompt, component }, index) => {
-          const copy = index >= cards.length;
-          return (
-            <li style={`--offset: ${offset(index)}`} aria-hidden={copy ? 'true' : undefined} class:list={{ copy }}>
-              <p class="ask">“{prompt}”</p>
-              <a href={pageURL(component)} tabindex={copy ? -1 : undefined}>
-                <picture>
-                  <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
-                  <img
-                    src={previewURL(component)}
-                    alt={component.title}
-                    width="192"
-                    height="417"
-                    loading="lazy"
-                    decoding="async"
-                    data-still={cardURL(component)}
-                  />
-                </picture>
-                {component.minIOS !== '18.0' && <span class="ios">iOS {component.minIOS.replace('.0', '')}</span>}
-              </a>
-              <p class="adds">
-                <span aria-hidden="true">+ </span>
-                {component.name}
-                <wbr />
-                .swift
-              </p>
-            </li>
-          );
-        })
-      }
-    </ul>
+    {
+      rows.map((row, rowIndex) => {
+        const reverse = rowIndex === 1;
+        return (
+          <ul class:list={{ reverse }} style={`--count: ${row.length}`} aria-hidden={reverse ? 'true' : undefined}>
+            {row.map(({ prompt, component }, index) => {
+              const copy = reverse || index >= cards.length;
+              return (
+                <li style={`--offset: ${offset(index, row.length, reverse)}`} aria-hidden={copy && !reverse ? 'true' : undefined} class:list={{ copy }}>
+                  <p class="ask">“{prompt}”</p>
+                  <a href={pageURL(component)} tabindex={copy ? -1 : undefined}>
+                    <picture>
+                      <source media="(prefers-reduced-motion: reduce)" srcset={cardURL(component)} />
+                      <img
+                        src={previewURL(component)}
+                        alt={component.title}
+                        width="192"
+                        height="417"
+                        loading="lazy"
+                        decoding="async"
+                        data-still={cardURL(component)}
+                      />
+                    </picture>
+                    {component.minIOS !== '18.0' && <span class="ios">iOS {component.minIOS.replace('.0', '')}</span>}
+                  </a>
+                  <p class="adds">
+                    <span aria-hidden="true">+ </span>
+                    {component.name}
+                    <wbr />
+                    .swift
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        );
+      })
+    }
   </div>
 </section>
 
 <script>
   for (const strip of document.querySelectorAll<HTMLElement>('[data-prompt-strip]')) {
-    const button = strip.querySelector<HTMLButtonElement>('[data-strip-pause]');
-    const label = strip.querySelector<HTMLElement>('[data-strip-label]');
     const viewport = strip.querySelector<HTMLElement>('.viewport');
     const images = [...strip.querySelectorAll<HTMLImageElement>('img[data-still]')];
     const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -87,19 +81,6 @@ const offset = (index: number) => (count - 1 - index) / count;
     for (const image of images) {
       image.addEventListener('load', () => image.classList.toggle('still', image.currentSrc === image.dataset.still));
     }
-
-    button?.addEventListener('click', () => {
-      const paused = strip.toggleAttribute('data-paused');
-      if (label) label.textContent = (paused ? strip.dataset.play : strip.dataset.pause) ?? '';
-      for (const image of images) {
-        if (paused) {
-          image.dataset.moving = image.src;
-          image.src = image.dataset.still!;
-        } else if (image.dataset.moving) {
-          image.src = image.dataset.moving;
-        }
-      }
-    });
 
     // Focus scrolls the hidden overflow to show a card; once it leaves, the row goes back to its place.
     strip.addEventListener('focusout', (event) => {
@@ -116,23 +97,13 @@ const offset = (index: number) => (count - 1 - index) / count;
     --ask-height: 4.375rem;
     --shot-height: calc(var(--card-width) * 874 / 402);
     --slot: calc(var(--card-width) + var(--gap));
-    --loop: calc(var(--count) * var(--slot));
-    --duration: calc(var(--count) * 9.4s);
     margin: 3rem calc(50% - 50vw) 0;
   }
 
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+  h2 {
     max-width: 96rem;
     margin: 0 auto 0.875rem;
     padding-inline: max(1rem, 2vw);
-  }
-
-  h2 {
-    margin: 0;
     font-family: var(--sl-font);
     font-size: var(--sl-text-sm);
     font-weight: 500;
@@ -140,39 +111,17 @@ const offset = (index: number) => (count - 1 - index) / count;
     color: var(--sl-color-gray-3);
   }
 
-  .pause {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.25rem;
-    padding: 0 0.75rem;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5625rem;
-    background: transparent;
-    color: var(--sl-color-gray-1);
-    font: inherit;
-    font-size: var(--sl-text-sm);
-    font-weight: 500;
-    cursor: pointer;
-  }
-
-  .play-icon,
-  [data-paused] .pause-icon {
-    display: none;
-  }
-
-  [data-paused] .play-icon {
-    display: block;
-  }
-
   .viewport {
+    display: grid;
+    gap: 1.5rem;
     padding-block: 0.25rem;
     overflow: hidden;
     mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   }
 
   ul {
+    --loop: calc(var(--count) * var(--slot));
+    --duration: calc(var(--count) * 9.4s);
     position: relative;
     height: calc(var(--ask-height) + 0.625rem + var(--shot-height) + 3rem);
     margin: 0;
@@ -262,9 +211,12 @@ const offset = (index: number) => (count - 1 - index) / count;
       transform: translateY(-4px) scale(1.02);
     }
 
+    ul.reverse li {
+      animation-direction: reverse;
+    }
+
     .prompt-strip:hover li,
-    .prompt-strip:focus-within li,
-    .prompt-strip[data-paused] li {
+    .prompt-strip:focus-within li {
       animation-play-state: paused;
     }
 
@@ -283,7 +235,7 @@ const offset = (index: number) => (count - 1 - index) / count;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pause,
+    ul.reverse,
     li.copy {
       display: none;
     }
@@ -310,12 +262,6 @@ const offset = (index: number) => (count - 1 - index) / count;
 
     img {
       scale: 1.0862;
-    }
-  }
-
-  @media (pointer: coarse) {
-    .pause {
-      min-height: 2.75rem;
     }
   }
 

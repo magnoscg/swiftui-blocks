@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.18.0 - 2026-11-23
+
 ### Added
 
 - Minimizing Navigation Bar, for iOS 27: a navigation stack whose bar gets out
@@ -33,6 +35,13 @@ on `main`.
 - Promo Code Field, a promo code field whose Apply button checks the code, then
   shows it applied with a way to remove it, or shakes, says why it was turned
   down and takes the focus back to fix it.
+
+### Changed
+
+- The prompts on the landing page drift in two rows, in opposite directions,
+  as the carousel before them did, and no longer have a Pause button.
+  Hovering or focusing the strip still holds it, and Reduce Motion still stops
+  it.
 
 ## 0.17.1 - 2026-11-21
 
