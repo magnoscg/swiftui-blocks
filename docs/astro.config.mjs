@@ -7,7 +7,7 @@ const SITE_CARD_ALT =
 // stats.*, not umami.*: EasyPrivacy blocks `umami.*/script.js`.
 const ANALYTICS_SCRIPT = 'https://stats.ogamlabs.com/script.js';
 const ANALYTICS_WEBSITE_ID = 'c1bea8c2-8729-474d-af3e-8da4d7d24c0a';
-// The script of Umami 3.5.0: after upgrading Umami, recompute it with `curl -fsS <script> | openssl dgst -sha384 -binary | openssl base64 -A`, or no visit counts.
+// The script of Umami 3.5.0: after upgrading Umami, recompute it with `curl -fsS <script> -o script.js && openssl dgst -sha384 -binary script.js | openssl base64 -A`, or no visit counts.
 const ANALYTICS_INTEGRITY = 'sha384-Ts03XUTV1nsmqXjhMgA3LGXKFnW1NLMAzbKGEaaDFUy7wUETechGFTNIXF7rAuqP';
 
 export default defineConfig({
