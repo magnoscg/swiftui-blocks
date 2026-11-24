@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.20.0 - 2026-11-24
+
 ### Added
 
 - The skill offers the Showcase app when someone wants to try every
