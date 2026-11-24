@@ -7,6 +7,12 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- The site counts visits with Umami, hosted on the project's own server,
+  without cookies and without keeping personal data, and a Privacy page says
+  what it counts. Local builds and `make docs-dev` do not count.
+
 ## 0.20.0 - 2026-11-24
 
 ### Added
