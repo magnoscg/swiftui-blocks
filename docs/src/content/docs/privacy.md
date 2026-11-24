@@ -5,8 +5,8 @@ description: What the site counts about a visit, what it does not keep, and who 
 
 The site counts its visits to learn which pages and components people use.
 It does so with [Umami](https://umami.is), an open-source tool that runs on
-the project's own server. No analytics company receives the counts, and
-they are not sold or shared.
+the project's own server rather than on an analytics service. The counts
+are never sold.
 
 ## What is counted
 
@@ -32,8 +32,8 @@ Addresses are counted without the part after `?` or `#`.
 
 - GitHub serves the site through GitHub Pages, and your browser asks GitHub
   for the previews of the components and the repository's star count.
-- Cloudflare carries the requests to the counter and keeps a daily backup of
-  the counts.
+- Cloudflare carries the requests to the counter, and its storage keeps a
+  daily backup of everything the counter holds.
 
 ## What collects nothing
 
