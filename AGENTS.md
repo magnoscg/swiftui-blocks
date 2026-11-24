@@ -305,6 +305,48 @@ rest are on you.
       member whose name already says it, and the demo, apart from the comment
       rule 14 gives it.
 
+## Running the Showcase
+
+The Showcase has the demo of every component. Before its first build:
+
+- `xcodebuild -version` must say Xcode 27.2 or later. With Xcode 26.6, the
+  one CI uses, `node scripts/catalog.mjs prune 26` deletes the components that
+  need iOS 27 from the checkout. Never commit that: on a checkout without
+  other changes, `git restore .` undoes it.
+- The shaders need the Metal toolchain, a separate download:
+  `xcodebuild -downloadComponent MetalToolchain`.
+
+In the simulator it runs as it is. `<simulator>` is an iPhone simulator, like
+`iPhone 18 Pro` with Xcode 27. `xcrun simctl list devices available` lists
+them, with the UDID to use instead when two share a name. `open -a Simulator`
+shows it to the person:
+
+```sh
+xcodebuild -project Showcase/Showcase.xcodeproj -scheme Showcase -destination 'platform=iOS Simulator,name=<simulator>' -derivedDataPath build build
+xcrun simctl bootstatus '<simulator>' -b
+open -a Simulator
+xcrun simctl install '<simulator>' build/Build/Products/Debug-iphonesimulator/Showcase.app
+xcrun simctl launch '<simulator>' com.magnoscg.AwesomeSwiftUI.Showcase
+```
+
+On an iPhone the person's own team signs it, with a bundle identifier of
+their own: the project sets no team, and a bundle identifier belongs to one
+account only. Ask them for their Team ID, find the device with
+`xcrun devicectl list devices`, and pass both values on the command line, so
+the project stays unchanged:
+
+```sh
+xcodebuild -project Showcase/Showcase.xcodeproj -scheme Showcase -destination 'platform=iOS,name=<device>' -derivedDataPath build -allowProvisioningUpdates -allowProvisioningDeviceRegistration DEVELOPMENT_TEAM=<team ID> PRODUCT_BUNDLE_IDENTIFIER=<their prefix>.Showcase build
+xcrun devicectl device install app --device '<device>' build/Build/Products/Debug-iphoneos/Showcase.app
+xcrun devicectl device process launch --device '<device>' <their prefix>.Showcase
+```
+
+The two `-allowProvisioning` options let Xcode register the iPhone and create
+the App ID and the profile in their account, which has to be signed in to
+Xcode. The iPhone needs Developer Mode on. With a free account, the app opens
+only after they trust the developer under Settings > General > VPN & Device
+Management.
+
 ## Trying a demo in the simulator
 
 The Showcase opens one demo alone with `-showcaseComponent <id>`:

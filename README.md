@@ -121,8 +121,33 @@ PulseRingButton(systemImage: "mic.fill", label: "Record") {
 ```
 
 The `Demo` view and the `#Preview` at the end of each file show how to use
-it, and you can delete them afterwards. To try every component on a device,
-open `Showcase/Showcase.xcodeproj` and run it.
+it, and you can delete them afterwards.
+
+### Try every component
+
+The Showcase app has the demo of every component. Clone the repository, then
+open `Showcase/Showcase.xcodeproj` and run it in the simulator:
+
+```sh
+git clone --depth 1 https://github.com/magnoscg/swiftui-blocks
+cd swiftui-blocks
+```
+
+It needs:
+
+- **Xcode 27.2 or later.** With Xcode 26.6, the one CI uses, run
+  `node scripts/catalog.mjs prune 26` first, with Node 24 or later. It removes
+  the components that need iOS 27 from your copy. `git restore .` brings them
+  back, and also undoes any other change in your copy.
+- **The Metal toolchain**, a separate download that the shaders need:
+  `xcodebuild -downloadComponent MetalToolchain`.
+- **Your own team on an iPhone.** The project sets none, and a bundle
+  identifier belongs to one account only. Choose your team under Signing &
+  Capabilities, change the bundle identifier to one of yours, and keep both
+  changes out of your commits.
+
+Your agent can do it for you: [Running the Showcase](AGENTS.md#running-the-showcase)
+has the commands.
 
 ## Catalog
 
