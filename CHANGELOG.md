@@ -7,6 +7,19 @@ on `main`.
 
 ## Unreleased
 
+### Added
+
+- The skill offers the Showcase app when someone wants to try every
+  component, and clones the repository for it with their OK.
+- AGENTS.md has the commands to build and run the Showcase from the
+  terminal, in the simulator and on an iPhone.
+
+### Changed
+
+- The README says what the Showcase needs: Xcode 27.2 or later, or, with
+  Xcode 26.6, removing the components of iOS 27; the Metal toolchain; and, on
+  an iPhone, your own team and bundle identifier.
+
 ## 0.19.0 - 2026-11-23
 
 ### Added
