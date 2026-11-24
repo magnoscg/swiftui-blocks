@@ -1,28 +1,36 @@
 ---
 title: Privacy
-description: What the site counts about a visit, and what it does not keep.
+description: What the site counts about a visit, what it does not keep, and who else sees a visit.
 ---
 
 The site counts its visits to learn which pages and components people use.
 It does so with [Umami](https://umami.is), an open-source tool that runs on
-the project's own server, so no third party receives the visits.
+the project's own server. The counts stay there: no analytics company
+receives them, and they are not sold or shared.
 
 ## What is counted
 
-- The page you open, and the page or site that sent you there.
+- The address and title of the page you open, and the site that sent you
+  there, both without the part after `?` or `#`.
 - Your browser, operating system, kind of device, screen size and language.
-- Your approximate location, by country, region and city, worked out from
-  your IP address when the visit arrives.
+- Your country, which Cloudflare works out from your IP address.
 
 ## What is not kept
 
-- **No cookies.** Nothing is stored in your browser, so there is no banner
-  to accept.
-- **No personal data.** Your IP address is never stored. Visits from the
-  same browser are grouped by an identifier made from that address, your
-  browser and a secret of the server, mixed with a salt that changes every
-  month, so they cannot be followed from one month to the next.
-- Nothing is sold or shared, and no advertising network sees the visits.
+- **No cookies.** The counting stores nothing in your browser. The site
+  itself keeps there only the theme and the tabs you choose, and the
+  repository's star count until you close the tab.
+- **No IP address.** Umami does not store it. It groups your visits under an
+  identifier made from that address, your browser and a secret of the
+  server, which changes every month.
+- Nothing that names you, such as an account or an email address.
+
+## Who else sees a visit
+
+- GitHub Pages serves the site, and Cloudflare carries the requests to the
+  counter, as each does for any site it serves.
+- The bar at the top asks GitHub for the repository's stars from your
+  browser.
 
 ## What collects nothing
 

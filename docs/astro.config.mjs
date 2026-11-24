@@ -7,7 +7,7 @@ const SITE_CARD_ALT =
 // stats.*, not umami.*: EasyPrivacy blocks `umami.*/script.js`.
 const ANALYTICS_SCRIPT = 'https://stats.ogamlabs.com/script.js';
 const ANALYTICS_WEBSITE_ID = 'c1bea8c2-8729-474d-af3e-8da4d7d24c0a';
-// The script of Umami 3.5.0: after upgrading Umami, recompute it with `curl -s <script> | openssl dgst -sha384 -binary | openssl base64 -A`, or no visit counts.
+// The script of Umami 3.5.0: after upgrading Umami, recompute it with `curl -fsS <script> | openssl dgst -sha384 -binary | openssl base64 -A`, or no visit counts.
 const ANALYTICS_INTEGRITY = 'sha384-Ts03XUTV1nsmqXjhMgA3LGXKFnW1NLMAzbKGEaaDFUy7wUETechGFTNIXF7rAuqP';
 
 export default defineConfig({
@@ -33,7 +33,7 @@ export default defineConfig({
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         { tag: 'meta', attrs: { name: 'twitter:image', content: SITE_CARD } },
         { tag: 'meta', attrs: { name: 'twitter:image:alt', content: SITE_CARD_ALT } },
-        // Umami counts visits without cookies; data-domains keeps local builds and `make docs-dev` from counting.
+        // Umami counts visits without cookies. data-domains keeps local builds and `make docs-dev` from counting; the exclude attributes drop the query and fragment of every address, where personal data could travel.
         {
           tag: 'script',
           attrs: {
@@ -43,6 +43,8 @@ export default defineConfig({
             crossorigin: 'anonymous',
             'data-website-id': ANALYTICS_WEBSITE_ID,
             'data-domains': 'swiftuiblocks.dev',
+            'data-exclude-search': 'true',
+            'data-exclude-hash': 'true',
           },
         },
       ],
