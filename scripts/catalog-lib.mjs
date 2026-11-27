@@ -631,7 +631,6 @@ export function previewLaunchArguments(id) {
     '-showcaseComponent', id,
     '-AppleLanguages', '(en)',
     '-AppleLocale', 'en_US',
-    '-AppleKeyboards', '(en_US@sw=QWERTY;hw=Automatic)',
   ];
 }
 

@@ -803,12 +803,11 @@ describe('recording a preview', () => {
     assert.deepEqual(previewPlan({ previewManual: true }), { record: false });
   });
 
-  it('launches the demo in English with the United States region and keyboard, whatever the simulator uses', () => {
+  it('launches the demo in English with the United States region, whatever the simulator uses', () => {
     assert.deepEqual(previewLaunchArguments('like-burst-button'), [
       '-showcaseComponent', 'like-burst-button',
       '-AppleLanguages', '(en)',
       '-AppleLocale', 'en_US',
-      '-AppleKeyboards', '(en_US@sw=QWERTY;hw=Automatic)',
     ]);
   });
 

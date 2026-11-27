@@ -9,9 +9,10 @@ on `main`.
 
 ### Changed
 
-- Previews are recorded in English with the United States region and
-  keyboard, whatever the simulator uses. The 41 previews that showed Spanish
-  dates, prices, numbers or a Spanish keyboard were recorded again.
+- Previews are recorded in English with the United States region, whatever
+  the simulator uses. The 38 previews that showed Spanish dates, prices,
+  numbers or a Spanish keyboard were recorded again, and Weather Forecast
+  Screen now shows its temperatures in Fahrenheit.
 
 ### Fixed
 
