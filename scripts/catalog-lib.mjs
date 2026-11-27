@@ -625,6 +625,16 @@ export function previewPlan(component) {
   return { record: true, steps: [`sleep ${DEFAULT_PREVIEW_SECONDS}`] };
 }
 
+// Arguments, not the simulator's settings: its region also draws the status bar, which every preview shares.
+export function previewLaunchArguments(id) {
+  return [
+    '-showcaseComponent', id,
+    '-AppleLanguages', '(en)',
+    '-AppleLocale', 'en_US',
+    '-AppleKeyboards', '(en_US@sw=QWERTY;hw=Automatic)',
+  ];
+}
+
 // Picks the booted iOS simulator with the newest runtime from `simctl list -j`.
 export function newestSimulator(devicesByRuntime) {
   const simulators = Object.entries(devicesByRuntime).flatMap(([runtime, devices]) => {
