@@ -14,6 +14,7 @@ import {
   findStale,
   loadCatalog,
   newestSimulator,
+  previewLaunchArguments,
   previewPlan,
   renderDocsPages,
   renderOutputs,
@@ -800,6 +801,14 @@ describe('recording a preview', () => {
 
   it('leaves a manual preview alone', () => {
     assert.deepEqual(previewPlan({ previewManual: true }), { record: false });
+  });
+
+  it('launches the demo in English with the United States region, whatever the simulator uses', () => {
+    assert.deepEqual(previewLaunchArguments('like-burst-button'), [
+      '-showcaseComponent', 'like-burst-button',
+      '-AppleLanguages', '(en)',
+      '-AppleLocale', 'en_US',
+    ]);
   });
 
   it('accepts the recording fields in the metadata', () => {

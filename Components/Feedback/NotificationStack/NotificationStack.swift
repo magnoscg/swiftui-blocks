@@ -212,7 +212,7 @@ struct NotificationStackDemo: View {
                 VStack(spacing: 0) {
                     Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide))
                         .font(.title3.weight(.medium))
-                    Text(Date.now, format: .dateTime.hour().minute())
+                    Text(Date.now, format: .dateTime.hour(.defaultDigits(amPM: .omitted)).minute())
                         .font(.system(size: 84, weight: .bold, design: .rounded))
                         .monospacedDigit()
                 }

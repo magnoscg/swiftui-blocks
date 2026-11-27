@@ -367,15 +367,18 @@ an iPhone 18 Pro simulator on the newest iOS, after `make catalog`, and run:
 make record COMPONENT=Buttons/PressableButtonStyle
 ```
 
-It opens the demo alone, records it and writes the preview, resized to 320
+It opens the demo alone, in English with the United States region whatever
+the simulator uses, records it and writes the preview, resized to 320
 pixels wide at 20 frames per second, and the social card. A demo that animates by itself records
 for 4 seconds. A demo that needs touches lists them in `previewSteps` in its
 metadata, as `axe batch` steps: `["tap --label Like", "sleep 1"]`.
 
 When AXe cannot perform the gesture, such as holding before a drag, record by
-hand, set `"previewManual": true` and convert it:
+hand, set `"previewManual": true` and convert it. Open the demo the way
+`make record` does, so its dates, prices and keyboard read the same:
 
 ```sh
+xcrun simctl launch booted com.magnoscg.AwesomeSwiftUI.Showcase -showcaseComponent <id> -AppleLanguages '(en)' -AppleLocale en_US
 xcrun simctl io booted recordVideo recording.mov   # Ctrl-C to stop
 make preview INPUT=recording.mov COMPONENT=Lists/ReorderableCardList
 ```

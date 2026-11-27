@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { setTimeout as wait } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { loadCatalog, newestSimulator, previewPlan, simulatorSupports } from './catalog-lib.mjs';
+import { loadCatalog, newestSimulator, previewLaunchArguments, previewPlan, simulatorSupports } from './catalog-lib.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const bundleID = 'com.magnoscg.AwesomeSwiftUI.Showcase';
@@ -50,7 +50,7 @@ async function record(component, { udid, version }) {
 
   const directory = mkdtempSync(join(tmpdir(), 'awesome-swiftui-preview-'));
   const movie = join(directory, `${component.name}.mov`);
-  run('xcrun', ['simctl', 'launch', '--terminate-running-process', udid, bundleID, '-showcaseComponent', component.id]);
+  run('xcrun', ['simctl', 'launch', '--terminate-running-process', udid, bundleID, ...previewLaunchArguments(component.id)]);
   await wait(startupMilliseconds);
 
   const recorder = spawn('xcrun', ['simctl', 'io', udid, 'recordVideo', '--codec=h264', '--force', movie], { stdio: 'ignore' });
