@@ -7,6 +7,8 @@ on `main`.
 
 ## Unreleased
 
+## 0.21.0 - 2026-11-27
+
 ### Added
 
 - The site counts visits with Umami, on the project's own server: no
