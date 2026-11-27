@@ -7,6 +7,17 @@ on `main`.
 
 ## Unreleased
 
+### Changed
+
+- Previews are recorded in English with the United States region and
+  keyboard, whatever the simulator uses. The 41 previews that showed Spanish
+  dates, prices, numbers or a Spanish keyboard were recorded again.
+
+### Fixed
+
+- The clock of the Notification Stack demo stays on one line with a 12-hour
+  region.
+
 ## 0.21.0 - 2026-11-27
 
 ### Added
